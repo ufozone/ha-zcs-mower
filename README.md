@@ -10,7 +10,17 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant.
 * Restart Home Assistant after installation
 * Make sure that you refresh your browser window too
 * Use the "Add Integration" in Home Assistant, Settings, Devices & Services and select "ZCS Lawn Mower Robot"
-* _More information about the login routine will follow_
+* Get account key and IMEI from lawn mower:
+    * Open the app on your mobile device.
+    * Click on the `Setup` tab.
+    * In the `Connect Settings` section, click `Registered "Connect Clients"`:
+      ![Registered "Connect Clients"](/ufozone/ha-zcs-mower/blob/main/setup_account1.jpg?raw=true)
+    * You need your account key (italicized string):
+      ![Get account key](/ufozone/ha-zcs-mower/blob/main/setup_account2.jpg?raw=true)
+    * Now you need the IMEI of your lawn mower
+    * Click on the `More info` tab and scroll to the `Connect Informations` section:
+      ![Get IMEI address](/ufozone/ha-zcs-mower/blob/main/setup_imei.jpg?raw=true)
+* Type both information into the config flow dialog.
 
 ## Available components 
 
