@@ -1,5 +1,7 @@
 """ZCS Lawn Mower Robot integration."""
 import asyncio
+import site
+from pathlib import Path
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -12,6 +14,13 @@ from .const import (
     CONF_IMEI,
     CONF_MOWERS,
 )
+
+# add module directory to path
+package_dir = Path(__file__).resolve().parents[0]
+site.addsitedir(str(package_dir))
+
+#https://github.com/deviceWISE/sample_tr50_python
+from tr50 import TR50http
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
@@ -37,7 +46,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(entry, PLATFORMS)
     )
-    #await hass.config_entries.async_forward_entry_setups(entry, ZCSROBOT_COMPONENTS)
+    #await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     #entry.async_on_unload(entry.add_update_listener(async_reload_entry))
     
     return True

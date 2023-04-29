@@ -1,1 +1,2 @@
-protobuf>=3.19.1
+httplib2>=0.10.3
+simplejson>=3.11.1
