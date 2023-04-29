@@ -1,0 +1,290 @@
+"""
+ZCS API Client.
+https://github.com/deviceWISE/sample_tr50_python
+"""
+from __future__ import annotations
+
+import asyncio
+import socket
+
+import aiohttp
+import async_timeout
+import simplejson as json
+
+from .const import (
+    LOGGER,
+    DOMAIN,
+)
+
+class ZcsMowerApiClient:
+    """Sample API Client."""
+    
+    # The API endpoint for POSTing (e.g. https://www.example.com/api)
+    _endpoint = ""
+
+    # The application identifier you will be using.
+    _app_id = ""
+
+    # The application token.
+    _app_token = ""
+
+    # The thing key used to identify the application.
+    _thing_key = ""
+
+    # Holds the current session identifier.
+    _session_id = ""
+
+    # If the last request succeeded or failed.
+    _status = None
+
+    # Holds the response data from the API call.
+    _response = []
+
+    # Holds the current session identifier.
+    _session_id = ""
+
+    # Holds any error returned by the API.
+    _error = []
+    
+    def __init__(
+        self,
+        session: aiohttp.ClientSession,
+        options: {},
+    ) -> None:
+        """Initialize API Client."""
+        self._session = session
+        
+        if "endpoint" in options:
+            self._endpoint = options["endpoint"]
+        
+        if "app_id" in options:
+            self._app_id = options["app_id"]
+        if "app_token" in options:
+            self._app_token = options["app_token"]
+        if "thing_key" in options:
+            self._thing_key = options["thing_key"]
+        
+        if "session_id" in options:
+            self._session_id = options["session_id"]
+    
+    # thing.find : This command is used to find and return a thing.
+    # @param     string    thing_key   Identifies the thing.
+    # @return    mixed     Returns the array of the selected thing on success, or the failure code.
+    async def thing_find(
+        self,
+        params: {}
+    ) -> any:
+        """This command is used to find and return a thing."""
+        
+        result = await self.execute("thing.find", params)
+        if result == True and self._response["data"]["success"] == True:
+            return self._response["data"]["params"]
+        else:
+            raise ZcsMowerApiClientAuthenticationError(
+                "Authorization failed. Please check the application configuration."
+            )
+    
+    # This method sends the TR50 request to the server and parses the response.
+    # @param    mixed    data     The JSON command and arguments. This parameter can also be a dict that will be converted to a JSON string.
+    # @return   bool     Success or failure to post.
+    async def post(
+        self,
+        data: dict | None = None,
+        headers: dict | None = None,
+    ) -> bool:
+        """This method sends the TR50 request to the server and parses the response."""
+        self._error = ""
+        self._status = True
+        self._response = ""
+        
+        if not type(data) is dict:
+            data = json.loads(data)
+
+        data = await self.set_json_auth(data)
+        
+        # TODO: delete
+        LOGGER.error(data)
+        
+        try:
+            async with async_timeout.timeout(10):
+                response = await self._session.request(
+                    method="POST",
+                    url=self._endpoint,
+                    headers=headers,
+                    json=data,
+                )
+                if not response.status == 200:
+                    raise ZcsMowerApiClientError(
+                        "Failed to POST to API"
+                    )
+                response.raise_for_status()
+                
+                self._response = await response.json()
+                
+                if "errorMessages" in self._response:
+                    self._error = self._response["errorMessages"]
+                
+                if "success" in self._response:
+                    self._status = self._response["success"]
+                if "data" in self._response:
+                    if "success" in self._response["data"]:
+                        self._status = self._response["data"]["success"]
+                if "auth" in self._response:
+                    if "success" in self._response["auth"]:
+                        self._status = self._response["auth"]["success"]
+                
+                # TODO: delete
+                LOGGER.error(self._response)
+                
+                if self._status == True:
+                    return self._status
+                else:
+                    raise ZcsMowerApiClientCommunicationError(
+                        "Communication failed: %s" % self._error
+                    )
+        except asyncio.TimeoutError as exception:
+            raise ZcsMowerApiClientCommunicationError(
+                "Timeout error fetching information",
+            ) from exception
+        except (aiohttp.ClientError, socket.gaierror) as exception:
+            raise ZcsMowerApiClientCommunicationError(
+                "Error fetching information",
+            ) from exception
+        except Exception as exception:
+            raise ZcsMowerApiClientError(
+                "Something really wrong happened!"
+            ) from exception
+    
+    # Package the command and the params into an array and sends the command to the configured endpoint for processing.
+    # @param    command    string    The TR50 command to execute.
+    # @param    params     dict      The command parameters.
+    # @return   bool       Success or failure to post.
+    async def execute(
+        self,
+        command: str,
+        params: dict | bool = False
+    ) -> bool:
+        """Package the command and the params into an array and sends the command to the configured endpoint for processing."""
+        if command == "api.authenticate":
+            parameters = {
+                "auth" : {
+                    "command" : "api.authenticate",
+                    "params" : params
+                }
+            }
+        else:
+            parameters = {
+                "data" : {
+                    "command" : command
+                }
+            }
+            if not params == False:
+               parameters["data"]["params"] = params
+        
+        return await self.post(parameters)
+    
+    # Depending on the configuration, authenticate the app or the user, prefer the app.
+    # @return    bool    Success or failure to authenticate.
+    async def auth(
+        self
+    ) -> bool:
+        """Depending on the configuration, authenticate the app."""
+        
+        if len(self._app_id) > 0 and len(self._app_token) > 0 and len(self._thing_key) > 0:
+            return await self.app_auth(self._app_id, self._app_token, self._thing_key)
+        return False
+    
+    # Authenticate the application.
+    # @param     string    app_id                The application ID.
+    # @param     string    app_token             The application token.
+    # @param     string    thing_key             The key of the application's thing.
+    # @param     bool      update_session_id     Update the object session ID.
+    # @return    bool      Success or failure to authenticate.
+    async def app_auth(
+        self,
+        app_id: str,
+        app_token: str,
+        thing_key: str,
+        update_session_id: bool = True
+    ) -> bool:
+        """Authenticate the application."""
+        
+        try:
+            params = {
+                "appId" : app_id,
+                "appToken" : app_token,
+                "thingKey" : thing_key
+            }
+            response = await self.execute("api.authenticate", params)
+            if response == True:
+                if update_session_id:
+                    self._session_id = self._response["auth"]["params"]["sessionId"]
+                return True
+            return False
+        except ZcsMowerApiClientCommunicationError as exception:
+            raise ZcsMowerApiClientAuthenticationError(
+                "Authorization failed. Please check the application configuration.",
+            ) from exception
+        except Exception as exception:
+            raise exception
+    
+    # Return the response data for the last command if the last command was successful.
+    # @return    dict    The response data.
+    async def get_response(
+        self
+    ) -> any:
+        """Return the response data for the last command if the last command was successful."""
+        if self._status and len(self._response["data"]) > 0:
+            return self._response["data"]
+        return None
+    
+    # This method checks the JSON command for the auth parameter. If it is not set, it adds.
+    # @param    mixed    data    A JSON string or the dict representation of JSON.
+    # @return   string   A JSON string with the auth parameter.
+    async def set_json_auth(
+        self,
+        data: str
+    ) -> str:
+        """This method checks the JSON command for the auth parameter. If it is not set, it adds."""
+        if not type(data) is dict:
+            data = json.loads(data)
+        
+        if not "auth" in data:
+            if len(self._session_id) == 0:
+                await self.auth()
+            # if it is still empty, we cannot proceed
+            if len(self._session_id) == 0:
+                raise ZcsMowerApiClientAuthenticationError(
+                    "Authorization failed. Please check the application configuration."
+                )
+            data["auth"] = {
+                "sessionId" : self._session_id
+            }
+        
+        return data
+    
+    
+    async def async_get_data(
+        self
+    ) -> any:
+        """Get data from the API."""
+        # TODO
+    
+    
+class ZcsMowerApiClientError(
+    Exception
+):
+    """Exception to indicate a general API error."""
+
+
+class ZcsMowerApiClientCommunicationError(
+    ZcsMowerApiClientError
+):
+    """Exception to indicate a communication error."""
+
+
+class ZcsMowerApiClientAuthenticationError(
+    ZcsMowerApiClientError
+):
+    """Exception to indicate an authentication error."""
+
