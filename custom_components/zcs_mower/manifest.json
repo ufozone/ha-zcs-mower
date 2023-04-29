@@ -1,5 +1,5 @@
 {
-  "domain": "zcs-mower",
+  "domain": "zcs_mower",
   "name": "ZCS Lawn Mower Robot",
   "codeowners": [
     "@ufozone"
