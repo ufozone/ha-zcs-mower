@@ -7,7 +7,7 @@ from homeassistant.const import Platform, PERCENTAGE, UnitOfLength
 
 LOGGER = getLogger(__package__)
 
-DOMAIN = "zcs_mower"
+DOMAIN = "zcsmower"
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
