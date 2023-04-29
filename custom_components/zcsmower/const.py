@@ -21,7 +21,6 @@ CONF_IMEI = "imei"
 CONF_MOWERS = "lawn_mowers"
 
 API_BASE_URI = "https://api-de.devicewise.com/api"
-API_USER_AGENT = "okhttp/4.9.0"
 API_APP_TOKEN = "DJMYYngGNEit40vA"
 
 UNITS = {

@@ -2,6 +2,7 @@
   "config": {
     "error": {
       "auth": "The client key provided is not valid.",
+      "connection": "Unable to connect to the server.",
       "invalid_imei": "The IMEI provided is not valid."
     },
     "step": {
