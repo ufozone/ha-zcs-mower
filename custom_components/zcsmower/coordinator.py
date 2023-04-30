@@ -12,9 +12,9 @@ from homeassistant.helpers.update_coordinator import (
 from homeassistant.exceptions import ConfigEntryAuthFailed
 
 from .api import (
-    ZcsMowerApiClient,
-    ZcsMowerApiClientAuthenticationError,
-    ZcsMowerApiClientError,
+    ZcsMowerApi,
+    ZcsMowerApiAuthenticationError,
+    ZcsMowerApiError,
 )
 from .const import DOMAIN, LOGGER
 
@@ -28,7 +28,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(
         self,
         hass: HomeAssistant,
-        client: ZcsMowerApiClient,
+        client: ZcsMowerApi,
     ) -> None:
         """Initialize."""
         self.client = client
@@ -43,7 +43,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Update data via library."""
         try:
             return await self.client.async_get_data()
-        except ZcsMowerApiClientAuthenticationError as exception:
+        except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
-        except ZcsMowerApiClientError as exception:
+        except ZcsMowerApiError as exception:
             raise UpdateFailed(exception) from exception

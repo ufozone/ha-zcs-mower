@@ -1,5 +1,5 @@
 """
-ZCS API Client.
+ZCS API
 https://github.com/deviceWISE/sample_tr50_python
 """
 from __future__ import annotations
@@ -16,9 +16,7 @@ from .const import (
     DOMAIN,
 )
 
-class ZcsMowerApiClient:
-    """Sample API Client."""
-    
+class ZcsMowerApi:
     # The API endpoint for POSTing (e.g. https://www.example.com/api)
     _endpoint = ""
 
@@ -51,7 +49,7 @@ class ZcsMowerApiClient:
         session: aiohttp.ClientSession,
         options: {},
     ) -> None:
-        """Initialize API Client."""
+        """Initialize API"""
         self._session = session
         
         if "endpoint" in options:
@@ -66,23 +64,6 @@ class ZcsMowerApiClient:
         
         if "session_id" in options:
             self._session_id = options["session_id"]
-    
-    # thing.find : This command is used to find and return a thing.
-    # @param     string    thing_key   Identifies the thing.
-    # @return    mixed     Returns the array of the selected thing on success, or the failure code.
-    async def thing_find(
-        self,
-        params: {}
-    ) -> any:
-        """This command is used to find and return a thing."""
-        
-        result = await self.execute("thing.find", params)
-        if result == True and self._response["data"]["success"] == True:
-            return self._response["data"]["params"]
-        else:
-            raise ZcsMowerApiClientAuthenticationError(
-                "Authorization failed. Please check the application configuration."
-            )
     
     # This method sends the TR50 request to the server and parses the response.
     # @param    mixed    data     The JSON command and arguments. This parameter can also be a dict that will be converted to a JSON string.
@@ -114,7 +95,7 @@ class ZcsMowerApiClient:
                     json=data,
                 )
                 if not response.status == 200:
-                    raise ZcsMowerApiClientError(
+                    raise ZcsMowerApiError(
                         "Failed to POST to API"
                     )
                 response.raise_for_status()
@@ -139,19 +120,19 @@ class ZcsMowerApiClient:
                 if self._status == True:
                     return self._status
                 else:
-                    raise ZcsMowerApiClientCommunicationError(
+                    raise ZcsMowerApiCommunicationError(
                         "Communication failed: %s" % self._error
                     )
         except asyncio.TimeoutError as exception:
-            raise ZcsMowerApiClientCommunicationError(
+            raise ZcsMowerApiCommunicationError(
                 "Timeout error fetching information",
             ) from exception
         except (aiohttp.ClientError, socket.gaierror) as exception:
-            raise ZcsMowerApiClientCommunicationError(
+            raise ZcsMowerApiCommunicationError(
                 "Error fetching information",
             ) from exception
         except Exception as exception:
-            raise ZcsMowerApiClientError(
+            raise ZcsMowerApiError(
                 "Something really wrong happened!"
             ) from exception
     
@@ -221,8 +202,8 @@ class ZcsMowerApiClient:
                     self._session_id = self._response["auth"]["params"]["sessionId"]
                 return True
             return False
-        except ZcsMowerApiClientCommunicationError as exception:
-            raise ZcsMowerApiClientAuthenticationError(
+        except ZcsMowerApiCommunicationError as exception:
+            raise ZcsMowerApiAuthenticationError(
                 "Authorization failed. Please check the application configuration.",
             ) from exception
         except Exception as exception:
@@ -254,7 +235,7 @@ class ZcsMowerApiClient:
                 await self.auth()
             # if it is still empty, we cannot proceed
             if len(self._session_id) == 0:
-                raise ZcsMowerApiClientAuthenticationError(
+                raise ZcsMowerApiAuthenticationError(
                     "Authorization failed. Please check the application configuration."
                 )
             data["auth"] = {
@@ -267,24 +248,24 @@ class ZcsMowerApiClient:
     async def async_get_data(
         self
     ) -> any:
-        """Get data from the API."""
+        """Get all(?) data from the API."""
         # TODO
     
     
-class ZcsMowerApiClientError(
+class ZcsMowerApiError(
     Exception
 ):
     """Exception to indicate a general API error."""
 
 
-class ZcsMowerApiClientCommunicationError(
-    ZcsMowerApiClientError
+class ZcsMowerApiCommunicationError(
+    ZcsMowerApiError
 ):
     """Exception to indicate a communication error."""
 
 
-class ZcsMowerApiClientAuthenticationError(
-    ZcsMowerApiClientError
+class ZcsMowerApiAuthenticationError(
+    ZcsMowerApiError
 ):
     """Exception to indicate an authentication error."""
 
