@@ -62,27 +62,14 @@ async def async_setup_entry(
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
     
-    config = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator.config = coordinator.config
     
     # Update our config to include new mowers and remove those that have been removed.
     if config_entry.options:
-        config.update(config_entry.options)
+        coordinator.config.update(config_entry.options)
     
-    client = ZcsMowerApiClient(
-        session=async_get_clientsession(hass),
-        options={
-            "endpoint": API_BASE_URI,
-            "app_id": config[CONF_CLIENT_KEY],
-            "app_token": API_APP_TOKEN,
-            "thing_key": config[CONF_CLIENT_KEY]
-        }
-    )
-    
-    # TODO: delete
-    LOGGER.error(config[CONF_CLIENT_KEY])
-    LOGGER.error(config[CONF_MOWERS])
-    
-    sensors = [ZcsMowerSensor(client, mower) for mower in config[CONF_MOWERS]]
+    sensors = [ZcsMowerSensor(coordinator, mower) for mower in coordinator.config[CONF_MOWERS]]
     async_add_entities(sensors, update_before_add=True)
 
 
@@ -94,17 +81,17 @@ async def async_setup_platform(
 ) -> None:
     """Set up the sensor platform."""
     
-    client = ZcsMowerApiClient(
-        session=async_get_clientsession(hass),
-        options={
-            "endpoint": API_BASE_URI,
-            "app_id": config[CONF_CLIENT_KEY],
-            "app_token": API_APP_TOKEN,
-            "thing_key": config[CONF_CLIENT_KEY]
-        }
-    )
-    sensors = [ZcsMowerSensor(client, mower) for mower in config[CONF_MOWERS]]
-    async_add_entities(sensors, update_before_add=True)
+    #client = ZcsMowerApiClient(
+    #    session=async_get_clientsession(hass),
+    #    options={
+    #        "endpoint": API_BASE_URI,
+    #        "app_id": config[CONF_CLIENT_KEY],
+    #        "app_token": API_APP_TOKEN,
+    #        "thing_key": config[CONF_CLIENT_KEY]
+    #    }
+    #)
+    #sensors = [ZcsMowerSensor(client, mower) for mower in config[CONF_MOWERS]]
+    #async_add_entities(sensors, update_before_add=True)
 
 
 class ZcsMowerSensor(Entity):
@@ -112,11 +99,12 @@ class ZcsMowerSensor(Entity):
 
     def __init__(
             self,
-            client: ZcsMowerApiClient,
+            coordinator: ZcsMowerDataUpdateCoordinator,
             mower: dict[str, str]
         ):
         super().__init__()
-        self.client = client
+        self.coordinator = coordinator
+        self.client = coordinator.client
         self._imei = mower["imei"]
         self._name = mower.get("name", self._imei)
         self._state = None

@@ -28,10 +28,12 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(
         self,
+        config: dict,
         hass: HomeAssistant,
         client: ZcsMowerApiClient,
     ) -> None:
         """Initialize."""
+        self.config = config
         self.client = client
         super().__init__(
             hass=hass,
@@ -43,7 +45,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            return await self.client.async_get_data()
+            
+            #return await self.client.async_get_data()
+            return True
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
         except ZcsMowerApiError as exception:

@@ -3,18 +3,23 @@ import asyncio
 import site
 from pathlib import Path
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import Platform
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api_client import ZcsMowerApiClient
 from .const import (
     LOGGER,
     DOMAIN,
     PLATFORMS,
+    API_BASE_URI,
+    API_APP_TOKEN,
     CONF_CLIENT_KEY,
     CONF_IMEI,
     CONF_MOWERS,
 )
+from .coordinator import ZcsMowerDataUpdateCoordinator
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
@@ -28,13 +33,26 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
     
-    hass.data.setdefault(DOMAIN, {})
-    hass_data = dict(entry.data)
+    config = dict(entry.data)
     # Registers update listener to update config entry when options are updated.
-    unsub_options_update_listener = entry.add_update_listener(options_update_listener)
     # Store a reference to the unsubscribe function to cleanup if an entry is unloaded.
-    hass_data["unsub_options_update_listener"] = unsub_options_update_listener
-    hass.data[DOMAIN][entry.entry_id] = hass_data
+    config["unsub_options_update_listener"] = entry.add_update_listener(options_update_listener)
+    
+    hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN][entry.entry_id] = coordinator = ZcsMowerDataUpdateCoordinator(
+        config=config,
+        hass=hass,
+        client=ZcsMowerApiClient(
+            session=async_get_clientsession(hass),
+            options={
+                "endpoint": API_BASE_URI,
+                "app_id": entry.data[CONF_CLIENT_KEY],
+                "app_token": API_APP_TOKEN,
+                "thing_key": entry.data[CONF_CLIENT_KEY]
+            }
+        ),
+    )
+    await coordinator.async_config_entry_first_refresh()
     
     # Forward the setup to platforms.
     #hass.async_create_task(
@@ -59,7 +77,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         # Remove config entry from domain.
         entry_data = hass.data[DOMAIN].pop(entry.entry_id)
         # Remove options_update_listener.
-        entry_data["unsub_options_update_listener"]()
+        entry_data.config["unsub_options_update_listener"]()
 
     return unload_ok
 
