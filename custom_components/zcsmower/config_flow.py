@@ -13,12 +13,6 @@ from homeassistant.helpers.entity_registry import (
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import voluptuous as vol
 
-from .api import (
-    ZcsMowerApiAuthenticationError,
-    ZcsMowerApiCommunicationError,
-    ZcsMowerApiError,
-)
-from .api_client import ZcsMowerApiClient
 from .const import (
     LOGGER,
     DOMAIN,
@@ -29,6 +23,13 @@ from .const import (
     CONF_IMEI,
     CONF_MOWERS,
 )
+from .api import (
+    ZcsMowerApi,
+    ZcsMowerApiClient,
+    ZcsMowerApiAuthenticationError,
+    ZcsMowerApiCommunicationError,
+    ZcsMowerApiError,
+)
 
 
 async def validate_auth(client_key: str, hass: core.HomeAssistant) -> None:
@@ -37,6 +38,8 @@ async def validate_auth(client_key: str, hass: core.HomeAssistant) -> None:
 
     Raises a ValueError if the client key is invalid.
     """
+    if len(client_key) != 28:
+        raise ValueError
     
     client = ZcsMowerApiClient(
         session=async_create_clientsession(hass),
@@ -47,9 +50,7 @@ async def validate_auth(client_key: str, hass: core.HomeAssistant) -> None:
             "thing_key": client_key
         }
     )
-    await client.thing_find(
-        thing_key=client_key
-    )
+    await client.check_api_client()
 
 async def validate_imei(imei: str, client_key: str, hass: core.HassJob) -> None:
     """
@@ -69,8 +70,8 @@ async def validate_imei(imei: str, client_key: str, hass: core.HassJob) -> None:
             "thing_key": client_key
         }
     )
-    await client.thing_find(
-        thing_key=imei
+    await client.check_robot(
+        imei=imei
     )
 
 class ZcsMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):

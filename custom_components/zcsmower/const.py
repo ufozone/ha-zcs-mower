@@ -1,13 +1,12 @@
 """Constants for ZCS Lawn Mower Robot integration."""
 from logging import Logger, getLogger
-from enum import Enum
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import Platform, PERCENTAGE, UnitOfLength
 
 LOGGER = getLogger(__package__)
 
 DOMAIN = "zcsmower"
+MANUFACTURER = "Zucchetti Centro Sistemi"
 
 PLATFORMS = [
     #Platform.BINARY_SENSOR,
@@ -25,16 +24,44 @@ CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
 
-ROBOT_STATES = {
-    1: "charging",
-    2: "working",
-    3: "stop",
-    4: "error",
-    5: "nosignal",
-    6: "gotostation",
-    7: "gotoarea",
-    8: "bordercut"
-}
+ROBOT_STATES = [
+    {
+        "name" : "unknown",
+        "icon" : "mdi:crosshairs-question",
+    },
+    {
+        "name" : "charging",
+        "icon" : "mdi:battery-charging",
+    },
+    {
+        "name" : "working",
+        "icon" : "mdi:state-machine",
+    },
+    {
+        "name" : "stop",
+        "icon" : "mdi:stop-circle",
+    },
+    {
+        "name" : "error",
+        "icon" : "mdi:alert-circle",
+    },
+    {
+        "name" : "nosignal",
+        "icon" : "mdi:signal-off",
+    },
+    {
+        "name" : "gotostation",
+        "icon" : "mdi:ev-station",
+    },
+    {
+        "name" : "gotoarea",
+        "icon" : "mdi:grass",
+    },
+    {
+        "name" : "bordercut",
+        "icon" : "mdi:scissors-cutting",
+    },
+]
 
 UNITS = {
     "KILOMETERS": UnitOfLength.KILOMETERS,

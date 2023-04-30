@@ -13,11 +13,15 @@ from homeassistant.exceptions import ConfigEntryAuthFailed
 
 from .api import (
     ZcsMowerApi,
+    ZcsMowerApiClient,
     ZcsMowerApiAuthenticationError,
     ZcsMowerApiError,
 )
-from .api_client import ZcsMowerApiClient
-from .const import DOMAIN, LOGGER
+from .const import (
+    DOMAIN,
+    LOGGER,
+    ROBOT_STATES,
+)
 
 
 # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
@@ -45,6 +49,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
+            # TODO: delete
+            LOGGER.error("_async_update_data")
             
             #return await self.client.async_get_data()
             return True

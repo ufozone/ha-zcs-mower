@@ -16,6 +16,7 @@ from .const import (
     DOMAIN,
 )
 
+
 class ZcsMowerApi:
     # The API endpoint for POSTing (e.g. https://www.example.com/api)
     _endpoint = ""
@@ -240,8 +241,49 @@ class ZcsMowerApi:
             }
         
         return data
+
+
+class ZcsMowerApiClient(ZcsMowerApi):
+    def __init__(
+        self,
+        session: aiohttp.ClientSession,
+        options: {},
+    ) -> None:
+        """Initialize API Client"""
+        ZcsMowerApi.__init__(
+            self,
+            session,
+            options
+        )
     
+    async def check_api_client(
+        self,
+    ) -> any:
+        result = await self.execute("thing.find", {
+            "key": self._thing_key
+        })
+        if result == True and self._response["data"]["success"] == True:
+            return self._response["data"]["params"]
+        else:
+            raise ZcsMowerApiAuthenticationError(
+                "Authorization failed. Please check the application configuration."
+            )
     
+    async def check_robot(
+        self,
+        imei: str
+    ) -> any:
+        result = await self.execute("thing.find", {
+            "imei": imei
+        })
+        if result == True and self._response["data"]["success"] == True:
+            return self._response["data"]["params"]
+        else:
+            raise ZcsMowerApiCommunicationError(
+                "Lawn mower not found. Please check the application configuration."
+            )
+
+
 class ZcsMowerApiError(
     Exception
 ):

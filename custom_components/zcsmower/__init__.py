@@ -1,14 +1,11 @@
 """ZCS Lawn Mower Robot integration."""
-import asyncio
-import site
-from pathlib import Path
+from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .api_client import ZcsMowerApiClient
 from .const import (
     LOGGER,
     DOMAIN,
@@ -19,6 +16,7 @@ from .const import (
     CONF_IMEI,
     CONF_MOWERS,
 )
+from .api import ZcsMowerApiClient
 from .coordinator import ZcsMowerDataUpdateCoordinator
 
 
@@ -32,7 +30,6 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
-    
     config = dict(entry.data)
     # Registers update listener to update config entry when options are updated.
     # Store a reference to the unsubscribe function to cleanup if an entry is unloaded.
@@ -66,24 +63,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 async def options_update_listener(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
     """Handle options update."""
-    
     await hass.config_entries.async_reload(config_entry.entry_id)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         # Remove config entry from domain.
         entry_data = hass.data[DOMAIN].pop(entry.entry_id)
         # Remove options_update_listener.
         entry_data.config["unsub_options_update_listener"]()
-
     return unload_ok
 
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload config entry."""
-    
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)
