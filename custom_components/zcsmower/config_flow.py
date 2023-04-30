@@ -32,28 +32,6 @@ from .const import (
     API_APP_TOKEN,
 )
 
-    
-async def validate_imei(imei: str, client_key: str, hass: core.HassJob) -> None:
-    """
-    Validates a lawn mower IMEI.
-    
-    Raises a ValueError if the IMEI is invalid.
-    """
-    if len(imei) != 15:
-        raise ValueError
-        
-    client = ZcsMowerApiClient(
-        session=async_get_clientsession(hass),
-        options={
-            "endpoint": API_BASE_URI,
-            "app_id": client_key,
-            "app_token": API_APP_TOKEN,
-            "thing_key": client_key
-        }
-    )
-    await client.thing_find(
-        thing_key=client_key
-    )
 
 async def validate_auth(client_key: str, hass: core.HomeAssistant) -> None:
     """
@@ -73,6 +51,28 @@ async def validate_auth(client_key: str, hass: core.HomeAssistant) -> None:
     )
     await client.thing_find(
         thing_key=client_key
+    )
+
+async def validate_imei(imei: str, client_key: str, hass: core.HassJob) -> None:
+    """
+    Validates a lawn mower IMEI.
+    
+    Raises a ValueError if the IMEI is invalid.
+    """
+    if len(imei) != 15:
+        raise ValueError
+        
+    client = ZcsMowerApiClient(
+        session=async_get_clientsession(hass),
+        options={
+            "endpoint": API_BASE_URI,
+            "app_id": client_key,
+            "app_token": API_APP_TOKEN,
+            "thing_key": client_key
+        }
+    )
+    await client.thing_find(
+        thing_key=imei
     )
 
 class ZcsMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -127,7 +127,7 @@ class ZcsMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     client_key=self.data[CONF_CLIENT_KEY],
                     hass=self.hass
                 )
-            except ValueError:
+            except Exception:
                 errors["base"] = "invalid_imei"
             
             if not errors:
@@ -216,19 +216,13 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 # Validate the imei.
                 client_key = self.hass.data[DOMAIN][self.config_entry.entry_id][CONF_CLIENT_KEY]
                 
-                # TODO: delete
-                LOGGER.error("options client_key")
-                LOGGER.error(user_input[CONF_IMEI])
-                LOGGER.error(client_key)
-                LOGGER.error(self.hass)
-                
                 try:
                     await validate_imei(
                         imei=user_input[CONF_IMEI],
                         client_key=client_key,
                         hass=self.hass
                     )
-                except ValueError:
+                except Exception:
                     errors["base"] = "invalid_imei"
 
                 if not errors:
