@@ -38,9 +38,6 @@ class ZcsMowerApi:
     # Holds the response data from the API call.
     _response = []
 
-    # Holds the current session identifier.
-    _session_id = ""
-
     # Holds any error returned by the API.
     _error = []
     
