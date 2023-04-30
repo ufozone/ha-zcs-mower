@@ -7,20 +7,21 @@
     },
     "step": {
       "user": {
-        "data": {
-          "client_key": "Client Key"
-        },
+        "title": "Authentication",
         "description": "Enter your client key from mobile app.",
-        "title": "Authentication"
+        "data": {
+          "name": "Name",
+          "client_key": "Client Key"
+        }
       },
       "mower": {
-        "data": {
-          "add_another": "Add another lawn mower?",
-          "imei": "IMEI of lawn mower",
-          "name": "Name of lawn mower"
-        },
+        "title": "Add lawn mower",
         "description": "Add a lawn mower, check the box to add another.",
-        "title": "Add lawn mower"
+        "data": {
+          "name": "Name of lawn mower",
+          "imei": "IMEI of lawn mower",
+          "add_another": "Add another lawn mower?"
+        }
       }
     }
   },
@@ -31,12 +32,12 @@
     "step": {
       "init": {
         "title": "Manage lawn mowers",
+        "description": "Remove existing lawn mowers or add a new lawn mower.",
         "data": {
           "mowers": "Existing mower: Uncheck any lawn mower you want to remove.",
           "imei": "New mower: IMEI of lawn mower",
           "name": "New mower: Name of lawn mower"
-        },
-        "description": "Remove existing lawn mowers or add a new lawn mower."
+        }
       }
     }
   }

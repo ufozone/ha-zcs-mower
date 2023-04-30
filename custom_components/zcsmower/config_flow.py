@@ -1,16 +1,26 @@
+"""Adds config flow for Ambrogio."""
+from __future__ import annotations
+
 from copy import deepcopy
 from typing import Any, Dict, Optional
 
-from homeassistant import config_entries, core
-from homeassistant.const import CONF_NAME
 from homeassistant.core import callback
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    OptionsFlow,
+)
+from homeassistant.const import (
+    CONF_NAME
+)
+from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_registry import (
     async_entries_for_config_entry,
     async_get,
 )
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
+import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 
 from .const import (
@@ -74,14 +84,14 @@ async def validate_imei(imei: str, client_key: str, hass: core.HassJob) -> None:
         imei=imei
     )
 
-class ZcsMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
     
-    data: Optional[Dict[str, Any]]
+    data: Optional[dict[str, Any]]
     
-    async def async_step_user(self, user_input: Optional[Dict[str, Any]] = None) -> config_entries.FlowResult:
+    async def async_step_user(self, user_input: Optional[dict[str, Any]] = None) -> FlowResult:
         """Invoked when a user initiates a flow via the user interface."""
-        errors: Dict[str, str] = {}
+        errors: dict[str, str] = {}
         if user_input is not None:
             try:
                 await validate_auth(user_input[CONF_CLIENT_KEY], self.hass)
@@ -107,15 +117,19 @@ class ZcsMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required(
+                        CONF_NAME,
+                        default=(user_input or {}).get(CONF_NAME),
+                    ): cv.string,
+                    vol.Required(
                         CONF_CLIENT_KEY,
                         default=(user_input or {}).get(CONF_CLIENT_KEY),
-                    ): cv.string
+                    ): cv.string,
                 }
             ),
             errors=errors,
         )
 
-    async def async_step_mower(self, user_input: Optional[Dict[str, Any]] = None) -> config_entries.FlowResult:
+    async def async_step_mower(self, user_input: Optional[Dict[str, Any]] = None) -> FlowResult:
         """Second step in config flow to add a lawn mower."""
         errors: Dict[str, str] = {}
         if user_input is not None:
@@ -144,7 +158,7 @@ class ZcsMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 
                 # User is done adding lawn mowers, create the config entry.
                 return self.async_create_entry(
-                    title=self.data[CONF_CLIENT_KEY],
+                    title=self.data[CONF_NAME],
                     data=self.data
                 )
             
@@ -173,10 +187,10 @@ class ZcsMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return OptionsFlowHandler(config_entry)
 
 
-class OptionsFlowHandler(config_entries.OptionsFlow):
+class OptionsFlowHandler(OptionsFlow):
     """Handles options flow for the component."""
 
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+    def __init__(self, config_entry: ConfigEntry) -> None:
         self.config_entry = config_entry
 
     async def async_step_init(
@@ -213,7 +227,8 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 
             if user_input.get(CONF_IMEI):
                 # Validate the imei.
-                client_key = self.hass.data[DOMAIN][self.config_entry.entry_id][CONF_CLIENT_KEY]
+                coordinator = self.hass.data[DOMAIN][self.config_entry.entry_id]
+                client_key = coordinator.config[CONF_CLIENT_KEY]
                 
                 try:
                     await validate_imei(
