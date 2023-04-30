@@ -10,10 +10,10 @@ LOGGER = getLogger(__package__)
 DOMAIN = "zcsmower"
 
 PLATFORMS = [
-    Platform.BINARY_SENSOR,
-    Platform.DEVICE_TRACKER,
+    #Platform.BINARY_SENSOR,
+    #Platform.DEVICE_TRACKER,
     Platform.SENSOR,
-    Platform.SWITCH,
+    #Platform.SWITCH,
 ]
 
 API_BASE_URI = "https://api-de.devicewise.com/api"
@@ -24,6 +24,17 @@ CONF_IMEI = "imei"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
+
+ROBOT_STATES = {
+    1: "charging",
+    2: "working",
+    3: "stop",
+    4: "error",
+    5: "nosignal",
+    6: "gotostation",
+    7: "gotoarea",
+    8: "bordercut"
+}
 
 UNITS = {
     "KILOMETERS": UnitOfLength.KILOMETERS,
