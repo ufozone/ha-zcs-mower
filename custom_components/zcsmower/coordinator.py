@@ -16,19 +16,20 @@ from .api import (
     ZcsMowerApiAuthenticationError,
     ZcsMowerApiError,
 )
+from .api_client import ZcsMowerApiClient
 from .const import DOMAIN, LOGGER
 
 
 # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
 class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching data from the API."""
+    """Class to manage fetching data from the ZCS API."""
 
     config_entry: ConfigEntry
 
     def __init__(
         self,
         hass: HomeAssistant,
-        client: ZcsMowerApi,
+        client: ZcsMowerApiClient,
     ) -> None:
         """Initialize."""
         self.client = client

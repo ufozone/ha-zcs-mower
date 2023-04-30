@@ -45,3 +45,13 @@ class ZcsMowerApiClient(ZcsMowerApi):
             raise ZcsMowerApiAuthenticationError(
                 "Authorization failed. Please check the application configuration."
             )
+
+
+    
+    async def async_get_data(
+        self
+    ) -> any:
+        """Get all(?) data from the API."""
+        
+        # TODO
+        LOGGER.error("READY to get all data")

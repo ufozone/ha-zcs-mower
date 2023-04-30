@@ -18,18 +18,16 @@ from .api import (
     ZcsMowerApiCommunicationError,
     ZcsMowerApiError,
 )
-from .api_client import (
-    ZcsMowerApiClient,
-)
+from .api_client import ZcsMowerApiClient
 from .const import (
     LOGGER,
     DOMAIN,
     PLATFORMS,
+    API_BASE_URI,
+    API_APP_TOKEN,
     CONF_CLIENT_KEY,
     CONF_IMEI,
     CONF_MOWERS,
-    API_BASE_URI,
-    API_APP_TOKEN,
 )
 
 
@@ -61,7 +59,7 @@ async def validate_imei(imei: str, client_key: str, hass: core.HassJob) -> None:
     """
     if len(imei) != 15:
         raise ValueError
-        
+    
     client = ZcsMowerApiClient(
         session=async_get_clientsession(hass),
         options={

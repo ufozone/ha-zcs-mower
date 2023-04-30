@@ -16,12 +16,14 @@ PLATFORMS = [
     Platform.SWITCH,
 ]
 
+API_BASE_URI = "https://api-de.devicewise.com/api"
+API_APP_TOKEN = "DJMYYngGNEit40vA"
+
 CONF_CLIENT_KEY = "client_key"
 CONF_IMEI = "imei"
 CONF_MOWERS = "lawn_mowers"
 
-API_BASE_URI = "https://api-de.devicewise.com/api"
-API_APP_TOKEN = "DJMYYngGNEit40vA"
+ATTR_IMEI = "imei"
 
 UNITS = {
     "KILOMETERS": UnitOfLength.KILOMETERS,

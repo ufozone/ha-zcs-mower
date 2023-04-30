@@ -245,13 +245,6 @@ class ZcsMowerApi:
         return data
     
     
-    async def async_get_data(
-        self
-    ) -> any:
-        """Get all(?) data from the API."""
-        # TODO
-    
-    
 class ZcsMowerApiError(
     Exception
 ):
