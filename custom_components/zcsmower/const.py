@@ -10,7 +10,7 @@ MANUFACTURER = "Zucchetti Centro Sistemi"
 
 PLATFORMS = [
     #Platform.BINARY_SENSOR,
-    #Platform.DEVICE_TRACKER,
+    Platform.DEVICE_TRACKER,
     Platform.SENSOR,
     #Platform.SWITCH,
 ]
