@@ -62,6 +62,10 @@ ROBOT_STATES = [
         "name" : "bordercut",
         "icon" : "mdi:scissors-cutting",
     },
+    {
+        "name" : "unknown",
+        "icon" : "mdi:crosshairs-question",
+    },
 ]
 
 UNITS = {

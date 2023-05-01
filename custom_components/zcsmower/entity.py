@@ -107,7 +107,8 @@ class ZcsMowerEntity(CoordinatorEntity):
         if self._imei in self.coordinator.data:
             robot = self.coordinator.data[self._imei]
             self._state = robot["state"]
+            self._available = (self._state > 0)
             self._location = robot["location"]
             self._serial = robot["serial"]
             if len(self._serial) > 0:
-                self._model = self._serial[0:8]
+                self._model = self._serial[0:5]

@@ -91,6 +91,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
     
     data: Optional[dict[str, Any]]
+    options: Optional[dict[str, Any]]
     
     async def async_step_user(self, user_input: Optional[dict[str, Any]] = None) -> FlowResult:
         """Invoked when a user initiates a flow via the user interface."""
@@ -98,23 +99,26 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 await validate_auth(user_input[CONF_CLIENT_KEY], self.hass)
+            except ValueError as exception:
+                errors["base"] = "invalid_key"
             except ZcsMowerApiAuthenticationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "auth"
-            except ZcsMowerApiCommunicationError as exception:
+            except (ZcsMowerApiCommunicationError, ZcsMowerApiError) as exception:
                 LOGGER.error(exception)
                 errors["base"] = "connection"
-            except ZcsMowerApiError as exception:
+            except Exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection"
+            
             if not errors:
                 # Input is valid, set data
                 self.data = user_input
-                self.data[CONF_MOWERS] = {}
-                
+                self.options = {
+                    CONF_MOWERS: {}
+                }
                 # Return the form of the next step
                 return await self.async_step_mower()
-            
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
@@ -143,12 +147,15 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     client_key=self.data[CONF_CLIENT_KEY],
                     hass=self.hass
                 )
-            except Exception:
+            except ValueError as exception:
                 errors["base"] = "invalid_imei"
+            except Exception:
+                LOGGER.exception(exception)
+                errors["base"] = "connection"
             
             if not errors:
                 # Input is valid, set data.
-                self.data[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
+                self.options[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
                 
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
@@ -158,7 +165,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 # User is done adding lawn mowers, create the config entry.
                 return self.async_create_entry(
                     title=self.data[CONF_NAME],
-                    data=self.data
+                    data=self.data,
+                    options=self.options,
                 )
             
         return self.async_show_form(
@@ -191,7 +199,7 @@ class OptionsFlowHandler(OptionsFlow):
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         self.config_entry = config_entry
-        self.data = dict(config_entry.data)
+        self.options = dict(config_entry.options)
 
     async def async_step_init(
         self,
@@ -216,7 +224,7 @@ class OptionsFlowHandler(OptionsFlow):
         }
         
         if user_input is not None:
-            updated_mowers = deepcopy(self.config_entry.data[CONF_MOWERS])
+            updated_mowers = deepcopy(self.config_entry.options[CONF_MOWERS])
 
             # Remove any unchecked lawn mowers
             removed_entities = [
@@ -241,21 +249,24 @@ class OptionsFlowHandler(OptionsFlow):
                         client_key=client_key,
                         hass=self.hass
                     )
-                except Exception:
+                except ValueError as exception:
                     errors["base"] = "invalid_imei"
+                except Exception:
+                    LOGGER.exception(exception)
+                    errors["base"] = "connection"
 
                 if not errors:
                     # Add the new lawn mower
                     updated_mowers[user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
             
-            self.data[CONF_MOWERS] = updated_mowers
+            self.options[CONF_MOWERS] = updated_mowers
             
             if not errors:
                 # Value of data will be set on the options property of our config_entry instance.
-                self.data.update(user_input)
+                self.options.update(user_input)
                 return self.async_create_entry(
                     title="",
-                    data=self.data,
+                    options=self.options,
                 )
         
         return self.async_show_form(
