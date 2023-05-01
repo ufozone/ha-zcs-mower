@@ -37,5 +37,3 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant.
 ### Switches
 * _coming soon_
 
-## Backup and Restore
-* In case of problems after a restore of Home Assistant, please delete the file `.zcsmower-session-cache` in your HA-config folder and restart HA
