@@ -107,9 +107,7 @@ class ZcsMowerApiClient:
             data = json.loads(data)
 
         data = await self.set_json_auth(data)
-        
-        # TODO: delete
-        LOGGER.error(data)
+        LOGGER.debug(data)
         
         try:
             async with async_timeout.timeout(10):
@@ -139,8 +137,7 @@ class ZcsMowerApiClient:
                     if "success" in self._response["auth"]:
                         self._status = self._response["auth"]["success"]
                 
-                # TODO: delete
-                LOGGER.error(self._response)
+                LOGGER.debug(self._response)
                 
                 if self._status == True:
                     return self._status

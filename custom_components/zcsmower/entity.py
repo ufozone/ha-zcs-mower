@@ -20,7 +20,8 @@ class ZcsMowerEntity(CoordinatorEntity):
     def __init__(
         self,
         coordinator: ZcsMowerDataUpdateCoordinator,
-        mower: dict[str, str],
+        imei: str,
+        name: str,
         entity_type: str,
         entity_key: str,
     ) -> None:
@@ -30,30 +31,17 @@ class ZcsMowerEntity(CoordinatorEntity):
         self.coordinator = coordinator
         self.client = coordinator.client
         
-        self._imei = mower["imei"]
-        self._name = mower.get("name", self._imei)
+        self._imei = imei
+        self._name = name
+        self._unique_id = slugify(f"{self._imei}_{self._name}")
         
-        self._attr_unique_id = slugify(f"{self._name}_{entity_key}")
-        self._attr_device_info = DeviceInfo(
-            identifiers={
-                (DOMAIN, self.unique_id)
-            },
-            name=self._name,
-            model=None,
-            manufacturer=MANUFACTURER,
-        )
-        self.entity_id = f"{entity_type}.{self._attr_unique_id}"
+        self.entity_id = f"{entity_type}.{self._unique_id}"
         
         self._state = 0
         self._available = True
         self.attrs: dict[str, Any] = {
             ATTR_IMEI: self._imei,
         }
-        
-        # TODO
-        LOGGER.error("Mower")
-        LOGGER.error(self._imei)
-        LOGGER.error(self._name)
 
     @property
     def name(self) -> str:
@@ -65,10 +53,10 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Return the icon of the entity."""
         return "mdi:robot-mower"
 
-    #@property
-    #def unique_id(self) -> str:
-    #    """Return the unique ID of the sensor."""
-    #    return self._attr_unique_id
+    @property
+    def unique_id(self) -> str:
+        """Return the unique ID of the sensor."""
+        return self._unique_id
 
     @property
     def available(self) -> bool:
@@ -80,6 +68,27 @@ class ZcsMowerEntity(CoordinatorEntity):
         return self.attrs
 
     async def async_update(self) -> None:
-        """Update all sensors."""
-        LOGGER.error("async_update")
-        LOGGER.error(self._name)
+        
+        # TODO
+        LOGGER.debug("async_update")
+        LOGGER.debug(self._name)
+        
+        self._update_handler();
+        self.async_write_ha_state()
+    
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        
+        # TODO
+        LOGGER.debug("_handle_coordinator_update")
+        LOGGER.debug(self._name)
+        
+        self._update_handler();
+        self.async_write_ha_state()
+    
+    def _update_handler(self):
+        if self._imei in self.coordinator.data:
+            robot = self.coordinator.data[self._imei]
+            self._state = robot["state"]
+            self._location = robot["location"]
+

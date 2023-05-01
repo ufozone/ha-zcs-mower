@@ -3,7 +3,8 @@ from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import (
     ConfigType,
@@ -24,19 +25,18 @@ from .entity import ZcsMowerEntity
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: ConfigEntry,
-    async_add_devices: AddEntitiesCallback,
+    async_add_entities: Entity,
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
     
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
-    
-    # Update our config to include new mowers and remove those that have been removed.
-    if config_entry.options:
-        coordinator.config.update(config_entry.options)
-    
-    sensors = [ZcsMowerSensor(coordinator, mower) for mower in coordinator.config[CONF_MOWERS]]
-    async_add_devices(sensors)
-    #async_add_devices(sensors, update_before_add=True)
+    async_add_entities(
+        [
+            ZcsMowerSensor(coordinator, imei, name)
+            for imei, name in coordinator.mowers.items()
+        ],
+        update_before_add=True
+    )
 
 
 async def async_setup_platform(
@@ -48,8 +48,8 @@ async def async_setup_platform(
     """Set up the sensor platform."""
     
     # TODO
-    LOGGER.error("async_setup_platform")
-    LOGGER.error(config_entry)
+    LOGGER.debug("async_setup_platform")
+    LOGGER.debug(config_entry)
 
 
 class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
@@ -58,12 +58,14 @@ class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
     def __init__(
         self,
         coordinator: ZcsMowerDataUpdateCoordinator,
-        mower: dict[str, str],
+        imei: str,
+        name: str,
     ) -> None:
         """Initialize the sensor class."""
         super().__init__(
             coordinator=coordinator,
-            mower=mower,
+            imei=imei,
+            name=name,
             entity_type="sensor",
             entity_key="state",
         )

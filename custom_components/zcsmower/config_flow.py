@@ -106,7 +106,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             if not errors:
                 # Input is valid, set data
                 self.data = user_input
-                self.data[CONF_MOWERS] = []
+                self.data[CONF_MOWERS] = {}
                 
                 # Return the form of the next step
                 return await self.async_step_mower()
@@ -144,12 +144,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             
             if not errors:
                 # Input is valid, set data.
-                self.data[CONF_MOWERS].append(
-                    {
-                        "imei": user_input[CONF_IMEI],
-                        "name": user_input.get(CONF_NAME, user_input[CONF_IMEI]),
-                    }
-                )
+                self.data[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
+                
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
                 if user_input.get("add_another", False):
@@ -225,11 +221,9 @@ class OptionsFlowHandler(OptionsFlow):
                 updated_mowers = [e for e in updated_mowers if e["imei"] != entry_imei]
 
             if user_input.get(CONF_IMEI):
-                # Validate the imei.
-                coordinator = self.hass.data[DOMAIN][self.config_entry.entry_id]
-                client_key = coordinator.config[CONF_CLIENT_KEY]
-                
                 try:
+                    # Validate the imei.
+                    client_key = self.config_entry.data[CONF_CLIENT_KEY]
                     await validate_imei(
                         imei=user_input[CONF_IMEI],
                         client_key=client_key,
@@ -240,19 +234,16 @@ class OptionsFlowHandler(OptionsFlow):
 
                 if not errors:
                     # Add the new lawn mower
-                    updated_mowers.append(
-                        {
-                            "imei": user_input[CONF_IMEI],
-                            "name": user_input.get(CONF_NAME, user_input[CONF_IMEI]),
-                        }
-                    )
+                    updated_mowers[user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
 
             if not errors:
                 # Value of data will be set on the options property of our config_entry
                 # instance.
                 return self.async_create_entry(
                     title="",
-                    data={CONF_MOWERS: updated_mowers},
+                    data={
+                        CONF_MOWERS: updated_mowers
+                    },
                 )
         
         return self.async_show_form(

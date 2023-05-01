@@ -31,7 +31,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(
         self,
-        config: dict,
+        mowers: dict,
         hass: HomeAssistant,
         client: ZcsMowerApiClient,
     ) -> None:
@@ -42,17 +42,67 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             name=DOMAIN,
             update_interval=timedelta(minutes=5),
         )
-        self.config = config
+        self.mowers = mowers
         self.client = client
 
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            # TODO: delete
-            LOGGER.error("_async_update_data")
+            mower_data = {}
+            mower_imeis = []
+            for _imei, _name in self.mowers.items():
+                mower_imeis.append(_imei)
+                mower_data[_imei] = {
+                    "name": _name,
+                    "imei": _imei,
+                    "state": 0,
+                    "location": {
+                        "latitude": None,
+                        "longitude": None,
+                    },
+                }
             
-            #return await self.client.async_get_data()
-            return True
+            result = await self.client.execute("thing.list", {
+                "show": [
+                    "id",
+                    "key",
+                    "name",
+                    "connected",
+                    "lastSeen",
+                    "lastCommunication",
+                    "loc",
+                    "properties",
+                    "alarms",
+                    "attrs",
+                    "createdOn",
+                    "storage",
+                    "varBillingPlanCode"
+                ],
+                "hideFields": True,
+                "keys": mower_imeis
+            })
+            response = await self.client.get_response()
+            if "result" in response:
+                result_list = response["result"]
+                #for i in range(len(result_list)):
+                #    mower = result_list[i]
+                for mower in result_list:
+                    if "key" in mower and "alarms" in mower:
+                        if "robot_state" in mower["alarms"] and mower["key"] in mower_data:
+                            robot_state = mower["alarms"]["robot_state"]
+                            mower_data[mower["key"]]["state"] = robot_state["state"]
+                            # latitude and longitude, not always available
+                            if "lat" in robot_state and "lng" in robot_state:
+                                mower_data[mower["key"]]["location"]["latitude"] = robot_state["lat"]
+                                mower_data[mower["key"]]["location"]["longitude"] = robot_state["lng"]
+                            # robot_state["since"] -> timestamp since state change (format 2023-04-30T10:24:47.517Z)
+            
+            # TODO
+            LOGGER.debug("_async_update_data")
+            LOGGER.debug(mower_data)
+            
+            
+            return mower_data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
         except ZcsMowerApiError as exception:
