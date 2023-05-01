@@ -99,7 +99,7 @@ class ZcsMowerApiClient:
         headers: dict | None = None,
     ) -> bool:
         """This method sends the TR50 request to the server and parses the response."""
-        self._error = ""
+        self._error = []
         self._status = True
         self._response = ""
         
@@ -142,6 +142,14 @@ class ZcsMowerApiClient:
                 if self._status == True:
                     return self._status
                 else:
+                    # if session is invalid, refresh authentication and execute command again
+                    # possible loop, if authentication session is always invalid after successful refresh
+                    for error in ( error for error in self._error if "Authentication session is invalid" in error ):
+                        refresh_auth = await self.auth()
+                        if refresh_auth == True:
+                            data["auth"]["sessionId"] = self._session_id
+                            return await self.post(data, headers)
+                    
                     raise ZcsMowerApiCommunicationError(
                         "Communication failed: %s" % self._error
                     )
@@ -192,7 +200,6 @@ class ZcsMowerApiClient:
         self
     ) -> bool:
         """Depending on the configuration, authenticate the app."""
-        
         if len(self._app_id) > 0 and len(self._app_token) > 0 and len(self._thing_key) > 0:
             return await self.app_auth(self._app_id, self._app_token, self._thing_key)
         return False
@@ -211,7 +218,6 @@ class ZcsMowerApiClient:
         update_session_id: bool = True
     ) -> bool:
         """Authenticate the application."""
-        
         try:
             params = {
                 "appId" : app_id,
