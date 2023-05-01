@@ -55,6 +55,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 mower_data[_imei] = {
                     "name": _name,
                     "imei": _imei,
+                    "model": None,
                     "state": 0,
                     "location": {
                         "latitude": None,
