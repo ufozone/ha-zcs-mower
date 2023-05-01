@@ -64,6 +64,19 @@ class ZcsMowerEntity(CoordinatorEntity):
         return self._available
 
     @property
+    def device_info(self):
+        """Return the device info."""
+
+        return {
+            "identifiers": {
+                (DOMAIN, self._imei)
+            },
+            "name": self._name,
+            "model": None,
+            "manufacturer": MANUFACTURER,
+        }
+
+    @property
     def extra_state_attributes(self) -> dict[str, Any]:
         return self.attrs
 
@@ -74,7 +87,6 @@ class ZcsMowerEntity(CoordinatorEntity):
         LOGGER.debug(self._name)
         
         self._update_handler();
-        self.async_write_ha_state()
     
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
