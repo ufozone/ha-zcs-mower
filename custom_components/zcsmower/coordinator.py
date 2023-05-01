@@ -55,7 +55,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 mower_data[_imei] = {
                     "name": _name,
                     "imei": _imei,
-                    "model": None,
+                    "serial": None,
                     "state": 0,
                     "location": {
                         "latitude": None,
@@ -96,7 +96,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                         # robot_state["since"] -> timestamp since state change (format 2023-04-30T10:24:47.517Z)
                     if "attrs" in mower and "robot_serial" in mower["attrs"]:
                         robot_serial = mower["attrs"]["robot_serial"]
-                        mower_data[mower["key"]]["model"] = robot_serial["value"]
+                        mower_data[mower["key"]]["serial"] = robot_serial["value"]
             
             # TODO
             LOGGER.debug("_async_update_data")
