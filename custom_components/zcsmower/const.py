@@ -62,6 +62,7 @@ ROBOT_STATES = [
         "name" : "bordercut",
         "icon" : "mdi:scissors-cutting",
     },
+    # few robots has unknown state 9
     {
         "name" : "unknown",
         "icon" : "mdi:crosshairs-question",

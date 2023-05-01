@@ -1,7 +1,8 @@
 {
   "config": {
     "error": {
-      "auth": "The client key provided is not valid.",
+      "invalid_key": "The client key provided is not valid.",
+      "auth": "Authorization failed.",
       "connection": "Unable to connect to the server.",
       "invalid_imei": "The IMEI provided is not valid."
     },
