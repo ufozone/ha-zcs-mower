@@ -191,7 +191,7 @@ class OptionsFlowHandler(OptionsFlow):
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         self.config_entry = config_entry
-        self.options = dict(config_entry.options)
+        self.data = dict(config_entry.data)
 
     async def async_step_init(
         self,
@@ -206,9 +206,15 @@ class OptionsFlowHandler(OptionsFlow):
             entity_registry, self.config_entry.entry_id
         )
         # Default value for our multi-select
-        all_mowers = {e.entity_id: e.original_name for e in entries}
-        mower_map = {e.entity_id: e for e in entries}
-
+        all_mowers = {
+            e.entity_id: e.original_name
+            for e in entries
+        }
+        mower_map = {
+            e.entity_id: e 
+            for e in entries
+        }
+        
         if user_input is not None:
             updated_mowers = deepcopy(self.config_entry.data[CONF_MOWERS])
 
@@ -241,16 +247,15 @@ class OptionsFlowHandler(OptionsFlow):
                 if not errors:
                     # Add the new lawn mower
                     updated_mowers[user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
-
+            
+            self.data[CONF_MOWERS] = updated_mowers
+            
             if not errors:
-                # Value of data will be set on the options property of our config_entry
-                # instance.
-                self.options.update(user_input)
+                # Value of data will be set on the options property of our config_entry instance.
+                self.data.update(user_input)
                 return self.async_create_entry(
                     title="",
-                    data={
-                        CONF_MOWERS: updated_mowers
-                    },
+                    data=self.data,
                 )
         
         return self.async_show_form(
