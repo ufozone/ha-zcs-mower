@@ -17,7 +17,7 @@ from .const import (
 )
 
 
-class ZcsMowerApi:
+class ZcsMowerApiClient:
     # The API endpoint for POSTing (e.g. https://www.example.com/api)
     _endpoint = ""
 
@@ -62,6 +62,33 @@ class ZcsMowerApi:
         
         if "session_id" in options:
             self._session_id = options["session_id"]
+    
+    async def check_api_client(
+        self,
+    ) -> any:
+        result = await self.execute("thing.find", {
+            "key": self._thing_key
+        })
+        if result == True and self._response["data"]["success"] == True:
+            return self._response["data"]["params"]
+        else:
+            raise ZcsMowerApiAuthenticationError(
+                "Authorization failed. Please check the application configuration."
+            )
+    
+    async def check_robot(
+        self,
+        imei: str
+    ) -> any:
+        result = await self.execute("thing.find", {
+            "imei": imei
+        })
+        if result == True and self._response["data"]["success"] == True:
+            return self._response["data"]["params"]
+        else:
+            raise ZcsMowerApiCommunicationError(
+                "Lawn mower not found. Please check the application configuration."
+            )
     
     # This method sends the TR50 request to the server and parses the response.
     # @param    mixed    data     The JSON command and arguments. This parameter can also be a dict that will be converted to a JSON string.
@@ -213,8 +240,8 @@ class ZcsMowerApi:
         self
     ) -> any:
         """Return the response data for the last command if the last command was successful."""
-        if self._status and len(self._response["data"]) > 0:
-            return self._response["data"]
+        if self._status and len(self._response["data"]) > 0 and "params" in self._response["data"]:
+            return self._response["data"]["params"]
         return None
     
     # This method checks the JSON command for the auth parameter. If it is not set, it adds.
@@ -241,48 +268,6 @@ class ZcsMowerApi:
             }
         
         return data
-
-
-class ZcsMowerApiClient(ZcsMowerApi):
-    def __init__(
-        self,
-        session: aiohttp.ClientSession,
-        options: {},
-    ) -> None:
-        """Initialize API Client"""
-        ZcsMowerApi.__init__(
-            self,
-            session,
-            options
-        )
-    
-    async def check_api_client(
-        self,
-    ) -> any:
-        result = await self.execute("thing.find", {
-            "key": self._thing_key
-        })
-        if result == True and self._response["data"]["success"] == True:
-            return self._response["data"]["params"]
-        else:
-            raise ZcsMowerApiAuthenticationError(
-                "Authorization failed. Please check the application configuration."
-            )
-    
-    async def check_robot(
-        self,
-        imei: str
-    ) -> any:
-        result = await self.execute("thing.find", {
-            "imei": imei
-        })
-        if result == True and self._response["data"]["success"] == True:
-            return self._response["data"]["params"]
-        else:
-            raise ZcsMowerApiCommunicationError(
-                "Lawn mower not found. Please check the application configuration."
-            )
-
 
 class ZcsMowerApiError(
     Exception

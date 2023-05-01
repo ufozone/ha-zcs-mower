@@ -34,7 +34,6 @@ from .const import (
     CONF_MOWERS,
 )
 from .api import (
-    ZcsMowerApi,
     ZcsMowerApiClient,
     ZcsMowerApiAuthenticationError,
     ZcsMowerApiCommunicationError,
