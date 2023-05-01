@@ -199,6 +199,7 @@ class OptionsFlowHandler(OptionsFlow):
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         self.config_entry = config_entry
+        self.data = dict(config_entry.data)
         self.options = dict(config_entry.options)
 
     async def async_step_init(
@@ -265,8 +266,8 @@ class OptionsFlowHandler(OptionsFlow):
                 # Value of data will be set on the options property of our config_entry instance.
                 self.options.update(user_input)
                 return self.async_create_entry(
-                    title="",
-                    options=self.options,
+                    title=self.data[CONF_NAME],
+                    data=self.options,
                 )
         
         return self.async_show_form(

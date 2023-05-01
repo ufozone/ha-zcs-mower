@@ -11,6 +11,7 @@ from .const import (
     MANUFACTURER,
     ATTRIBUTION,
     ATTR_IMEI,
+    ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 
@@ -106,7 +107,7 @@ class ZcsMowerEntity(CoordinatorEntity):
     def _update_handler(self):
         if self._imei in self.coordinator.data:
             robot = self.coordinator.data[self._imei]
-            self._state = robot["state"]
+            self._state = robot["state"] if robot["state"] < len(ROBOT_STATES) else 0
             self._available = (self._state > 0)
             self._location = robot["location"]
             self._serial = robot["serial"]
