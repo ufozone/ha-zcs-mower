@@ -33,6 +33,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         
         self._imei = imei
         self._name = name
+        self._model = None
         self._unique_id = slugify(f"{self._imei}_{self._name}")
         
         self.entity_id = f"{entity_type}.{self._unique_id}"
@@ -72,7 +73,7 @@ class ZcsMowerEntity(CoordinatorEntity):
                 (DOMAIN, self._imei)
             },
             "name": self._name,
-            "model": None,
+            "model": self._model,
             "manufacturer": MANUFACTURER,
         }
 
@@ -103,4 +104,5 @@ class ZcsMowerEntity(CoordinatorEntity):
             robot = self.coordinator.data[self._imei]
             self._state = robot["state"]
             self._location = robot["location"]
+            self._model = robot["model"]
 

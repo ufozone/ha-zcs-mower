@@ -9,6 +9,7 @@ from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
     OptionsFlow,
+    CONN_CLASS_CLOUD_POLL,
 )
 from homeassistant.const import (
     CONF_NAME
@@ -85,6 +86,9 @@ async def validate_imei(imei: str, client_key: str, hass: core.HassJob) -> None:
 
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
+
+    VERSION = 1
+    CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
     
     data: Optional[dict[str, Any]]
     
@@ -187,9 +191,11 @@ class OptionsFlowHandler(OptionsFlow):
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         self.config_entry = config_entry
+        self.options = dict(config_entry.options)
 
     async def async_step_init(
-        self, user_input: Dict[str, Any] = None
+        self,
+        user_input: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         """Manage the options for the custom component."""
         errors: Dict[str, str] = {}
@@ -239,6 +245,7 @@ class OptionsFlowHandler(OptionsFlow):
             if not errors:
                 # Value of data will be set on the options property of our config_entry
                 # instance.
+                self.options.update(user_input)
                 return self.async_create_entry(
                     title="",
                     data={

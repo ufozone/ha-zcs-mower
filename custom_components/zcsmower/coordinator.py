@@ -84,18 +84,18 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             response = await self.client.get_response()
             if "result" in response:
                 result_list = response["result"]
-                #for i in range(len(result_list)):
-                #    mower = result_list[i]
-                for mower in result_list:
-                    if "key" in mower and "alarms" in mower:
-                        if "robot_state" in mower["alarms"] and mower["key"] in mower_data:
-                            robot_state = mower["alarms"]["robot_state"]
-                            mower_data[mower["key"]]["state"] = robot_state["state"]
-                            # latitude and longitude, not always available
-                            if "lat" in robot_state and "lng" in robot_state:
-                                mower_data[mower["key"]]["location"]["latitude"] = robot_state["lat"]
-                                mower_data[mower["key"]]["location"]["longitude"] = robot_state["lng"]
-                            # robot_state["since"] -> timestamp since state change (format 2023-04-30T10:24:47.517Z)
+                for mower in ( mower for mower in result_list if "key" in mower and mower["key"] in mower_data ):
+                    if "alarms" in mower and "robot_state" in mower["alarms"]:
+                        robot_state = mower["alarms"]["robot_state"]
+                        mower_data[mower["key"]]["state"] = robot_state["state"]
+                        # latitude and longitude, not always available
+                        if "lat" in robot_state and "lng" in robot_state:
+                            mower_data[mower["key"]]["location"]["latitude"] = robot_state["lat"]
+                            mower_data[mower["key"]]["location"]["longitude"] = robot_state["lng"]
+                        # robot_state["since"] -> timestamp since state change (format 2023-04-30T10:24:47.517Z)
+                    if "attrs" in mower and "robot_serial" in mower["attrs"]:
+                        robot_serial = mower["attrs"]["robot_serial"]
+                        mower_data[mower["key"]]["model"] = robot_serial["value"]
             
             # TODO
             LOGGER.debug("_async_update_data")
