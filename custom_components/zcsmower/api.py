@@ -11,10 +11,25 @@ import aiohttp
 import async_timeout
 import simplejson as json
 
-from .const import (
-    LOGGER,
-    DOMAIN,
-)
+from .const import LOGGER
+
+
+class ZcsMowerApiError(
+    Exception
+):
+    """Exception to indicate a general API error."""
+
+
+class ZcsMowerApiCommunicationError(
+    ZcsMowerApiError
+):
+    """Exception to indicate a communication error."""
+
+
+class ZcsMowerApiAuthenticationError(
+    ZcsMowerApiError
+):
+    """Exception to indicate an authentication error."""
 
 
 class ZcsMowerApiClient:
@@ -91,6 +106,7 @@ class ZcsMowerApiClient:
             )
     
     # This method sends the TR50 request to the server and parses the response.
+    # https://github.com/deviceWISE/sample_tr50_python
     # @param    mixed    data     The JSON command and arguments. This parameter can also be a dict that will be converted to a JSON string.
     # @return   bool     Success or failure to post.
     async def post(
@@ -167,6 +183,7 @@ class ZcsMowerApiClient:
             ) from exception
     
     # Package the command and the params into an array and sends the command to the configured endpoint for processing.
+    # https://github.com/deviceWISE/sample_tr50_python
     # @param    command    string    The TR50 command to execute.
     # @param    params     dict      The command parameters.
     # @return   bool       Success or failure to post.
@@ -195,6 +212,7 @@ class ZcsMowerApiClient:
         return await self.post(parameters)
     
     # Depending on the configuration, authenticate the app or the user, prefer the app.
+    # https://github.com/deviceWISE/sample_tr50_python
     # @return    bool    Success or failure to authenticate.
     async def auth(
         self
@@ -205,6 +223,7 @@ class ZcsMowerApiClient:
         return False
     
     # Authenticate the application.
+    # https://github.com/deviceWISE/sample_tr50_python
     # @param     string    app_id                The application ID.
     # @param     string    app_token             The application token.
     # @param     string    thing_key             The key of the application's thing.
@@ -238,6 +257,7 @@ class ZcsMowerApiClient:
             raise exception
     
     # Return the response data for the last command if the last command was successful.
+    # https://github.com/deviceWISE/sample_tr50_python
     # @return    dict    The response data.
     async def get_response(
         self
@@ -248,6 +268,7 @@ class ZcsMowerApiClient:
         return None
     
     # This method checks the JSON command for the auth parameter. If it is not set, it adds.
+    # https://github.com/deviceWISE/sample_tr50_python
     # @param    mixed    data    A JSON string or the dict representation of JSON.
     # @return   string   A JSON string with the auth parameter.
     async def set_json_auth(
@@ -271,21 +292,3 @@ class ZcsMowerApiClient:
             }
         
         return data
-
-class ZcsMowerApiError(
-    Exception
-):
-    """Exception to indicate a general API error."""
-
-
-class ZcsMowerApiCommunicationError(
-    ZcsMowerApiError
-):
-    """Exception to indicate a communication error."""
-
-
-class ZcsMowerApiAuthenticationError(
-    ZcsMowerApiError
-):
-    """Exception to indicate an authentication error."""
-

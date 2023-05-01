@@ -7,6 +7,7 @@ LOGGER = getLogger(__package__)
 
 DOMAIN = "zcsmower"
 MANUFACTURER = "Zucchetti Centro Sistemi"
+ATTRIBUTION = "Data provided by Telit IoT Platform"
 
 PLATFORMS = [
     #Platform.BINARY_SENSOR,

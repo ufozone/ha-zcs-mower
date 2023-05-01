@@ -9,13 +9,16 @@ from .const import (
     LOGGER,
     DOMAIN,
     MANUFACTURER,
+    ATTRIBUTION,
     ATTR_IMEI,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 
 
 class ZcsMowerEntity(CoordinatorEntity):
-    """BlueprintEntity class."""
+    """ZCS Lawn Mower Robot class."""
+
+    _attr_attribution = ATTRIBUTION
 
     def __init__(
         self,
