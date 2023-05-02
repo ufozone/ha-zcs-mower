@@ -1,7 +1,6 @@
 """ZCS Lawn Mower Robot entity"""
 from __future__ import annotations
 
-from homeassistant.helpers.entity import Entity, DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -39,13 +38,18 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._name = name
         self._serial = None
         self._model = None
-        self._unique_id = slugify(f"{self._imei}_{self._name}")
         
+        self._unique_id = slugify(f"{self._imei}_{self._name}")
         self.entity_id = f"{entity_type}.{self._unique_id}"
         
         self._state = 0
         self._available = True
-        self.attrs: dict[str, Any] = {
+        self._location = {
+            "latitude": None,
+            "longitude": None,
+        }
+        
+        self.attrs: dict[str, any] = {
             ATTR_IMEI: self._imei,
         }
 
@@ -83,33 +87,34 @@ class ZcsMowerEntity(CoordinatorEntity):
         }
 
     @property
-    def extra_state_attributes(self) -> dict[str, Any]:
+    def extra_state_attributes(self) -> dict[str, any]:
+        """Return Extra Attributes."""
         return self.attrs
 
     async def async_update(self) -> None:
-        
+        """Peform async_update."""
         # TODO
         LOGGER.debug("async_update")
         LOGGER.debug(self._name)
-        
-        self._update_handler();
+
+        self._update_handler()
     
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        
+
         # TODO
         LOGGER.debug("_handle_coordinator_update")
         LOGGER.debug(self._name)
-        
-        self._update_handler();
+
+        self._update_handler()
         self.async_write_ha_state()
     
     def _update_handler(self):
         if self._imei in self.coordinator.data:
             robot = self.coordinator.data[self._imei]
             self._state = robot["state"] if robot["state"] < len(ROBOT_STATES) else 0
-            self._available = (self._state > 0)
+            self._available = self._state > 0
             self._location = robot["location"]
             self._serial = robot["serial"]
-            if self._serial != None and len(self._serial) > 0:
+            if self._serial is not None and len(self._serial) > 4:
                 self._model = self._serial[0:5]
