@@ -1,6 +1,7 @@
 """ZCS Lawn Mower Robot entity"""
 from __future__ import annotations
 
+from datetime import datetime
 from homeassistant.const import (
     ATTR_NAME,
     ATTR_IDENTIFIERS,
@@ -25,6 +26,7 @@ from .const import (
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
+    ATTR_LAST_PULL,
     ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -66,14 +68,9 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._connected = False
         self._last_communication = None
         self._last_seen = None
+        self._last_pull = None
         
         self.entity_id = f"{entity_type}.{self._unique_id}"
-        self.attrs: dict[str, any] = {
-            ATTR_IMEI: self._imei,
-            ATTR_CONNECTED: self._connected,
-            ATTR_LAST_COMM: self._last_communication,
-            ATTR_LAST_SEEN: self._last_seen,
-        }
 
     @property
     def name(self) -> str:
@@ -111,7 +108,13 @@ class ZcsMowerEntity(CoordinatorEntity):
     @property
     def extra_state_attributes(self) -> dict[str, any]:
         """Return Extra Attributes."""
-        return self.attrs
+        return {
+            ATTR_IMEI: self._imei,
+            ATTR_CONNECTED: self._connected,
+            ATTR_LAST_COMM: self._last_communication,
+            ATTR_LAST_SEEN: self._last_seen,
+            ATTR_LAST_PULL: self._last_pull,
+        }
 
     async def async_update(self) -> None:
         """Peform async_update."""
@@ -137,3 +140,8 @@ class ZcsMowerEntity(CoordinatorEntity):
                 self._model = self._serial[0:5]
                 if self._serial[0:2] in MANUFACTURER_MAP:
                     self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
+
+            self._connected = robot[ATTR_CONNECTED]
+            self._last_communication = robot[ATTR_LAST_COMM]
+            self._last_seen = robot[ATTR_LAST_SEEN]
+            self._last_pull = datetime.now()

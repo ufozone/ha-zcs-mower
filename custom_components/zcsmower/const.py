@@ -25,6 +25,7 @@ PLATFORMS = [
 
 API_BASE_URI = "https://api-de.devicewise.com/api"
 API_APP_TOKEN = "DJMYYngGNEit40vA"
+API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 CONF_CLIENT_KEY = "client_key"
 CONF_IMEI = "imei"
@@ -35,6 +36,7 @@ ATTR_SERIAL = "serial"
 ATTR_CONNECTED = "connected"
 ATTR_LAST_COMM = "last_communication"
 ATTR_LAST_SEEN = "last_seen"
+ATTR_LAST_PULL = "last_pull"
 
 ROBOT_STATES = [
     {

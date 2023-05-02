@@ -27,6 +27,7 @@ from .api import (
 from .const import (
     DOMAIN,
     LOGGER,
+    API_DATETIME_FORMAT,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_CONNECTED,
@@ -120,10 +121,15 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                                 ATTR_LATITUDE: robot_state["lat"],
                                 ATTR_LONGITUDE: robot_state["lng"],
                             }
-                        # robot_state["since"] -> timestamp since state change (format 2023-04-30T10:24:47.517Z)
                     if "attrs" in mower and "robot_serial" in mower["attrs"]:
                         robot_serial = mower["attrs"]["robot_serial"]
                         mower_data[mower["key"]][ATTR_SERIAL] = robot_serial["value"]
+                    if "connected" in mower:
+                        mower_data[mower["key"]][ATTR_CONNECTED] = mower["connected"]
+                    if "lastCommunication" in mower:
+                        mower_data[mower["key"]][ATTR_LAST_COMM] = datetime.strptime(mower["lastCommunication"], API_DATETIME_FORMAT)
+                    if "lastSeen" in mower:
+                        mower_data[mower["key"]][ATTR_LAST_SEEN] = datetime.strptime(mower["lastSeen"], API_DATETIME_FORMAT)
 
             # TODO
             LOGGER.debug("_async_update_data")
