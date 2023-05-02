@@ -25,6 +25,29 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     
     hass.data.setdefault(DOMAIN, {})
     
+    async def async_set_profile(call) -> None:
+        """Handle the service call."""
+        LOGGER.debug(call.data)
+    
+    async def async_work_until(call) -> None:
+        """Handle the service call."""
+        LOGGER.debug(call.data)
+        area = call.data.get("area")
+        LOGGER.debug(area)
+    
+    async def async_border_cut(call) -> None:
+        """Handle the service call."""
+        LOGGER.debug(call.data)
+    
+    async def async_charge_until(call) -> None:
+        """Handle the service call."""
+        LOGGER.debug(call.data)
+    
+    hass.services.async_register(DOMAIN, "set_profile", async_set_profile)
+    hass.services.async_register(DOMAIN, "work_until", async_work_until)
+    hass.services.async_register(DOMAIN, "border_cut", async_border_cut)
+    hass.services.async_register(DOMAIN, "charge_until", async_charge_until)
+    
     return True
 
 

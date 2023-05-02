@@ -1,14 +1,14 @@
 set_profile:
   description: "Configure the profile for auto-mode."
+  target:
+    device:
+      integration: "zcsmower"
+    entity:
+      domain: device_tracker
   fields:
-    imei:
-      description: "IMEI of the lawn mower"
-      example: "350000000000000"
-      required: True
-      selector:
-        text:
     profile:
-      description: "Profile"
+      name: "Profile"
+      description: "Select the profile you want to use."
       example: "1"
       default: "1"
       selector:
@@ -20,14 +20,14 @@ set_profile:
 
 work_until:
   description: "Command the lawn mower to mow until a certain time."
+  target:
+    device:
+      integration: "zcsmower"
+    entity:
+      domain: device_tracker
   fields:
-    imei:
-      description: "IMEI of the lawn mower"
-      example: "350000000000000"
-      required: True
-      selector:
-        text:
     area:
+      name: "Zone"
       description: "Zone where the lawn mower should start."
       example: "1"
       default: "1"
@@ -43,6 +43,7 @@ work_until:
             - "7"
             - "8"
     hours:
+      name: "Hours"
       description: "Time until which lawn mower should drive in locale time and 24h format."
       example: "12"
       default: 1
@@ -53,6 +54,7 @@ work_until:
           step: 1
           mode: slider
     minutes:
+      name: "Minutes"
       description: "Time until which lawn mower should drive in locale time and 24h format."
       example: "30"
       default: 1
@@ -65,24 +67,22 @@ work_until:
 
 border_cut:
   description: "Command the lawn mower to cut the border."
-  fields:
-    imei:
-      description: "IMEI of the lawn mower"
-      example: "350000000000000"
-      required: True
-      selector:
-        text:
+  target:
+    device:
+      integration: "zcsmower"
+    entity:
+      domain: device_tracker
 
 charge_until:
   description: "Command the lawn mower to charge until a certain time."
+  target:
+    device:
+      integration: "zcsmower"
+    entity:
+      domain: device_tracker
   fields:
-    imei:
-      description: "IMEI of the lawn mower"
-      example: "350000000000000"
-      required: True
-      selector:
-        text:
     hours:
+      name: "Hours"
       description: "Time until which lawn mower should charge in locale time and 24h format."
       example: "12"
       default: 1
@@ -93,6 +93,7 @@ charge_until:
           step: 1
           mode: slider
     minutes:
+      name: "Minutes"
       description: "Time until which lawn mower should charge in locale time and 24h format."
       example: "30"
       default: 1
@@ -102,7 +103,8 @@ charge_until:
           max: 60
           step: 1
           mode: slider
-    hours:
+    weekday:
+      name: "Day of week"
       description: "Numeric representation of the day of the week is 0 (for Sunday) through 6 (for Saturday)."
       example: "1"
       default: 0
