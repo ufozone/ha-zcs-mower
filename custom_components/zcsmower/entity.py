@@ -51,16 +51,16 @@ class ZcsMowerEntity(CoordinatorEntity):
 
         self.coordinator = coordinator
         self.client = coordinator.client
-        
+
         self._imei = imei
         self._name = name
         self._serial = None
         self._manufacturer = MANUFACTURER_DEFAULT
         self._model = None
         self._sw_version = None
-        
+
         self._unique_id = slugify(f"{self._imei}_{self._name}")
-        
+
         self._state = 0
         self._available = True
         self._location = {
@@ -71,7 +71,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._last_communication = None
         self._last_seen = None
         self._last_pull = None
-        
+
         self.entity_id = f"{entity_type}.{self._unique_id}"
 
     @property
@@ -97,7 +97,6 @@ class ZcsMowerEntity(CoordinatorEntity):
     @property
     def device_info(self):
         """Return the device info."""
-
         return {
             ATTR_IDENTIFIERS: {
                 (DOMAIN, self._imei)
