@@ -14,7 +14,6 @@ from homeassistant.helpers.typing import (
 from .const import (
     LOGGER,
     DOMAIN,
-    CONF_MOWERS,
     ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -34,7 +33,7 @@ async def async_setup_entry(
             ZcsMowerSensor(coordinator, imei, name)
             for imei, name in coordinator.mowers.items()
         ],
-        update_before_add=True
+        update_before_add=True,
     )
 
 
@@ -68,17 +67,13 @@ class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
             entity_type="sensor",
             entity_key="state",
         )
-    
-    @property
-    def state(self) -> str | None:
-        return ROBOT_STATES[self._state]["name"]
-    
+
     @property
     def icon(self) -> str:
         """Return the icon of the entity."""
         return ROBOT_STATES[self._state]["icon"]
-    
+
     @property
     def native_value(self) -> str:
         """Return the native value of the sensor."""
-        return ROBOT_STATES[0]["name"]
+        return ROBOT_STATES[self._state]["name"]
