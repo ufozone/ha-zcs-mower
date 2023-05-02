@@ -98,7 +98,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         LOGGER.debug(self._name)
 
         self._update_handler()
-    
+
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
 
@@ -108,7 +108,7 @@ class ZcsMowerEntity(CoordinatorEntity):
 
         self._update_handler()
         self.async_write_ha_state()
-    
+
     def _update_handler(self):
         if self._imei in self.coordinator.data:
             robot = self.coordinator.data[self._imei]
@@ -116,5 +116,8 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._available = self._state > 0
             self._location = robot["location"]
             self._serial = robot["serial"]
-            if self._serial is not None and len(self._serial) > 4:
+            if (
+                self._serial is not None
+                and len(self._serial) > 4
+            ):
                 self._model = self._serial[0:5]
