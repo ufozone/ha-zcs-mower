@@ -31,6 +31,10 @@ CONF_IMEI = "imei"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
+ATTR_SERIAL = "serial"
+ATTR_CONNECTED = "connected"
+ATTR_LAST_COMM = "last_communication"
+ATTR_LAST_SEEN = "last_seen"
 
 ROBOT_STATES = [
     {

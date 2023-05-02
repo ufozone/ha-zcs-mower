@@ -1,6 +1,16 @@
 """ZCS Lawn Mower Robot entity"""
 from __future__ import annotations
 
+from homeassistant.const import (
+    ATTR_NAME,
+    ATTR_IDENTIFIERS,
+    ATTR_LOCATION,
+    ATTR_MANUFACTURER,
+    ATTR_MODEL,
+    ATTR_LATITUDE,
+    ATTR_LONGITUDE,
+    ATTR_STATE,
+)
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -11,6 +21,10 @@ from .const import (
     MANUFACTURER_MAP,
     ATTRIBUTION,
     ATTR_IMEI,
+    ATTR_SERIAL,
+    ATTR_CONNECTED,
+    ATTR_LAST_COMM,
+    ATTR_LAST_SEEN,
     ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -42,17 +56,23 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._manufacturer = MANUFACTURER_DEFAULT
         
         self._unique_id = slugify(f"{self._imei}_{self._name}")
-        self.entity_id = f"{entity_type}.{self._unique_id}"
         
         self._state = 0
         self._available = True
         self._location = {
-            "latitude": None,
-            "longitude": None,
+            ATTR_LATITUDE: None,
+            ATTR_LONGITUDE: None,
         }
+        self._connected = False
+        self._last_communication = None
+        self._last_seen = None
         
+        self.entity_id = f"{entity_type}.{self._unique_id}"
         self.attrs: dict[str, any] = {
             ATTR_IMEI: self._imei,
+            ATTR_CONNECTED: self._connected,
+            ATTR_LAST_COMM: self._last_communication,
+            ATTR_LAST_SEEN: self._last_seen,
         }
 
     @property
@@ -80,12 +100,12 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Return the device info."""
 
         return {
-            "identifiers": {
+            ATTR_IDENTIFIERS: {
                 (DOMAIN, self._imei)
             },
-            "name": self._name,
-            "model": self._model,
-            "manufacturer": self._manufacturer,
+            ATTR_NAME: self._name,
+            ATTR_MODEL: self._model,
+            ATTR_MANUFACTURER: self._manufacturer,
         }
 
     @property
@@ -95,29 +115,21 @@ class ZcsMowerEntity(CoordinatorEntity):
 
     async def async_update(self) -> None:
         """Peform async_update."""
-        # TODO
-        LOGGER.debug("async_update")
-        LOGGER.debug(self._name)
-
         self._update_handler()
 
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-
-        # TODO
-        LOGGER.debug("_handle_coordinator_update")
-        LOGGER.debug(self._name)
-
         self._update_handler()
         self.async_write_ha_state()
 
     def _update_handler(self):
         if self._imei in self.coordinator.data:
             robot = self.coordinator.data[self._imei]
-            self._state = robot["state"] if robot["state"] < len(ROBOT_STATES) else 0
+            self._state = robot[ATTR_STATE] if robot[ATTR_STATE] < len(ROBOT_STATES) else 0
             self._available = self._state > 0
-            self._location = robot["location"]
-            self._serial = robot["serial"]
+            if robot[ATTR_LOCATION] is not None:
+                self._location = robot[ATTR_LOCATION]
+            self._serial = robot[ATTR_SERIAL]
             if (
                 self._serial is not None
                 and len(self._serial) > 4

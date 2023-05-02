@@ -1,9 +1,18 @@
 """DataUpdateCoordinator for ZCS Lawn Mower Robot."""
 from __future__ import annotations
 
-from datetime import timedelta
-
+from datetime import (
+    timedelta,
+    datetime,
+)
 from homeassistant.core import HomeAssistant
+from homeassistant.const import (
+    ATTR_NAME,
+    ATTR_LOCATION,
+    ATTR_LATITUDE,
+    ATTR_LONGITUDE,
+    ATTR_STATE,
+)
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
@@ -18,6 +27,11 @@ from .api import (
 from .const import (
     DOMAIN,
     LOGGER,
+    ATTR_IMEI,
+    ATTR_SERIAL,
+    ATTR_CONNECTED,
+    ATTR_LAST_COMM,
+    ATTR_LAST_SEEN,
 )
 
 
@@ -57,14 +71,14 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             for _imei, _name in self.mowers.items():
                 mower_imeis.append(_imei)
                 mower_data[_imei] = {
-                    "name": _name,
-                    "imei": _imei,
-                    "serial": None,
-                    "state": 0,
-                    "location": {
-                        "latitude": None,
-                        "longitude": None,
-                    },
+                    ATTR_NAME: _name,
+                    ATTR_IMEI: _imei,
+                    ATTR_SERIAL: None,
+                    ATTR_STATE: 0,
+                    ATTR_LOCATION: None,
+                    ATTR_CONNECTED: False,
+                    ATTR_LAST_COMM: None,
+                    ATTR_LAST_SEEN: None,
                 }
             
             await self.client.execute(
@@ -99,15 +113,17 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ):
                     if "alarms" in mower and "robot_state" in mower["alarms"]:
                         robot_state = mower["alarms"]["robot_state"]
-                        mower_data[mower["key"]]["state"] = robot_state["state"]
+                        mower_data[mower["key"]][ATTR_STATE] = robot_state["state"]
                         # latitude and longitude, not always available
                         if "lat" in robot_state and "lng" in robot_state:
-                            mower_data[mower["key"]]["location"]["latitude"] = robot_state["lat"]
-                            mower_data[mower["key"]]["location"]["longitude"] = robot_state["lng"]
+                            mower_data[mower["key"]][ATTR_LOCATION] = {
+                                ATTR_LATITUDE: robot_state["lat"],
+                                ATTR_LONGITUDE: robot_state["lng"],
+                            }
                         # robot_state["since"] -> timestamp since state change (format 2023-04-30T10:24:47.517Z)
                     if "attrs" in mower and "robot_serial" in mower["attrs"]:
                         robot_serial = mower["attrs"]["robot_serial"]
-                        mower_data[mower["key"]]["serial"] = robot_serial["value"]
+                        mower_data[mower["key"]][ATTR_SERIAL] = robot_serial["value"]
 
             # TODO
             LOGGER.debug("_async_update_data")
