@@ -16,8 +16,7 @@ from homeassistant.helpers.typing import (
 from .const import (
     LOGGER,
     DOMAIN,
-    CONF_MOWERS,
-    ROBOT_STATES,
+    #ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -36,7 +35,7 @@ async def async_setup_entry(
             ZcsMowerDeviceTracker(coordinator, imei, name)
             for imei, name in coordinator.mowers.items()
         ],
-        update_before_add=True
+        update_before_add=True,
     )
 
 
@@ -72,13 +71,13 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
         )
     
     @property
-    def latitude(self) -> Optional[float]:
+    def latitude(self) -> float | None:
         """Return latitude value of the device."""
         location = self._location.get("latitude", None)
         return location if location else None
 
     @property
-    def longitude(self) -> Optional[float]:
+    def longitude(self) -> float | None:
         """Return longitude value of the device."""
         location = self._location.get("longitude", None)
         return location if location else None
@@ -90,4 +89,5 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
 
     @property
     def device_class(self):
+        """Return Device Class."""
         return None
