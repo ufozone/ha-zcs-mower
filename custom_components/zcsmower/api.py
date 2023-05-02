@@ -77,9 +77,12 @@ class ZcsMowerApiClient:
     async def check_api_client(
         self,
     ) -> any:
-        result = await self.execute("thing.find", {
-            "key": self._thing_key
-        })
+        result = await self.execute(
+            "thing.find",
+            {
+                "key": self._thing_key
+            }
+        )
         if result is True and self._response["data"]["success"] is True:
             return self._response["data"]["params"]
         else:
@@ -91,9 +94,12 @@ class ZcsMowerApiClient:
         self,
         imei: str
     ) -> any:
-        result = await self.execute("thing.find", {
-            "imei": imei
-        })
+        result = await self.execute(
+            "thing.find",
+            {
+                "imei": imei
+            }
+        )
         if result is True and self._response["data"]["success"] is True:
             return self._response["data"]["params"]
         else:
