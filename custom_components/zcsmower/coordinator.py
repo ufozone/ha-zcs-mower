@@ -12,6 +12,7 @@ from homeassistant.const import (
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
     ATTR_STATE,
+    ATTR_SW_VERSION,
 )
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
@@ -75,6 +76,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     ATTR_NAME: _name,
                     ATTR_IMEI: _imei,
                     ATTR_SERIAL: None,
+                    ATTR_SW_VERSION: None,
                     ATTR_STATE: 0,
                     ATTR_LOCATION: None,
                     ATTR_CONNECTED: False,
@@ -121,9 +123,11 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                                 ATTR_LATITUDE: robot_state["lat"],
                                 ATTR_LONGITUDE: robot_state["lng"],
                             }
-                    if "attrs" in mower and "robot_serial" in mower["attrs"]:
-                        robot_serial = mower["attrs"]["robot_serial"]
-                        mower_data[mower["key"]][ATTR_SERIAL] = robot_serial["value"]
+                    if "attrs" in mower:
+                        if "robot_serial" in mower["attrs"]:
+                            mower_data[mower["key"]][ATTR_SERIAL] = mower["attrs"]["robot_serial"]["value"]
+                        if "program_version" in mower["attrs"]:
+                            mower_data[mower["key"]][ATTR_SW_VERSION] = mower["attrs"]["program_version"]["value"]
                     if "connected" in mower:
                         mower_data[mower["key"]][ATTR_CONNECTED] = mower["connected"]
                     if "lastCommunication" in mower:

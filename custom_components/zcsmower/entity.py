@@ -8,6 +8,7 @@ from homeassistant.const import (
     ATTR_LOCATION,
     ATTR_MANUFACTURER,
     ATTR_MODEL,
+    ATTR_SW_VERSION,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
     ATTR_STATE,
@@ -54,8 +55,9 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._imei = imei
         self._name = name
         self._serial = None
-        self._model = None
         self._manufacturer = MANUFACTURER_DEFAULT
+        self._model = None
+        self._sw_version = None
         
         self._unique_id = slugify(f"{self._imei}_{self._name}")
         
@@ -101,8 +103,9 @@ class ZcsMowerEntity(CoordinatorEntity):
                 (DOMAIN, self._imei)
             },
             ATTR_NAME: self._name,
-            ATTR_MODEL: self._model,
             ATTR_MANUFACTURER: self._manufacturer,
+            ATTR_MODEL: self._model,
+            ATTR_SW_VERSION: self._sw_version,
         }
 
     @property
@@ -137,9 +140,10 @@ class ZcsMowerEntity(CoordinatorEntity):
                 self._serial is not None
                 and len(self._serial) > 4
             ):
-                self._model = self._serial[0:5]
                 if self._serial[0:2] in MANUFACTURER_MAP:
                     self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
+                self._model = self._serial[0:5]
+            self._sw_version = robot[ATTR_SW_VERSION]
 
             self._connected = robot[ATTR_CONNECTED]
             self._last_communication = robot[ATTR_LAST_COMM]
