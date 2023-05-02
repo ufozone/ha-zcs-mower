@@ -19,7 +19,7 @@ set_profile:
             - "3"
 
 work_until:
-  description: "work_until"
+  description: "Command the lawn mower to mow until a certain time."
   fields:
     imei:
       description: "IMEI of the lawn mower"
@@ -28,7 +28,7 @@ work_until:
       selector:
         text:
     area:
-      description: "start area"
+      description: "Zone where the lawn mower should start."
       example: "1"
       default: "1"
       selector:
@@ -43,9 +43,9 @@ work_until:
             - "7"
             - "8"
     hours:
-      description: "hours"
+      description: "Time until which lawn mower should drive in locale time and 24h format."
       example: "12"
-      default: 0
+      default: 1
       selector:
         number:
           min: 1
@@ -53,9 +53,9 @@ work_until:
           step: 1
           mode: slider
     minutes:
-      description: "minutes"
+      description: "Time until which lawn mower should drive in locale time and 24h format."
       example: "30"
-      default: 0
+      default: 1
       selector:
         number:
           min: 1
@@ -64,7 +64,7 @@ work_until:
           mode: slider
 
 border_cut:
-  description: "border_cut"
+  description: "Command the lawn mower to cut the border."
   fields:
     imei:
       description: "IMEI of the lawn mower"
@@ -74,7 +74,7 @@ border_cut:
         text:
 
 charge_until:
-  description: "charge_until"
+  description: "Command the lawn mower to charge until a certain time."
   fields:
     imei:
       description: "IMEI of the lawn mower"
@@ -83,9 +83,9 @@ charge_until:
       selector:
         text:
     hours:
-      description: "hours"
+      description: "Time until which lawn mower should charge in locale time and 24h format."
       example: "12"
-      default: 0
+      default: 1
       selector:
         number:
           min: 1
@@ -93,9 +93,9 @@ charge_until:
           step: 1
           mode: slider
     minutes:
-      description: "minutes"
+      description: "Time until which lawn mower should charge in locale time and 24h format."
       example: "30"
-      default: 0
+      default: 1
       selector:
         number:
           min: 1
@@ -103,7 +103,7 @@ charge_until:
           step: 1
           mode: slider
     hours:
-      description: "The numeric representation of the day of the week is 0 (for Sunday) through 6 (for Saturday)."
+      description: "Numeric representation of the day of the week is 0 (for Sunday) through 6 (for Saturday)."
       example: "1"
       default: 0
       selector:
