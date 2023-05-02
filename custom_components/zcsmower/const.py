@@ -6,7 +6,14 @@ from homeassistant.const import Platform, PERCENTAGE, UnitOfLength
 LOGGER = getLogger(__package__)
 
 DOMAIN = "zcsmower"
-MANUFACTURER = "Zucchetti Centro Sistemi"
+MANUFACTURER_DEFAULT = "Zucchetti Centro Sistemi"
+MANUFACTURER_MAP = {
+    "AM": "Ambrogio Robot",
+    "KB": "Kubota",
+    "ST": "STIGA",
+    "TH": "TECHline",
+    "WI": "Herkules Wiper",
+}
 ATTRIBUTION = "Data provided by Telit IoT Platform"
 
 PLATFORMS = [

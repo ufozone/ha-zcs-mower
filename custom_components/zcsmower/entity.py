@@ -7,7 +7,8 @@ from homeassistant.util import slugify
 from .const import (
     LOGGER,
     DOMAIN,
-    MANUFACTURER,
+    MANUFACTURER_DEFAULT,
+    MANUFACTURER_MAP,
     ATTRIBUTION,
     ATTR_IMEI,
     ROBOT_STATES,
@@ -38,6 +39,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._name = name
         self._serial = None
         self._model = None
+        self._manufacturer = MANUFACTURER_DEFAULT
         
         self._unique_id = slugify(f"{self._imei}_{self._name}")
         self.entity_id = f"{entity_type}.{self._unique_id}"
@@ -83,7 +85,7 @@ class ZcsMowerEntity(CoordinatorEntity):
             },
             "name": self._name,
             "model": self._model,
-            "manufacturer": MANUFACTURER,
+            "manufacturer": self._manufacturer,
         }
 
     @property
@@ -121,3 +123,5 @@ class ZcsMowerEntity(CoordinatorEntity):
                 and len(self._serial) > 4
             ):
                 self._model = self._serial[0:5]
+                if self._serial[0:2] in MANUFACTURER_MAP:
+                    self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
