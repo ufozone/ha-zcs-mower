@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
@@ -19,15 +18,12 @@ from .api import (
 from .const import (
     DOMAIN,
     LOGGER,
-    ROBOT_STATES,
 )
 
 
 # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
 class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the ZCS API."""
-
-    config_entry: ConfigEntry
 
     def __init__(
         self,
@@ -44,6 +40,14 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         )
         self.mowers = mowers
         self.client = client
+
+    async def __aenter__(self):
+        """Return Self."""
+        return self
+
+    async def __aexit__(self, *excinfo):
+        """Close Session before class is destroyed."""
+        await self.client._session.close()
 
     async def _async_update_data(self):
         """Update data via library."""
@@ -63,29 +67,36 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     },
                 }
             
-            result = await self.client.execute("thing.list", {
-                "show": [
-                    "id",
-                    "key",
-                    "name",
-                    "connected",
-                    "lastSeen",
-                    "lastCommunication",
-                    "loc",
-                    "properties",
-                    "alarms",
-                    "attrs",
-                    "createdOn",
-                    "storage",
-                    "varBillingPlanCode"
-                ],
-                "hideFields": True,
-                "keys": mower_imeis
-            })
+            await self.client.execute(
+                "thing.list",
+                {
+                    "show": [
+                        "id",
+                        "key",
+                        "name",
+                        "connected",
+                        "lastSeen",
+                        "lastCommunication",
+                        "loc",
+                        "properties",
+                        "alarms",
+                        "attrs",
+                        "createdOn",
+                        "storage",
+                        "varBillingPlanCode"
+                    ],
+                    "hideFields": True,
+                    "keys": mower_imeis
+                },
+            )
             response = await self.client.get_response()
             if "result" in response:
                 result_list = response["result"]
-                for mower in ( mower for mower in result_list if "key" in mower and mower["key"] in mower_data ):
+                for mower in (
+                    mower
+                    for mower in result_list
+                    if "key" in mower and mower["key"] in mower_data
+                ):
                     if "alarms" in mower and "robot_state" in mower["alarms"]:
                         robot_state = mower["alarms"]["robot_state"]
                         mower_data[mower["key"]]["state"] = robot_state["state"]
@@ -97,12 +108,11 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     if "attrs" in mower and "robot_serial" in mower["attrs"]:
                         robot_serial = mower["attrs"]["robot_serial"]
                         mower_data[mower["key"]]["serial"] = robot_serial["value"]
-            
+
             # TODO
             LOGGER.debug("_async_update_data")
             LOGGER.debug(mower_data)
-            
-            
+
             return mower_data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
