@@ -9,30 +9,26 @@ import socket
 
 import aiohttp
 import async_timeout
-import simplejson as json
+import json
 
 from .const import LOGGER
 
 
-class ZcsMowerApiError(
-    Exception
-):
+class ZcsMowerApiError(Exception):
     """Exception to indicate a general API error."""
 
 
-class ZcsMowerApiCommunicationError(
-    ZcsMowerApiError
-):
+class ZcsMowerApiCommunicationError(ZcsMowerApiError):
     """Exception to indicate a communication error."""
 
 
-class ZcsMowerApiAuthenticationError(
-    ZcsMowerApiError
-):
+class ZcsMowerApiAuthenticationError(ZcsMowerApiError):
     """Exception to indicate an authentication error."""
 
 
 class ZcsMowerApiClient:
+    """Sample API Client."""
+
     # The API endpoint for POSTing (e.g. https://www.example.com/api)
     _endpoint = ""
 
@@ -84,7 +80,7 @@ class ZcsMowerApiClient:
         result = await self.execute("thing.find", {
             "key": self._thing_key
         })
-        if result == True and self._response["data"]["success"] == True:
+        if result is True and self._response["data"]["success"] is True:
             return self._response["data"]["params"]
         else:
             raise ZcsMowerApiAuthenticationError(
@@ -98,7 +94,7 @@ class ZcsMowerApiClient:
         result = await self.execute("thing.find", {
             "imei": imei
         })
-        if result == True and self._response["data"]["success"] == True:
+        if result is True and self._response["data"]["success"] is True:
             return self._response["data"]["params"]
         else:
             raise ZcsMowerApiCommunicationError(
@@ -107,24 +103,34 @@ class ZcsMowerApiClient:
     
     # This method sends the TR50 request to the server and parses the response.
     # https://github.com/deviceWISE/sample_tr50_python
-    # @param    mixed    data     The JSON command and arguments. This parameter can also be a dict that will be converted to a JSON string.
+    # @param    mixed    data     The JSON command and arguments. This parameter can also be a dict 
+    #                             that will be converted to a JSON string.
     # @return   bool     Success or failure to post.
     async def post(
         self,
         data: dict | None = None,
         headers: dict | None = None,
     ) -> bool:
-        """This method sends the TR50 request to the server and parses the response."""
+        """
+        Send the TR50 request to the server and parses the response.
+
+        Args:
+            data (dict | None): JSON command and arguments to send.
+            headers (dict | None): Headers to send.
+
+        Returns:
+            bool: Success or failure to post.
+        """
         self._error = []
         self._status = True
         self._response = ""
-        
-        if not type(data) is dict:
+
+        if not isinstance(data, dict):
             data = json.loads(data)
 
         data = await self.set_json_auth(data)
         LOGGER.debug(data)
-        
+
         try:
             async with async_timeout.timeout(10):
                 response = await self._session.request(
@@ -138,12 +144,12 @@ class ZcsMowerApiClient:
                         "Failed to POST to API"
                     )
                 response.raise_for_status()
-                
+
                 self._response = await response.json()
-                
+
                 if "errorMessages" in self._response:
                     self._error = self._response["errorMessages"]
-                
+
                 if "success" in self._response:
                     self._status = self._response["success"]
                 if "data" in self._response:
@@ -152,22 +158,27 @@ class ZcsMowerApiClient:
                 if "auth" in self._response:
                     if "success" in self._response["auth"]:
                         self._status = self._response["auth"]["success"]
-                
+
                 LOGGER.debug(self._response)
-                
-                if self._status == True:
+
+                if self._status:
                     return self._status
                 else:
                     # if session is invalid, refresh authentication and execute command again
-                    # possible loop, if authentication session is always invalid after successful refresh
-                    for error in ( error for error in self._error if "Authentication session is invalid" in error ):
+                    # possible loop, if authentication session is always invalid 
+                    # after successful refresh
+                    for error in (
+                        error
+                        for error in self._error 
+                        if "Authentication session is invalid" in error
+                    ):
                         refresh_auth = await self.auth()
-                        if refresh_auth == True:
+                        if refresh_auth:
                             data["auth"]["sessionId"] = self._session_id
                             return await self.post(data, headers)
-                    
+
                     raise ZcsMowerApiCommunicationError(
-                        "Communication failed: %s" % self._error
+                        f"Communication failed: {self._error}"
                     )
         except asyncio.TimeoutError as exception:
             raise ZcsMowerApiCommunicationError(
@@ -181,8 +192,9 @@ class ZcsMowerApiClient:
             raise ZcsMowerApiError(
                 "Something really wrong happened!"
             ) from exception
-    
-    # Package the command and the params into an array and sends the command to the configured endpoint for processing.
+
+    # Package the command and the params into an array and sends the command to the 
+    # configured endpoint for processing.
     # https://github.com/deviceWISE/sample_tr50_python
     # @param    command    string    The TR50 command to execute.
     # @param    params     dict      The command parameters.
@@ -192,8 +204,20 @@ class ZcsMowerApiClient:
         command: str,
         params: dict | bool = False
     ) -> bool:
-        """Package the command and the params into an array and sends the command to the configured endpoint for processing."""
-        if command == "api.authenticate":
+        """Execute commands agains the deviceWISE API.
+
+        Package the command and the params into an array and sends the
+        command to the configured endpoint for processing.
+
+        Args:
+            command (str): The TR50 command to execute.
+            params (dict): The command parameters.
+
+        Returns:
+            bool: Successor failure to post.
+
+        """
+        if command is "api.authenticate":
             parameters = {
                 "auth" : {
                     "command" : "api.authenticate",
@@ -206,11 +230,11 @@ class ZcsMowerApiClient:
                     "command" : command
                 }
             }
-            if not params == False:
-               parameters["data"]["params"] = params
-        
+            if params is not False:
+                parameters["data"]["params"] = params
+
         return await self.post(parameters)
-    
+
     # Depending on the configuration, authenticate the app or the user, prefer the app.
     # https://github.com/deviceWISE/sample_tr50_python
     # @return    bool    Success or failure to authenticate.
@@ -239,12 +263,12 @@ class ZcsMowerApiClient:
         """Authenticate the application."""
         try:
             params = {
-                "appId" : app_id,
-                "appToken" : app_token,
-                "thingKey" : thing_key
+                "appId": app_id,
+                "appToken": app_token,
+                "thingKey": thing_key
             }
             response = await self.execute("api.authenticate", params)
-            if response == True:
+            if response is True:
                 if update_session_id:
                     self._session_id = self._response["auth"]["params"]["sessionId"]
                 return True
@@ -255,7 +279,7 @@ class ZcsMowerApiClient:
             ) from exception
         except Exception as exception:
             raise exception
-    
+
     # Return the response data for the last command if the last command was successful.
     # https://github.com/deviceWISE/sample_tr50_python
     # @return    dict    The response data.
@@ -263,10 +287,14 @@ class ZcsMowerApiClient:
         self
     ) -> any:
         """Return the response data for the last command if the last command was successful."""
-        if self._status and len(self._response["data"]) > 0 and "params" in self._response["data"]:
+        if (
+            self._status
+            and len(self._response["data"]) > 0
+            and "params" in self._response["data"]
+        ):
             return self._response["data"]["params"]
         return None
-    
+
     # This method checks the JSON command for the auth parameter. If it is not set, it adds.
     # https://github.com/deviceWISE/sample_tr50_python
     # @param    mixed    data    A JSON string or the dict representation of JSON.
@@ -275,20 +303,19 @@ class ZcsMowerApiClient:
         self,
         data: str
     ) -> str:
-        """This method checks the JSON command for the auth parameter. If it is not set, it adds."""
-        if not type(data) is dict:
+        """Check the JSON command for the auth parameter. If it is not set, it adds."""
+        if not isinstance(data, dict):
             data = json.loads(data)
-        
-        if not "auth" in data:
-            if len(self._session_id) == 0:
+
+        if "auth" not in data:
+            if len(self._session_id) is 0:
                 await self.auth()
             # if it is still empty, we cannot proceed
-            if len(self._session_id) == 0:
+            if len(self._session_id) is 0:
                 raise ZcsMowerApiAuthenticationError(
                     "Authorization failed. Please check the application configuration."
                 )
             data["auth"] = {
                 "sessionId" : self._session_id
             }
-        
         return data
