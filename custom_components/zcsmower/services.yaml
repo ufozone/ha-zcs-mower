@@ -1,0 +1,114 @@
+set_profile:
+  description: "Configure the profile for auto-mode."
+  fields:
+    imei:
+      description: "IMEI of the lawn mower"
+      example: "350000000000000"
+      required: True
+      selector:
+        text:
+    profile:
+      description: "Profile"
+      example: "1"
+      default: "1"
+      selector:
+        select:
+          options:
+            - "1"
+            - "2"
+            - "3"
+
+work_until:
+  description: "work_until"
+  fields:
+    imei:
+      description: "IMEI of the lawn mower"
+      example: "350000000000000"
+      required: True
+      selector:
+        text:
+    area:
+      description: "start area"
+      example: "1"
+      default: "1"
+      selector:
+        select:
+          options:
+            - "1"
+            - "2"
+            - "3"
+            - "4"
+            - "5"
+            - "6"
+            - "7"
+            - "8"
+    hours:
+      description: "hours"
+      example: "12"
+      default: 0
+      selector:
+        number:
+          min: 1
+          max: 24
+          step: 1
+          mode: slider
+    minutes:
+      description: "minutes"
+      example: "30"
+      default: 0
+      selector:
+        number:
+          min: 1
+          max: 60
+          step: 1
+          mode: slider
+
+border_cut:
+  description: "border_cut"
+  fields:
+    imei:
+      description: "IMEI of the lawn mower"
+      example: "350000000000000"
+      required: True
+      selector:
+        text:
+
+charge_until:
+  description: "charge_until"
+  fields:
+    imei:
+      description: "IMEI of the lawn mower"
+      example: "350000000000000"
+      required: True
+      selector:
+        text:
+    hours:
+      description: "hours"
+      example: "12"
+      default: 0
+      selector:
+        number:
+          min: 1
+          max: 24
+          step: 1
+          mode: slider
+    minutes:
+      description: "minutes"
+      example: "30"
+      default: 0
+      selector:
+        number:
+          min: 1
+          max: 60
+          step: 1
+          mode: slider
+    hours:
+      description: "The numeric representation of the day of the week is 0 (for Sunday) through 6 (for Saturday)."
+      example: "1"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 6
+          step: 1
+          mode: slider
