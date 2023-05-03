@@ -135,25 +135,25 @@ charge_until:
       name: "Day of week"
       description: "Numeric representation of the day of the week is 0 (for Sunday) through 6 (for Saturday)."
       required: true
-      example: 1
-      default: 0
+      example: "1"
+      default: "0"
       selector:
         select:
           options:
-          - label: Sunday
-            value: 0
-          - label: Monday
-            value: 1
-          - label: Tuesday
-            value: 2
-          - label: Wednesday
-            value: 3
-          - label: Thursday
-            value: 4
-          - label: Friday
-            value: 5
-          - label: Saturday
-            value: 6
+          - label: "Sunday"
+            value: "0"
+          - label: "Monday"
+            value: "1"
+          - label: "Tuesday"
+            value: "2"
+          - label: "Wednesday"
+            value: "3"
+          - label: "Thursday"
+            value: "4"
+          - label: "Friday"
+            value: "5"
+          - label: "Saturday"
+            value: "6"
 
 trace_position:
   name: "Trace position of lawn mower"
