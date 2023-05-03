@@ -64,25 +64,73 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def async_handle_set_profile(call) -> None:
         """Handle the service call."""
-        LOGGER.debug(call.data)
+        await async_handle_service(call)
 
     async def async_handle_work_until(call) -> None:
         """Handle the service call."""
-        LOGGER.debug(call.data)
         area = call.data.get("area")
         LOGGER.debug(area)
+        await async_handle_service(call)
 
     async def async_handle_border_cut(call) -> None:
         """Handle the service call."""
-        LOGGER.debug(call.data)
+        await async_handle_service(call)
 
     async def async_handle_charge_until(call) -> None:
         """Handle the service call."""
-        LOGGER.debug(call.data)
+        await async_handle_service(call)
 
     async def async_handle_trace_position(call) -> None:
         """Handle the service call."""
-        LOGGER.debug(call.data)
+        await async_handle_service(call)
+
+    async def async_handle_service(call):
+        service = call.service
+        data = {**call.data}
+        device_ids = data.pop("device_id", [])
+        if isinstance(device_ids, str):
+            device_ids = [device_ids]
+        device_ids = set(device_ids)
+        
+        LOGGER.debug(service)
+        LOGGER.debug(data)
+        LOGGER.debug(device_ids)
+        
+        dr = async_get(hass)
+        for device_id in device_ids:
+            device = dr.async_get(device_id)
+            if not device:
+                continue
+             
+            LOGGER.debug("device")
+            LOGGER.debug(device)
+             
+            identifiers = list(device.identifiers)[0]
+            
+            
+            LOGGER.debug(identifiers[0])
+            LOGGER.debug(str(identifiers[0]))
+            
+            if str(identifiers[0]) is not DOMAIN:
+                LOGGER.debug("foo1")
+            #    continue
+            
+            
+            if str(identifiers[0]) is not "zcsmower":
+                LOGGER.debug("foo2")
+                
+            if "zcsmower" is not DOMAIN:
+                LOGGER.debug("foo3")
+             
+            LOGGER.debug("bar")
+             
+             
+            imei = identifiers[1]
+             
+             
+            #LOGGER.debug(DOMAIN)
+            #LOGGER.debug(device)
+            #LOGGER.debug(imei)
 
     hass.services.async_register(
         DOMAIN,
@@ -149,34 +197,6 @@ async def async_setup_services(hass):
         #        continue
         #    browser = browsers[target]
         #    hass.create_task(browser.send(service, **data))
-
-    def handle_service(call):
-        service = call.service
-        data = {**call.data}
-        device_ids = data.pop("device_id", [])
-        if isinstance(device_ids, str):
-            device_ids = [device_ids]
-        device_ids = set(device_ids)
-        
-        LOGGER.debug(service)
-        LOGGER.debug(data)
-        LOGGER.debug(device_ids)
-        
-        dr = async_get(hass)
-        for device_id in device_ids:
-             device = dr.async_get(device_id)
-             if not device:
-                 continue
-             identifiers = list(device.identifiers)[0]
-             
-             LOGGER.debug(DOMAIN)
-             
-             if identifiers[1] is not DOMAIN:
-                 continue
-             imei = identifiers[1]
-             LOGGER.debug(DOMAIN)
-             LOGGER.debug(device)
-             LOGGER.debug(imei)
 
         #call_service(service, browsers, data)
 

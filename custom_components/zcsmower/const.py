@@ -58,7 +58,7 @@ SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
         vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
         vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=1, max=24)),
-        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=1, max=80)),
+        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=1, max=60)),
     }
 )
 SERVICE_BORDER_CUT = "border_cut"
@@ -72,7 +72,7 @@ SERVICE_CHARGE_UNTIL_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=1, max=24)),
-        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=1, max=80)),
+        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=1, max=60)),
         vol.Required("weekday"): vol.All(vol.Coerce(int), vol.Range(min=0, max=6)),
     }
 )
