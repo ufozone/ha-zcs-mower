@@ -93,7 +93,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     data: Optional[dict[str, Any]]
     options: Optional[dict[str, Any]]
     
-    async def async_step_user(self, user_input: Optional[dict[str, Any]] = None) -> FlowResult:
+    async def async_step_user(self, user_input: Optional[dict[str, any]] = None) -> FlowResult:
         """Invoked when a user initiates a flow via the user interface."""
         errors: dict[str, str] = {}
         if user_input is not None:
@@ -136,9 +136,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_mower(self, user_input: Optional[Dict[str, Any]] = None) -> FlowResult:
+    async def async_step_mower(self, user_input: Optional[dict[str, any]] = None) -> FlowResult:
         """Second step in config flow to add a lawn mower."""
-        errors: Dict[str, str] = {}
+        errors: dict[str, str] = {}
         if user_input is not None:
             # Validate the IMEI
             try:
@@ -204,10 +204,10 @@ class OptionsFlowHandler(OptionsFlow):
 
     async def async_step_init(
         self,
-        user_input: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+        user_input: dict[str, any] = None
+    ) -> dict[str, any]:
         """Manage the options for the custom component."""
-        errors: Dict[str, str] = {}
+        errors: dict[str, str] = {}
         # Grab all configured lawn mowers from the entity registry so we can populate
         # the multi-select dropdown that will allow a user to remove a lawn mower.
         entity_registry = async_get(self.hass)
