@@ -17,14 +17,14 @@ set_profile:
       name: "Profile"
       description: "Select the profile you want to use."
       required: true
-      example: "1"
-      default: "1"
+      example: 1
+      default: 1
       selector:
         select:
           options:
-            - "1"
-            - "2"
-            - "3"
+            - 1
+            - 2
+            - 3
 
 work_until:
   name: "Mowing until a certain time"
@@ -56,11 +56,11 @@ work_until:
       name: "Hours"
       description: "Time until which lawn mower should drive in locale time and 24h format."
       required: true
-      example: "12"
-      default: 1
+      example: 12
+      default: 12
       selector:
         number:
-          min: 1
+          min: 0
           max: 24
           step: 1
           mode: slider
@@ -68,11 +68,11 @@ work_until:
       name: "Minutes"
       description: "Time until which lawn mower should drive in locale time and 24h format."
       required: true
-      example: "30"
-      default: 1
+      example: 30
+      default: 0
       selector:
         number:
-          min: 1
+          min: 0
           max: 60
           step: 1
           mode: slider
@@ -112,11 +112,11 @@ charge_until:
       name: "Hours"
       description: "Time until which lawn mower should charge in locale time and 24h format."
       required: true
-      example: "12"
-      default: 1
+      example: 12
+      default: 12
       selector:
         number:
-          min: 1
+          min: 0
           max: 24
           step: 1
           mode: slider
@@ -125,10 +125,10 @@ charge_until:
       description: "Time until which lawn mower should charge in locale time and 24h format."
       required: true
       example: 30
-      default: 1
+      default: 0
       selector:
         number:
-          min: 1
+          min: 0
           max: 60
           step: 1
           mode: slider
