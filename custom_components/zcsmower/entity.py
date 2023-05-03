@@ -141,7 +141,7 @@ class ZcsMowerEntity(CoordinatorEntity):
             ):
                 if self._serial[0:2] in MANUFACTURER_MAP:
                     self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
-                self._model = self._serial[0:5]
+                self._model = self._serial[0:6]
             self._sw_version = robot[ATTR_SW_VERSION]
 
             self._connected = robot[ATTR_CONNECTED]
