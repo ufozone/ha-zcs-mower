@@ -150,6 +150,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         imei: str,
     ) -> bool:
+        """Send command wake_up to lawn nower."""
         LOGGER.debug(f"wake_up: {imei}")
         try:
             return await self.client.execute(
@@ -169,6 +170,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         imei: str,
         profile: int,
     ) -> bool:
+        """Send command set_profile to lawn nower."""
         LOGGER.debug(f"set_profile: {imei}")
         try:
             await self.async_wake_up(imei)
@@ -195,6 +197,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         hours: int,
         minutes: int,
     ) -> bool:
+        """Send command work_until to lawn nower."""
         LOGGER.debug(f"work_until: {imei}")
         try:
             await self.async_wake_up(imei)
@@ -220,6 +223,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         imei: str,
     ) -> bool:
+        """Send command border_cut to lawn nower."""
         LOGGER.debug(f"border_cut: {imei}")
         try:
             await self.async_wake_up(imei)
@@ -243,6 +247,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         minutes: int,
         weekday: int,
     ) -> bool:
+        """Send command charge_until to lawn nower."""
         LOGGER.debug(f"charge_until: {imei}")
         try:
             await self.async_wake_up(imei)
@@ -268,6 +273,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         imei: str,
     ) -> bool:
+        """Send command trace_position to lawn nower."""
         LOGGER.debug(f"trace_position: {imei}")
         try:
             await self.async_wake_up(imei)

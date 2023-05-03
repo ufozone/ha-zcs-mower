@@ -92,7 +92,6 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
             )
 
     async def async_handle_service(call) -> dict[str, any]:
-        service = call.service
         data = {**call.data}
         device_ids = data.pop("device_id", [])
         if isinstance(device_ids, str):
