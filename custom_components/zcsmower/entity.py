@@ -137,7 +137,7 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._serial = robot[ATTR_SERIAL]
             if (
                 self._serial is not None
-                and len(self._serial) > 4
+                and len(self._serial) > 5
             ):
                 if self._serial[0:2] in MANUFACTURER_MAP:
                     self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
