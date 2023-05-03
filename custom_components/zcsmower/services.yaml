@@ -5,18 +5,18 @@ set_profile:
     device_id:
       name: "Device(s)"
       description: "Device(s) on which the command is to be executed."
-      required: True
+      required: true
       selector:
         device:
+          multiple: true
           filter:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
-          multiple: True
     profile:
       name: "Profile"
       description: "Select the profile you want to use."
-      required: True
+      required: true
       example: "1"
       default: "1"
       selector:
@@ -33,18 +33,18 @@ work_until:
     device_id:
       name: "Device(s)"
       description: "Device(s) on which the command is to be executed."
-      required: True
+      required: true
       selector:
         device:
+          multiple: true
           filter:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
-          multiple: True
     area:
       name: "Zone"
       description: "Zone where the lawn mower should start."
-      required: True
+      required: true
       example: "1"
       default: "1"
       selector:
@@ -61,7 +61,7 @@ work_until:
     hours:
       name: "Hours"
       description: "Time until which lawn mower should drive in locale time and 24h format."
-      required: True
+      required: true
       example: "12"
       default: 1
       selector:
@@ -73,7 +73,7 @@ work_until:
     minutes:
       name: "Minutes"
       description: "Time until which lawn mower should drive in locale time and 24h format."
-      required: True
+      required: true
       example: "30"
       default: 1
       selector:
@@ -90,14 +90,14 @@ border_cut:
     device_id:
       name: "Device(s)"
       description: "Device(s) on which the command is to be executed."
-      required: True
+      required: true
       selector:
         device:
+          multiple: true
           filter:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
-          multiple: True
 
 charge_until:
   name: "Charge until a certain time"
@@ -106,18 +106,18 @@ charge_until:
     device_id:
       name: "Device(s)"
       description: "Device(s) on which the command is to be executed."
-      required: True
+      required: true
       selector:
         device:
+          multiple: true
           filter:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
-          multiple: True
     hours:
       name: "Hours"
       description: "Time until which lawn mower should charge in locale time and 24h format."
-      required: True
+      required: true
       example: "12"
       default: 1
       selector:
@@ -129,7 +129,7 @@ charge_until:
     minutes:
       name: "Minutes"
       description: "Time until which lawn mower should charge in locale time and 24h format."
-      required: True
+      required: true
       example: 30
       default: 1
       selector:
@@ -141,7 +141,7 @@ charge_until:
     weekday:
       name: "Day of week"
       description: "Numeric representation of the day of the week is 0 (for Sunday) through 6 (for Saturday)."
-      required: True
+      required: true
       example: 1
       default: 0
       selector:
@@ -158,11 +158,11 @@ trace_position:
     device_id:
       name: "Device(s)"
       description: "Device(s) on which the command is to be executed."
-      required: True
+      required: true
       selector:
         device:
+          multiple: true
           filter:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
-          multiple: True

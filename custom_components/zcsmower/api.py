@@ -138,7 +138,7 @@ class ZcsMowerApiClient:
         LOGGER.debug(data)
 
         try:
-            async with async_timeout.timeout(10):
+            async with async_timeout.timeout(60):
                 response = await self._session.request(
                     method="POST",
                     url=self._endpoint,

@@ -4,7 +4,6 @@ from __future__ import annotations
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import async_get
-#from homeassistant.helpers.entity_registry import async_get
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
@@ -34,103 +33,86 @@ from .coordinator import ZcsMowerDataUpdateCoordinator
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up  ZCS Lawn Mower Robot component."""
     hass.data.setdefault(DOMAIN, {})
-    return True
-
-
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up platform from a ConfigEntry."""
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = coordinator = ZcsMowerDataUpdateCoordinator(
-        mowers=entry.options[CONF_MOWERS],
-        hass=hass,
-        client=ZcsMowerApiClient(
-            session=async_get_clientsession(hass),
-            options={
-                "endpoint": API_BASE_URI,
-                "app_id": entry.data[CONF_CLIENT_KEY],
-                "app_token": API_APP_TOKEN,
-                "thing_key": entry.data[CONF_CLIENT_KEY]
-            }
-        ),
-    )
-    await coordinator.async_config_entry_first_refresh()
-
-    # Forward the setup to platforms.
-    #hass.async_create_task(
-    #    hass.config_entries.async_forward_entry_setup(entry, PLATFORMS)
-    #)
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     async def async_handle_set_profile(call) -> None:
         """Handle the service call."""
-        await async_handle_service(call)
+        targets = await async_handle_service(call)
+        for imei, coordinator in targets.items():
+            hass.async_create_task(
+                coordinator.async_set_profile(
+                    imei,
+                    call.data.get("profile"),
+                )
+            )
 
     async def async_handle_work_until(call) -> None:
         """Handle the service call."""
-        area = call.data.get("area")
-        LOGGER.debug(area)
-        await async_handle_service(call)
+        targets = await async_handle_service(call)
+        for imei, coordinator in targets.items():
+            hass.async_create_task(
+                coordinator.async_work_until(
+                    imei,
+                    call.data.get("area"),
+                    call.data.get("hours"),
+                    call.data.get("minutes"),
+                )
+            )
 
     async def async_handle_border_cut(call) -> None:
         """Handle the service call."""
-        await async_handle_service(call)
+        targets = await async_handle_service(call)
+        for imei, coordinator in targets.items():
+            hass.async_create_task(
+                coordinator.async_border_cut(
+                    imei,
+                )
+            )
 
     async def async_handle_charge_until(call) -> None:
         """Handle the service call."""
-        await async_handle_service(call)
+        targets = await async_handle_service(call)
+        for imei, coordinator in targets.items():
+            hass.async_create_task(
+                coordinator.async_charge_until(
+                    imei,
+                    call.data.get("hours"),
+                    call.data.get("minutes"),
+                    call.data.get("weekday"),
+                )
+            )
 
     async def async_handle_trace_position(call) -> None:
         """Handle the service call."""
-        await async_handle_service(call)
+        targets = await async_handle_service(call)
+        for imei, coordinator in targets.items():
+            hass.async_create_task(
+                coordinator.async_trace_position(
+                    imei,
+                )
+            )
 
-    async def async_handle_service(call):
+    async def async_handle_service(call) -> dict[str, any]:
         service = call.service
         data = {**call.data}
         device_ids = data.pop("device_id", [])
         if isinstance(device_ids, str):
             device_ids = [device_ids]
         device_ids = set(device_ids)
-        
-        LOGGER.debug(service)
-        LOGGER.debug(data)
-        LOGGER.debug(device_ids)
-        
+
+        targets = {}
         dr = async_get(hass)
         for device_id in device_ids:
             device = dr.async_get(device_id)
             if not device:
                 continue
-             
-            LOGGER.debug("device")
-            LOGGER.debug(device)
-             
             identifiers = list(device.identifiers)[0]
-            
-            
-            LOGGER.debug(identifiers[0])
-            LOGGER.debug(str(identifiers[0]))
-            
-            if str(identifiers[0]) is not DOMAIN:
-                LOGGER.debug("foo1")
-            #    continue
-            
-            
-            if str(identifiers[0]) is not "zcsmower":
-                LOGGER.debug("foo2")
-                
-            if "zcsmower" is not DOMAIN:
-                LOGGER.debug("foo3")
-             
-            LOGGER.debug("bar")
-             
-             
-            imei = identifiers[1]
-             
-             
-            #LOGGER.debug(DOMAIN)
-            #LOGGER.debug(device)
-            #LOGGER.debug(imei)
+            if identifiers[0] != DOMAIN:
+                continue
+            config_entry_id = list(device.config_entries)[0]
+            if config_entry_id not in hass.data[DOMAIN]:
+                continue
+            targets[identifiers[1]] = hass.data[DOMAIN][config_entry_id]
+        return targets
 
     hass.services.async_register(
         DOMAIN,
@@ -162,6 +144,34 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         async_handle_trace_position,
         schema=SERVICE_TRACE_POSITION_SCHEMA
     )
+    return True
+
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up platform from a ConfigEntry."""
+    hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN][entry.entry_id] = coordinator = ZcsMowerDataUpdateCoordinator(
+        mowers=entry.options[CONF_MOWERS],
+        hass=hass,
+        client=ZcsMowerApiClient(
+            session=async_get_clientsession(hass),
+            options={
+                "endpoint": API_BASE_URI,
+                "app_id": entry.data[CONF_CLIENT_KEY],
+                "app_token": API_APP_TOKEN,
+                "thing_key": entry.data[CONF_CLIENT_KEY]
+            }
+        ),
+    )
+    await coordinator.async_config_entry_first_refresh()
+
+    # Forward the setup to platforms.
+    #hass.async_create_task(
+    #    hass.config_entries.async_forward_entry_setup(entry, PLATFORMS)
+    #)
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+
     return True
 
 
