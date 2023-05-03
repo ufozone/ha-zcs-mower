@@ -1,14 +1,22 @@
 set_profile:
+  name: "Set profile"
   description: "Configure the profile for auto-mode."
-  target:
-    device:
-      integration: "zcsmower"
-    entity:
-      domain: device_tracker
   fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: True
+      selector:
+        device:
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+          multiple: True
     profile:
       name: "Profile"
       description: "Select the profile you want to use."
+      required: True
       example: "1"
       default: "1"
       selector:
@@ -19,16 +27,24 @@ set_profile:
             - "3"
 
 work_until:
+  name: "Mowing until a certain time"
   description: "Command the lawn mower to mow until a certain time."
-  target:
-    device:
-      integration: "zcsmower"
-    entity:
-      domain: device_tracker
   fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: True
+      selector:
+        device:
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+          multiple: True
     area:
       name: "Zone"
       description: "Zone where the lawn mower should start."
+      required: True
       example: "1"
       default: "1"
       selector:
@@ -45,6 +61,7 @@ work_until:
     hours:
       name: "Hours"
       description: "Time until which lawn mower should drive in locale time and 24h format."
+      required: True
       example: "12"
       default: 1
       selector:
@@ -56,6 +73,7 @@ work_until:
     minutes:
       name: "Minutes"
       description: "Time until which lawn mower should drive in locale time and 24h format."
+      required: True
       example: "30"
       default: 1
       selector:
@@ -66,24 +84,40 @@ work_until:
           mode: slider
 
 border_cut:
+  name: "Border cutting"
   description: "Command the lawn mower to cut the border."
-  target:
-    device:
-      integration: "zcsmower"
-    entity:
-      domain: device_tracker
+  fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: True
+      selector:
+        device:
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+          multiple: True
 
 charge_until:
+  name: "Charge until a certain time"
   description: "Command the lawn mower to charge until a certain time."
-  target:
-    device:
-      integration: "zcsmower"
-    entity:
-      domain: device_tracker
   fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: True
+      selector:
+        device:
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+          multiple: True
     hours:
       name: "Hours"
       description: "Time until which lawn mower should charge in locale time and 24h format."
+      required: True
       example: "12"
       default: 1
       selector:
@@ -95,7 +129,8 @@ charge_until:
     minutes:
       name: "Minutes"
       description: "Time until which lawn mower should charge in locale time and 24h format."
-      example: "30"
+      required: True
+      example: 30
       default: 1
       selector:
         number:
@@ -106,7 +141,8 @@ charge_until:
     weekday:
       name: "Day of week"
       description: "Numeric representation of the day of the week is 0 (for Sunday) through 6 (for Saturday)."
-      example: "1"
+      required: True
+      example: 1
       default: 0
       selector:
         number:
@@ -114,3 +150,19 @@ charge_until:
           max: 6
           step: 1
           mode: slider
+
+trace_position:
+  name: "Trace position of lawn mower"
+  description: "Command the lawn mower to report its current position."
+  fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: True
+      selector:
+        device:
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+          multiple: True

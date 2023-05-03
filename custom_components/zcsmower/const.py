@@ -1,7 +1,14 @@
 """Constants for ZCS Lawn Mower Robot integration."""
 from logging import Logger, getLogger
 
-from homeassistant.const import Platform, PERCENTAGE, UnitOfLength
+import voluptuous as vol
+from homeassistant.const import (
+    Platform,
+    PERCENTAGE,
+    UnitOfLength,
+    ATTR_DEVICE_ID,
+)
+from homeassistant.helpers import config_validation as cv
 
 LOGGER = getLogger(__package__)
 
@@ -37,6 +44,44 @@ ATTR_CONNECTED = "connected"
 ATTR_LAST_COMM = "last_communication"
 ATTR_LAST_SEEN = "last_seen"
 ATTR_LAST_PULL = "last_pull"
+
+SERVICE_SET_PROFILE = "set_profile"
+SERVICE_SET_PROFILE_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required("profile"): vol.All(vol.Coerce(int), vol.Range(min=1, max=3)),
+    }
+)
+SERVICE_WORK_UNTIL = "work_until"
+SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
+        vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=1, max=24)),
+        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=1, max=80)),
+    }
+)
+SERVICE_BORDER_CUT = "border_cut"
+SERVICE_BORDER_CUT_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+    }
+)
+SERVICE_CHARGE_UNTIL = "charge_until"
+SERVICE_CHARGE_UNTIL_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=1, max=24)),
+        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=1, max=80)),
+        vol.Required("weekday"): vol.All(vol.Coerce(int), vol.Range(min=0, max=6)),
+    }
+)
+SERVICE_TRACE_POSITION = "trace_position"
+SERVICE_TRACE_POSITION_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+    }
+)
 
 ROBOT_STATES = [
     {
