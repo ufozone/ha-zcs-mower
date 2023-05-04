@@ -86,7 +86,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     ATTR_LAST_COMM: None,
                     ATTR_LAST_SEEN: None,
                 }
-            
+            if len(mower_imeis) == 0:
+                return mower_data
+
             await self.client.execute(
                 "thing.list",
                 {
