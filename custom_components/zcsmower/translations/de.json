@@ -335,7 +335,8 @@
           "nosignal": "Kein Signal",
           "gotostation": "Fahre zur Ladestation",
           "gotoarea": "Fahre in die Fläche",
-          "bordercut": "Randmähen"
+          "bordercut": "Randmähen",
+          "undefined": "Undefiniert"
         },
         "state_attributes": {
           "imei": {

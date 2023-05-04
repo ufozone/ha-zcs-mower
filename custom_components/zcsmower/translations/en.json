@@ -335,7 +335,8 @@
           "nosignal": "No signal",
           "gotostation": "Go to station",
           "gotoarea": "Go to area",
-          "bordercut": "Border cut"
+          "bordercut": "Border cut",
+          "undefined": "Undefined"
         },
         "state_attributes": {
           "imei": {
