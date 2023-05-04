@@ -4,8 +4,6 @@ from logging import Logger, getLogger
 import voluptuous as vol
 from homeassistant.const import (
     Platform,
-    PERCENTAGE,
-    UnitOfLength,
     ATTR_DEVICE_ID,
 )
 from homeassistant.helpers import config_validation as cv
@@ -127,10 +125,3 @@ ROBOT_STATES = [
         "icon" : "mdi:crosshairs-question",
     },
 ]
-
-UNITS = {
-    "KILOMETERS": UnitOfLength.KILOMETERS,
-    "PERCENT": PERCENTAGE,
-    "T24H": "",
-    "T12H": "",
-}
