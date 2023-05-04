@@ -24,7 +24,7 @@ from .const import (
     ATTRIBUTION,
     ATTR_IMEI,
     ATTR_SERIAL,
-    ATTR_MESSAGE,
+    ATTR_ERROR,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
@@ -66,7 +66,7 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._unique_id = slugify(f"{self._imei}_{self._name}")
 
         self._state = 0
-        self._message = 0
+        self._error = 0
         self._available = True
         self._location = {
             ATTR_LATITUDE: None,
@@ -76,18 +76,14 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._last_communication = None
         self._last_seen = None
         self._last_pull = None
-        
-        self._additional_state_attributes = {}
+
+        self._additional_extra_state_attributes = {}
 
         self.entity_id = f"{entity_type}.{self._unique_id}"
 
-    def set_additional_state_attributes(
-            self,
-            additional_attributes: dict[str, any],
-        ) -> None:
-        """Set additional attributes."""
-        if isinstance(additional_attributes, dict):
-            self._additional_state_attributes.update(additional_attributes)
+    def update_extra_state_attributes(self) -> None:
+        """Update extra attributes."""
+        self._additional_extra_state_attributes = {}
 
     @property
     def name(self) -> str:
@@ -127,8 +123,8 @@ class ZcsMowerEntity(CoordinatorEntity):
             ATTR_LAST_SEEN: self._last_seen,
             ATTR_LAST_PULL: self._last_pull,
         }
-        _extra_state_attributes.update(self._additional_state_attributes)
-        
+        _extra_state_attributes.update(self._additional_extra_state_attributes)
+
         return _extra_state_attributes
 
     async def async_update(self) -> None:
@@ -144,7 +140,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         if self._imei in self.coordinator.data:
             robot = self.coordinator.data[self._imei]
             self._state = robot[ATTR_STATE] if robot[ATTR_STATE] < len(ROBOT_STATES) else 0
-            self._message = robot[ATTR_MESSAGE]
+            self._error = robot[ATTR_ERROR]
             self._available = self._state > 0
             if robot[ATTR_LOCATION] is not None:
                 self._location = robot[ATTR_LOCATION]
@@ -162,3 +158,4 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._last_communication = robot[ATTR_LAST_COMM]
             self._last_seen = robot[ATTR_LAST_SEEN]
             self._last_pull = datetime.now()
+            self.update_extra_state_attributes()
