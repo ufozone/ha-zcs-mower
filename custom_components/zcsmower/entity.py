@@ -59,7 +59,10 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._model = None
         self._sw_version = None
 
-        self._unique_id = slugify(f"{self._imei}_{self._name}")
+        if entity_key:
+            self._unique_id = slugify(f"{self._imei}_{self._name}_{entity_key}")
+        else:
+            self._unique_id = slugify(f"{self._imei}_{self._name}")
 
         self._state = 0
         self._available = True
