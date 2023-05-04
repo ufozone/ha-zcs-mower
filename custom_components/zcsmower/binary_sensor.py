@@ -81,7 +81,7 @@ class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
             coordinator=coordinator,
             imei=imei,
             name=name,
-            entity_type="sensor",
+            entity_type="binary_sensor",
             entity_key=entity_description.key,
         )
         self.entity_description = entity_description
