@@ -1,11 +1,8 @@
 """ZCS Lawn Mower Robot integration."""
 from __future__ import annotations
 
-import voluptuous as vol
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import config_validation as cv
-from homeassistant.helpers.entity_registry import async_get as e_async_get
 from homeassistant.helpers.device_registry import async_get
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -145,29 +142,6 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         SERVICE_TRACE_POSITION,
         async_handle_trace_position,
         schema=SERVICE_TRACE_POSITION_SCHEMA
-    )
-    # TODO: delete
-    async def async_handle_test(call) -> None:
-        data = {**call.data}
-        entity_ids = data.pop("entity_id", [])
-        if isinstance(entity_ids, str):
-            entity_ids = [entity_ids]
-        entity_ids = set(entity_ids)
-        
-        er = e_async_get(hass)
-        for entity_id in entity_ids:
-            entity = er.async_get(entity_id)
-            LOGGER.debug(entity)
-
-    hass.services.async_register(
-        DOMAIN,
-        "test",
-        async_handle_test,
-        schema=vol.Schema(
-            {
-                vol.Required("entity_id"): cv.entity_ids,
-            }
-        )
     )
     return True
 
