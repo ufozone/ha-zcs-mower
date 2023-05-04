@@ -51,20 +51,20 @@
             "name": "IMEI"
           },
           "connected": {
-            "name": "Connected",
+            "name": "Verbunden",
             "state": {
               "true": "Ja",
               "false": "Nein"
             }
           },
           "last_communication": {
-            "name": "Last communication"
+            "name": "Zuletzt kommuniziert"
           },
           "last_seen": {
-            "name": "Last seen"
+            "name": "Zuletzt gesehen"
           },
           "last_pull": {
-            "name": "Last pull"
+            "name": "Zuletzt abgerufen"
           }
         }
       }
