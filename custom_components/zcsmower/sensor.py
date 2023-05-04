@@ -3,7 +3,11 @@ from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorEntityDescription,
+)
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.typing import (
     ConfigType,
@@ -23,6 +27,7 @@ from .entity import ZcsMowerEntity
 ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
         key=None,
+        device_class=SensorDeviceClass.ENUM,
         translation_key="state",
     ),
 )
