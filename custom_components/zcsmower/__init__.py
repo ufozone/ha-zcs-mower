@@ -1,8 +1,11 @@
 """ZCS Lawn Mower Robot integration."""
 from __future__ import annotations
 
+import voluptuous as vol
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.entity_registry import async_get as e_async_get
 from homeassistant.helpers.device_registry import async_get
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -143,6 +146,29 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         async_handle_trace_position,
         schema=SERVICE_TRACE_POSITION_SCHEMA
     )
+    # TODO: delete
+    async def async_handle_test(call) -> None:
+        data = {**call.data}
+        entity_ids = data.pop("entity_id", [])
+        if isinstance(entity_ids, str):
+            entity_ids = [entity_ids]
+        entity_ids = set(entity_ids)
+        
+        er = e_async_get(hass)
+        for entity_id in entity_ids:
+            entity = er.async_get(entity_id)
+            LOGGER.debug(entity)
+
+    hass.services.async_register(
+        DOMAIN,
+        "test",
+        async_handle_test,
+        schema=vol.Schema(
+            {
+                vol.Required("entity_id"): cv.entity_ids,
+            }
+        )
+    )
     return True
 
 
@@ -186,28 +212,3 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)
-
-async def async_setup_services(hass):
-    def call_service(service, targets, data):
-        LOGGER.debug(service)
-        LOGGER.debug(targets)
-        LOGGER.debug(data)
-        #browsers = hass.data[DOMAIN][DATA_BROWSERS]
-
-        #if isinstance(targets, str):
-        #    targets = [targets]
-
-        # If no targets were specified, send to all browsers
-        #if len(targets) == 0:
-        #    targets = browsers.keys()
-
-        #for target in targets:
-        #    if target not in browsers:
-        #        continue
-        #    browser = browsers[target]
-        #    hass.create_task(browser.send(service, **data))
-
-        #call_service(service, browsers, data)
-
-    for service in SERVICES:
-        hass.services.async_register(DOMAIN, service, handle_service)
