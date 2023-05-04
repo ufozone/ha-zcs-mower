@@ -24,6 +24,7 @@ from .const import (
     ATTRIBUTION,
     ATTR_IMEI,
     ATTR_SERIAL,
+    ATTR_MESSAGE,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
@@ -65,6 +66,7 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._unique_id = slugify(f"{self._imei}_{self._name}")
 
         self._state = 0
+        self._message = 0
         self._available = True
         self._location = {
             ATTR_LATITUDE: None,
@@ -129,6 +131,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         if self._imei in self.coordinator.data:
             robot = self.coordinator.data[self._imei]
             self._state = robot[ATTR_STATE] if robot[ATTR_STATE] < len(ROBOT_STATES) else 0
+            self._message = robot[ATTR_MESSAGE]
             self._available = self._state > 0
             if robot[ATTR_LOCATION] is not None:
                 self._location = robot[ATTR_LOCATION]
