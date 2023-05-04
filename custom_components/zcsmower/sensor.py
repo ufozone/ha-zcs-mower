@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.typing import (
     ConfigType,
@@ -20,6 +20,13 @@ from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 
+ENTITY_DESCRIPTIONS = (
+    SensorEntityDescription(
+        key="state",
+        translation_key="state",
+    ),
+)
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: ConfigEntry,
@@ -30,8 +37,14 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerSensor(coordinator, imei, name)
+            ZcsMowerSensor(
+                coordinator=coordinator,
+                entity_description=entity_description,
+                imei=imei,
+                name=name,
+            )
             for imei, name in coordinator.mowers.items()
+            for entity_description in ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
@@ -56,6 +69,7 @@ class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
     def __init__(
         self,
         coordinator: ZcsMowerDataUpdateCoordinator,
+        entity_description: SensorEntityDescription,
         imei: str,
         name: str,
     ) -> None:
@@ -65,8 +79,9 @@ class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
             imei=imei,
             name=name,
             entity_type="sensor",
-            entity_key="state",
+            entity_key=entity_description.key,
         )
+        self.entity_description = entity_description
 
     @property
     def icon(self) -> str:

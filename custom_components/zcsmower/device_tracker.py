@@ -5,7 +5,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.device_tracker import SOURCE_TYPE_GPS
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import Entity, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import (
     ConfigType,
@@ -22,6 +22,13 @@ from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 
+ENTITY_DESCRIPTIONS = (
+    EntityDescription(
+        key="location",
+        translation_key="location",
+    ),
+)
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: ConfigEntry,
@@ -32,8 +39,14 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerDeviceTracker(coordinator, imei, name)
+            ZcsMowerDeviceTracker(
+                coordinator=coordinator,
+                entity_description=entity_description,
+                imei=imei,
+                name=name,
+            )
             for imei, name in coordinator.mowers.items()
+            for entity_description in ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
@@ -58,6 +71,7 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
     def __init__(
         self,
         coordinator: ZcsMowerDataUpdateCoordinator,
+        entity_description: SensorEntityDescription,
         imei: str,
         name: str,
     ) -> None:
@@ -67,8 +81,9 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
             imei=imei,
             name=name,
             entity_type="device_tracker",
-            entity_key="location",
+            entity_key=entity_description.key,
         )
+        self.entity_description = entity_description
     
     @property
     def latitude(self) -> float | None:
