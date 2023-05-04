@@ -15,11 +15,11 @@ from homeassistant.const import (
     CONF_NAME
 )
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.entity_registry import (
-    async_entries_for_config_entry,
-    async_get,
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers.aiohttp_client import (
+    async_create_clientsession,
+    async_get_clientsession,
 )
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
@@ -208,39 +208,34 @@ class OptionsFlowHandler(OptionsFlow):
     ) -> dict[str, any]:
         """Manage the options for the custom component."""
         errors: dict[str, str] = {}
-        # Grab all configured lawn mowers from the entity registry so we can populate
-        # the multi-select dropdown that will allow a user to remove a lawn mower.
-        entity_registry = async_get(self.hass)
-        entries = async_entries_for_config_entry(
-            entity_registry, self.config_entry.entry_id
-        )
-        # Default value for our multi-select
-        all_mowers = {
-            e.entity_id: e.original_name
-            for e in entries
-        }
-        mower_map = {
-            e.entity_id: e 
-            for e in entries
-        }
-        
+        mowers: dict = self.options[CONF_MOWERS]
+        device_registry = dr.async_get(self.hass)
+        entity_registry = er.async_get(self.hass)
+
         if user_input is not None:
             updated_mowers = deepcopy(self.config_entry.options[CONF_MOWERS])
-
-            # Remove any unchecked lawn mowers
-            removed_entities = [
-                entity_id
-                for entity_id in mower_map.keys()
-                if entity_id not in user_input["mowers"]
+            mowers_remove = [
+                _imei
+                for _imei in mowers.keys()
+                if _imei not in user_input[CONF_MOWERS]
             ]
-            for entity_id in removed_entities:
-                # Unregister from HA
-                entity_registry.async_remove(entity_id)
-                # Remove from our configured mowers.
-                entry = mower_map[entity_id]
-                entry_imei = entry.unique_id
-                updated_mowers = [e for e in updated_mowers if e["imei"] != entry_imei]
+            for _imei in mowers_remove:
+                device = device_registry.async_get_device({(DOMAIN, _imei)})
+                if not device:
+                    continue
+                entries = er.async_entries_for_device(
+                    registry=entity_registry,
+                    device_id=device.id,
+                    include_disabled_entities=False,
+                )
+                [
+                    entity_registry.async_remove(e.entity_id)
+                    for e in entries
+                ]
+                device_registry.async_remove_device(device.id)
+                updated_mowers.pop(_imei)
 
+            # add new lawn mower
             if user_input.get(CONF_IMEI):
                 try:
                     # Validate the imei.
@@ -259,27 +254,27 @@ class OptionsFlowHandler(OptionsFlow):
                 if not errors:
                     # Add the new lawn mower
                     updated_mowers[user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
-            
+
             self.options[CONF_MOWERS] = updated_mowers
-            
+
             if not errors:
                 # Value of data will be set on the options property of our config_entry instance.
-                self.options.update(user_input)
+                self.options.update()
                 return self.async_create_entry(
                     title=self.data[CONF_NAME],
                     data=self.options,
                 )
-        
+
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(
                 {
-                    vol.Optional("mowers", default=list(all_mowers.keys())): cv.multi_select(
-                        all_mowers
+                    vol.Optional(CONF_MOWERS, default=list(mowers.keys())): cv.multi_select(
+                        mowers
                     ),
                     vol.Optional(CONF_IMEI): cv.string,
                     vol.Optional(CONF_NAME): cv.string,
                 }
             ),
-            errors=errors
+            errors=errors,
         )
