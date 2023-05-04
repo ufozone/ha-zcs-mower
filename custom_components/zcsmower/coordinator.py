@@ -32,6 +32,7 @@ from .const import (
     API_ACK_TIMEOUT,
     ATTR_IMEI,
     ATTR_SERIAL,
+    ATTR_MESSAGE,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
@@ -79,6 +80,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     ATTR_SERIAL: None,
                     ATTR_SW_VERSION: None,
                     ATTR_STATE: 0,
+                    ATTR_MESSAGE: 0,
                     ATTR_LOCATION: None,
                     ATTR_CONNECTED: False,
                     ATTR_LAST_COMM: None,
@@ -118,6 +120,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     if "alarms" in mower and "robot_state" in mower["alarms"]:
                         robot_state = mower["alarms"]["robot_state"]
                         mower_data[mower["key"]][ATTR_STATE] = robot_state["state"]
+                        mower_data[mower["key"]][ATTR_MESSAGE] = int(robot_state["msg"])
                         # latitude and longitude, not always available
                         if "lat" in robot_state and "lng" in robot_state:
                             mower_data[mower["key"]][ATTR_LOCATION] = {
