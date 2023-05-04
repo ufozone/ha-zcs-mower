@@ -43,6 +43,32 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Fehler",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connected",
+            "state": {
+              "true": "Ja",
+              "false": "Nein"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      }
+    },
     "sensor": {
       "state": {
         "name": "Status",
