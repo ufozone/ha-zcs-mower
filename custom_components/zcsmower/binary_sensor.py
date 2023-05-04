@@ -89,13 +89,11 @@ class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
 
     def update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        _reason = ""
         if self._state == 4:
             _reason = ROBOT_ERRORS[self._error] if self._error in ROBOT_ERRORS else "unknown"
-
-        self._additional_extra_state_attributes = {
-            "reason": _reason,
-        }
+            self._additional_extra_state_attributes = {
+                "reason": _reason,
+            }
 
     @property
     def is_on(self) -> bool:
