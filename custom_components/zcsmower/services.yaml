@@ -1,5 +1,5 @@
 set_profile:
-  name: "Set profile"
+  name: "Setting profile"
   description: "Configure the profile for auto-mode."
   fields:
     device_id:
@@ -93,7 +93,7 @@ border_cut:
             domain: "device_tracker"
 
 charge_until:
-  name: "Charge until a certain time"
+  name: "Charging until a certain time"
   description: "Command the lawn mower to charge until a certain time."
   fields:
     device_id:
@@ -156,7 +156,7 @@ charge_until:
             value: "6"
 
 trace_position:
-  name: "Trace position of lawn mower"
+  name: "Tracing position"
   description: "Command the lawn mower to report its current position."
   fields:
     device_id:
