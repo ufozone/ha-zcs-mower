@@ -25,15 +25,67 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 
 ## Available components 
 
+### General
+
+* all entities
+
+    ```
+    attributes: 
+    imei, connected, last_communication, last_seen, last_poll
+    ```
+
 ### Binary Sensors
-* _coming soon_
+
+* error
+
+    ```
+    attributes: 
+    reason
+    ```
 
 ### Device Tracker
-* _coming soon_
+
+* location
 
 ### Sensors
-* _coming soon_
 
-### Switches
-* _coming soon_
+* state
+  | Values      | Description   |
+  |-------------|---------------|
+  | unknown     | Unknown       |
+  | charging    | Charging      |
+  | working     | Working       |
+  | stop        | Stop          |
+  | error       | Error         |
+  | nosignal    | No signal     |
+  | gotostation | Go to station |
+  | gotoarea    | Go to area    |
+  | bordercut   | Border cut    |
 
+### Services
+
+* set_profile
+  Configure the profile for auto-mode.
+  
+* work_until
+  Command the lawn mower to mow until a certain time.
+  
+* border_cut
+  Command the lawn mower to cut the border.
+  
+* charge_until
+  Command the lawn mower to charge until a certain time.
+  
+* trace_position
+  Command the lawn mower to report its current position.
+
+### Logging
+
+Set the logging to debug with the following settings in case of problems.
+
+```
+logger:
+  default: warn
+  logs:
+    custom_components.zcsmower: debug
+```
