@@ -1,12 +1,14 @@
-"""ZCS Lawn Mower Robot sensor platform."""
+"""ZCS Lawn Mower Robot binary sensor platform."""
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.device_tracker import SOURCE_TYPE_GPS
-from homeassistant.components.device_tracker.config_entry import TrackerEntity
-from homeassistant.helpers.entity import Entity, EntityDescription
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
+    BinarySensorEntity,
+    BinarySensorEntityDescription,
+)
+from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.typing import (
     ConfigType,
     DiscoveryInfoType,
@@ -16,17 +18,17 @@ from homeassistant.helpers.typing import (
 from .const import (
     LOGGER,
     DOMAIN,
-    #ROBOT_STATES,
+    ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 
 ENTITY_DESCRIPTIONS = (
-    EntityDescription(
-        key=None,
-        icon="mdi:robot-mower",
-        translation_key="location",
+    BinarySensorEntityDescription(
+        key="error",
+        translation_key="error",
+        device_class=BinarySensorDeviceClass.PROBLEM,
     ),
 )
 
@@ -40,7 +42,7 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerDeviceTracker(
+            ZcsMowerBinarySensor(
                 coordinator=coordinator,
                 entity_description=entity_description,
                 imei=imei,
@@ -59,20 +61,20 @@ async def async_setup_platform(
     async_add_entities: Callable,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up the sensor platform."""
+    """Set up the sensor binary platform."""
     
     # TODO
     LOGGER.debug("async_setup_platform")
     LOGGER.debug(config_entry)
 
 
-class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
-    """Representation of a ZCS Lawn Mower Robot sensor."""
+class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
+    """Representation of a ZCS Lawn Mower Robot binary sensor."""
 
     def __init__(
         self,
         coordinator: ZcsMowerDataUpdateCoordinator,
-        entity_description: SensorEntityDescription,
+        entity_description: BinarySensorEntityDescription,
         imei: str,
         name: str,
     ) -> None:
@@ -81,29 +83,12 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
             coordinator=coordinator,
             imei=imei,
             name=name,
-            entity_type="device_tracker",
+            entity_type="sensor",
             entity_key=entity_description.key,
         )
         self.entity_description = entity_description
-    
-    @property
-    def latitude(self) -> float | None:
-        """Return latitude value of the device."""
-        location = self._location.get("latitude", None)
-        return location if location else None
 
     @property
-    def longitude(self) -> float | None:
-        """Return longitude value of the device."""
-        location = self._location.get("longitude", None)
-        return location if location else None
-
-    @property
-    def source_type(self):
-        """Return the source type, eg gps or router, of the device."""
-        return SOURCE_TYPE_GPS
-
-    @property
-    def device_class(self):
-        """Return Device Class."""
-        return None
+    def is_on(self) -> bool:
+        """Return true if the binary_sensor is on."""
+        return self._state == 4

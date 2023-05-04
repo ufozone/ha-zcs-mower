@@ -22,7 +22,7 @@ MANUFACTURER_MAP = {
 ATTRIBUTION = "Data provided by Telit IoT Platform"
 
 PLATFORMS = [
-    #Platform.BINARY_SENSOR,
+    Platform.BINARY_SENSOR,
     Platform.DEVICE_TRACKER,
     Platform.SENSOR,
     #Platform.SWITCH,

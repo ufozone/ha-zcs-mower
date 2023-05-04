@@ -83,11 +83,6 @@ class ZcsMowerEntity(CoordinatorEntity):
         return self._name
 
     @property
-    def icon(self) -> str:
-        """Return the icon of the entity."""
-        return "mdi:robot-mower"
-
-    @property
     def unique_id(self) -> str:
         """Return the unique ID of the sensor."""
         return self._unique_id
