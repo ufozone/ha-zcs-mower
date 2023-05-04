@@ -22,7 +22,6 @@ from .const import (
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
-
 ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
         key="error",
@@ -30,6 +29,7 @@ ENTITY_DESCRIPTIONS = (
         device_class=BinarySensorDeviceClass.PROBLEM,
     ),
 )
+
 
 async def async_setup_entry(
     hass: HomeAssistant,

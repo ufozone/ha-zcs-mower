@@ -23,7 +23,6 @@ from .const import (
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
-
 ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
         key=None,
@@ -31,6 +30,7 @@ ENTITY_DESCRIPTIONS = (
         translation_key="state",
     ),
 )
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
