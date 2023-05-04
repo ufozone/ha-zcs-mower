@@ -22,7 +22,7 @@ from .entity import ZcsMowerEntity
 
 ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
-        key="state",
+        key=None,
         translation_key="state",
     ),
 )

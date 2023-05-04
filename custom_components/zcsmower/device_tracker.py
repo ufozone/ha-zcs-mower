@@ -24,7 +24,7 @@ from .entity import ZcsMowerEntity
 
 ENTITY_DESCRIPTIONS = (
     EntityDescription(
-        key="location",
+        key=None,
         translation_key="location",
     ),
 )

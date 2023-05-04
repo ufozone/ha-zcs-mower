@@ -1,0 +1,110 @@
+{
+  "config": {
+    "error": {
+      "invalid_key": "Der angegebene Kundenschlüssel ist ungültig.",
+      "auth": "Autorisierung fehlgeschlagen.",
+      "connection": "Es kann keine Verbindung zum Server hergestellt werden.",
+      "invalid_imei": "Die angegebene IMEI ist nicht gültig."
+    },
+    "step": {
+      "user": {
+        "title": "Authentifizierung",
+        "description": "Gib deinen Kundenschlüssel aus der mobilen App ein.",
+        "data": {
+          "name": "Name",
+          "client_key": "Kundenschlüssel"
+        }
+      },
+      "mower": {
+        "title": "Rasenmäher hinzufügen",
+        "description": "Füge einen Rasenmäher hinzu. Markiere das Kästchen, um einen weiteren hinzuzufügen.",
+        "data": {
+          "name": "Name des Rasenmähers",
+          "imei": "IMEI des Rasenmähers",
+          "add_another": "Einen weiteren Rasenmäher hinzufügen?"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "invalid_imei": "Die angegebene IMEI ist nicht gültig."
+    },
+    "step": {
+      "init": {
+        "title": "Verwalten der Rasenmäher",
+        "description": "Entferne vorhandene Rasenmäher oder füge einen neuen Rasenmäher hinzu.",
+        "data": {
+          "mowers": "Vorhandener Mäher: Deaktiviere alle Rasenmäher, die entfernt werden sollen.",
+          "name": "Neuer Rasenmäher: Name des Rasenmähers",
+          "imei": "Neuer Rasenmäher: IMEI des Rasenmähers"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Status",
+        "state": {
+          "unknown": "Unbekannt",
+          "charging": "Ladevorgang",
+          "working": "Mähvorgang",
+          "stop": "Stopp",
+          "error": "Fehler",
+          "nosignal": "Kein Signal",
+          "gotostation": "Fahre zur Ladestation",
+          "gotoarea": "Fahre in die Fläche",
+          "bordercut": "Randmähen"
+        },
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbunden",
+            "state": {
+              "true": "Ja",
+              "false": "Nein"
+            }
+          },
+          "last_communication": {
+            "name": "Zuletzt kommuniziert"
+          },
+          "last_seen": {
+            "name": "Zuletzt gesehen"
+          },
+          "last_pull": {
+            "name": "Zuletzt abgerufen"
+          }
+        }
+      }
+    },
+    "device_tracker": {
+      "location": {
+        "name": "Standort",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbunden",
+            "state": {
+              "true": "Ja",
+              "false": "Nein"
+            }
+          },
+          "last_communication": {
+            "name": "Zuletzt kommuniziert"
+          },
+          "last_seen": {
+            "name": "Zuletzt gesehen"
+          },
+          "last_pull": {
+            "name": "Zuletzt abgerufen"
+          }
+        }
+      }
+    }
+  }
+}

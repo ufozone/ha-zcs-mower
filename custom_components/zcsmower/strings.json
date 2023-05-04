@@ -64,8 +64,8 @@
           "connected": {
             "name": "Connected",
             "state": {
-              "true": "Yes",
-              "false": "No"
+              "true": "[%key:common::state::yes%]",
+              "false": "[%key:common::state::no%]"
             }
           },
           "last_communication": {
@@ -90,8 +90,8 @@
           "connected": {
             "name": "Connected",
             "state": {
-              "true": "Yes",
-              "false": "No"
+              "true": "[%key:common::state::yes%]",
+              "false": "[%key:common::state::no%]"
             }
           },
           "last_communication": {
