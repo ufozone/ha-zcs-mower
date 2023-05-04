@@ -69,6 +69,7 @@
           "reason": {
             "name": "Grund",
             "state": {
+              "unknown": "Unbekannt",
               "bus_error": "BUS ERROR",
               "sync_error": "SYNC ERROR",
               "blackout_sig02": "Blackout - SIG02",
