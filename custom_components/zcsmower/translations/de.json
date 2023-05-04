@@ -48,7 +48,7 @@
         "name": "Status",
         "state": {
           "unknown": "Unbekannt",
-          "charging": "Ladevorgang",
+          "charging": "Aufladen",
           "working": "Mähvorgang",
           "stop": "Stopp",
           "error": "Fehler",
