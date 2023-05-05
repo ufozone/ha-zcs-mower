@@ -54,7 +54,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             hass=hass,
             logger=LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=5),
+            update_interval=timedelta(minutes=2),
         )
         self.mowers = mowers
         self.client = client
@@ -337,6 +337,45 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 {
                     "method": "trace_position",
                     "imei": imei,
+                    "ackTimeout": API_ACK_TIMEOUT,
+                    "singleton": True,
+                },
+            )
+        except Exception as exception:
+            LOGGER.exception(exception)
+        return False
+
+    async def async_keep_out(
+        self,
+        imei: str,
+        latitude: float,
+        longitude: float,
+        radius: int,
+        hours: int | None = None,
+        minutes: int | None = None,
+        index: int | None = None,
+    ) -> bool:
+        """Send command keep_out to lawn nower."""
+        LOGGER.debug(f"keep_out: {imei}")
+        _params = {
+            "latitude": latitude,
+            "longitude": longitude,
+            "radius": radius,
+        }
+        if isinstance(hours, int) and hours in range(0, 23):
+            _params["hh"] = hours
+        if isinstance(minutes, int) and minutes in range(0, 59):
+            _params["mm"] = minutes
+        if isinstance(index, int):
+            _params["index"] = index
+        try:
+            await self.async_wake_up(imei)
+            return await self.client.execute(
+                "method.exec",
+                {
+                    "method": "keep_out",
+                    "imei": imei,
+                    "params": _params,
                     "ackTimeout": API_ACK_TIMEOUT,
                     "singleton": True,
                 },

@@ -4,7 +4,10 @@ from logging import getLogger
 import voluptuous as vol
 from homeassistant.const import (
     Platform,
-    ATTR_DEVICE_ID,
+    CONF_DEVICE_ID,
+    CONF_LATITUDE,
+    CONF_LONGITUDE,
+    CONF_RADIUS,
 )
 from homeassistant.helpers import config_validation as cv
 
@@ -48,20 +51,20 @@ ATTR_LAST_PULL = "last_pull"
 SERVICE_SET_PROFILE = "set_profile"
 SERVICE_SET_PROFILE_SCHEMA = vol.Schema(
     {
-        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("profile"): vol.All(vol.Coerce(int), vol.Range(min=1, max=3)),
     }
 )
 SERVICE_WORK_NOW = "work_now"
 SERVICE_WORK_NOW_SCHEMA = vol.Schema(
     {
-        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
     }
 )
 SERVICE_WORK_UNTIL = "work_until"
 SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
     {
-        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
         vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=24)),
         vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=60)),
@@ -70,19 +73,19 @@ SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
 SERVICE_BORDER_CUT = "border_cut"
 SERVICE_BORDER_CUT_SCHEMA = vol.Schema(
     {
-        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
     }
 )
 SERVICE_CHARGE_NOW = "charge_now"
 SERVICE_CHARGE_NOW_SCHEMA = vol.Schema(
     {
-        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
     }
 )
 SERVICE_CHARGE_UNTIL = "charge_until"
 SERVICE_CHARGE_UNTIL_SCHEMA = vol.Schema(
     {
-        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=24)),
         vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=60)),
         vol.Required("weekday"): vol.All(vol.Coerce(int), vol.Range(min=0, max=6)),
@@ -91,7 +94,19 @@ SERVICE_CHARGE_UNTIL_SCHEMA = vol.Schema(
 SERVICE_TRACE_POSITION = "trace_position"
 SERVICE_TRACE_POSITION_SCHEMA = vol.Schema(
     {
-        vol.Required(ATTR_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
+    }
+)
+SERVICE_KEEP_OUT = "keep_out"
+SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required(CONF_LATITUDE): cv.latitude,
+        vol.Required(CONF_LONGITUDE): cv.longitude,
+        vol.Required(CONF_RADIUS): vol.Coerce(int),
+        vol.Optional("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=24)),
+        vol.Optional("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=60)),
+        vol.Optional("index"): vol.Coerce(int),
     }
 )
 

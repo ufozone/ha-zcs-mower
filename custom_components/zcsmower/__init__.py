@@ -2,6 +2,11 @@
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
+from homeassistant.const import (
+    CONF_LATITUDE,
+    CONF_LONGITUDE,
+    CONF_RADIUS,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import async_get
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -27,6 +32,8 @@ from .const import (
     SERVICE_CHARGE_UNTIL_SCHEMA,
     SERVICE_TRACE_POSITION,
     SERVICE_TRACE_POSITION_SCHEMA,
+    SERVICE_KEEP_OUT,
+    SERVICE_KEEP_OUT_SCHEMA,
 )
 from .api import ZcsMowerApiClient
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -113,6 +120,22 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
                 )
             )
 
+    async def async_handle_keep_out(call) -> None:
+        """Handle the service call."""
+        targets = await async_handle_service(call)
+        for imei, coordinator in targets.items():
+            hass.async_create_task(
+                coordinator.async_keep_out(
+                    imei,
+                    call.data.get(CONF_LATITUDE),
+                    call.data.get(CONF_LONGITUDE),
+                    call.data.get(CONF_RADIUS),
+                    call.data.get("hours", None),
+                    call.data.get("minutes", None),
+                    call.data.get("index", None),
+                )
+            )
+
     async def async_handle_service(call) -> dict[str, any]:
         data = {**call.data}
         device_ids = data.pop("device_id", [])
@@ -176,6 +199,12 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         SERVICE_TRACE_POSITION,
         async_handle_trace_position,
         schema=SERVICE_TRACE_POSITION_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_KEEP_OUT,
+        async_handle_keep_out,
+        schema=SERVICE_KEEP_OUT_SCHEMA
     )
     return True
 

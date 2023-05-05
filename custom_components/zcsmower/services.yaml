@@ -202,3 +202,58 @@ trace_position:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
+
+keep_out:
+  name: "Keep out of a location (no-go area)"
+  description: "Commands the lawn mower to keep out of a location."
+  fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+    area:
+      name: "Location"
+      description: "Location from which the lawn mower should keep out."
+      required: true
+      example: 1
+      default: 1
+      selector:
+        location:
+          radius: true
+    hours:
+      name: "Hours"
+      description: "Time until which lawn mower should keep out in locale time and 24h format."
+      example: 12
+      default: 12
+      selector:
+        number:
+          min: 0
+          max: 24
+          step: 1
+          mode: slider
+    minutes:
+      name: "Minutes"
+      description: "Time until which lawn mower should keep out in locale time and 24h format."
+      example: 30
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 60
+          step: 1
+          mode: slider
+    index:
+      name: "Index"
+      description: "Index is needed when the lawn mower is to keep out of multiple locations at the same time. Different index values per no-go area."
+      example: 1
+      default: 1
+      selector:
+        number:
+          mode: box
