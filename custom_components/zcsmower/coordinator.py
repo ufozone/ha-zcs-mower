@@ -123,7 +123,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                         robot_state = mower["alarms"]["robot_state"]
                         mower_data[mower["key"]][ATTR_STATE] = robot_state["state"]
                         if "msg" in robot_state:
-                            mower_data[mower["key"]][ATTR_ERROR] = int(robot_state["msg"])
+                            mower_data[mower["key"]][ATTR_ERROR] = int(
+                                robot_state["msg"]
+                            )
                         # latitude and longitude, not always available
                         if "lat" in robot_state and "lng" in robot_state:
                             mower_data[mower["key"]][ATTR_LOCATION] = {
@@ -138,10 +140,15 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     if "connected" in mower:
                         mower_data[mower["key"]][ATTR_CONNECTED] = mower["connected"]
                     if "lastCommunication" in mower:
-                        mower_data[mower["key"]][ATTR_LAST_COMM] = datetime.strptime(mower["lastCommunication"], API_DATETIME_FORMAT)
+                        mower_data[mower["key"]][ATTR_LAST_COMM] = datetime.strptime(
+                            mower["lastCommunication"],
+                            API_DATETIME_FORMAT
+                        )
                     if "lastSeen" in mower:
-                        mower_data[mower["key"]][ATTR_LAST_SEEN] = datetime.strptime(mower["lastSeen"], API_DATETIME_FORMAT)
-
+                        mower_data[mower["key"]][ATTR_LAST_SEEN] = datetime.strptime(
+                            mower["lastSeen"],
+                            API_DATETIME_FORMAT
+                        )
             # TODO
             LOGGER.debug("_async_update_data")
             LOGGER.debug(mower_data)

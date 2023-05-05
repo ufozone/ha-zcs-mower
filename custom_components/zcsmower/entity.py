@@ -17,7 +17,6 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
 from .const import (
-    LOGGER,
     DOMAIN,
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,

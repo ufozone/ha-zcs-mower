@@ -1,12 +1,16 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.device_tracker import SOURCE_TYPE_GPS
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
-from homeassistant.helpers.entity import Entity, EntityDescription
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.entity import (
+    Entity,
+    EntityDescription,
+)
 from homeassistant.helpers.typing import (
     ConfigType,
     DiscoveryInfoType,
@@ -62,7 +66,6 @@ async def async_setup_platform(
     
     # TODO
     LOGGER.debug("async_setup_platform")
-    LOGGER.debug(config_entry)
 
 
 class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
@@ -71,7 +74,7 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
     def __init__(
         self,
         coordinator: ZcsMowerDataUpdateCoordinator,
-        entity_description: SensorEntityDescription,
+        entity_description: EntityDescription,
         imei: str,
         name: str,
     ) -> None:

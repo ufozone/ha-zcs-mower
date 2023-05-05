@@ -1,6 +1,8 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.sensor import (
@@ -64,7 +66,6 @@ async def async_setup_platform(
     
     # TODO
     LOGGER.debug("async_setup_platform")
-    LOGGER.debug(config_entry)
 
 
 class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
