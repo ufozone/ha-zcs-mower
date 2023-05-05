@@ -34,11 +34,11 @@ from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 ROBOT_SUPPORTED_FEATURES = (
-    VacuumEntityFeature.STATE
-    | VacuumEntityFeature.STOP
+    VacuumEntityFeature.STOP
     | VacuumEntityFeature.RETURN_HOME
     | VacuumEntityFeature.SEND_COMMAND
     | VacuumEntityFeature.LOCATE
+    | VacuumEntityFeature.STATE
     | VacuumEntityFeature.STATUS
     | VacuumEntityFeature.START
 )
@@ -130,6 +130,47 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
     def error(self) -> str:
         """Define an error message if the vacuum is in STATE_ERROR."""
         if self._state == 4:
-            mower_attributes = AutomowerEntity.get_mower_attributes(self)
             return ROBOT_ERRORS.get(self._error, "unknown")
         return None
+
+    async def async_start(self) -> None:
+        """Start or resume the cleaning task."""
+        await self.coordinator.async_work_now(
+            self._imei,
+        )
+
+    async def async_pause(self) -> None:
+        """Not supported."""
+        LOGGER.warning("Method %s.pause is not supported.", DOMAIN)
+
+    async def async_stop(self, **kwargs) -> None:
+        """Command the lawn mower return to station until next schedule."""
+        await self.async_return_to_base(**kwargs)
+
+    async def async_return_to_base(self, **kwargs) -> None:
+        """Command the lawn mower return to station until next schedule."""
+        await self.coordinator.async_charge_now(
+            self._imei,
+        )
+
+    async def async_clean_spot(self, **kwargs: any) -> None:
+        """Not supported."""
+        LOGGER.warning("Method %s.clean_spot is not supported.", DOMAIN)
+
+    async def async_locate(self, **kwargs: any) -> None:
+        """Locate the vacuum cleaner."""
+        await self.coordinator.async_trace_position(
+            self._imei,
+        )
+
+    async def async_set_fan_speed(self, fan_speed: str, **kwargs: any) -> None:
+        """Not supported."""
+        LOGGER.warning("Method %s.set_fan_speed is not supported.", DOMAIN)
+
+    async def async_send_command(
+        self,
+        command: str,
+        params: dict[str, any] | list[any] | None = None,
+        **kwargs: any
+    ) -> None:
+        """Send a command to a vacuum cleaner."""
