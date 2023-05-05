@@ -59,6 +59,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self.mowers = mowers
         self.client = client
 
+        self.mower_data = {}
+
     async def __aenter__(self):
         """Return Self."""
         return self
@@ -153,7 +155,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug("_async_update_data")
             LOGGER.debug(mower_data)
 
-            return mower_data
+            self.mower_data = mower_data
+
+            return self.mower_data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
         except ZcsMowerApiError as exception:
@@ -376,6 +380,29 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "method": "keep_out",
                     "imei": imei,
                     "params": _params,
+                    "ackTimeout": API_ACK_TIMEOUT,
+                    "singleton": True,
+                },
+            )
+        except Exception as exception:
+            LOGGER.exception(exception)
+        return False
+
+    async def async_custom_command(
+        self,
+        imei: str,
+        command: str,
+        params: dict[str, any] | list[any] | None = None,
+    ) -> None:
+        """Send custom command to lawn nower."""
+        try:
+            await self.async_wake_up(imei)
+            return await self.client.execute(
+                "method.exec",
+                {
+                    "method": command,
+                    "imei": imei,
+                    "params": params,
                     "ackTimeout": API_ACK_TIMEOUT,
                     "singleton": True,
                 },
