@@ -328,15 +328,17 @@
         "name": "State",
         "state": {
           "unknown": "Unknown",
-          "charging": "Charging",
-          "working": "Working",
-          "stop": "Stop",
+          "charge": "Charge",
+          "work": "Work",
+          "pause": "Pause",
           "error": "Error",
           "nosignal": "No signal",
           "gotostation": "Go to station",
           "gotoarea": "Go to area",
           "bordercut": "Border cut",
-          "undefined": "Undefined"
+          "expired": "Expired",
+          "renewed": "Renewed",
+          "work_standby": "Work standby"
         },
         "state_attributes": {
           "imei": {

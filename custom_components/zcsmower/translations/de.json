@@ -328,15 +328,17 @@
         "name": "Status",
         "state": {
           "unknown": "Unbekannt",
-          "charging": "Aufladen",
-          "working": "Mähvorgang",
-          "stop": "Stopp",
-          "error": "Fehler",
+          "charge": "Aufladen",
+          "work": "Mähvorgang",
+          "pause": "Pause",
+          "fail": "Fehler",
           "nosignal": "Kein Signal",
           "gotostation": "Fahre zur Ladestation",
           "gotoarea": "Fahre in die Fläche",
           "bordercut": "Randmähen",
-          "undefined": "Undefiniert"
+          "expired": "Abgelaufen",
+          "renewed": "Erneuert",
+          "work_standby": "Arbeitsbereitschaft"
         },
         "state_attributes": {
           "imei": {
