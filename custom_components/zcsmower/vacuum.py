@@ -107,6 +107,8 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
 
     def update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
+        # TODO: Currently no way to map this status, but it would be the best way to
+        #       present detailed error messages.
         self._additional_extra_state_attributes = {
             ATTR_STATUS: ROBOT_STATES[self._state]["name"],
         }
@@ -134,9 +136,9 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
         return None
 
     async def async_start(self) -> None:
-        """Start or resume the cleaning task."""
+        """Start or resume the mowing task."""
         await self.coordinator.async_work_now(
-            self._imei,
+            imei=self._imei,
         )
 
     async def async_pause(self) -> None:
@@ -150,7 +152,7 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
     async def async_return_to_base(self, **kwargs) -> None:
         """Command the lawn mower return to station until next schedule."""
         await self.coordinator.async_charge_now(
-            self._imei,
+            imei=self._imei,
         )
 
     async def async_clean_spot(self, **kwargs: any) -> None:
@@ -158,9 +160,9 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
         LOGGER.warning("Method %s.clean_spot is not supported.", DOMAIN)
 
     async def async_locate(self, **kwargs: any) -> None:
-        """Locate the vacuum cleaner."""
+        """Locate the lawn mower."""
         await self.coordinator.async_trace_position(
-            self._imei,
+            imei=self._imei,
         )
 
     async def async_set_fan_speed(self, fan_speed: str, **kwargs: any) -> None:
@@ -173,4 +175,9 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
         params: dict[str, any] | list[any] | None = None,
         **kwargs: any
     ) -> None:
-        """Send a command to a vacuum cleaner."""
+        """Send a command to lawn mower."""
+        await self.coordinator.async_custom_command(
+            imei=self._imei,
+            command=command,
+            params=params,
+        )
