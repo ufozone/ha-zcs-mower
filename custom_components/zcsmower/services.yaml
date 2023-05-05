@@ -25,6 +25,22 @@ set_profile:
           max: 3
           mode: box
 
+work_now:
+  name: "Mowing now"
+  description: "Command the lawn mower to mow now."
+  fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+
 work_until:
   name: "Mowing until a certain time"
   description: "Command the lawn mower to mow until a certain time."
@@ -79,6 +95,22 @@ work_until:
 border_cut:
   name: "Border cutting"
   description: "Command the lawn mower to cut the border."
+  fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+
+charge_now:
+  name: "Charging now"
+  description: "Command the lawn mower to charge now."
   fields:
     device_id:
       name: "Device(s)"
