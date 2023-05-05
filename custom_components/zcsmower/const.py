@@ -23,7 +23,7 @@ MANUFACTURER_MAP = {
     "TH": "TECHline",
     "WI": "Herkules Wiper",
 }
-ATTRIBUTION = "Data provided by Telit IoT Platform"
+ATTRIBUTION = "Data provided gently by Telit IoT Platform"
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
