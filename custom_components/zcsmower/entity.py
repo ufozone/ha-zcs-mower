@@ -49,8 +49,11 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Initialize."""
         super().__init__(coordinator)
 
-        self.coordinator = coordinator
-        self.client = coordinator.client
+        self._coordinator = coordinator
+        self._client = coordinator.client
+
+        self._entity_type = entity_type
+        self._entity_key = entity_key
 
         self._imei = imei
         self._name = name
@@ -136,8 +139,8 @@ class ZcsMowerEntity(CoordinatorEntity):
         self.async_write_ha_state()
 
     def _update_handler(self):
-        if self._imei in self.coordinator.data:
-            robot = self.coordinator.data[self._imei]
+        if self._imei in self._coordinator.data:
+            robot = self._coordinator.data[self._imei]
             self._state = robot[ATTR_STATE] if robot[ATTR_STATE] < len(ROBOT_STATES) else 0
             self._error = robot[ATTR_ERROR]
             self._available = self._state > 0

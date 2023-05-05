@@ -62,7 +62,7 @@ async def async_setup_platform(
     async_add_entities: Callable,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up the sensor binary platform."""
+    """Set up the binary sensor platform."""
     # TODO
     LOGGER.debug("async_setup_platform")
 
@@ -77,7 +77,7 @@ class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
         imei: str,
         name: str,
     ) -> None:
-        """Initialize the sensor class."""
+        """Initialize the binary sensor class."""
         super().__init__(
             coordinator=coordinator,
             imei=imei,
@@ -89,12 +89,14 @@ class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
 
     def update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        if self._state == 4:
-            self._additional_extra_state_attributes = {
-                "reason": ROBOT_ERRORS.get(self._error, "unknown"),
-            }
+        if self._entity_key == "error":
+            if self._state == 4:
+                self._additional_extra_state_attributes = {
+                    "reason": ROBOT_ERRORS.get(self._error, "unknown"),
+                }
 
     @property
     def is_on(self) -> bool:
         """Return true if the binary_sensor is on."""
-        return self._state == 4
+        if self._entity_key == "error":
+            return self._state == 4
