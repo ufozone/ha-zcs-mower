@@ -45,14 +45,13 @@ from .api import (
 
 
 async def validate_auth(client_key: str, hass: HomeAssistant) -> None:
-    """
-    Validate client key.
+    """Validate client key.
 
     Raises a ValueError if the client key is invalid.
     """
     if len(client_key) != 28:
         raise ValueError
-    
+
     client = ZcsMowerApiClient(
         session=async_create_clientsession(hass),
         options={
@@ -65,14 +64,13 @@ async def validate_auth(client_key: str, hass: HomeAssistant) -> None:
     await client.check_api_client()
 
 async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
-    """
-    Validate a lawn mower IMEI.
-    
+    """Validate a lawn mower IMEI.
+
     Raises a ValueError if the IMEI is invalid.
     """
     if len(imei) != 15:
         raise ValueError
-    
+
     client = ZcsMowerApiClient(
         session=async_get_clientsession(hass),
         options={
@@ -91,10 +89,10 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
-    
+
     data: dict[str, any] | None
     options: dict[str, any] | None
-    
+
     async def async_step_user(
         self,
         user_input: dict[str, any] | None = None,
@@ -116,7 +114,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             except Exception as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection"
-            
+
             if not errors:
                 # Input is valid, set data
                 self.data = user_input
@@ -228,7 +226,7 @@ class OptionsFlowHandler(OptionsFlow):
             updated_mowers = deepcopy(self.config_entry.options[CONF_MOWERS])
             mowers_remove = [
                 _imei
-                for _imei in mowers.keys()
+                _imei in mowers
                 if _imei not in user_input[CONF_MOWERS]
             ]
             for _imei in mowers_remove:
@@ -273,7 +271,7 @@ class OptionsFlowHandler(OptionsFlow):
             self.options[CONF_MOWERS] = updated_mowers
 
             if not errors:
-                # Value of data will be set on the options property of our 
+                # Value of data will be set on the options property of our
                 # config_entry instance.
                 self.options.update()
                 return self.async_create_entry(

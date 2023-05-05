@@ -1,5 +1,4 @@
-"""
-ZCS Lawn Mower Robot API Client.
+"""ZCS Lawn Mower Robot API Client.
 
 https://github.com/deviceWISE/sample_tr50_python
 """
@@ -120,8 +119,7 @@ class ZcsMowerApiClient:
         data: dict | None = None,
         headers: dict | None = None,
     ) -> bool:
-        """
-        Send the TR50 request to the server and parses the response.
+        """Send the TR50 request to the server and parses the response.
 
         Args:
             data (dict | None): JSON command and arguments to send.
@@ -174,13 +172,14 @@ class ZcsMowerApiClient:
                     return self._status
                 else:
                     # if session is invalid, refresh authentication and execute command
-                    # again possible loop, if authentication session is always invalid 
+                    # again possible loop, if authentication session is always invalid
                     # after successful refresh
                     for error in (
                         error
-                        for error in self._error 
+                        for error in self._error
                         if "Authentication session is invalid" in error
                     ):
+                        LOGGER.info(error)
                         refresh_auth = await self.auth()
                         if refresh_auth:
                             data["auth"]["sessionId"] = self._session_id
@@ -202,7 +201,7 @@ class ZcsMowerApiClient:
                 "Something really wrong happened!"
             ) from exception
 
-    # Package the command and the params into an array and sends the command to the 
+    # Package the command and the params into an array and sends the command to the
     # configured endpoint for processing.
     # https://github.com/deviceWISE/sample_tr50_python
     # @param    command    string    The TR50 command to execute.
@@ -251,8 +250,8 @@ class ZcsMowerApiClient:
     ) -> bool:
         """Depending on the configuration, authenticate the app."""
         if (
-            len(self._app_id) > 0 
-            and len(self._app_token) > 0 
+            len(self._app_id) > 0
+            and len(self._app_token) > 0
             and len(self._thing_key) > 0
         ):
             return await self.app_auth(self._app_id, self._app_token, self._thing_key)

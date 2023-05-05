@@ -86,7 +86,7 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
             entity_key=entity_description.key,
         )
         self.entity_description = entity_description
-    
+
     @property
     def latitude(self) -> float | None:
         """Return latitude value of the device."""
