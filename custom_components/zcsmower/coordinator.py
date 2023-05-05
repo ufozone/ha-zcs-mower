@@ -1,6 +1,8 @@
 """DataUpdateCoordinator for ZCS Lawn Mower Robot."""
 from __future__ import annotations
 
+import asyncio
+
 from datetime import (
     timedelta,
     datetime,
@@ -30,6 +32,7 @@ from .const import (
     LOGGER,
     API_DATETIME_FORMAT,
     API_ACK_TIMEOUT,
+    API_WAIT_BEFORE_EXEC,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_ERROR,
@@ -60,6 +63,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self.client = client
 
         self.mower_data = {}
+
+        self._loop = asyncio.get_event_loop()
 
     async def __aenter__(self):
         """Return Self."""
@@ -186,47 +191,55 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         imei: str,
         profile: int,
-    ) -> bool:
+    ) -> None:
         """Send command set_profile to lawn nower."""
         LOGGER.debug(f"set_profile: {imei}")
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": "set_profile",
-                    "imei": imei,
-                    "params": {
-                        "profile": (profile - 1),
-                    },
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": "set_profile",
+                            "imei": imei,
+                            "params": {
+                                "profile": (profile - 1),
+                            },
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
 
     async def async_work_now(
         self,
         imei: str,
-    ) -> bool:
+    ) -> None:
         """Send command work_now to lawn nower."""
         LOGGER.debug(f"work_now: {imei}")
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": "work_now",
-                    "imei": imei,
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": "work_now",
+                            "imei": imei,
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
 
     async def async_work_until(
         self,
@@ -234,70 +247,82 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         area: int,
         hours: int,
         minutes: int,
-    ) -> bool:
+    ) -> None:
         """Send command work_until to lawn nower."""
         LOGGER.debug(f"work_until: {imei}")
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": "work_until",
-                    "imei": imei,
-                    "params": {
-                        "area": (area - 1),
-                        "hh": hours,
-                        "mm": minutes,
-                    },
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": "work_until",
+                            "imei": imei,
+                            "params": {
+                                "area": (area - 1),
+                                "hh": hours,
+                                "mm": minutes,
+                            },
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
 
     async def async_border_cut(
         self,
         imei: str,
-    ) -> bool:
+    ) -> None:
         """Send command border_cut to lawn nower."""
         LOGGER.debug(f"border_cut: {imei}")
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": "border_cut",
-                    "imei": imei,
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": "border_cut",
+                            "imei": imei,
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
 
     async def async_charge_now(
         self,
         imei: str,
-    ) -> bool:
+    ) -> None:
         """Send command charge_now to lawn nower."""
         LOGGER.debug(f"charge_now: {imei}")
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": "charge_now",
-                    "imei": imei,
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": "charge_now",
+                            "imei": imei,
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
 
     async def async_charge_until(
         self,
@@ -305,49 +330,57 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         hours: int,
         minutes: int,
         weekday: int,
-    ) -> bool:
+    ) -> None:
         """Send command charge_until to lawn nower."""
         LOGGER.debug(f"charge_until: {imei}")
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": "charge_until",
-                    "imei": imei,
-                    "params": {
-                        "hh": hours,
-                        "mm": minutes,
-                        "weekday": weekday,
-                    },
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": "charge_until",
+                            "imei": imei,
+                            "params": {
+                                "hh": hours,
+                                "mm": minutes,
+                                "weekday": weekday,
+                            },
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
 
     async def async_trace_position(
         self,
         imei: str,
-    ) -> bool:
+    ) -> None:
         """Send command trace_position to lawn nower."""
         LOGGER.debug(f"trace_position: {imei}")
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": "trace_position",
-                    "imei": imei,
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": "trace_position",
+                            "imei": imei,
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
 
     async def async_keep_out(
         self,
@@ -358,7 +391,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         hours: int | None = None,
         minutes: int | None = None,
         index: int | None = None,
-    ) -> bool:
+    ) -> None:
         """Send command keep_out to lawn nower."""
         LOGGER.debug(f"keep_out: {imei}")
         _params = {
@@ -374,19 +407,23 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             _params["index"] = index
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": "keep_out",
-                    "imei": imei,
-                    "params": _params,
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": "keep_out",
+                            "imei": imei,
+                            "params": _params,
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
 
     async def async_custom_command(
         self,
@@ -397,16 +434,20 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Send custom command to lawn nower."""
         try:
             await self.async_wake_up(imei)
-            return await self.client.execute(
-                "method.exec",
-                {
-                    "method": command,
-                    "imei": imei,
-                    "params": params,
-                    "ackTimeout": API_ACK_TIMEOUT,
-                    "singleton": True,
-                },
+            self._loop.call_later(
+                API_WAIT_BEFORE_EXEC,
+                lambda: asyncio.create_task(
+                    self.client.execute(
+                        "method.exec",
+                        {
+                            "method": command,
+                            "imei": imei,
+                            "params": params,
+                            "ackTimeout": API_ACK_TIMEOUT,
+                            "singleton": True,
+                        },
+                    )
+                )
             )
         except Exception as exception:
             LOGGER.exception(exception)
-        return False
