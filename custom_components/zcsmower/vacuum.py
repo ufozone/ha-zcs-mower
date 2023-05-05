@@ -107,10 +107,14 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
 
     def update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
+        if self._state == 4:
+            _attr_status = ROBOT_ERRORS.get(self._error, "unknown")
+        else:
+            _attr_status = ROBOT_STATES[self._state]["name"]
         # TODO: Currently no way to map this status, but it would be the best way to
         #       present detailed error messages.
         self._additional_extra_state_attributes = {
-            ATTR_STATUS: ROBOT_STATES[self._state]["name"],
+            ATTR_STATUS: _attr_status,
         }
 
     @property
