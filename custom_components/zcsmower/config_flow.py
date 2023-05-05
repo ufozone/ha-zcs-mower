@@ -2,9 +2,12 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Any, Dict, Optional
 
-from homeassistant.core import callback
+from homeassistant.core import (
+    callback,
+    HomeAssistant,
+    HassJob,
+)
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
@@ -27,7 +30,6 @@ import voluptuous as vol
 from .const import (
     LOGGER,
     DOMAIN,
-    PLATFORMS,
     API_BASE_URI,
     API_APP_TOKEN,
     CONF_CLIENT_KEY,
@@ -42,7 +44,7 @@ from .api import (
 )
 
 
-async def validate_auth(client_key: str, hass: core.HomeAssistant) -> None:
+async def validate_auth(client_key: str, hass: HomeAssistant) -> None:
     """
     Validates client key.
 
@@ -62,7 +64,7 @@ async def validate_auth(client_key: str, hass: core.HomeAssistant) -> None:
     )
     await client.check_api_client()
 
-async def validate_imei(imei: str, client_key: str, hass: core.HassJob) -> None:
+async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
     """
     Validates a lawn mower IMEI.
     
@@ -90,16 +92,20 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
     
-    data: Optional[dict[str, Any]]
-    options: Optional[dict[str, Any]]
+    data: dict[str, any] | None
+    options: dict[str, any] | None
     
-    async def async_step_user(self, user_input: Optional[dict[str, any]] = None) -> FlowResult:
+    async def async_step_user(
+        self,
+        user_input: dict[str, any] | None = None,
+    ) -> FlowResult:
         """Invoked when a user initiates a flow via the user interface."""
         errors: dict[str, str] = {}
         if user_input is not None:
             try:
                 await validate_auth(user_input[CONF_CLIENT_KEY], self.hass)
             except ValueError as exception:
+                LOGGER.info(exception)
                 errors["base"] = "invalid_key"
             except ZcsMowerApiAuthenticationError as exception:
                 LOGGER.error(exception)
@@ -107,7 +113,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             except (ZcsMowerApiCommunicationError, ZcsMowerApiError) as exception:
                 LOGGER.error(exception)
                 errors["base"] = "connection"
-            except Exception:
+            except Exception as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection"
             
@@ -136,7 +142,10 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_mower(self, user_input: Optional[dict[str, any]] = None) -> FlowResult:
+    async def async_step_mower(
+        self,
+        user_input: dict[str, any] | None = None,
+    ) -> FlowResult:
         """Second step in config flow to add a lawn mower."""
         errors: dict[str, str] = {}
         if user_input is not None:
@@ -148,27 +157,29 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     hass=self.hass
                 )
             except ValueError as exception:
+                LOGGER.info(exception)
                 errors["base"] = "invalid_imei"
-            except Exception:
+            except Exception as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection"
-            
+
             if not errors:
                 # Input is valid, set data.
-                self.options[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
-                
+                self.options[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(
+                    CONF_NAME,
+                    user_input[CONF_IMEI],
+                )
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
                 if user_input.get("add_another", False):
                     return await self.async_step_mower()
-                
+
                 # User is done adding lawn mowers, create the config entry.
                 return self.async_create_entry(
                     title=self.data[CONF_NAME],
                     data=self.data,
                     options=self.options,
                 )
-            
         return self.async_show_form(
             step_id="mower",
             data_schema=vol.Schema(
@@ -246,31 +257,37 @@ class OptionsFlowHandler(OptionsFlow):
                         hass=self.hass
                     )
                 except ValueError as exception:
+                    LOGGER.info(exception)
                     errors["base"] = "invalid_imei"
-                except Exception:
+                except Exception as exception:
                     LOGGER.exception(exception)
                     errors["base"] = "connection"
 
                 if not errors:
                     # Add the new lawn mower
-                    updated_mowers[user_input[CONF_IMEI]] = user_input.get(CONF_NAME, user_input[CONF_IMEI])
-
+                    updated_mowers[user_input[CONF_IMEI]] = user_input.get(
+                        CONF_NAME,
+                        user_input[CONF_IMEI],
+                    )
             self.options[CONF_MOWERS] = updated_mowers
 
             if not errors:
-                # Value of data will be set on the options property of our config_entry instance.
+                # Value of data will be set on the options property of our 
+                # config_entry instance.
                 self.options.update()
                 return self.async_create_entry(
                     title=self.data[CONF_NAME],
                     data=self.options,
                 )
-
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(
                 {
-                    vol.Optional(CONF_MOWERS, default=list(mowers.keys())): cv.multi_select(
-                        mowers
+                    vol.Optional(
+                        CONF_MOWERS,
+                        default=list(mowers.keys())
+                    ): cv.multi_select(
+                        mowers,
                     ),
                     vol.Optional(CONF_IMEI): cv.string,
                     vol.Optional(CONF_NAME): cv.string,

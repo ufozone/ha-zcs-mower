@@ -1,6 +1,8 @@
 """ZCS Lawn Mower Robot binary sensor platform."""
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.binary_sensor import (
@@ -64,7 +66,6 @@ async def async_setup_platform(
     
     # TODO
     LOGGER.debug("async_setup_platform")
-    LOGGER.debug(config_entry)
 
 
 class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
@@ -90,7 +91,10 @@ class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
     def update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
         if self._state == 4:
-            _reason = ROBOT_ERRORS[self._error] if self._error in ROBOT_ERRORS else "unknown"
+            if self._error in ROBOT_ERRORS:
+                _reason = ROBOT_ERRORS[self._error]
+            else:
+                _reason = "unknown"
             self._additional_extra_state_attributes = {
                 "reason": _reason,
             }

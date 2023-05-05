@@ -1,5 +1,5 @@
 """Constants for ZCS Lawn Mower Robot integration."""
-from logging import Logger, getLogger
+from logging import getLogger
 
 import voluptuous as vol
 from homeassistant.const import (

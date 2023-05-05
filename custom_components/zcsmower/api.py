@@ -109,8 +109,8 @@ class ZcsMowerApiClient:
     
     # This method sends the TR50 request to the server and parses the response.
     # https://github.com/deviceWISE/sample_tr50_python
-    # @param    mixed    data     The JSON command and arguments. This parameter can also be a dict 
-    #                             that will be converted to a JSON string.
+    # @param    mixed    data     JSON command and arguments. This parameter can also
+    #                             be a dict that will be converted to a JSON string.
     # @return   bool     Success or failure to post.
     async def post(
         self,
@@ -170,8 +170,8 @@ class ZcsMowerApiClient:
                 if self._status:
                     return self._status
                 else:
-                    # if session is invalid, refresh authentication and execute command again
-                    # possible loop, if authentication session is always invalid 
+                    # if session is invalid, refresh authentication and execute command
+                    # again possible loop, if authentication session is always invalid 
                     # after successful refresh
                     for error in (
                         error
@@ -223,7 +223,7 @@ class ZcsMowerApiClient:
             bool: Successor failure to post.
 
         """
-        if command is "api.authenticate":
+        if command == "api.authenticate":
             parameters = {
                 "auth" : {
                     "command" : "api.authenticate",
@@ -248,7 +248,11 @@ class ZcsMowerApiClient:
         self
     ) -> bool:
         """Depending on the configuration, authenticate the app."""
-        if len(self._app_id) > 0 and len(self._app_token) > 0 and len(self._thing_key) > 0:
+        if (
+            len(self._app_id) > 0 
+            and len(self._app_token) > 0 
+            and len(self._thing_key) > 0
+        ):
             return await self.app_auth(self._app_id, self._app_token, self._thing_key)
         return False
     
@@ -314,10 +318,10 @@ class ZcsMowerApiClient:
             data = json.loads(data)
 
         if "auth" not in data:
-            if len(self._session_id) is 0:
+            if len(self._session_id) == 0:
                 await self.auth()
             # if it is still empty, we cannot proceed
-            if len(self._session_id) is 0:
+            if len(self._session_id) == 0:
                 raise ZcsMowerApiAuthenticationError(
                     "Authorization failed. Please check the application configuration."
                 )

@@ -7,13 +7,11 @@ from homeassistant.helpers.device_registry import async_get
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
-    LOGGER,
     DOMAIN,
     PLATFORMS,
     API_BASE_URI,
     API_APP_TOKEN,
     CONF_CLIENT_KEY,
-    CONF_IMEI,
     CONF_MOWERS,
     SERVICE_SET_PROFILE,
     SERVICE_SET_PROFILE_SCHEMA,
