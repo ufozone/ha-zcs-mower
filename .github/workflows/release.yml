@@ -31,7 +31,12 @@ jobs:
           cd "${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}"
           zip ${{ steps.information.outputs.name }}.zip -r ./
 
-      - name: Upload the zip file to the release
-        uses: softprops/action-gh-release@v0.1.15
+      - name: Upload the zipfile as a release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/${{ steps.information.outputs.name }}.zip
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: "${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/${{ steps.information.outputs.name }}.zip"
+          asset_name: ${{ steps.information.outputs.name }}.zip
+          asset_content_type: application/zip
