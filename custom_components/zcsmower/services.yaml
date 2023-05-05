@@ -218,7 +218,7 @@ keep_out:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
-    area:
+    location:
       name: "Location"
       description: "Location from which the lawn mower should keep out."
       required: true
