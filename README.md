@@ -1,4 +1,21 @@
 # ZCS Lawn Mower Robot
+[![License][license-shield]](LICENSE)
+![Project Maintenance][maintenance-shield]
+[![GitHub Activity][commits-shield]][commits]
+
+[![hacs][hacsbadge]][hacs]
+[![Discord][discord-shield]][discord]
+[![Community Forum][forum-shield]][forum]
+
+Stable -
+[![GitHub Release][stable-release-shield]][releases]
+[![release-badge]][release-workflow]
+
+Latest -
+[![GitHub Release][latest-release-shield]][releases]
+[![validate-badge]][validate-workflow]
+[![lint-badge]][lint-workflow]
+[![issues][issues-shield]][issues-link]
 
 > :warning: **This integration is in development.**
 
@@ -67,17 +84,26 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 * set_profile
   Configure the profile for auto-mode.
   
+* work_now
+  Command the lawn mower to mow now.
+  
 * work_until
   Command the lawn mower to mow until a certain time.
   
 * border_cut
   Command the lawn mower to cut the border.
   
+* charge_now
+  Command the lawn mower to charge now.
+  
 * charge_until
   Command the lawn mower to charge until a certain time.
   
 * trace_position
   Command the lawn mower to report its current position.
+  
+* keep_out
+  Commands the lawn mower to keep out of a location (no-go area).
 
 ### Logging
 
@@ -89,3 +115,32 @@ logger:
   logs:
     custom_components.zcsmower: debug
 ```
+
+
+***
+
+[commits-shield]: https://img.shields.io/github/commit-activity/y/ufozone/ha-zcs-mower?style=for-the-badge
+[commits]: https://github.com/ufozone/ha-zcs-mower/commits/main
+[license-shield]: https://img.shields.io/github/license/ufozone/ha-zcs-mower.svg?style=for-the-badge
+[maintenance-shield]: https://img.shields.io/badge/maintainer-ufozone-blue.svg?style=for-the-badge
+
+[hacs]: https://github.com/custom-components/hacs
+[hacsbadge]: https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge
+[discord]: https://discord.gg/Qa5fW2R
+[discord-shield]: https://img.shields.io/discord/330944238910963714.svg?style=for-the-badge
+[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
+[forum]: https://community.home-assistant.io/
+
+[issues-shield]: https://img.shields.io/github/issues/ufozone/ha-zcs-mower?style=flat
+[issues-link]: https://github.com/ufozone/ha-zcs-mower/issues
+
+[releases]: https://github.com/ufozone/ha-zcs-mower/releases
+[stable-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?style=flat
+[latest-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?include_prereleases&style=flat
+
+[lint-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yml/badge.svg
+[lint-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yml
+[validate-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/validate.yml/badge.svg
+[validate-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/validate.yml
+[release-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/release.yml/badge.svg
+[release-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/release.yml
