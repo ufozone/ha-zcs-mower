@@ -106,7 +106,7 @@ SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
             {
                 vol.Required(CONF_LATITUDE): float,
                 vol.Required(CONF_LONGITUDE): float,
-                vol.Optional(CONF_RADIUS): float,
+                vol.Optional(CONF_RADIUS): int,
             }
         ),
         vol.Optional("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
