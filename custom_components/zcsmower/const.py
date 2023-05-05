@@ -29,7 +29,7 @@ PLATFORMS = [
     Platform.BINARY_SENSOR,
     Platform.DEVICE_TRACKER,
     Platform.SENSOR,
-    #Platform.SWITCH,
+    Platform.VACUUM,
 ]
 
 API_BASE_URI = "https://api-de.devicewise.com/api"
