@@ -51,7 +51,7 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
     imei, connected, last_communication, last_seen, last_poll
     ```
 
-### Binary Sensors
+### Binary Sensor
 
 * error
 
@@ -64,7 +64,7 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 
 * location
 
-### Sensors
+### Sensor
 
 * state
   | Values      | Description   |
@@ -78,6 +78,23 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
   | gotostation | Go to station |
   | gotoarea    | Go to area    |
   | bordercut   | Border cut    |
+
+### Vacuum
+
+* mower
+  | Values      | Description       |
+  |-------------|-------------------|
+  | cleaning    | Mowing            |
+  | docked      | Docked            |
+  | paused      | Paused            |
+  | idle        | Idle              |
+  | returning   | Returning to dock |
+  | error       | Error             |
+
+    ```
+    attributes: 
+    status
+    ```
 
 ### Services
 
