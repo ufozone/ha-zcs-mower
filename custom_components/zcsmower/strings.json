@@ -388,6 +388,34 @@
           }
         }
       }
+    },
+    "vacuum": {
+      "mower": {
+        "state": {
+          "cleaning": "Mowing"
+        },
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "Connected",
+              "false": "Disconnected"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      }
     }
   }
 }
