@@ -39,7 +39,7 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: Entity,
 ) -> None:
-    """Setup sensors from a config entry created in the integrations UI."""
+    """Do setup sensors from a config entry created in the integrations UI."""
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
@@ -63,7 +63,6 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the sensor platform."""
-    
     # TODO
     LOGGER.debug("async_setup_platform")
 

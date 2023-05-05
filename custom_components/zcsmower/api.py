@@ -1,5 +1,6 @@
 """
-ZCS API
+ZCS Lawn Mower Robot API Client.
+
 https://github.com/deviceWISE/sample_tr50_python
 """
 from __future__ import annotations
@@ -52,31 +53,32 @@ class ZcsMowerApiClient:
 
     # Holds any error returned by the API.
     _error = []
-    
+
     def __init__(
         self,
         session: aiohttp.ClientSession,
         options: {},
     ) -> None:
-        """Initialize API"""
+        """Initialize API."""
         self._session = session
-        
+
         if "endpoint" in options:
             self._endpoint = options["endpoint"]
-        
+
         if "app_id" in options:
             self._app_id = options["app_id"]
         if "app_token" in options:
             self._app_token = options["app_token"]
         if "thing_key" in options:
             self._thing_key = options["thing_key"]
-        
+
         if "session_id" in options:
             self._session_id = options["session_id"]
-    
+
     async def check_api_client(
         self,
     ) -> any:
+        """Check given client key against the API."""
         result = await self.execute(
             "thing.find",
             {
@@ -89,11 +91,12 @@ class ZcsMowerApiClient:
             raise ZcsMowerApiAuthenticationError(
                 "Authorization failed. Please check the application configuration."
             )
-    
+
     async def check_robot(
         self,
         imei: str
     ) -> any:
+        """Check given IMEI against the API."""
         result = await self.execute(
             "thing.find",
             {
@@ -106,7 +109,7 @@ class ZcsMowerApiClient:
             raise ZcsMowerApiCommunicationError(
                 "Lawn mower not found. Please check the application configuration."
             )
-    
+
     # This method sends the TR50 request to the server and parses the response.
     # https://github.com/deviceWISE/sample_tr50_python
     # @param    mixed    data     JSON command and arguments. This parameter can also
@@ -221,7 +224,6 @@ class ZcsMowerApiClient:
 
         Returns:
             bool: Successor failure to post.
-
         """
         if command == "api.authenticate":
             parameters = {
@@ -255,7 +257,7 @@ class ZcsMowerApiClient:
         ):
             return await self.app_auth(self._app_id, self._app_token, self._thing_key)
         return False
-    
+
     # Authenticate the application.
     # https://github.com/deviceWISE/sample_tr50_python
     # @param     string    app_id                The application ID.

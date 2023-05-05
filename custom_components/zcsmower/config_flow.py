@@ -46,7 +46,7 @@ from .api import (
 
 async def validate_auth(client_key: str, hass: HomeAssistant) -> None:
     """
-    Validates client key.
+    Validate client key.
 
     Raises a ValueError if the client key is invalid.
     """
@@ -66,7 +66,7 @@ async def validate_auth(client_key: str, hass: HomeAssistant) -> None:
 
 async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
     """
-    Validates a lawn mower IMEI.
+    Validate a lawn mower IMEI.
     
     Raises a ValueError if the IMEI is invalid.
     """
@@ -99,7 +99,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         self,
         user_input: dict[str, any] | None = None,
     ) -> FlowResult:
-        """Invoked when a user initiates a flow via the user interface."""
+        """Invoke when a user initiates a flow via the user interface."""
         errors: dict[str, str] = {}
         if user_input is not None:
             try:
@@ -209,6 +209,7 @@ class OptionsFlowHandler(OptionsFlow):
     """Handles options flow for the component."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
+        """Initialize options flow."""
         self.config_entry = config_entry
         self.data = dict(config_entry.data)
         self.options = dict(config_entry.options)
