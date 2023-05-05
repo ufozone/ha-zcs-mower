@@ -3,12 +3,12 @@ name: Release Workflow
 on:
   release:
     types:
-      - [published]
+      - published
 
 jobs:
   release:
     name: Release
-    runs-on: "ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
