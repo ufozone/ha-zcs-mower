@@ -51,10 +51,10 @@
             "name": "IMEI"
           },
           "connected": {
-            "name": "Verbunden",
+            "name": "Verbindungsstatus",
             "state": {
-              "true": "Ja",
-              "false": "Nein"
+              "true": "Verbunden",
+              "false": "Getrennt"
             }
           },
           "last_communication": {
@@ -345,10 +345,10 @@
             "name": "IMEI"
           },
           "connected": {
-            "name": "Verbunden",
+            "name": "Verbindungsstatus",
             "state": {
-              "true": "Ja",
-              "false": "Nein"
+              "true": "Verbunden",
+              "false": "Getrennt"
             }
           },
           "last_communication": {
@@ -371,10 +371,10 @@
             "name": "IMEI"
           },
           "connected": {
-            "name": "Verbunden",
+            "name": "Verbindungsstatus",
             "state": {
-              "true": "Ja",
-              "false": "Nein"
+              "true": "Verbunden",
+              "false": "Getrennt"
             }
           },
           "last_communication": {
