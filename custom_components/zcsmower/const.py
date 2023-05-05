@@ -66,8 +66,8 @@ SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
-        vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=24)),
-        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=60)),
+        vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
+        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
     }
 )
 SERVICE_BORDER_CUT = "border_cut"
@@ -86,8 +86,8 @@ SERVICE_CHARGE_UNTIL = "charge_until"
 SERVICE_CHARGE_UNTIL_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
-        vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=24)),
-        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=60)),
+        vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
+        vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
         vol.Required("weekday"): vol.All(vol.Coerce(int), vol.Range(min=0, max=6)),
     }
 )
@@ -104,8 +104,8 @@ SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
         vol.Required(CONF_LATITUDE): cv.latitude,
         vol.Required(CONF_LONGITUDE): cv.longitude,
         vol.Required(CONF_RADIUS): vol.Coerce(int),
-        vol.Optional("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=24)),
-        vol.Optional("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=60)),
+        vol.Optional("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
+        vol.Optional("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
         vol.Optional("index"): vol.Coerce(int),
     }
 )

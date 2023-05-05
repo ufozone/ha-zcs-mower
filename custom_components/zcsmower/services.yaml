@@ -76,7 +76,7 @@ work_until:
       selector:
         number:
           min: 0
-          max: 24
+          max: 23
           step: 1
           mode: slider
     minutes:
@@ -88,7 +88,7 @@ work_until:
       selector:
         number:
           min: 0
-          max: 60
+          max: 59
           step: 1
           mode: slider
 
@@ -148,7 +148,7 @@ charge_until:
       selector:
         number:
           min: 0
-          max: 24
+          max: 23
           step: 1
           mode: slider
     minutes:
@@ -160,7 +160,7 @@ charge_until:
       selector:
         number:
           min: 0
-          max: 60
+          max: 59
           step: 1
           mode: slider
     weekday:
@@ -235,7 +235,7 @@ keep_out:
       selector:
         number:
           min: 0
-          max: 24
+          max: 23
           step: 1
           mode: slider
     minutes:
@@ -246,7 +246,7 @@ keep_out:
       selector:
         number:
           min: 0
-          max: 60
+          max: 59
           step: 1
           mode: slider
     index:
