@@ -226,7 +226,7 @@ class OptionsFlowHandler(OptionsFlow):
             updated_mowers = deepcopy(self.config_entry.options[CONF_MOWERS])
             mowers_remove = [
                 _imei
-                _imei in mowers.keys()
+                for _imei in mowers
                 if _imei not in user_input[CONF_MOWERS]
             ]
             for _imei in mowers_remove:
