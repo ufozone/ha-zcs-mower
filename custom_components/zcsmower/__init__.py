@@ -15,10 +15,14 @@ from .const import (
     CONF_MOWERS,
     SERVICE_SET_PROFILE,
     SERVICE_SET_PROFILE_SCHEMA,
+    SERVICE_WORK_NOW,
+    SERVICE_WORK_NOW_SCHEMA,
     SERVICE_WORK_UNTIL,
     SERVICE_WORK_UNTIL_SCHEMA,
     SERVICE_BORDER_CUT,
     SERVICE_BORDER_CUT_SCHEMA,
+    SERVICE_CHARGE_NOW,
+    SERVICE_CHARGE_NOW_SCHEMA,
     SERVICE_CHARGE_UNTIL,
     SERVICE_CHARGE_UNTIL_SCHEMA,
     SERVICE_TRACE_POSITION,
@@ -141,7 +145,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         DOMAIN,
         SERVICE_WORK_NOW,
         async_handle_work_now,
-        schema=SERVICE_WORK_UNTIL_SCHEMA
+        schema=SERVICE_WORK_NOW_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,

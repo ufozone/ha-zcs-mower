@@ -10,5 +10,5 @@
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/ufozone/ha-zcs-mower/issues",
-  "version": "0.3.1"
+  "version": "0.3.2"
 }
