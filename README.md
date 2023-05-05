@@ -138,9 +138,9 @@ logger:
 [stable-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?style=flat
 [latest-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?include_prereleases&style=flat
 
-[lint-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yml/badge.svg
-[lint-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yml
-[validate-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/validate.yml/badge.svg
-[validate-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/validate.yml
-[release-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/release.yml/badge.svg
-[release-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/release.yml
+[lint-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yaml/badge.svg
+[lint-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yaml
+[validate-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/validate.yaml/badge.svg
+[validate-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/validate.yaml
+[release-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/release.yaml/badge.svg
+[release-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/release.yaml
