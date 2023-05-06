@@ -1,4 +1,9 @@
 """Services Registry for ZCS Lawn Mower Robot integration."""
+
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+)
 from homeassistant.const import (
     CONF_DEVICE_ID,
     CONF_LOCATION,
@@ -7,6 +12,9 @@ from homeassistant.const import (
     CONF_RADIUS,
 )
 from homeassistant.helpers.device_registry import async_get
+from homeassistant.helpers.service import (
+    verify_domain_control,
+)
 
 from .const import (
     DOMAIN,
@@ -33,10 +41,16 @@ from .const import (
 )
 
 
-async def async_setup_service(hass):
+async def async_setup_services(hass: HomeAssistant) -> None:
     """Set up ZCS Lawn Mower Robot services."""
 
-    async def async_handle_service(call) -> dict[str, any]:
+    if hass.services.async_services().get(DOMAIN):
+        return
+
+    @verify_domain_control(hass, DOMAIN)
+    async def async_handle_service(call: ServiceCall) -> None:
+        """Call correct HomematicIP Cloud service."""
+        service = call.service
         data = {**call.data}
         device_ids = data.pop(CONF_DEVICE_ID, [])
         if isinstance(device_ids, str):
@@ -56,182 +70,232 @@ async def async_setup_service(hass):
             if config_entry_id not in hass.data[DOMAIN]:
                 continue
             targets[identifiers[1]] = hass.data[DOMAIN][config_entry_id]
-        return targets
 
-    async def async_handle_set_profile(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_set_profile(
-                    imei,
-                    call.data.get("profile"),
-                )
-            )
-
-    async def async_handle_work_now(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_work_now(
-                    imei,
-                    call.data.get("area"),
-                )
-            )
-
-    async def async_handle_work_for(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_work_for(
-                    imei,
-                    call.data.get("duration"),
-                    call.data.get("area"),
-                )
-            )
-
-    async def async_handle_work_until(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_work_until(
-                    imei,
-                    call.data.get("hours"),
-                    call.data.get("minutes"),
-                    call.data.get("area"),
-                )
-            )
-
-    async def async_handle_border_cut(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_border_cut(
-                    imei,
-                )
-            )
-
-    async def async_handle_charge_now(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_charge_now(
-                    imei,
-                )
-            )
-
-    async def async_handle_charge_for(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_charge_for(
-                    imei,
-                    call.data.get("duration"),
-                )
-            )
-
-    async def async_handle_charge_until(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_charge_until(
-                    imei,
-                    call.data.get("hours"),
-                    call.data.get("minutes"),
-                    call.data.get("weekday"),
-                )
-            )
-
-    async def async_handle_trace_position(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_trace_position(
-                    imei,
-                )
-            )
-
-    async def async_handle_keep_out(call) -> None:
-        """Handle the service call."""
-        targets = await async_handle_service(call)
-        for imei, coordinator in targets.items():
-            hass.async_create_task(
-                coordinator.async_keep_out(
-                    imei,
-                    call.data.get(CONF_LOCATION, {}).get(CONF_LATITUDE),
-                    call.data.get(CONF_LOCATION, {}).get(CONF_LONGITUDE),
-                    call.data.get(CONF_LOCATION, {}).get(CONF_RADIUS),
-                    call.data.get("hours", None),
-                    call.data.get("minutes", None),
-                    call.data.get("index", None),
-                )
-            )
+        if service == SERVICE_SET_PROFILE:
+            await _async_set_profile(hass, targets, data)
+        elif service == SERVICE_WORK_NOW:
+            await _async_work_now(hass, targets, data)
+        elif service == SERVICE_WORK_FOR:
+            await _async_work_for(hass, targets, data)
+        elif service == SERVICE_WORK_UNTIL:
+            await _async_work_until(hass, targets, data)
+        elif service == SERVICE_BORDER_CUT:
+            await _async_border_cut(hass, targets, data)
+        elif service == SERVICE_CHARGE_NOW:
+            await _async_charge_now(hass, targets, data)
+        elif service == SERVICE_CHARGE_FOR:
+            await _async_charge_for(hass, targets, data)
+        elif service == SERVICE_CHARGE_UNTIL:
+            await _async_charge_until(hass, targets, data)
+        elif service == SERVICE_TRACE_POSITION:
+            await _async_trace_position(hass, targets, data)
+        elif service == SERVICE_KEEP_OUT:
+            await _async_keep_out(hass, targets, data)
 
     hass.services.async_register(
         DOMAIN,
         SERVICE_SET_PROFILE,
-        async_handle_set_profile,
+        async_handle_service,
         schema=SERVICE_SET_PROFILE_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_WORK_NOW,
-        async_handle_work_now,
+        async_handle_service,
         schema=SERVICE_WORK_NOW_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_WORK_FOR,
-        async_handle_work_for,
+        async_handle_service,
         schema=SERVICE_WORK_FOR_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_WORK_UNTIL,
-        async_handle_work_until,
+        async_handle_service,
         schema=SERVICE_WORK_UNTIL_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_BORDER_CUT,
-        async_handle_border_cut,
+        async_handle_service,
         schema=SERVICE_BORDER_CUT_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_CHARGE_NOW,
-        async_handle_charge_now,
+        async_handle_service,
         schema=SERVICE_CHARGE_NOW_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_CHARGE_FOR,
-        async_handle_charge_for,
+        async_handle_service,
         schema=SERVICE_CHARGE_FOR_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_CHARGE_UNTIL,
-        async_handle_charge_until,
+        async_handle_service,
         schema=SERVICE_CHARGE_UNTIL_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_TRACE_POSITION,
-        async_handle_trace_position,
+        async_handle_service,
         schema=SERVICE_TRACE_POSITION_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
         SERVICE_KEEP_OUT,
-        async_handle_keep_out,
+        async_handle_service,
         schema=SERVICE_KEEP_OUT_SCHEMA
     )
+
+async def _async_set_profile(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_set_profile(
+                imei,
+                data.get("profile"),
+            )
+        )
+
+async def _async_work_now(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_work_now(
+                imei,
+                data.get("area"),
+            )
+        )
+
+async def _async_work_for(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_work_for(
+                imei,
+                data.get("duration"),
+                data.get("area"),
+            )
+        )
+
+async def _async_work_until(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_work_until(
+                imei,
+                data.get("hours"),
+                data.get("minutes"),
+                data.get("area"),
+            )
+        )
+
+async def _async_border_cut(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_border_cut(
+                imei,
+            )
+        )
+
+async def _async_charge_now(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_charge_now(
+                imei,
+            )
+        )
+
+async def _async_charge_for(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_charge_for(
+                imei,
+                data.get("duration"),
+            )
+        )
+
+async def _async_charge_until(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_charge_until(
+                imei,
+                data.get("hours"),
+                data.get("minutes"),
+                data.get("weekday"),
+            )
+        )
+
+async def _async_trace_position(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_trace_position(
+                imei,
+            )
+        )
+
+async def _async_keep_out(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_keep_out(
+                imei,
+                data.get(CONF_LOCATION, {}).get(CONF_LATITUDE),
+                data.get(CONF_LOCATION, {}).get(CONF_LONGITUDE),
+                data.get(CONF_LOCATION, {}).get(CONF_RADIUS),
+                data.get("hours", None),
+                data.get("minutes", None),
+                data.get("index", None),
+            )
+        )
