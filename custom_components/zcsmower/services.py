@@ -92,63 +92,63 @@ async def async_setup_services(hass: HomeAssistant) -> None:
             await _async_keep_out(hass, targets, data)
 
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_SET_PROFILE,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_SET_PROFILE,
+        service_func=async_handle_service,
         schema=SERVICE_SET_PROFILE_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_WORK_NOW,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_WORK_NOW,
+        service_func=async_handle_service,
         schema=SERVICE_WORK_NOW_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_WORK_FOR,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_WORK_FOR,
+        service_func=async_handle_service,
         schema=SERVICE_WORK_FOR_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_WORK_UNTIL,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_WORK_UNTIL,
+        service_func=async_handle_service,
         schema=SERVICE_WORK_UNTIL_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_BORDER_CUT,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_BORDER_CUT,
+        service_func=async_handle_service,
         schema=SERVICE_BORDER_CUT_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_CHARGE_NOW,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_CHARGE_NOW,
+        service_func=async_handle_service,
         schema=SERVICE_CHARGE_NOW_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_CHARGE_FOR,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_CHARGE_FOR,
+        service_func=async_handle_service,
         schema=SERVICE_CHARGE_FOR_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_CHARGE_UNTIL,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_CHARGE_UNTIL,
+        service_func=async_handle_service,
         schema=SERVICE_CHARGE_UNTIL_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_TRACE_POSITION,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_TRACE_POSITION,
+        service_func=async_handle_service,
         schema=SERVICE_TRACE_POSITION_SCHEMA
     )
     hass.services.async_register(
-        DOMAIN,
-        SERVICE_KEEP_OUT,
-        async_handle_service,
+        domain=DOMAIN,
+        service=SERVICE_KEEP_OUT,
+        service_func=async_handle_service,
         schema=SERVICE_KEEP_OUT_SCHEMA
     )
 
