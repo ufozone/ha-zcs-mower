@@ -19,7 +19,7 @@ from .coordinator import ZcsMowerDataUpdateCoordinator
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
-    """Set up  ZCS Lawn Mower Robot component."""
+    """Set up ZCS Lawn Mower Robot component."""
     hass.data.setdefault(DOMAIN, {})
 
     await async_setup_service(hass)

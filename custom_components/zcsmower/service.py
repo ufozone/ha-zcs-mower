@@ -1,3 +1,4 @@
+"""Services Registry for ZCS Lawn Mower Robot integration."""
 from homeassistant.const import (
     CONF_DEVICE_ID,
     CONF_LOCATION,
@@ -33,7 +34,7 @@ from .const import (
 
 
 async def async_setup_service(hass):
-    """Set up  ZCS Lawn Mower Robot services."""
+    """Set up ZCS Lawn Mower Robot services."""
 
     async def async_handle_service(call) -> dict[str, any]:
         data = {**call.data}
@@ -174,62 +175,63 @@ async def async_setup_service(hass):
                 )
             )
 
-    SERVICES_MAP = [
-        {
-            "service": SERVICE_SET_PROFILE,
-            "service_func": async_handle_set_profile,
-            "schema": SERVICE_SET_PROFILE_SCHEMA
-        },
-        {
-            "service": SERVICE_WORK_NOW,
-            "service_func": async_handle_work_now,
-            "schema": SERVICE_WORK_NOW_SCHEMA
-        },
-        {
-            "service": SERVICE_WORK_FOR,
-            "service_func": async_handle_work_for,
-            "schema": SERVICE_WORK_FOR_SCHEMA
-        },
-        {
-            "service": SERVICE_WORK_UNTIL,
-            "service_func": async_handle_work_until,
-            "schema": SERVICE_WORK_UNTIL_SCHEMA
-        },
-        {
-            "service": SERVICE_BORDER_CUT,
-            "service_func": async_handle_border_cut,
-            "schema": SERVICE_BORDER_CUT_SCHEMA
-        },
-        {
-            "service": SERVICE_CHARGE_NOW,
-            "service_func": async_handle_charge_now,
-            "schema": SERVICE_CHARGE_NOW_SCHEMA
-        },
-        {
-            "service": SERVICE_CHARGE_FOR,
-            "service_func": async_handle_charge_for,
-            "schema": SERVICE_CHARGE_FOR_SCHEMA
-        },
-        {
-            "service": SERVICE_CHARGE_UNTIL,
-            "service_func": async_handle_charge_until,
-            "schema": SERVICE_CHARGE_UNTIL_SCHEMA
-        },
-        {
-            "service": SERVICE_TRACE_POSITION,
-            "service_func": async_handle_trace_position,
-            "schema": SERVICE_TRACE_POSITION_SCHEMA
-        },
-        {
-            "service": SERVICE_KEEP_OUT,
-            "service_func": async_handle_keep_out,
-            "schema": SERVICE_KEEP_OUT_SCHEMA
-        },
-    ]
-    for service in SERVICES_MAP:
-        hass.services.async_register(
-            DOMAIN,
-            service.get("service"),
-            service.get("service_func"),
-            schema=service.get("schema")
-        )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_SET_PROFILE,
+        async_handle_set_profile,
+        schema=SERVICE_SET_PROFILE_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_WORK_NOW,
+        async_handle_work_now,
+        schema=SERVICE_WORK_NOW_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_WORK_FOR,
+        async_handle_work_for,
+        schema=SERVICE_WORK_FOR_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_WORK_UNTIL,
+        async_handle_work_until,
+        schema=SERVICE_WORK_UNTIL_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_BORDER_CUT,
+        async_handle_border_cut,
+        schema=SERVICE_BORDER_CUT_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_CHARGE_NOW,
+        async_handle_charge_now,
+        schema=SERVICE_CHARGE_NOW_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_CHARGE_FOR,
+        async_handle_charge_for,
+        schema=SERVICE_CHARGE_FOR_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_CHARGE_UNTIL,
+        async_handle_charge_until,
+        schema=SERVICE_CHARGE_UNTIL_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_TRACE_POSITION,
+        async_handle_trace_position,
+        schema=SERVICE_TRACE_POSITION_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_KEEP_OUT,
+        async_handle_keep_out,
+        schema=SERVICE_KEEP_OUT_SCHEMA
+    )
