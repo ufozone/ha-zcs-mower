@@ -148,9 +148,9 @@ class ZcsMowerEntity(CoordinatorEntity):
     def _update_handler(self):
         if self._imei in self.coordinator.data[CONF_MOWERS]:
             robot = self.coordinator.data[CONF_MOWERS][self._imei]
-            
+
             # TODO: Wenn state auf 2 geaendert, dann trace_position starten
-            
+
             self._state = robot[ATTR_STATE] if robot[ATTR_STATE] < len(ROBOT_STATES) else 0
             self._error = robot[ATTR_ERROR]
             self._available = self._state > 0
