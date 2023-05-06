@@ -36,7 +36,7 @@ API_BASE_URI = "https://api-de.devicewise.com/api"
 API_APP_TOKEN = "DJMYYngGNEit40vA"
 API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_ACK_TIMEOUT = 30
-API_WAIT_BEFORE_EXEC = 10
+API_WAIT_BEFORE_EXEC = 15
 
 CONF_CLIENT_KEY = "client_key"
 CONF_IMEI = "imei"
