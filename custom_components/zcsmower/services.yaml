@@ -51,6 +51,44 @@ work_now:
           max: 10
           mode: box
 
+work_for:
+  name: "Mowing for a certain duration"
+  description: "Command the lawn mower to mow for a certain duration."
+  fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+    duration:
+      name: "Duration"
+      description: "Duration in which the mower should run, in minutes."
+      required: true
+      example: 30
+      default: 60
+      selector:
+        number:
+          min: 1
+          max: 1439
+          step: 1
+          mode: slider
+    area:
+      name: "Zone"
+      description: "Zone where the lawn mower should start."
+      example: 1
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 10
+          mode: box
+
 work_until:
   name: "Mowing until a certain time"
   description: "Command the lawn mower to mow until a certain time."

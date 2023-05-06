@@ -7,6 +7,8 @@ from datetime import (
     timedelta,
     datetime,
 )
+from pytz import timezone
+
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_NAME,
@@ -77,6 +79,15 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             return datetime.strptime(date_string, API_DATETIME_FORMAT_DEFAULT)
         except ValueError:
             return datetime.strptime(date_string, API_DATETIME_FORMAT_FALLBACK)
+
+    def _get_datetime_from_duration(
+        self,
+        duration: int,
+    ) -> datetime:
+        """Get datetime object by adding a duration to the current time."""
+        locale_timezone = timezone(str(self.hass.config.time_zone))
+        datetime_now = datetime.utcnow().astimezone(locale_timezone)
+        return datetime_now + timedelta(minutes=duration)
 
     async def __aenter__(self):
         """Return Self."""
@@ -255,6 +266,23 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as exception:
             LOGGER.exception(exception)
 
+    async def async_work_for(
+        self,
+        imei: str,
+        duration: int,
+        area: int | None = None,
+    ) -> None:
+        """Prepare command work_for."""
+        LOGGER.debug(f"work_for: {imei}")
+        _target = self._get_datetime_from_duration(duration)
+        await self.async_work_until(
+            imei=imei,
+            hours=_target.hour,
+            minutes=_target.minute,
+            area=area,
+        )
+        LOGGER.debug(dt_target.weekday())
+
     async def async_work_until(
         self,
         imei: str,
@@ -341,6 +369,20 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             )
         except Exception as exception:
             LOGGER.exception(exception)
+
+    async def async_charge_for(
+        self,
+        imei: str,
+        duration: int,
+    ) -> None:
+        """Prepare command charge_until."""
+        _target = self._get_datetime_from_duration(duration)
+        await self.async_charge_until(
+            imei=imei,
+            hours=_target.hour,
+            minutes=_target.minute,
+            weekday=_target.weekday(),
+        )
 
     async def async_charge_until(
         self,

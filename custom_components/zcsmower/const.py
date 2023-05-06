@@ -65,6 +65,14 @@ SERVICE_WORK_NOW_SCHEMA = vol.Schema(
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
     }
 )
+SERVICE_WORK_FOR = "work_for"
+SERVICE_WORK_FOR_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required("duration"): vol.All(vol.Coerce(int), vol.Range(min=1, max=1439)),
+        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10)),
+    }
+)
 SERVICE_WORK_UNTIL = "work_until"
 SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
     {

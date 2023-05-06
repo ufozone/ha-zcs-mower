@@ -23,6 +23,8 @@ from .const import (
     SERVICE_SET_PROFILE_SCHEMA,
     SERVICE_WORK_NOW,
     SERVICE_WORK_NOW_SCHEMA,
+    SERVICE_WORK_FOR,
+    SERVICE_WORK_FOR_SCHEMA,
     SERVICE_WORK_UNTIL,
     SERVICE_WORK_UNTIL_SCHEMA,
     SERVICE_BORDER_CUT,
@@ -62,6 +64,18 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
             hass.async_create_task(
                 coordinator.async_work_now(
                     imei,
+                    call.data.get("area"),
+                )
+            )
+
+    async def async_handle_work_for(call) -> None:
+        """Handle the service call."""
+        targets = await async_handle_service(call)
+        for imei, coordinator in targets.items():
+            hass.async_create_task(
+                coordinator.async_work_for(
+                    imei,
+                    call.data.get("duration"),
                     call.data.get("area"),
                 )
             )
@@ -171,6 +185,12 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         SERVICE_WORK_NOW,
         async_handle_work_now,
         schema=SERVICE_WORK_NOW_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_WORK_FOR,
+        async_handle_work_for,
+        schema=SERVICE_WORK_FOR_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
