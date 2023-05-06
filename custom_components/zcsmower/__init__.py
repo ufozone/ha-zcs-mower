@@ -2,14 +2,7 @@
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
-from homeassistant.const import (
-    CONF_LOCATION,
-    CONF_LATITUDE,
-    CONF_LONGITUDE,
-    CONF_RADIUS,
-)
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.device_registry import async_get
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
