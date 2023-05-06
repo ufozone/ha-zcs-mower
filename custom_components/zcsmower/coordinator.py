@@ -244,7 +244,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Send command work_now to lawn nower."""
         LOGGER.debug(f"work_now: {imei}")
         _params = {}
-        if isinstance(area, int) and hours in range(0, 23):
+        if isinstance(area, int) and area in range(1, 10):
             _params["area"] = area - 1
         try:
             await self.async_wake_up(imei)
@@ -380,7 +380,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             imei=imei,
             hours=_target.hour,
             minutes=_target.minute,
-            weekday=_target.weekday(),
+            weekday=_target.isoweekday(),
         )
 
     async def async_charge_until(
@@ -405,7 +405,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                             "params": {
                                 "hh": hours,
                                 "mm": minutes,
-                                "weekday": weekday,
+                                "weekday": (weekday - 1),
                             },
                             "ackTimeout": API_ACK_TIMEOUT,
                             "singleton": True,

@@ -107,7 +107,7 @@ SERVICE_CHARGE_UNTIL_SCHEMA = vol.Schema(
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
         vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
-        vol.Required("weekday"): vol.All(vol.Coerce(int), vol.Range(min=0, max=6)),
+        vol.Required("weekday"): vol.All(vol.Coerce(int), vol.Range(min=1, max=7)),
     }
 )
 SERVICE_TRACE_POSITION = "trace_position"
