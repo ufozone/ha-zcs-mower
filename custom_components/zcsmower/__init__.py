@@ -62,6 +62,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
             hass.async_create_task(
                 coordinator.async_work_now(
                     imei,
+                    call.data.get("area"),
                 )
             )
 
@@ -72,9 +73,9 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
             hass.async_create_task(
                 coordinator.async_work_until(
                     imei,
-                    call.data.get("area"),
                     call.data.get("hours"),
                     call.data.get("minutes"),
+                    call.data.get("area"),
                 )
             )
 

@@ -56,6 +56,7 @@ SERVICE_SET_PROFILE_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("profile"): vol.All(vol.Coerce(int), vol.Range(min=1, max=3)),
+        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10)),
     }
 )
 SERVICE_WORK_NOW = "work_now"
@@ -70,7 +71,7 @@ SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
         vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
-        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
+        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10)),
     }
 )
 SERVICE_BORDER_CUT = "border_cut"

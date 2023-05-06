@@ -40,6 +40,16 @@ work_now:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
+    area:
+      name: "Zone"
+      description: "Zone where the lawn mower should start."
+      example: 1
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 10
+          mode: box
 
 work_until:
   name: "Mowing until a certain time"
@@ -56,17 +66,6 @@ work_until:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
-    area:
-      name: "Zone"
-      description: "Zone where the lawn mower should start."
-      required: true
-      example: 1
-      default: 1
-      selector:
-        number:
-          min: 1
-          max: 8
-          mode: box
     hours:
       name: "Hours"
       description: "Time until which lawn mower should drive in locale time and 24h format."
@@ -91,6 +90,16 @@ work_until:
           max: 59
           step: 1
           mode: slider
+    area:
+      name: "Zone"
+      description: "Zone where the lawn mower should start."
+      example: 1
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 10
+          mode: box
 
 border_cut:
   name: "Border cutting"
