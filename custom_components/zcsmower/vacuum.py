@@ -105,7 +105,7 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
         self.entity_description = entity_description
         self._attr_supported_features = ROBOT_SUPPORTED_FEATURES
 
-    def update_extra_state_attributes(self) -> None:
+    def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
         if self._state == 4:
             _attr_status = ROBOT_ERRORS.get(self._error, "unknown")

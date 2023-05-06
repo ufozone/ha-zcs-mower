@@ -87,7 +87,7 @@ class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
         )
         self.entity_description = entity_description
 
-    def update_extra_state_attributes(self) -> None:
+    def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
         if self._entity_key == "error":
             if self._state == 4:

@@ -34,7 +34,8 @@ PLATFORMS = [
 
 API_BASE_URI = "https://api-de.devicewise.com/api"
 API_APP_TOKEN = "DJMYYngGNEit40vA"
-API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
+API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
+API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
 API_WAIT_BEFORE_EXEC = 15
 
@@ -67,9 +68,9 @@ SERVICE_WORK_UNTIL = "work_until"
 SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
-        vol.Required("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
         vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
         vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
+        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
     }
 )
 SERVICE_BORDER_CUT = "border_cut"

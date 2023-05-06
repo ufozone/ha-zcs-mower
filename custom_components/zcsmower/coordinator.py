@@ -30,9 +30,11 @@ from .api import (
 from .const import (
     DOMAIN,
     LOGGER,
-    API_DATETIME_FORMAT,
+    API_DATETIME_FORMAT_DEFAULT,
+    API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
     API_WAIT_BEFORE_EXEC,
+    CONF_MOWERS,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_ERROR,
@@ -65,6 +67,16 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self.mower_data = {}
 
         self._loop = asyncio.get_event_loop()
+
+    def _convert_datetime_from_api(
+        self,
+        date_string: str,
+    ) -> datetime:
+        """Convert datetime string from API data into datetime object."""
+        try:
+            return datetime.strptime(date_string, API_DATETIME_FORMAT_DEFAULT)
+        except ValueError:
+            return datetime.strptime(date_string, API_DATETIME_FORMAT_FALLBACK)
 
     async def __aenter__(self):
         """Return Self."""
@@ -147,22 +159,19 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     if "connected" in mower:
                         mower_data[mower["key"]][ATTR_CONNECTED] = mower["connected"]
                     if "lastCommunication" in mower:
-                        mower_data[mower["key"]][ATTR_LAST_COMM] = datetime.strptime(
-                            mower["lastCommunication"],
-                            API_DATETIME_FORMAT
-                        )
+                        mower_data[mower["key"]][ATTR_LAST_COMM] = self._convert_datetime_from_api(mower["lastCommunication"])
                     if "lastSeen" in mower:
-                        mower_data[mower["key"]][ATTR_LAST_SEEN] = datetime.strptime(
-                            mower["lastSeen"],
-                            API_DATETIME_FORMAT
-                        )
+                        mower_data[mower["key"]][ATTR_LAST_SEEN] = self._convert_datetime_from_api(mower["lastSeen"])
+
             # TODO
             LOGGER.debug("_async_update_data")
             LOGGER.debug(mower_data)
 
             self.mower_data = mower_data
 
-            return self.mower_data
+            return {
+                CONF_MOWERS: self.mower_data,
+            }
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
         except ZcsMowerApiError as exception:
@@ -219,9 +228,13 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def async_work_now(
         self,
         imei: str,
+        area: int | None = None,
     ) -> None:
         """Send command work_now to lawn nower."""
         LOGGER.debug(f"work_now: {imei}")
+        _params = {}
+        if isinstance(area, int) and hours in range(0, 23):
+            _params["area"] = area - 1
         try:
             await self.async_wake_up(imei)
             self._loop.call_later(
@@ -232,6 +245,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                         {
                             "method": "work_now",
                             "imei": imei,
+                            "params": _params,
                             "ackTimeout": API_ACK_TIMEOUT,
                             "singleton": True,
                         },
@@ -244,12 +258,20 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def async_work_until(
         self,
         imei: str,
-        area: int,
         hours: int,
         minutes: int,
+        area: int | None = None,
     ) -> None:
         """Send command work_until to lawn nower."""
         LOGGER.debug(f"work_until: {imei}")
+        _params = {
+            "hh": hours,
+            "mm": minutes,
+        }
+        if isinstance(area, int) and area in range(1, 10):
+            _params["area"] = area - 1
+        else:
+            __params["area"] = 255
         try:
             await self.async_wake_up(imei)
             self._loop.call_later(
@@ -260,11 +282,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                         {
                             "method": "work_until",
                             "imei": imei,
-                            "params": {
-                                "area": (area - 1),
-                                "hh": hours,
-                                "mm": minutes,
-                            },
+                            "params": _params,
                             "ackTimeout": API_ACK_TIMEOUT,
                             "singleton": True,
                         },

@@ -24,6 +24,7 @@ from .const import (
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,
     ATTRIBUTION,
+    CONF_MOWERS,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_ERROR,
@@ -52,6 +53,8 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Initialize."""
         super().__init__(coordinator)
 
+        self._imei = imei
+        self._name = name
         self._entity_type = entity_type
         self._entity_key = entity_key
 
@@ -83,7 +86,11 @@ class ZcsMowerEntity(CoordinatorEntity):
 
         self.entity_id = f"{entity_type}.{self._unique_id}"
 
-    def update_extra_state_attributes(self) -> None:
+    def _get_attributes(self) -> dict:
+        """Get the mower attributes of the current mower."""
+        return self.coordinator.data[self._imei]
+
+    def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
         self._additional_extra_state_attributes = {}
 
@@ -139,8 +146,11 @@ class ZcsMowerEntity(CoordinatorEntity):
         self.async_write_ha_state()
 
     def _update_handler(self):
-        if self._imei in self.coordinator.data:
-            robot = self.coordinator.data[self._imei]
+        if self._imei in self.coordinator.data[CONF_MOWERS]:
+            robot = self.coordinator.data[CONF_MOWERS][self._imei]
+            
+            # TODO: Wenn state auf 2 geaendert, dann trace_position starten
+            
             self._state = robot[ATTR_STATE] if robot[ATTR_STATE] < len(ROBOT_STATES) else 0
             self._error = robot[ATTR_ERROR]
             self._available = self._state > 0
@@ -160,4 +170,4 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._last_communication = robot[ATTR_LAST_COMM]
             self._last_seen = robot[ATTR_LAST_SEEN]
             self._last_pull = datetime.utcnow().replace(tzinfo=timezone.utc)
-            self.update_extra_state_attributes()
+            self._update_extra_state_attributes()
