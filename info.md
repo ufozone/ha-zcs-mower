@@ -104,6 +104,9 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 * work_now
   Command the lawn mower to mow now.
   
+* work_for
+  Command the lawn mower to mow for a certain duration.
+  
 * work_until
   Command the lawn mower to mow until a certain time.
   
@@ -112,6 +115,9 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
   
 * charge_now
   Command the lawn mower to charge now.
+  
+* charge_for
+  Command the lawn mower to charge for a certain duration.
   
 * charge_until
   Command the lawn mower to charge until a certain time.
