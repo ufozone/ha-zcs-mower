@@ -43,7 +43,6 @@ from .const import (
 
 async def async_setup_services(hass: HomeAssistant) -> None:
     """Set up ZCS Lawn Mower Robot services."""
-
     if hass.services.async_services().get(DOMAIN):
         return
 
