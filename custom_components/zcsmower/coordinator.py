@@ -271,7 +271,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if isinstance(area, int) and area in range(1, 10):
             _params["area"] = area - 1
         else:
-            __params["area"] = 255
+            _params["area"] = 255
         try:
             await self.async_wake_up(imei)
             self._loop.call_later(
