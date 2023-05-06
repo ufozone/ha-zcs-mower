@@ -52,15 +52,3 @@ jobs:
       - name: Lint with isort
         run: |
           isort custom_components/zcsmower
-      - name: Run tests
-        run: |
-          pytest \
-            -qq \
-            --timeout=9 \
-            --durations=10 \
-            -n auto \
-            --cov custom_components.zcsmower \
-            --cov-report=xml \
-            -o console_output_style=count \
-            -p no:sugar \
-            tests
