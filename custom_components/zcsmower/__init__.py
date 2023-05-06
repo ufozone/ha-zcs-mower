@@ -13,7 +13,7 @@ from .const import (
     CONF_CLIENT_KEY,
     CONF_MOWERS,
 )
-from .service import async_setup_services
+from .services import async_setup_services
 from .api import ZcsMowerApiClient
 from .coordinator import ZcsMowerDataUpdateCoordinator
 

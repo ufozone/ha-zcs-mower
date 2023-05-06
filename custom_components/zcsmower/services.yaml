@@ -68,7 +68,7 @@ work_for:
             domain: "device_tracker"
     duration:
       name: "Duration"
-      description: "Duration in which the mower should run, in minutes."
+      description: "Duration in which the lawn mower should run, in minutes."
       required: true
       example: 30
       default: 60
