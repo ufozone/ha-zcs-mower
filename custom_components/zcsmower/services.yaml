@@ -240,15 +240,13 @@ charge_until:
           mode: slider
     weekday:
       name: "Day of week"
-      description: "Numeric representation of the day of the week is 0 (for Sunday) through 6 (for Saturday)."
+      description: "Numeric representation of the day of the week is 1 (for Monday) through 7 (for Sunday)."
       required: true
       example: "1"
       default: "0"
       selector:
         select:
           options:
-          - label: "Sunday"
-            value: "0"
           - label: "Monday"
             value: "1"
           - label: "Tuesday"
@@ -261,6 +259,8 @@ charge_until:
             value: "5"
           - label: "Saturday"
             value: "6"
+          - label: "Sunday"
+            value: "7"
 
 trace_position:
   name: "Tracing position"
