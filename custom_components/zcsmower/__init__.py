@@ -31,6 +31,8 @@ from .const import (
     SERVICE_BORDER_CUT_SCHEMA,
     SERVICE_CHARGE_NOW,
     SERVICE_CHARGE_NOW_SCHEMA,
+    SERVICE_CHARGE_FOR,
+    SERVICE_CHARGE_FOR_SCHEMA,
     SERVICE_CHARGE_UNTIL,
     SERVICE_CHARGE_UNTIL_SCHEMA,
     SERVICE_TRACE_POSITION,
@@ -110,6 +112,17 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
             hass.async_create_task(
                 coordinator.async_charge_now(
                     imei,
+                )
+            )
+
+    async def async_handle_charge_for(call) -> None:
+        """Handle the service call."""
+        targets = await async_handle_service(call)
+        for imei, coordinator in targets.items():
+            hass.async_create_task(
+                coordinator.async_charge_for(
+                    imei,
+                    call.data.get("duration"),
                 )
             )
 
@@ -209,6 +222,12 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         SERVICE_CHARGE_NOW,
         async_handle_charge_now,
         schema=SERVICE_CHARGE_NOW_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_CHARGE_FOR,
+        async_handle_charge_for,
+        schema=SERVICE_CHARGE_FOR_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,
