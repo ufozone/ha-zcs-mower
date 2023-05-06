@@ -281,7 +281,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             minutes=_target.minute,
             area=area,
         )
-        LOGGER.debug(dt_target.weekday())
 
     async def async_work_until(
         self,
