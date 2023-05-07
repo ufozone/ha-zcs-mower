@@ -24,7 +24,6 @@ from .const import (
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,
     ATTRIBUTION,
-    CONF_MOWERS,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_ERROR,
@@ -146,17 +145,17 @@ class ZcsMowerEntity(CoordinatorEntity):
         self.async_write_ha_state()
 
     def _update_handler(self):
-        if self._imei in self.coordinator.data[CONF_MOWERS]:
-            robot = self.coordinator.data[CONF_MOWERS][self._imei]
+        if self._imei in self.coordinator.data:
+            mower = self.coordinator.data[self._imei]
 
-            # TODO: Wenn state auf 2 geaendert, dann trace_position starten
+            """TODO: Wenn state auf 2 geaendert, dann trace_position starten"""
 
-            self._state = robot[ATTR_STATE] if robot[ATTR_STATE] < len(ROBOT_STATES) else 0
-            self._error = robot[ATTR_ERROR]
+            self._state = mower[ATTR_STATE] if mower[ATTR_STATE] < len(ROBOT_STATES) else 0
+            self._error = mower[ATTR_ERROR]
             self._available = self._state > 0
-            if robot[ATTR_LOCATION] is not None:
-                self._location = robot[ATTR_LOCATION]
-            self._serial = robot[ATTR_SERIAL]
+            if mower[ATTR_LOCATION] is not None:
+                self._location = mower[ATTR_LOCATION]
+            self._serial = mower[ATTR_SERIAL]
             if (
                 self._serial is not None
                 and len(self._serial) > 5
@@ -164,10 +163,10 @@ class ZcsMowerEntity(CoordinatorEntity):
                 if self._serial[0:2] in MANUFACTURER_MAP:
                     self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
                 self._model = self._serial[0:6]
-            self._sw_version = robot[ATTR_SW_VERSION]
+            self._sw_version = mower[ATTR_SW_VERSION]
 
-            self._connected = robot[ATTR_CONNECTED]
-            self._last_communication = robot[ATTR_LAST_COMM]
-            self._last_seen = robot[ATTR_LAST_SEEN]
+            self._connected = mower[ATTR_CONNECTED]
+            self._last_communication = mower[ATTR_LAST_COMM]
+            self._last_seen = mower[ATTR_LAST_SEEN]
             self._last_pull = datetime.utcnow().replace(tzinfo=timezone.utc)
             self._update_extra_state_attributes()

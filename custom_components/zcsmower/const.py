@@ -38,12 +38,16 @@ API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
 
+UPDATE_INTERVAL_DEFAULT = 5
+UPDATE_INTERVAL_WORKING = 1
+
 CONF_CLIENT_KEY = "client_key"
 CONF_IMEI = "imei"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
 ATTR_SERIAL = "serial"
+ATTR_WORKING = "working"
 ATTR_ERROR = "error"
 ATTR_CONNECTED = "connected"
 ATTR_LAST_COMM = "last_communication"
@@ -55,13 +59,13 @@ SERVICE_SET_PROFILE_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("profile"): vol.All(vol.Coerce(int), vol.Range(min=1, max=3)),
-        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10)),
     }
 )
 SERVICE_WORK_NOW = "work_now"
 SERVICE_WORK_NOW_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10)),
     }
 )
 SERVICE_WORK_FOR = "work_for"
@@ -132,6 +136,7 @@ SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
     }
 )
 
+ROBOT_WORKING_STATES = [2, 6, 7, 8, 11]
 ROBOT_STATES = [
     {
         "name" : "unknown",

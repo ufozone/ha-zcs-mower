@@ -35,12 +35,16 @@ from .const import (
     API_DATETIME_FORMAT_DEFAULT,
     API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
+    UPDATE_INTERVAL_DEFAULT,
+    UPDATE_INTERVAL_WORKING,
     ATTR_IMEI,
     ATTR_SERIAL,
+    ATTR_WORKING,
     ATTR_ERROR,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
+    ROBOT_WORKING_STATES,
 )
 
 
@@ -53,13 +57,14 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         mowers: dict,
         hass: HomeAssistant,
         client: ZcsMowerApiClient,
+        update_interval: timedelta = timedelta(minutes=UPDATE_INTERVAL_DEFAULT),
     ) -> None:
         """Initialize."""
         super().__init__(
             hass=hass,
             logger=LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=2),
+            update_interval=update_interval,
         )
         self.mowers = mowers
         self.client = client
@@ -72,6 +77,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_SERIAL: None,
                 ATTR_SW_VERSION: None,
                 ATTR_STATE: 0,
+                ATTR_WORKING: False,
                 ATTR_ERROR: 0,
                 ATTR_LOCATION: None,
                 ATTR_CONNECTED: False,
@@ -81,9 +87,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self.update_single_mower = None
 
         self._loop = asyncio.get_event_loop()
-
-        # TODO
-        LOGGER.debug(self.mower_data)
 
     def _convert_datetime_from_api(
         self,
@@ -115,24 +118,36 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            """Update only onw mower."""
             if isinstance(self.update_single_mower, dict):
+                """Update only onw mower."""
                 await self.async_update_single_mower(self.update_single_mower)
                 self.update_single_mower = None
-                return self.mower_data
-
-            """Update all mowers."""
-            await self.async_update_all_mowers()
+            else:
+                """Update all mowers."""
+                await self.async_update_all_mowers()
 
             # TODO
             LOGGER.debug("_async_update_data")
             LOGGER.debug(self.mower_data)
 
+            if self.async_has_working_mowers():
+                self.update_interval = timedelta(minutes=UPDATE_INTERVAL_WORKING)
+                LOGGER.info("Increase update interval, because lawn mowers are working.")
+            else:
+                self.update_interval = timedelta(minutes=UPDATE_INTERVAL_DEFAULT)
+                LOGGER.info("Decrease update interval, because no lawn mowers are working.")
             return self.mower_data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
         except ZcsMowerApiError as exception:
             raise UpdateFailed(exception) from exception
+
+    async def async_has_working_mowers(
+        self,
+    ) -> bool:
+        """Count the working lawn mowers."""
+        count_helper = [v['working'] for k, v in self.mower_data.items() if v.get('working')]
+        return len(count_helper) > 0
 
     async def async_update_all_mowers(
         self,
@@ -182,10 +197,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if "alarms" in data and "robot_state" in data["alarms"]:
             robot_state = data["alarms"]["robot_state"]
             self.mower_data[data["key"]][ATTR_STATE] = robot_state["state"]
+            self.mower_data[data["key"]][ATTR_WORKING] = robot_state["state"] in list(ROBOT_WORKING_STATES)
             if "msg" in robot_state:
-                self.mower_data[data["key"]][ATTR_ERROR] = int(
-                    robot_state["msg"]
-                )
+                self.mower_data[data["key"]][ATTR_ERROR] = int(robot_state["msg"])
             # latitude and longitude, not always available
             if "lat" in robot_state and "lng" in robot_state:
                 self.mower_data[data["key"]][ATTR_LOCATION] = {
