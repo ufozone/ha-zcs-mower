@@ -53,6 +53,8 @@ ATTR_CONNECTED = "connected"
 ATTR_LAST_COMM = "last_communication"
 ATTR_LAST_SEEN = "last_seen"
 ATTR_LAST_PULL = "last_pull"
+ATTR_LAST_STATE = "last_state"
+ATTR_LAST_WAKE_UP = "last_wake_up"
 
 SERVICE_SET_PROFILE = "set_profile"
 SERVICE_SET_PROFILE_SCHEMA = vol.Schema(
