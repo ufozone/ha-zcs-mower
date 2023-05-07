@@ -131,11 +131,12 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug(self.mower_data)
 
             if self.async_has_working_mowers():
-                self.update_interval = timedelta(minutes=UPDATE_INTERVAL_WORKING)
-                LOGGER.info("Increase update interval, because lawn mowers are working.")
+                suggested_update_interval = timedelta(minutes=UPDATE_INTERVAL_WORKING)
             else:
-                self.update_interval = timedelta(minutes=UPDATE_INTERVAL_DEFAULT)
-                LOGGER.info("Decrease update interval, because no lawn mowers are working.")
+                suggested_update_interval = timedelta(minutes=UPDATE_INTERVAL_DEFAULT)
+            if suggested_update_interval != self.update_interval:
+                self.update_interval = suggested_update_interval
+                LOGGER.info("Update update_interval, because lawn mower(s) changed state from not working to working or vice versa.")
             return self.mower_data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
