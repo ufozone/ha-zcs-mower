@@ -92,8 +92,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_LAST_STATE: 0,
                 ATTR_LAST_WAKE_UP: None,
             }
-        self.update_single_mower = None
-
         self._loop = asyncio.get_event_loop()
 
     def _convert_datetime_from_api(
@@ -130,13 +128,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            if isinstance(self.update_single_mower, dict):
-                """Update only one mower."""
-                await self.async_update_mower(self.update_single_mower)
-                self.update_single_mower = None
-            else:
-                """Update all mowers."""
-                await self.async_fetch_all_mowers()
+            """Update all mowers."""
+            await self.async_fetch_all_mowers()
 
             # TODO
             LOGGER.debug("_async_update_data")
@@ -156,6 +149,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             raise ConfigEntryAuthFailed(exception) from exception
         except ZcsMowerApiError as exception:
             raise UpdateFailed(exception) from exception
+
+    async def _async_update_listeners(self) -> None:
+        """Update all registered listeners."""
+        self.async_update_listeners()
 
     def get_mower_attributes(
         self,
@@ -223,12 +220,13 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             },
         )
         response = await self.client.get_response()
-        connected = response.get("connected", False)
-        self.update_single_mower = response
+        await self.async_update_mower(response)
+
+        # Update all entities
         self.hass.async_create_task(
-            self._async_update_data()
+            self._async_update_listeners()
         )
-        return connected
+        return response.get("connected", False)
 
     async def async_update_mower(
         self,

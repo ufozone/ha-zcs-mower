@@ -1,6 +1,7 @@
 """ZCS Lawn Mower Robot entity."""
 from __future__ import annotations
 
+from homeassistant.core import callback
 from homeassistant.const import (
     ATTR_NAME,
     ATTR_IDENTIFIERS,
@@ -137,12 +138,13 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Peform async_update."""
         self._update_handler()
 
+    @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
         self._update_handler()
         self.async_write_ha_state()
 
-    def _update_handler(self):
+    def _update_handler(self) -> None:
         """Handle updated data."""
         if self._imei not in self.coordinator.data:
             return None
