@@ -26,6 +26,7 @@ from .const import (
     ATTRIBUTION,
     ATTR_IMEI,
     ATTR_SERIAL,
+    ATTR_WORKING,
     ATTR_ERROR,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
@@ -70,6 +71,7 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._unique_id = slugify(f"{self._imei}_{self._name}")
 
         self._state = 0
+        self._working = False
         self._error = 0
         self._available = True
         self._location = {
@@ -145,28 +147,29 @@ class ZcsMowerEntity(CoordinatorEntity):
         self.async_write_ha_state()
 
     def _update_handler(self):
-        if self._imei in self.coordinator.data:
-            mower = self.coordinator.data[self._imei]
+        """Handle updated data."""
+        if self._imei not in self.coordinator.data:
+            return None
+        # Get this mower entity from coordinator
+        mower = self.coordinator.data[self._imei]
+        self._state = mower[ATTR_STATE] if mower[ATTR_STATE] < len(ROBOT_STATES) else 0
+        self._working = mower[ATTR_WORKING]
+        self._error = mower[ATTR_ERROR]
+        self._available = self._state > 0
+        if mower[ATTR_LOCATION] is not None:
+            self._location = mower[ATTR_LOCATION]
+        self._serial = mower[ATTR_SERIAL]
+        if (
+            self._serial is not None
+            and len(self._serial) > 5
+        ):
+            if self._serial[0:2] in MANUFACTURER_MAP:
+                self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
+            self._model = self._serial[0:6]
+        self._sw_version = mower[ATTR_SW_VERSION]
 
-            """TODO: Wenn state auf 2 geaendert, dann trace_position starten"""
-
-            self._state = mower[ATTR_STATE] if mower[ATTR_STATE] < len(ROBOT_STATES) else 0
-            self._error = mower[ATTR_ERROR]
-            self._available = self._state > 0
-            if mower[ATTR_LOCATION] is not None:
-                self._location = mower[ATTR_LOCATION]
-            self._serial = mower[ATTR_SERIAL]
-            if (
-                self._serial is not None
-                and len(self._serial) > 5
-            ):
-                if self._serial[0:2] in MANUFACTURER_MAP:
-                    self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
-                self._model = self._serial[0:6]
-            self._sw_version = mower[ATTR_SW_VERSION]
-
-            self._connected = mower[ATTR_CONNECTED]
-            self._last_communication = mower[ATTR_LAST_COMM]
-            self._last_seen = mower[ATTR_LAST_SEEN]
-            self._last_pull = datetime.utcnow().replace(tzinfo=timezone.utc)
-            self._update_extra_state_attributes()
+        self._connected = mower[ATTR_CONNECTED]
+        self._last_communication = mower[ATTR_LAST_COMM]
+        self._last_seen = mower[ATTR_LAST_SEEN]
+        self._last_pull = datetime.utcnow().replace(tzinfo=timezone.utc)
+        self._update_extra_state_attributes()
