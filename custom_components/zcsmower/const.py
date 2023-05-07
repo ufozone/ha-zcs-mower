@@ -38,8 +38,8 @@ API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
 
-UPDATE_INTERVAL_DEFAULT = 5
-UPDATE_INTERVAL_WORKING = 1
+UPDATE_INTERVAL_DEFAULT = 300
+UPDATE_INTERVAL_WORKING = 60
 
 CONF_CLIENT_KEY = "client_key"
 CONF_IMEI = "imei"
@@ -136,7 +136,6 @@ SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
     }
 )
 
-ROBOT_WORKING_STATES = [2, 6, 7, 8, 11]
 ROBOT_STATES = [
     {
         "name" : "unknown",
@@ -199,6 +198,8 @@ ROBOT_STATES = [
         "color": "#E61EDC",
     },
 ]
+ROBOT_WAKE_UP_INTERVAL = 300
+ROBOT_WORKING_STATES = [2, 6, 7, 8, 11]
 
 ROBOT_ERRORS = {
     0: "bus_error",

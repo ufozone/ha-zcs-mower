@@ -45,6 +45,7 @@ from .const import (
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
     ROBOT_WORKING_STATES,
+    ROBOT_WAKE_UP_INTERVAL,
 )
 
 
@@ -57,7 +58,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         mowers: dict,
         hass: HomeAssistant,
         client: ZcsMowerApiClient,
-        update_interval: timedelta = timedelta(minutes=UPDATE_INTERVAL_DEFAULT),
+        update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL_DEFAULT),
     ) -> None:
         """Initialize."""
         super().__init__(
@@ -131,9 +132,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug(self.mower_data)
 
             if self.async_has_working_mowers():
-                suggested_update_interval = timedelta(minutes=UPDATE_INTERVAL_WORKING)
+                suggested_update_interval = timedelta(seconds=UPDATE_INTERVAL_WORKING)
             else:
-                suggested_update_interval = timedelta(minutes=UPDATE_INTERVAL_DEFAULT)
+                suggested_update_interval = timedelta(seconds=UPDATE_INTERVAL_DEFAULT)
             if suggested_update_interval != self.update_interval:
                 self.update_interval = suggested_update_interval
                 LOGGER.info("Update update_interval, because lawn mower(s) changed state from not working to working or vice versa.")
