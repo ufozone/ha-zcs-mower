@@ -280,9 +280,16 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> bool:
         """Prepare lawn mower for incomming command."""
         try:
-            #this_mower = self.async_get_mower_attributes(data["key"])
-
-
+            # Use connection state from last fetch if last pull was not longer than 10 seconds ago
+            this_mower = self.async_get_mower_attributes(data["key"])
+            last_pull = this_mower.get(ATTR_LAST_PULL, None)
+            if (
+                last_pull is not None
+                and 10 > (datetime.utcnow().replace(tzinfo=timezone.utc) - last_pull).total_seconds()
+                and this_mower.get(ATTR_CONNECTED, False)
+            ):
+                return True
+            # Fetch connection state fresh from API
             connected = await self.async_fetch_single_mower(imei)
             if connected is True:
                 return True
