@@ -281,11 +281,11 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Prepare lawn mower for incomming command."""
         try:
             # Use connection state from last fetch if last pull was not longer than 10 seconds ago
-            this_mower = self.async_get_mower_attributes(data["key"])
+            this_mower = self.async_get_mower_attributes(imei)
             last_pull = this_mower.get(ATTR_LAST_PULL, None)
             if (
                 last_pull is not None
-                and 10 > (datetime.utcnow().replace(tzinfo=timezone.utc) - last_pull).total_seconds()
+                and (datetime.utcnow().replace(tzinfo=timezone.utc) - last_pull).total_seconds() < 10
                 and this_mower.get(ATTR_CONNECTED, False)
             ):
                 return True
