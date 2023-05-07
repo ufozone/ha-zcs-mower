@@ -222,7 +222,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         response = await self.client.get_response()
         await self.async_update_mower(response)
 
-        # Update all entities
+        # Always update HA states after a command was executed.
+        # API calls that change the lawn mower's state update the local object when
+        # executing the command, so only the HA state needs further updates.
         self.hass.async_create_task(
             self._async_update_listeners()
         )
