@@ -106,6 +106,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         except ValueError:
             return datetime.strptime(date_string, API_DATETIME_FORMAT_FALLBACK)
 
+    def _get_datetime_now(self) -> datetime:
+        """Get current datetime in UTC."""
+        return datetime.utcnow().replace(tzinfo=timezone.utc)
+
     def _get_datetime_from_duration(
         self,
         duration: int,
@@ -256,9 +260,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             this_mower[ATTR_LAST_COMM] = self._convert_datetime_from_api(data["lastCommunication"])
         if "lastSeen" in data:
             this_mower[ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
-        this_mower[ATTR_LAST_PULL] = datetime.utcnow().replace(tzinfo=timezone.utc)
+        this_mower[ATTR_LAST_PULL] = self._get_datetime_now()
 
-
+        #if this_mower[ATTR_STATE] in ROBOT_WORKING_STATES:
+        #    self._get_datetime_now()
         """TODO:
                 ATTR_LAST_STATE
                 ATTR_LAST_WAKE_UP
@@ -285,7 +290,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             last_pull = this_mower.get(ATTR_LAST_PULL, None)
             if (
                 last_pull is not None
-                and (datetime.utcnow().replace(tzinfo=timezone.utc) - last_pull).total_seconds() < 10
+                and (self._get_datetime_now() - last_pull).total_seconds() < 10
                 and this_mower.get(ATTR_CONNECTED, False)
             ):
                 return True
