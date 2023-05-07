@@ -40,16 +40,6 @@ work_now:
             integration: "zcsmower"
           entity:
             domain: "device_tracker"
-    area:
-      name: "Zone"
-      description: "Zone where the lawn mower should start."
-      example: 1
-      default: 1
-      selector:
-        number:
-          min: 1
-          max: 10
-          mode: box
 
 work_for:
   name: "Mowing for a certain duration"

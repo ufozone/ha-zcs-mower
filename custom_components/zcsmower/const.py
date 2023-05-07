@@ -65,7 +65,6 @@ SERVICE_WORK_NOW = "work_now"
 SERVICE_WORK_NOW_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
-        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10)),
     }
 )
 SERVICE_WORK_FOR = "work_for"

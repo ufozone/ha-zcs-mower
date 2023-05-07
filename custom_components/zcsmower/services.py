@@ -176,7 +176,6 @@ async def _async_work_now(
         hass.async_create_task(
             coordinator.async_work_now(
                 imei,
-                data.get("area"),
             )
         )
 

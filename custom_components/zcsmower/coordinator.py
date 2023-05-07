@@ -84,6 +84,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_CONNECTED: False,
                 ATTR_LAST_COMM: None,
                 ATTR_LAST_SEEN: None,
+                # TODO
+                "last_state": 0,
+                "last_wake_up": None,
             }
         self.update_single_mower = None
 
@@ -196,29 +199,47 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         data: dict[str, any],
     ) -> None:
         """Update a single mower."""
+        this_mower = self.mower_data.get(data["key"], None)
+        if this_mower is None:
+            return None
+        # Start refreshing mower in coordinator from fetched API data
         if "alarms" in data and "robot_state" in data["alarms"]:
             robot_state = data["alarms"]["robot_state"]
-            self.mower_data[data["key"]][ATTR_STATE] = robot_state["state"]
-            self.mower_data[data["key"]][ATTR_WORKING] = robot_state["state"] in list(ROBOT_WORKING_STATES)
+            this_mower[ATTR_STATE] = robot_state["state"]
+            this_mower[ATTR_WORKING] = robot_state["state"] in list(ROBOT_WORKING_STATES)
             if "msg" in robot_state:
-                self.mower_data[data["key"]][ATTR_ERROR] = int(robot_state["msg"])
+                this_mower[ATTR_ERROR] = int(robot_state["msg"])
             # latitude and longitude, not always available
             if "lat" in robot_state and "lng" in robot_state:
-                self.mower_data[data["key"]][ATTR_LOCATION] = {
+                this_mower[ATTR_LOCATION] = {
                     ATTR_LATITUDE: robot_state["lat"],
                     ATTR_LONGITUDE: robot_state["lng"],
                 }
         if "attrs" in data:
             if "robot_serial" in data["attrs"]:
-                self.mower_data[data["key"]][ATTR_SERIAL] = data["attrs"]["robot_serial"]["value"]
+                this_mower[ATTR_SERIAL] = data["attrs"]["robot_serial"]["value"]
             if "program_version" in data["attrs"]:
-                self.mower_data[data["key"]][ATTR_SW_VERSION] = data["attrs"]["program_version"]["value"]
+                this_mower[ATTR_SW_VERSION] = data["attrs"]["program_version"]["value"]
         if "connected" in data:
-            self.mower_data[data["key"]][ATTR_CONNECTED] = data["connected"]
+            this_mower[ATTR_CONNECTED] = data["connected"]
         if "lastCommunication" in data:
-            self.mower_data[data["key"]][ATTR_LAST_COMM] = self._convert_datetime_from_api(data["lastCommunication"])
+            this_mower[ATTR_LAST_COMM] = self._convert_datetime_from_api(data["lastCommunication"])
         if "lastSeen" in data:
-            self.mower_data[data["key"]][ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
+            this_mower[ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
+
+
+        """TODO: 
+        
+        Wenn state auf einen ROBOT_WORKING_STATES geaendert, dann trace_position senden
+        Letzter Status kann auf folgende VAR gelegt werden
+        self._last_state = 0
+        
+        Solange state ein ROBOT_WORKING_STATES ist alle ROBOT_WAKE_UP_INTERVAL Sekunden einen Wake up senden
+        Letzter Wake up kann auf folgende VAR gelegt werden
+        self._last_wake_up = None
+        """
+
+        self.mower_data[data["key"]] = this_mower
 
     async def async_get_single_mower(
         self,
@@ -310,13 +331,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def async_work_now(
         self,
         imei: str,
-        area: int | None = None,
     ) -> bool:
         """Send command work_now to lawn nower."""
         LOGGER.debug(f"work_now: {imei}")
-        _params = {}
-        if isinstance(area, int) and area in range(1, 10):
-            _params["area"] = area - 1
         try:
             await self.async_prepare_for_command(imei)
             return await self.client.execute(
@@ -324,7 +341,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 {
                     "method": "work_now",
                     "imei": imei,
-                    "params": _params,
                     "ackTimeout": API_ACK_TIMEOUT,
                     "singleton": True,
                 },
