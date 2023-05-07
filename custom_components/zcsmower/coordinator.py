@@ -44,6 +44,8 @@ from .const import (
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
+    ATTR_LAST_STATE,
+    ATTR_LAST_WAKE_UP,
     ROBOT_WORKING_STATES,
     #ROBOT_WAKE_UP_INTERVAL,
 )
@@ -84,9 +86,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_CONNECTED: False,
                 ATTR_LAST_COMM: None,
                 ATTR_LAST_SEEN: None,
-                # TODO
-                "last_state": 0,
-                "last_wake_up": None,
+                ATTR_LAST_STATE: 0,
+                ATTR_LAST_WAKE_UP: None,
             }
         self.update_single_mower = None
 
@@ -128,7 +129,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 self.update_single_mower = None
             else:
                 """Update all mowers."""
-                await self.async_update_all_mowers()
+                await self.async_fetch_all_mowers()
 
             # TODO
             LOGGER.debug("_async_update_data")
@@ -147,6 +148,13 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         except ZcsMowerApiError as exception:
             raise UpdateFailed(exception) from exception
 
+    async def async_get_mower_attributes(
+        self,
+        imei: str,
+    ) -> dict[str, any] | None:
+        """Get attributes of an given lawn mower."""
+        return self.mower_data.get(imei, None)
+
     async def async_has_working_mowers(
         self,
     ) -> bool:
@@ -154,10 +162,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         count_helper = [v['working'] for k, v in self.mower_data.items() if v.get('working')]
         return len(count_helper) > 0
 
-    async def async_update_all_mowers(
+    async def async_fetch_all_mowers(
         self,
     ) -> None:
-        """Update all mowers."""
+        """Fetch data for all mowers."""
         mower_imeis = list(self.mower_data.keys())
         if len(mower_imeis) == 0:
             return None
@@ -194,12 +202,31 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             ):
                 await self.async_update_single_mower(mower)
 
+    async def async_fetch_single_mower(
+        self,
+        imei: str,
+    ) -> bool:
+        """Fetch data for single mower, return connection state."""
+        await self.client.execute(
+            "thing.find",
+            {
+                "imei": imei,
+            },
+        )
+        response = await self.client.get_response()
+        connected = response.get("connected", False)
+        self.update_single_mower = response
+        self.hass.async_create_task(
+            self._async_update_data()
+        )
+        return connected
+
     async def async_update_single_mower(
         self,
         data: dict[str, any],
     ) -> None:
         """Update a single mower."""
-        this_mower = self.mower_data.get(data["key"], None)
+        this_mower = self.async_get_mower_attributes(data["key"])
         if this_mower is None:
             return None
         # Start refreshing mower in coordinator from fetched API data
@@ -229,36 +256,19 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
 
         """TODO:
+                ATTR_LAST_STATE
+                ATTR_LAST_WAKE_UP
+        Solange state ein ROBOT_WORKING_STATES ist alle ROBOT_WAKE_UP_INTERVAL Sekunden einen Wake up senden
+        Letzter Wake up kann auf folgende VAR gelegt werden
+        self._last_wake_up = None
 
         Wenn state auf einen ROBOT_WORKING_STATES geaendert, dann trace_position senden
         Letzter Status kann auf folgende VAR gelegt werden
         self._last_state = 0
 
-        Solange state ein ROBOT_WORKING_STATES ist alle ROBOT_WAKE_UP_INTERVAL Sekunden einen Wake up senden
-        Letzter Wake up kann auf folgende VAR gelegt werden
-        self._last_wake_up = None
         """
 
         self.mower_data[data["key"]] = this_mower
-
-    async def async_get_single_mower(
-        self,
-        imei: str,
-    ) -> bool:
-        """Get a single mower."""
-        await self.client.execute(
-            "thing.find",
-            {
-                "imei": imei,
-            },
-        )
-        response = await self.client.get_response()
-        connected = response.get("connected", False)
-        self.update_single_mower = response
-        self.hass.async_create_task(
-            self._async_update_data()
-        )
-        return connected
 
     async def async_prepare_for_command(
         self,
@@ -266,7 +276,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> bool:
         """Prepare lawn mower for incomming command."""
         try:
-            connected = await self.async_get_single_mower(imei)
+            connected = await self.async_fetch_single_mower(imei)
             if connected is True:
                 return True
             await self.async_wake_up(imei)
@@ -274,7 +284,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
             attempt = 0
             while connected is False and attempt <= 5:
-                connected = await self.async_get_single_mower(imei)
+                connected = await self.async_fetch_single_mower(imei)
                 if connected is True:
                     return True
                 attempt = attempt + 1
