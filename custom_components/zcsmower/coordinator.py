@@ -35,7 +35,6 @@ from .const import (
     API_DATETIME_FORMAT_DEFAULT,
     API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
-    CONF_MOWERS,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_ERROR,
@@ -66,8 +65,25 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self.client = client
 
         self.mower_data = {}
+        for _imei, _name in self.mowers.items():
+            self.mower_data[_imei] = {
+                ATTR_NAME: _name,
+                ATTR_IMEI: _imei,
+                ATTR_SERIAL: None,
+                ATTR_SW_VERSION: None,
+                ATTR_STATE: 0,
+                ATTR_ERROR: 0,
+                ATTR_LOCATION: None,
+                ATTR_CONNECTED: False,
+                ATTR_LAST_COMM: None,
+                ATTR_LAST_SEEN: None,
+            }
+        self.update_single_mower = None
 
         self._loop = asyncio.get_event_loop()
+
+        # TODO
+        LOGGER.debug(self.mower_data)
 
     def _convert_datetime_from_api(
         self,
@@ -99,93 +115,113 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            mower_data = {}
-            mower_imeis = []
-            for _imei, _name in self.mowers.items():
-                mower_imeis.append(_imei)
-                mower_data[_imei] = {
-                    ATTR_NAME: _name,
-                    ATTR_IMEI: _imei,
-                    ATTR_SERIAL: None,
-                    ATTR_SW_VERSION: None,
-                    ATTR_STATE: 0,
-                    ATTR_ERROR: 0,
-                    ATTR_LOCATION: None,
-                    ATTR_CONNECTED: False,
-                    ATTR_LAST_COMM: None,
-                    ATTR_LAST_SEEN: None,
-                }
-            if len(mower_imeis) == 0:
-                return mower_data
+            """Update only onw mower."""
+            if isinstance(self.update_single_mower, dict):
+                await self.async_update_single_mower(self.update_single_mower)
+                self.update_single_mower = None
+                return self.mower_data
 
-            await self.client.execute(
-                "thing.list",
-                {
-                    "show": [
-                        "id",
-                        "key",
-                        "name",
-                        "connected",
-                        "lastSeen",
-                        "lastCommunication",
-                        "loc",
-                        "properties",
-                        "alarms",
-                        "attrs",
-                        "createdOn",
-                        "storage",
-                        "varBillingPlanCode"
-                    ],
-                    "hideFields": True,
-                    "keys": mower_imeis
-                },
-            )
-            response = await self.client.get_response()
-            if "result" in response:
-                result_list = response["result"]
-                for mower in (
-                    mower
-                    for mower in result_list
-                    if "key" in mower and mower["key"] in mower_data
-                ):
-                    if "alarms" in mower and "robot_state" in mower["alarms"]:
-                        robot_state = mower["alarms"]["robot_state"]
-                        mower_data[mower["key"]][ATTR_STATE] = robot_state["state"]
-                        if "msg" in robot_state:
-                            mower_data[mower["key"]][ATTR_ERROR] = int(
-                                robot_state["msg"]
-                            )
-                        # latitude and longitude, not always available
-                        if "lat" in robot_state and "lng" in robot_state:
-                            mower_data[mower["key"]][ATTR_LOCATION] = {
-                                ATTR_LATITUDE: robot_state["lat"],
-                                ATTR_LONGITUDE: robot_state["lng"],
-                            }
-                    if "attrs" in mower:
-                        if "robot_serial" in mower["attrs"]:
-                            mower_data[mower["key"]][ATTR_SERIAL] = mower["attrs"]["robot_serial"]["value"]
-                        if "program_version" in mower["attrs"]:
-                            mower_data[mower["key"]][ATTR_SW_VERSION] = mower["attrs"]["program_version"]["value"]
-                    if "connected" in mower:
-                        mower_data[mower["key"]][ATTR_CONNECTED] = mower["connected"]
-                    if "lastCommunication" in mower:
-                        mower_data[mower["key"]][ATTR_LAST_COMM] = self._convert_datetime_from_api(mower["lastCommunication"])
-                    if "lastSeen" in mower:
-                        mower_data[mower["key"]][ATTR_LAST_SEEN] = self._convert_datetime_from_api(mower["lastSeen"])
+            """Update all mowers."""
+            await self.async_update_all_mowers()
 
             # TODO
             LOGGER.debug("_async_update_data")
-            LOGGER.debug(mower_data)
+            LOGGER.debug(self.mower_data)
 
-            self.mower_data = mower_data
-
-            return {
-                CONF_MOWERS: self.mower_data,
-            }
+            return self.mower_data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
         except ZcsMowerApiError as exception:
             raise UpdateFailed(exception) from exception
+
+    async def async_update_all_mowers(
+        self,
+    ) -> None:
+        """Update all mowers."""
+        mower_imeis = list(self.mower_data.keys())
+        if len(mower_imeis) == 0:
+            return None
+
+        await self.client.execute(
+            "thing.list",
+            {
+                "show": [
+                    "id",
+                    "key",
+                    "name",
+                    "connected",
+                    "lastSeen",
+                    "lastCommunication",
+                    "loc",
+                    "properties",
+                    "alarms",
+                    "attrs",
+                    "createdOn",
+                    "storage",
+                    "varBillingPlanCode"
+                ],
+                "hideFields": True,
+                "keys": mower_imeis
+            },
+        )
+        response = await self.client.get_response()
+        if "result" in response:
+            result_list = response["result"]
+            for mower in (
+                mower
+                for mower in result_list
+                if "key" in mower and mower["key"] in self.mower_data
+            ):
+                await self.async_update_single_mower(mower)
+
+    async def async_update_single_mower(
+        self,
+        data: dict[str, any],
+    ) -> None:
+        """Update a single mower."""
+        if "alarms" in data and "robot_state" in data["alarms"]:
+            robot_state = data["alarms"]["robot_state"]
+            self.mower_data[data["key"]][ATTR_STATE] = robot_state["state"]
+            if "msg" in robot_state:
+                self.mower_data[data["key"]][ATTR_ERROR] = int(
+                    robot_state["msg"]
+                )
+            # latitude and longitude, not always available
+            if "lat" in robot_state and "lng" in robot_state:
+                self.mower_data[data["key"]][ATTR_LOCATION] = {
+                    ATTR_LATITUDE: robot_state["lat"],
+                    ATTR_LONGITUDE: robot_state["lng"],
+                }
+        if "attrs" in data:
+            if "robot_serial" in data["attrs"]:
+                self.mower_data[data["key"]][ATTR_SERIAL] = data["attrs"]["robot_serial"]["value"]
+            if "program_version" in data["attrs"]:
+                self.mower_data[data["key"]][ATTR_SW_VERSION] = data["attrs"]["program_version"]["value"]
+        if "connected" in data:
+            self.mower_data[data["key"]][ATTR_CONNECTED] = data["connected"]
+        if "lastCommunication" in data:
+            self.mower_data[data["key"]][ATTR_LAST_COMM] = self._convert_datetime_from_api(data["lastCommunication"])
+        if "lastSeen" in data:
+            self.mower_data[data["key"]][ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
+
+    async def async_get_single_mower(
+        self,
+        imei: str,
+    ) -> bool:
+        """Get a single mower."""
+        await self.client.execute(
+            "thing.find",
+            {
+                "imei": imei,
+            },
+        )
+        response = await self.client.get_response()
+        connected = response.get("connected", False)
+        self.update_single_mower = response
+        self.hass.async_create_task(
+            self._async_update_data()
+        )
+        return connected
 
     async def async_prepare_for_command(
         self,
@@ -193,29 +229,15 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> bool:
         """Prepare lawn mower for incomming command."""
         try:
-            await self.client.execute(
-                "thing.find",
-                {
-                    "imei": imei,
-                },
-            )
-            response = await self.client.get_response()
-            connected = response.get("connected", False)
+            connected = await self.async_get_single_mower(imei)
             if connected is True:
                 return True
             await self.async_wake_up(imei)
             await asyncio.sleep(5)
 
             attempt = 0
-            while connected is False and attempt < 31:
-                await self.client.execute(
-                    "thing.find",
-                    {
-                        "imei": imei,
-                    },
-                )
-                response = await self.client.get_response()
-                connected = response.get("connected", False)
+            while connected is False and attempt <= 5:
+                connected = await self.async_get_single_mower(imei)
                 if connected is True:
                     return True
                 attempt = attempt + 1
