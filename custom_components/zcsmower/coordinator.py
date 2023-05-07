@@ -45,7 +45,7 @@ from .const import (
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
     ROBOT_WORKING_STATES,
-    ROBOT_WAKE_UP_INTERVAL,
+    #ROBOT_WAKE_UP_INTERVAL,
 )
 
 
@@ -228,12 +228,12 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             this_mower[ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
 
 
-        """TODO: 
-        
+        """TODO:
+
         Wenn state auf einen ROBOT_WORKING_STATES geaendert, dann trace_position senden
         Letzter Status kann auf folgende VAR gelegt werden
         self._last_state = 0
-        
+
         Solange state ein ROBOT_WORKING_STATES ist alle ROBOT_WAKE_UP_INTERVAL Sekunden einen Wake up senden
         Letzter Wake up kann auf folgende VAR gelegt werden
         self._last_wake_up = None
