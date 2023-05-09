@@ -166,19 +166,19 @@ ROBOT_MODELS = {
     "AM400L": "L400 Elite", # ?
     #"AM450B": "", # DB:21
     #"AM450D": "", # DB:99
-    "KB250L": "KR 250", # DB:49
-    "KB250P": "KR 250", # DB:91
-    "KB350L": "KR 350", # DB:271
-    "KB400B": "KR 400", # DB:16
-    "KB400D": "KR 400", # DB:79
+    "KB250L": "KR 250", # ?
+    "KB250P": "KR 250", # ?
+    "KB350L": "KR 350", # ?
+    "KB400B": "KR 400", # ?
+    "KB400D": "KR 400", # ?
     #"OW250L": "", # DB:307
     #"OW250P": "", # DB:60
     #"ST250D": "", # DB:17
     #"ST250L": "", # DB:4227
     #"TH015D": "", # DB:30
     "TH020D": "D1", # ?
-    "TH020L": "LX2", # DB:1186
-    "TH020P": "SX2", # DB:419
+    "TH020L": "LX2", # ?
+    "TH020P": "SX2", # ?
     "TH025D": "DX2.5", # ?
     "TH025L": "LX2.5", # ?
     "TH029D": "DX2.9", # ?
@@ -534,5 +534,5 @@ ROBOT_ERRORS = {
     5004: "unexpected_shutdown_work",
     5005: "unexpected_shutdown_work_pause",
     5006: "unexpected_shutdown_done",
-    5008: "unexpected_shutdown_error_1",
+    5008: "unexpected_shutdown_error",
 }

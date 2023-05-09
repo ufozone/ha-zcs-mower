@@ -316,8 +316,7 @@
               "unexpected_shutdown_charge": "UNEXPECTED SHUTDOWN CHARGE",
               "unexpected_shutdown_work": "UNEXPECTED SHUTDOWN WORK",
               "unexpected_shutdown_work_pause": "UNEXPECTED SHUTDOWN WORK PAUSE",
-              "unexpected_shutdown_done": "UNEXPECTED SHUTDOWN DONE",
-              "unexpected_shutdown_error_1": "Unexpected shutdown error"
+              "unexpected_shutdown_done": "UNEXPECTED SHUTDOWN DONE"
             }
           }
         }
