@@ -29,6 +29,7 @@ from .const import (
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
     ATTR_LAST_PULL,
+    ROBOT_MODELS,
     ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -164,6 +165,8 @@ class ZcsMowerEntity(CoordinatorEntity):
             if self._serial[0:2] in MANUFACTURER_MAP:
                 self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
             self._model = self._serial[0:6]
+            if self._model in ROBOT_MODELS:
+                self._model = ROBOT_MODELS[self._model]
         self._sw_version = mower[ATTR_SW_VERSION]
 
         self._connected = mower[ATTR_CONNECTED]
