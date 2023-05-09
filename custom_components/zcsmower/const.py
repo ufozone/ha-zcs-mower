@@ -137,6 +137,90 @@ SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
     }
 )
 
+ROBOT_MODELS = {
+    "AM015D": "Fifteen Deluxe", # ?
+    "AM020D": "Twenty Deluxe", # ?
+    "AM020L": "Twenty Elite",
+    "AM020P": "Twenty Elite S+", # ?
+    "AM020R": "Twenty ZR", # ?
+    "AM025D": "Twenty 25 Deluxe", # ?
+    "AM025L": "Twenty 25 Elite", # ?
+    "AM029D": "Twenty 29 Deluxe", # ?
+    "AM029L": "Twenty 29 Elite", # ?
+    "AM032D": "L32 Deluxe", # ?
+    "AM035B": "L35 Basic",
+    "AM035D": "L35 Deluxe",
+    "AM040B": "4.0 Basic", # ???
+    "AM040L": "4.0 Elite", # ???
+    "AM043L": "4.36 Elite",
+    "AM060L": "L60 Elite", # ?
+    "AM060P": "L60 Elite S+", # ?
+    "AM085L": "L85 Elite", # ?
+    #"AM095L": "", # DB:1082
+    "AM250D": "L250 Deluxe", # ?
+    "AM250L": "L250i Elite",
+    "AM250P": "L250i Elite S+",# ?
+    "AM350L": "L350i Elite", # ?
+    "AM400B": "L400i Basic", # ?
+    "AM400D": "L400i Deluxe", # ?
+    "AM400L": "L400 Elite", # ?
+    #"AM450B": "", # DB:21
+    #"AM450D": "", # DB:99
+    "KB250L": "KR 250", # DB:49
+    "KB250P": "KR 250", # DB:91
+    "KB350L": "KR 350", # DB:271
+    "KB400B": "KR 400", # DB:16
+    "KB400D": "KR 400", # DB:79
+    #"OW250L": "", # DB:307
+    #"OW250P": "", # DB:60
+    #"ST250D": "", # DB:17
+    #"ST250L": "", # DB:4227
+    #"TH015D": "", # DB:30
+    "TH020D": "D1", # ?
+    "TH020L": "LX2", # DB:1186
+    "TH020P": "SX2", # DB:419
+    "TH025D": "DX2.5", # ?
+    "TH025L": "LX2.5", # ?
+    "TH029D": "DX2.9", # ?
+    "TH029L": "LX2.9", # ?
+    "TH032D": "DZ2", # ?
+    "TH035B": "DZ3", # ?
+    "TH035D": "LZ3", # ?
+    "TH040B": "BX4", # ???
+    "TH040L": "LX4", # ???
+    "TH043L": "LX6", # ???
+    #"TH095L": "", # DB:164
+    "TH250D": "D25 i", # ???
+    "TH250L": "L25 i", # ?
+    "TH250P": "S25 i", # ?
+    #"TH350L": "", # DB:270
+    "TH400B": "B40 i", # ?
+    "TH400D": "D40 i", # ?
+    #"TH450B": "", # DB:14
+    #"TH450D": "", # DB:40
+    #"WI015D": "", # DB:26
+    #"WI020D": "", # DB:12
+    #"WI020L": "", # DB:1556
+    #"WI020P": "", # DB:516
+    #"WI025D": "", # DB:11
+    #"WI025L": "", # DB:157
+    #"WI029L": "", # DB:30
+    #"WI032D": "", # DB:12
+    #"WI035D": "", # DB:386
+    #"WI040B": "", # DB:25
+    #"WI040L": "", # DB:625
+    "WI043L": "KXL S Ultra Premium",
+    #"WI095L": "", # DB:108
+    #"WI250D": "", # DB:11
+    #"WI250L": "", # DB:1140
+    #"WI250P": "", # DB:270
+    #"WI251L": "", # DB:20
+    #"WI350L": "", # DB:493
+    #"WI400B": "", # DB:74
+    #"WI400D": "", # DB:70
+    #"WI450D": "", # DB:61
+}
+
 ROBOT_STATES = [
     {
         "name" : "unknown",
