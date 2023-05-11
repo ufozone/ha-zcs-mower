@@ -1,4 +1,4 @@
-"""Adds config flow for Ambrogio."""
+"""Adds config flow for Digital Devices Octopus NET."""
 from __future__ import annotations
 
 from copy import deepcopy
