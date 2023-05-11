@@ -48,7 +48,7 @@ async def async_setup_services(hass: HomeAssistant) -> None:
 
     @verify_domain_control(hass, DOMAIN)
     async def async_handle_service(call: ServiceCall) -> None:
-        """Call correct HomematicIP Cloud service."""
+        """Call correct ZCS Lawn Mower Robot service."""
         service = call.service
         data = {**call.data}
         device_ids = data.pop(CONF_DEVICE_ID, [])

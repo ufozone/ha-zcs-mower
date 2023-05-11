@@ -45,7 +45,7 @@ jobs:
           pip install -r .github/requirements-test.txt
       - name: Check with RUFF
         run: |
-          python3 -m ruff check custom_components/zcsmower --line-length=120
+          python3 -m ruff check custom_components/zcsmower
       - name: Lint with pydocstyle
         run: |
           pydocstyle custom_components/zcsmower
