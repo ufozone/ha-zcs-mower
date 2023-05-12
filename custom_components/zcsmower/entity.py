@@ -4,7 +4,6 @@ from __future__ import annotations
 from homeassistant.core import callback
 from homeassistant.const import (
     ATTR_NAME,
-    ATTR_STATE,
     ATTR_IDENTIFIERS,
     ATTR_MANUFACTURER,
     ATTR_MODEL,

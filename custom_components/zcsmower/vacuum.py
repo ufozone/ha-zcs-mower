@@ -31,7 +31,6 @@ from .const import (
     LOGGER,
     DOMAIN,
     ATTR_ERROR,
-    ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
