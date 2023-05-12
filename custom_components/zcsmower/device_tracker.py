@@ -4,6 +4,11 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from homeassistant.core import HomeAssistant
+from homeassistant.const import (
+    ATTR_LOCATION,
+    ATTR_LATITUDE,
+    ATTR_LONGITUDE,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.device_tracker import SOURCE_TYPE_GPS
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
@@ -90,13 +95,13 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
     @property
     def latitude(self) -> float | None:
         """Return latitude value of the device."""
-        location = self._location.get("latitude", None)
+        location = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
         return location if location else None
 
     @property
     def longitude(self) -> float | None:
         """Return longitude value of the device."""
-        location = self._location.get("longitude", None)
+        location = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
         return location if location else None
 
     @property

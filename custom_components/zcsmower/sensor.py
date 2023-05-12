@@ -4,6 +4,10 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from homeassistant.core import HomeAssistant
+from homeassistant.const import (
+    ATTR_STATE,
+    ATTR_ICON,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -90,9 +94,9 @@ class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
     @property
     def icon(self) -> str:
         """Return the icon of the entity."""
-        return ROBOT_STATES[self._state]["icon"]
+        return self._get_attribute(ATTR_ICON)
 
     @property
     def native_value(self) -> str:
         """Return the native value of the sensor."""
-        return ROBOT_STATES[self._state]["name"]
+        return self._get_attribute(ATTR_STATE)

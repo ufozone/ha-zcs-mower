@@ -5,10 +5,10 @@ from homeassistant.core import callback
 from homeassistant.const import (
     ATTR_NAME,
     ATTR_IDENTIFIERS,
-    ATTR_LOCATION,
     ATTR_MANUFACTURER,
     ATTR_MODEL,
     ATTR_SW_VERSION,
+    ATTR_LOCATION,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
     ATTR_STATE,
@@ -25,6 +25,7 @@ from .const import (
     ATTR_SERIAL,
     ATTR_WORKING,
     ATTR_ERROR,
+    ATTR_AVAILABLE,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
@@ -55,32 +56,10 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._name = name
         self._entity_type = entity_type
         self._entity_key = entity_key
-
-        self._imei = imei
-        self._name = name
-        self._serial = None
-        self._manufacturer = MANUFACTURER_DEFAULT
-        self._model = None
-        self._sw_version = None
-
         if entity_key:
             self._unique_id = slugify(f"{self._imei}_{self._name}_{entity_key}")
         else:
             self._unique_id = slugify(f"{self._imei}_{self._name}")
-
-        self._state = 0
-        self._working = False
-        self._error = 0
-        self._available = True
-        self._location = {
-            ATTR_LATITUDE: None,
-            ATTR_LONGITUDE: None,
-        }
-        self._connected = False
-        self._last_communication = None
-        self._last_seen = None
-        self._last_pull = None
-
         self._additional_extra_state_attributes = {}
 
         self.entity_id = f"{entity_type}.{self._unique_id}"
@@ -110,7 +89,7 @@ class ZcsMowerEntity(CoordinatorEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return self._available
+        return self._get_attribute(ATTR_AVAILABLE, False)
 
     @property
     def device_info(self):
@@ -120,23 +99,24 @@ class ZcsMowerEntity(CoordinatorEntity):
                 (DOMAIN, self._imei)
             },
             ATTR_NAME: self._name,
-            ATTR_MANUFACTURER: self._manufacturer,
-            ATTR_MODEL: self._model,
-            ATTR_SW_VERSION: self._sw_version,
+            ATTR_MANUFACTURER: self._get_attribute(ATTR_MANUFACTURER),
+            ATTR_MODEL: self._get_attribute(ATTR_MODEL),
+            ATTR_SW_VERSION: self._get_attribute(ATTR_SW_VERSION),
         }
 
     @property
     def extra_state_attributes(self) -> dict[str, any]:
         """Return axtra attributes."""
-        _extra_state_attributes = {
-            ATTR_IMEI: self._imei,
-            ATTR_CONNECTED: self._connected,
-            ATTR_LAST_COMM: self._last_communication,
-            ATTR_LAST_SEEN: self._last_seen,
-            ATTR_LAST_PULL: self._last_pull,
-        }
-        _extra_state_attributes.update(self._additional_extra_state_attributes)
-
+        _extra_state_attributes = self._additional_extra_state_attributes
+        _extra_state_attributes.update(
+            {
+                ATTR_IMEI: self._imei,
+                ATTR_CONNECTED: self._get_attribute(ATTR_CONNECTED),
+                ATTR_LAST_COMM: self._get_attribute(ATTR_LAST_COMM),
+                ATTR_LAST_SEEN: self._get_attribute(ATTR_LAST_SEEN),
+                ATTR_LAST_PULL: self._get_attribute(ATTR_LAST_PULL),
+            }
+        )
         return _extra_state_attributes
 
     async def async_update(self) -> None:
@@ -151,30 +131,4 @@ class ZcsMowerEntity(CoordinatorEntity):
 
     def _update_handler(self) -> None:
         """Handle updated data."""
-        if self._imei not in self.coordinator.data:
-            return None
-        # Get this mower entity from coordinator
-        mower = self.coordinator.data[self._imei]
-        self._state = mower[ATTR_STATE] if mower[ATTR_STATE] < len(ROBOT_STATES) else 0
-        self._working = mower[ATTR_WORKING]
-        self._error = mower[ATTR_ERROR]
-        self._available = self._state > 0
-        if mower[ATTR_LOCATION] is not None:
-            self._location = mower[ATTR_LOCATION]
-        self._serial = mower[ATTR_SERIAL]
-        if (
-            self._serial is not None
-            and len(self._serial) > 5
-        ):
-            if self._serial[0:2] in MANUFACTURER_MAP:
-                self._manufacturer = MANUFACTURER_MAP[self._serial[0:2]]
-            self._model = self._serial[0:6]
-            if self._model in ROBOT_MODELS:
-                self._model = ROBOT_MODELS[self._model]
-        self._sw_version = mower[ATTR_SW_VERSION]
-
-        self._connected = mower[ATTR_CONNECTED]
-        self._last_communication = mower[ATTR_LAST_COMM]
-        self._last_seen = mower[ATTR_LAST_SEEN]
-        self._last_pull = mower[ATTR_LAST_PULL]
         self._update_extra_state_attributes()

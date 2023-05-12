@@ -4,6 +4,9 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from homeassistant.core import HomeAssistant
+from homeassistant.const import (
+    ATTR_STATE,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.vacuum import (
     ATTR_STATUS,
@@ -27,8 +30,8 @@ from homeassistant.helpers.typing import (
 from .const import (
     LOGGER,
     DOMAIN,
+    ATTR_ERROR,
     ROBOT_STATES,
-    ROBOT_ERRORS,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -107,10 +110,10 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        if self._state == 4:
-            _attr_status = ROBOT_ERRORS.get(self._error, "unknown")
+        if self._get_attribute(ATTR_STATE) == "fail":
+            _attr_status = self._get_attribute(ATTR_ERROR, "unknown")
         else:
-            _attr_status = ROBOT_STATES[self._state]["name"]
+            _attr_status = self._get_attribute(ATTR_STATE)
         # TODO: Currently no way to map this status, but it would be the best way to
         #       present detailed error messages.
         self._additional_extra_state_attributes = {
@@ -120,23 +123,23 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
     @property
     def state(self) -> str:
         """Return the state of the lawn mower."""
-        if self._state in (2, 7, 8):
+        if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "bordercut"):
             return STATE_CLEANING
-        if self._state == 1:
+        if self._get_attribute(ATTR_STATE) == "charge":
             return STATE_DOCKED
-        if self._state == 3:
+        if self._get_attribute(ATTR_STATE) == "pause":
             return STATE_PAUSED
-        if self._state == 6:
+        if self._get_attribute(ATTR_STATE) == "gotostation":
             return STATE_RETURNING
-        if self._state == 11:
+        if self._get_attribute(ATTR_STATE) == "work_standby":
             return STATE_IDLE
         return STATE_ERROR
 
     @property
     def error(self) -> str:
         """Define an error message if the vacuum is in STATE_ERROR."""
-        if self._state == 4:
-            return ROBOT_ERRORS.get(self._error, "unknown")
+        if self._get_attribute(ATTR_STATE) == "fail":
+            return self._get_attribute(ATTR_ERROR, "unknown")
         return None
 
     async def async_start(self) -> None:
