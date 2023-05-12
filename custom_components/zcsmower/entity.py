@@ -4,34 +4,24 @@ from __future__ import annotations
 from homeassistant.core import callback
 from homeassistant.const import (
     ATTR_NAME,
+    ATTR_STATE,
     ATTR_IDENTIFIERS,
     ATTR_MANUFACTURER,
     ATTR_MODEL,
     ATTR_SW_VERSION,
-    ATTR_LOCATION,
-    ATTR_LATITUDE,
-    ATTR_LONGITUDE,
-    ATTR_STATE,
 )
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
 from .const import (
     DOMAIN,
-    MANUFACTURER_DEFAULT,
-    MANUFACTURER_MAP,
     ATTRIBUTION,
     ATTR_IMEI,
-    ATTR_SERIAL,
-    ATTR_WORKING,
-    ATTR_ERROR,
     ATTR_AVAILABLE,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
     ATTR_LAST_PULL,
-    ROBOT_MODELS,
-    ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 
