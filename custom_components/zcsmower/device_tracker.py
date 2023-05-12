@@ -25,7 +25,6 @@ from homeassistant.helpers.typing import (
 from .const import (
     LOGGER,
     DOMAIN,
-    #ROBOT_STATES,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity

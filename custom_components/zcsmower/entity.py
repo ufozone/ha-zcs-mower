@@ -95,7 +95,7 @@ class ZcsMowerEntity(CoordinatorEntity):
 
     @property
     def extra_state_attributes(self) -> dict[str, any]:
-        """Return axtra attributes."""
+        """Return extra attributes."""
         _extra_state_attributes = self._additional_extra_state_attributes
         _extra_state_attributes.update(
             {
