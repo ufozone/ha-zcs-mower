@@ -156,7 +156,7 @@ ROBOT_MODELS = {
     "AM060L": "L60 Elite", # ?
     "AM060P": "L60 Elite S+", # ?
     "AM085L": "L85 Elite", # ?
-    #"AM095L": "", # DB:1082
+    "AM095L": "Quad Elite 4WD",
     "AM250D": "L250 Deluxe", # ?
     "AM250L": "L250i Elite",
     "AM250P": "L250i Elite S+",# ?
