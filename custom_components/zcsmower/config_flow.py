@@ -1,8 +1,6 @@
 """Adds config flow for ZCS Lawn Mower Robot."""
 from __future__ import annotations
 
-from copy import deepcopy
-
 from homeassistant.core import (
     callback,
     HomeAssistant,
@@ -18,13 +16,17 @@ from homeassistant.const import (
     CONF_NAME
 )
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import (
+    config_validation as cv,
+    device_registry as dr,
+    entity_registry as er,
+    selector,
+)
 from homeassistant.helpers.aiohttp_client import (
     async_create_clientsession,
     async_get_clientsession,
 )
-import homeassistant.helpers.config_validation as cv
+from homeassistant.util import slugify
 import voluptuous as vol
 
 from .const import (
@@ -87,11 +89,10 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 1
+    VERSION = 2
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     data: dict[str, any] | None
-    options: dict[str, any] | None
 
     async def async_step_user(
         self,
@@ -101,25 +102,29 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
         if user_input is not None:
             try:
-                await validate_auth(user_input[CONF_CLIENT_KEY], self.hass)
+                await validate_auth(
+                    client_key=user_input[CONF_CLIENT_KEY],
+                    hass=self.hass,
+                )
             except ValueError as exception:
                 LOGGER.info(exception)
-                errors["base"] = "invalid_key"
+                errors["base"] = "key_invalid"
             except ZcsMowerApiAuthenticationError as exception:
                 LOGGER.error(exception)
-                errors["base"] = "auth"
-            except (ZcsMowerApiCommunicationError, ZcsMowerApiError) as exception:
+                errors["base"] = "auth_failed"
+            except ZcsMowerApiCommunicationError as exception:
                 LOGGER.error(exception)
-                errors["base"] = "connection"
-            except Exception as exception:
+                errors["base"] = "communication_failed"
+            except (Exception, ZcsMowerApiError) as exception:
                 LOGGER.exception(exception)
-                errors["base"] = "connection"
+                errors["base"] = "connection_failed"
 
             if not errors:
                 # Input is valid, set data
-                self.data = user_input
-                self.options = {
-                    CONF_MOWERS: {}
+                self.data = {
+                    CONF_NAME: user_input[CONF_NAME],
+                    CONF_CLIENT_KEY: user_input[CONF_CLIENT_KEY],
+                    CONF_MOWERS: {},
                 }
                 # Return the form of the next step
                 return await self.async_step_mower()
@@ -129,12 +134,20 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(
                         CONF_NAME,
-                        default=(user_input or {}).get(CONF_NAME),
-                    ): cv.string,
+                        default=(user_input or {}).get(CONF_NAME, ""),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
                     vol.Required(
                         CONF_CLIENT_KEY,
-                        default=(user_input or {}).get(CONF_CLIENT_KEY),
-                    ): cv.string,
+                        default=(user_input or {}).get(CONF_CLIENT_KEY, ""),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
                 }
             ),
             errors=errors,
@@ -156,14 +169,17 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 )
             except ValueError as exception:
                 LOGGER.info(exception)
-                errors["base"] = "invalid_imei"
-            except Exception as exception:
+                errors["base"] = "imei_invalid"
+            except ZcsMowerApiCommunicationError as exception:
+                LOGGER.error(exception)
+                errors["base"] = "communication_failed"
+            except (Exception, ZcsMowerApiError) as exception:
                 LOGGER.exception(exception)
-                errors["base"] = "connection"
+                errors["base"] = "connection_failed"
 
             if not errors:
                 # Input is valid, set data.
-                self.options[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(
+                self.data[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(
                     CONF_NAME,
                     user_input[CONF_IMEI],
                 )
@@ -176,21 +192,28 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 return self.async_create_entry(
                     title=self.data[CONF_NAME],
                     data=self.data,
-                    options=self.options,
                 )
         return self.async_show_form(
             step_id="mower",
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_IMEI
-                    ): cv.string,
+                        CONF_IMEI,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
                     vol.Optional(
-                        CONF_NAME
-                    ): cv.string,
+                        CONF_NAME,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
                     vol.Optional(
-                        "add_another"
-                    ): cv.boolean,
+                        "add_another",
+                    ): selector.BooleanSelector(),
                 }
             ),
             errors=errors,
@@ -200,39 +223,216 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry):
         """Get the options flow for this handler."""
-        return OptionsFlowHandler(config_entry)
+        return ZcsMowerOptionsFlowHandler(config_entry)
 
 
-class OptionsFlowHandler(OptionsFlow):
+class ZcsMowerOptionsFlowHandler(OptionsFlow):
     """Handles options flow for the component."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
         self.config_entry = config_entry
         self.data = dict(config_entry.data)
-        self.options = dict(config_entry.options)
 
     async def async_step_init(
         self,
-        user_input: dict[str, any] = None
-    ) -> dict[str, any]:
-        """Manage the options for the custom component."""
-        errors: dict[str, str] = {}
-        mowers: dict = self.options[CONF_MOWERS]
-        device_registry = dr.async_get(self.hass)
-        entity_registry = er.async_get(self.hass)
+        user_input: dict | None = None
+    ) -> FlowResult:
+        """Show options menu for the ZCS Lawn Mower Robot component."""
+        return self.async_show_menu(
+            step_id="init",
+            menu_options=[
+                "add",
+                "change",
+                "delete",
+                "settings",
+            ],
+        )
 
+    async def async_step_add(
+        self,
+        user_input: dict | None = None
+    ) -> FlowResult:
+        """Add a lawn mower to the garage."""
+        errors: dict[str, str] = {}
         if user_input is not None:
-            updated_mowers = deepcopy(self.config_entry.options[CONF_MOWERS])
-            mowers_remove = [
-                _imei
-                for _imei in mowers
-                if _imei not in user_input[CONF_MOWERS]
-            ]
-            for _imei in mowers_remove:
-                device = device_registry.async_get_device({(DOMAIN, _imei)})
+            if user_input[CONF_IMEI] in self.data[CONF_MOWERS]:
+                errors["base"] = "imei_exists"
+            elif (
+                user_input[CONF_NAME] 
+                and user_input[CONF_NAME] in self.data[CONF_MOWERS].values()
+            ):
+                errors["base"] = "name_exists"
+            else:
+                # Validate the IMEI
+                try:
+                    await validate_imei(
+                        imei=user_input[CONF_IMEI],
+                        client_key=self.data[CONF_CLIENT_KEY],
+                        hass=self.hass,
+                    )
+                except ValueError as exception:
+                    LOGGER.info(exception)
+                    errors["base"] = "imei_invalid"
+                except ZcsMowerApiCommunicationError as exception:
+                    LOGGER.error(exception)
+                    errors["base"] = "communication_failed"
+                except (Exception, ZcsMowerApiError) as exception:
+                    LOGGER.exception(exception)
+                    errors["base"] = "connection_failed"
+
+            if not errors:
+                # Input is valid, set data
+                self.data[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(
+                    CONF_NAME,
+                    user_input[CONF_IMEI],
+                )
+                return self.async_create_entry(
+                    title=self.data[CONF_NAME],
+                    data=self.data,
+                )
+
+        return self.async_show_form(
+            step_id="add",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_IMEI,
+                        default=(user_input or {}).get(CONF_IMEI, ""),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Optional(
+                        CONF_NAME,
+                        default=(user_input or {}).get(CONF_NAME, ""),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                }
+            ),
+            errors=errors,
+        )
+
+    async def async_step_change(
+        self,
+        user_input: dict | None = None
+    ) -> FlowResult:
+        """Change a lawn mower from the garage."""
+        errors: dict[str, str] = {}
+        last_step = False
+        form_schema = {
+            vol.Required(
+                CONF_IMEI,
+                default=(user_input or {}).get(CONF_IMEI, ""),
+            ): selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=[
+                        selector.SelectOptionDict(
+                            value=imei,
+                            label=f"{name} ({imei})",
+                        )
+                        for imei, name in self.data[CONF_MOWERS].items()
+                    ],
+                    mode=selector.SelectSelectorMode.DROPDOWN,
+                    translation_key=CONF_IMEI,
+                    multiple=False,
+                )
+            ),
+        }
+        if user_input is not None:
+            if user_input[CONF_IMEI] not in self.data[CONF_MOWERS]:
+                errors["base"] = "imei_not_exists"
+            else:
+                last_step = True
+                mower_imei = user_input[CONF_IMEI]
+                if CONF_NAME not in user_input:
+                    mower_name = self.data[CONF_MOWERS][mower_imei]
+                else:
+                    mower_name = user_input[CONF_NAME]
+                    if (
+                        mower_name != self.data[CONF_MOWERS][mower_imei]
+                        and mower_name in self.data[CONF_MOWERS].values()
+                    ):
+                        errors["base"] = "name_exists"
+
+                    if not errors:
+                        old_identifier = slugify(f"{mower_imei}_{self.data[CONF_MOWERS][mower_imei]}")
+                        new_identifier = slugify(f"{mower_imei}_{mower_name}")
+
+                        device_registry = dr.async_get(self.hass)
+                        device = device_registry.async_get_device({(DOMAIN, mower_imei)})
+                        if not device:
+                            return self.async_abort(reason="device_error")
+
+                        entity_registry = er.async_get(self.hass)
+                        entries = er.async_entries_for_device(
+                            registry=entity_registry,
+                            device_id=device.id,
+                            include_disabled_entities=False,
+                        )
+                        for e in entries:
+                            LOGGER.debug(e)
+                            entity_registry.async_update_entity(
+                                e.entity_id,
+                                new_entity_id=e.entity_id.replace(old_identifier, new_identifier),
+                                new_unique_id=e.unique_id.replace(old_identifier, new_identifier),
+                                original_name=mower_name,
+                            )
+                        device_registry.async_update_device(
+                            device.id,
+                            name=mower_name,
+                        )
+                        self.data[CONF_MOWERS][mower_imei] = mower_name
+
+                        # Input is valid, set data
+                        return self.async_create_entry(
+                            title=self.data[CONF_NAME],
+                            data=self.data,
+                        )
+                form_schema.update(
+                    {
+                        vol.Required(
+                            CONF_NAME,
+                            default=mower_name,
+                        ): selector.TextSelector(
+                            selector.TextSelectorConfig(
+                                type=selector.TextSelectorType.TEXT
+                            ),
+                        ),
+                    }
+                )
+        return self.async_show_form(
+            step_id="change",
+            data_schema=vol.Schema(form_schema),
+            errors=errors,
+            last_step=last_step,
+        )
+
+    async def async_step_delete(
+        self,
+        user_input: dict | None = None
+    ) -> FlowResult:
+        """Delete a lawn mower from the garage."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            if len(self.data[CONF_MOWERS]) == 1:
+                errors["base"] = "last_mower"
+            elif user_input[CONF_IMEI] not in self.data[CONF_MOWERS]:
+                errors["base"] = "imei_not_exists"
+            elif user_input["confirm"] is not True:
+                errors["base"] = "delete_not_confirmed"
+
+            if not errors:
+                device_registry = dr.async_get(self.hass)
+                device = device_registry.async_get_device({(DOMAIN, user_input[CONF_IMEI])})
                 if not device:
-                    continue
+                    return self.async_abort(reason="device_error")
+
+                entity_registry = er.async_get(self.hass)
                 entries = er.async_entries_for_device(
                     registry=entity_registry,
                     device_id=device.id,
@@ -243,53 +443,100 @@ class OptionsFlowHandler(OptionsFlow):
                     for e in entries
                 ]
                 device_registry.async_remove_device(device.id)
-                updated_mowers.pop(_imei)
+                self.data[CONF_MOWERS].pop(user_input[CONF_IMEI])
 
-            # add new lawn mower
-            if user_input.get(CONF_IMEI):
-                try:
-                    # Validate the imei.
-                    client_key = self.config_entry.data[CONF_CLIENT_KEY]
-                    await validate_imei(
-                        imei=user_input[CONF_IMEI],
-                        client_key=client_key,
-                        hass=self.hass
-                    )
-                except ValueError as exception:
-                    LOGGER.info(exception)
-                    errors["base"] = "invalid_imei"
-                except Exception as exception:
-                    LOGGER.exception(exception)
-                    errors["base"] = "connection"
-
-                if not errors:
-                    # Add the new lawn mower
-                    updated_mowers[user_input[CONF_IMEI]] = user_input.get(
-                        CONF_NAME,
-                        user_input[CONF_IMEI],
-                    )
-            self.options[CONF_MOWERS] = updated_mowers
-
-            if not errors:
-                # Value of data will be set on the options property of our
-                # config_entry instance.
-                self.options.update()
+                # Input is valid, set data
                 return self.async_create_entry(
                     title=self.data[CONF_NAME],
-                    data=self.options,
+                    data=self.data,
                 )
         return self.async_show_form(
-            step_id="init",
+            step_id="delete",
             data_schema=vol.Schema(
                 {
-                    vol.Optional(
-                        CONF_MOWERS,
-                        default=list(mowers.keys())
-                    ): cv.multi_select(
-                        mowers,
+                    vol.Required(
+                        CONF_IMEI,
+                        default=(user_input or {}).get(CONF_IMEI, ""),
+                    ): selector.SelectSelector(
+                        selector.SelectSelectorConfig(
+                            options=[
+                                selector.SelectOptionDict(
+                                    value=imei,
+                                    label=f"{name} ({imei})",
+                                )
+                                for imei, name in self.data[CONF_MOWERS].items()
+                            ],
+                            mode=selector.SelectSelectorMode.DROPDOWN,
+                            translation_key=CONF_IMEI,
+                            multiple=False,
+                        )
                     ),
-                    vol.Optional(CONF_IMEI): cv.string,
-                    vol.Optional(CONF_NAME): cv.string,
+                    vol.Required(
+                        "confirm",
+                        default=False,
+                    ): selector.BooleanSelector(),
+                }
+            ),
+            errors=errors,
+        )
+
+    async def async_step_settings(
+        self,
+        user_input: dict | None = None
+    ) -> FlowResult:
+        """Manage the ZCS Lawn Mower Robot settings."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            try:
+                await validate_auth(
+                    client_key=user_input[CONF_CLIENT_KEY],
+                    hass=self.hass,
+                )
+            except ValueError as exception:
+                LOGGER.info(exception)
+                errors["base"] = "key_invalid"
+            except ZcsMowerApiAuthenticationError as exception:
+                LOGGER.error(exception)
+                errors["base"] = "auth_failed"
+            except (ZcsMowerApiCommunicationError, ZcsMowerApiError) as exception:
+                LOGGER.error(exception)
+                errors["base"] = "connection_failed"
+            except Exception as exception:
+                LOGGER.exception(exception)
+                errors["base"] = "connection_failed"
+
+            if not errors:
+                # Input is valid, set data
+                self.data.update(
+                    {
+                        CONF_NAME: user_input[CONF_NAME],
+                        CONF_CLIENT_KEY: user_input[CONF_CLIENT_KEY],
+                    }
+                )
+                return self.async_create_entry(
+                    title=self.data[CONF_NAME],
+                    data=self.data,
+                )
+        return self.async_show_form(
+            step_id="settings",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_NAME,
+                        default=(user_input or self.data).get(CONF_NAME, ""),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Required(
+                        CONF_CLIENT_KEY,
+                        default=(user_input or self.data).get(CONF_CLIENT_KEY, ""),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
                 }
             ),
             errors=errors,

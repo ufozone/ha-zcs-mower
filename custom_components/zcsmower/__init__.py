@@ -31,7 +31,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator = ZcsMowerDataUpdateCoordinator(
-        mowers=entry.options[CONF_MOWERS],
+        mowers=entry.data[CONF_MOWERS],
         hass=hass,
         client=ZcsMowerApiClient(
             session=async_get_clientsession(hass),

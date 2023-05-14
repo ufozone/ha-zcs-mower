@@ -1,17 +1,18 @@
 {
   "config": {
     "error": {
-      "invalid_key": "The client key provided is not valid.",
-      "auth": "Authorization failed.",
-      "connection": "Unable to connect to the server.",
-      "invalid_imei": "The IMEI provided is not valid."
+      "key_invalid": "The client key provided is not valid.",
+      "auth_failed": "Authorization failed.",
+      "communication_failed": "Action could not be executed.",
+      "connection_failed": "Unable to connect to the server.",
+      "imei_invalid": "The IMEI provided is not valid."
     },
     "step": {
       "user": {
         "title": "Authentication",
-        "description": "Enter your client key from mobile app.",
+        "description": "Enter your garage name client key from mobile app.",
         "data": {
-          "name": "Name",
+          "name": "Garage Name",
           "client_key": "Client Key"
         }
       },
@@ -28,16 +29,58 @@
   },
   "options": {
     "error": {
-      "invalid_imei": "The IMEI provided is not valid."
+      "key_invalid": "The client key provided is not valid.",
+      "auth_failed": "Authorization failed.",
+      "communication_failed": "Action could not be executed.",
+      "connection_failed": "Unable to connect to the server.",
+      "imei_invalid": "The IMEI provided is not valid.",
+      "imei_exists": "A lawn mower with this IMEI already exists.",
+      "name_exists": "A lawn mower with this name already exists.",
+      "imei_not_exists": "A lawn mower with this IMEI does not exists.",
+      "delete_not_confirmed": "Deletion of lawn mower was not confirmed.",
+      "last_mower": "Last lawn mower cannot be deleted."
     },
     "step": {
       "init": {
         "title": "Manage lawn mowers",
-        "description": "Remove existing lawn mowers or add a new lawn mower.",
+        "description": "Manage your lawn mower(s) and settings.",
+        "menu_options": {
+          "add": "Add Robot Mower",
+          "change": "Change Robot Mower",
+          "delete": "Remove Robot Mower",
+          "settings": "Update Settings"
+        }
+      },
+      "add": {
+        "title": "Add lawn mower",
+        "description": "Add another lawn mower:",
         "data": {
-          "mowers": "Existing mower: Uncheck any lawn mower you want to remove.",
-          "imei": "New mower: IMEI of lawn mower",
-          "name": "New mower: Name of lawn mower"
+          "name": "Name of lawn mower",
+          "imei": "IMEI of lawn mower"
+        }
+      },
+      "change": {
+        "title": "Change lawn mower",
+        "description": "Change a lawn mower:",
+        "data": {
+          "imei": "Select lawn mower",
+          "name": "Name of lawn mower"
+        }
+      },
+      "delete": {
+        "title": "Delete lawn mower",
+        "description": "Delete a lawn mower:",
+        "data": {
+          "imei": "Select lawn mower",
+          "confirm": "Confirm deletion"
+        }
+      },
+      "settings": {
+        "title": "Authentication",
+        "description": "Enter your garage name client key from mobile app:",
+        "data": {
+          "name": "Garage Name",
+          "client_key": "Client Key"
         }
       }
     }
