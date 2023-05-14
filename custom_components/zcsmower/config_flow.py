@@ -17,7 +17,6 @@ from homeassistant.const import (
 )
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import (
-    config_validation as cv,
     device_registry as dr,
     entity_registry as er,
     selector,
@@ -26,7 +25,6 @@ from homeassistant.helpers.aiohttp_client import (
     async_create_clientsession,
     async_get_clientsession,
 )
-from homeassistant.util import slugify
 import voluptuous as vol
 
 from .const import (
@@ -259,7 +257,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
             if user_input[CONF_IMEI] in self.data[CONF_MOWERS]:
                 errors["base"] = "imei_exists"
             elif (
-                user_input[CONF_NAME] 
+                user_input[CONF_NAME]
                 and user_input[CONF_NAME] in self.data[CONF_MOWERS].values()
             ):
                 errors["base"] = "name_exists"
