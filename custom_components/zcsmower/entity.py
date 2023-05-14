@@ -46,9 +46,9 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._entity_type = entity_type
         self._entity_key = entity_key
         if entity_key:
-            self._unique_id = slugify(f"{self._imei}_{self._name}_{entity_key}")
+            self._unique_id = slugify(f"mower_{self._imei}_{entity_key}")
         else:
-            self._unique_id = slugify(f"{self._imei}_{self._name}")
+            self._unique_id = slugify(f"mower_{self._imei}")
         self._additional_extra_state_attributes = {}
 
         self.entity_id = f"{entity_type}.{self._unique_id}"

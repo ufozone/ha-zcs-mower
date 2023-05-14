@@ -360,13 +360,11 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                         errors["base"] = "name_exists"
 
                     if not errors:
-                        old_identifier = slugify(f"{mower_imei}_{self.data[CONF_MOWERS][mower_imei]}")
-                        new_identifier = slugify(f"{mower_imei}_{mower_name}")
-
                         device_registry = dr.async_get(self.hass)
                         device = device_registry.async_get_device({(DOMAIN, mower_imei)})
                         if not device:
                             return self.async_abort(reason="device_error")
+                        LOGGER.debug(device)
 
                         entity_registry = er.async_get(self.hass)
                         entries = er.async_entries_for_device(
@@ -374,14 +372,13 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                             device_id=device.id,
                             include_disabled_entities=False,
                         )
-                        for e in entries:
-                            LOGGER.debug(e)
+                        [
                             entity_registry.async_update_entity(
                                 e.entity_id,
-                                new_entity_id=e.entity_id.replace(old_identifier, new_identifier),
-                                new_unique_id=e.unique_id.replace(old_identifier, new_identifier),
                                 original_name=mower_name,
                             )
+                            for e in entries
+                        ]
                         device_registry.async_update_device(
                             device.id,
                             name=mower_name,
@@ -431,6 +428,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                 device = device_registry.async_get_device({(DOMAIN, user_input[CONF_IMEI])})
                 if not device:
                     return self.async_abort(reason="device_error")
+                LOGGER.debug(device)
 
                 entity_registry = er.async_get(self.hass)
                 entries = er.async_entries_for_device(
