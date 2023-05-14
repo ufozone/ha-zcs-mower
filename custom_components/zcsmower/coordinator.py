@@ -281,7 +281,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                         mower[ATTR_MODEL] = ROBOT_MODELS[mower[ATTR_MODEL]]
             # In some cases, program_version is not available
             if "program_version" in data["attrs"]:
-                mower[ATTR_SW_VERSION] = data["attrs"]["program_version"]["value"]
+                _revision = data["attrs"]["program_version"]["value"]
+                mower[ATTR_SW_VERSION] = f"r{_revision}"
         mower[ATTR_CONNECTED] = data.get("connected", False)
         if "lastCommunication" in data:
             mower[ATTR_LAST_COMM] = self._convert_datetime_from_api(data["lastCommunication"])
