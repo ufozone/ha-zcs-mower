@@ -13,7 +13,18 @@
         "description": "Enter your garage name client key from mobile app.",
         "data": {
           "name": "Garage Name",
-          "client_key": "Client Key"
+          "client_key": "Client Key",
+          "camera_enable": "Enable map camera"
+        }
+      },
+      "camera": {
+        "title": "Configure map camera",
+        "description": "Camera settings.",
+        "data": {
+          "img_path_map": "Path to the map image",
+          "img_path_mower": "Path to the mower location image",
+          "gps_top_left": "GPS coordinates of the top left image corner",
+          "gps_bottom_right": "GPS coordinates of the bottom right image corner"
         }
       },
       "mower": {
@@ -48,7 +59,8 @@
           "add": "Add Robot Mower",
           "change": "Change Robot Mower",
           "delete": "Remove Robot Mower",
-          "settings": "Update Settings"
+          "camera": "Map Cam Settings",
+          "settings": "Authentication Settings"
         }
       },
       "add": {
@@ -75,11 +87,21 @@
           "confirm": "Confirm deletion"
         }
       },
+      "camera": {
+        "title": "Configure map camera",
+        "description": "Camera settings.",
+        "data": {
+          "camera_enable": "Enable map camera",
+          "img_path_map": "Path to the map image",
+          "img_path_mower": "Path to the mower location image",
+          "gps_top_left": "GPS coordinates of the top left image corner",
+          "gps_bottom_right": "GPS coordinates of the bottom right image corner"
+        }
+      },
       "settings": {
         "title": "Authentication",
-        "description": "Enter your garage name client key from mobile app:",
+        "description": "Enter your client key from mobile app:",
         "data": {
-          "name": "Garage Name",
           "client_key": "Client Key"
         }
       }

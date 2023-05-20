@@ -1,6 +1,8 @@
 """Adds config flow for ZCS Lawn Mower Robot."""
 from __future__ import annotations
 
+import os
+
 from homeassistant.core import (
     callback,
     HomeAssistant,
@@ -9,11 +11,12 @@ from homeassistant.core import (
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
-    OptionsFlow,
+    OptionsFlowWithConfigEntry,
     CONN_CLASS_CLOUD_POLL,
 )
 from homeassistant.const import (
-    CONF_NAME
+    CONF_NAME,
+    ATTR_NAME,
 )
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import (
@@ -33,8 +36,13 @@ from .const import (
     API_BASE_URI,
     API_APP_TOKEN,
     CONF_CLIENT_KEY,
-    CONF_IMEI,
+    CONF_CAMERA_ENABLE,
+    CONF_IMG_PATH_MAP,
+    CONF_IMG_PATH_MOWER,
+    CONF_GPS_TOP_LEFT,
+    CONF_GPS_BOTTOM_RIGHT,
     CONF_MOWERS,
+    ATTR_IMEI,
 )
 from .api import (
     ZcsMowerApiClient,
@@ -87,10 +95,11 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 2
+    VERSION = 3
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
-    data: dict[str, any] | None
+    title: str | None
+    options: dict[str, any] | None
 
     async def async_step_user(
         self,
@@ -118,13 +127,22 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "connection_failed"
 
             if not errors:
-                # Input is valid, set data
-                self.data = {
-                    CONF_NAME: user_input[CONF_NAME],
-                    CONF_CLIENT_KEY: user_input[CONF_CLIENT_KEY],
+                # Input is valid, set data and options
+                self.title = user_input.get(CONF_NAME, "")
+                self.options = {
+                    CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, ""),
+                    CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
+                    CONF_IMG_PATH_MAP: "",
+                    CONF_IMG_PATH_MOWER: "",
+                    CONF_GPS_TOP_LEFT: "",
+                    CONF_GPS_BOTTOM_RIGHT: "",
                     CONF_MOWERS: {},
                 }
+                LOGGER.debug(self.options)
                 # Return the form of the next step
+                # If user ticked the box go to camera step
+                if user_input.get(CONF_CAMERA_ENABLE, False):
+                    return await self.async_step_camera()
                 return await self.async_step_mower()
         return self.async_show_form(
             step_id="user",
@@ -146,6 +164,71 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
+                    # TODO: camera
+                    #vol.Optional(
+                    #    CONF_CAMERA_ENABLE,
+                    #): selector.BooleanSelector(),
+                }
+            ),
+            errors=errors,
+        )
+
+    async def async_step_camera(
+        self,
+        user_input: dict[str, any] | None = None,
+    ) -> FlowResult:
+        """Second step in config flow to configure camera."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            self.options[CONF_IMG_PATH_MAP] = user_input.get(CONF_IMG_PATH_MAP)
+            self.options[CONF_IMG_PATH_MOWER] = user_input.get(CONF_IMG_PATH_MOWER)
+            if user_input.get(CONF_GPS_TOP_LEFT):
+                self.options[CONF_GPS_TOP_LEFT] = [
+                    float(x.strip())
+                    for x in user_input.get(CONF_GPS_TOP_LEFT).split(",")
+                    if x
+                ]
+            if user_input.get(CONF_GPS_BOTTOM_RIGHT):
+                self.options[CONF_GPS_BOTTOM_RIGHT] = [
+                    float(x.strip())
+                    for x in user_input.get(CONF_GPS_BOTTOM_RIGHT).split(",")
+                    if x
+                ]
+            LOGGER.debug(self.options)
+            # Return the form of the next step
+            return await self.async_step_mower()
+        return self.async_show_form(
+            step_id="camera",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_IMG_PATH_MAP,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Required(
+                        CONF_IMG_PATH_MOWER,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Required(
+                        CONF_GPS_TOP_LEFT,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Required(
+                        CONF_GPS_BOTTOM_RIGHT,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
                 }
             ),
             errors=errors,
@@ -155,14 +238,14 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         self,
         user_input: dict[str, any] | None = None,
     ) -> FlowResult:
-        """Second step in config flow to add a lawn mower."""
+        """Second/third step in config flow to add a lawn mower."""
         errors: dict[str, str] = {}
         if user_input is not None:
             # Validate the IMEI
             try:
                 await validate_imei(
-                    imei=user_input[CONF_IMEI],
-                    client_key=self.data[CONF_CLIENT_KEY],
+                    imei=user_input[ATTR_IMEI],
+                    client_key=self.options[CONF_CLIENT_KEY],
                     hass=self.hass
                 )
             except ValueError as exception:
@@ -177,10 +260,11 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
             if not errors:
                 # Input is valid, set data.
-                self.data[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(
-                    CONF_NAME,
-                    user_input[CONF_IMEI],
+                self.options[CONF_MOWERS][user_input[ATTR_IMEI]] = user_input.get(
+                    ATTR_NAME,
+                    user_input[ATTR_IMEI],
                 )
+                LOGGER.debug(self.options)
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
                 if user_input.get("add_another", False):
@@ -188,22 +272,23 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
                 # User is done adding lawn mowers, create the config entry.
                 return self.async_create_entry(
-                    title=self.data[CONF_NAME],
-                    data=self.data,
+                    title=self.title,
+                    data={},
+                    options=self.options,
                 )
         return self.async_show_form(
             step_id="mower",
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_IMEI,
+                        ATTR_IMEI,
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
                     vol.Optional(
-                        CONF_NAME,
+                        ATTR_NAME,
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -219,18 +304,20 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry):
+    def async_get_options_flow(config_entry) -> ZcsMowerOptionsFlowHandler:
         """Get the options flow for this handler."""
         return ZcsMowerOptionsFlowHandler(config_entry)
 
 
-class ZcsMowerOptionsFlowHandler(OptionsFlow):
+class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     """Handles options flow for the component."""
+
+    VERSION = 3
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
-        self.config_entry = config_entry
-        self.data = dict(config_entry.data)
+        super().__init__(config_entry)
+        self.base_path = os.path.dirname(__file__)
 
     async def async_step_init(
         self,
@@ -243,6 +330,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                 "add",
                 "change",
                 "delete",
+                # TODO: camera
+                #"camera",
                 "settings",
             ],
         )
@@ -254,19 +343,19 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
         """Add a lawn mower to the garage."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            if user_input[CONF_IMEI] in self.data[CONF_MOWERS]:
+            if user_input[ATTR_IMEI] in self._options[CONF_MOWERS]:
                 errors["base"] = "imei_exists"
             elif (
-                user_input[CONF_NAME]
-                and user_input[CONF_NAME] in self.data[CONF_MOWERS].values()
+                user_input[ATTR_NAME]
+                and user_input[ATTR_NAME] in self._options[CONF_MOWERS].values()
             ):
                 errors["base"] = "name_exists"
             else:
                 # Validate the IMEI
                 try:
                     await validate_imei(
-                        imei=user_input[CONF_IMEI],
-                        client_key=self.data[CONF_CLIENT_KEY],
+                        imei=user_input[ATTR_IMEI],
+                        client_key=self._options[CONF_CLIENT_KEY],
                         hass=self.hass,
                     )
                 except ValueError as exception:
@@ -281,30 +370,30 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
 
             if not errors:
                 # Input is valid, set data
-                self.data[CONF_MOWERS][user_input[CONF_IMEI]] = user_input.get(
-                    CONF_NAME,
-                    user_input[CONF_IMEI],
+                self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = user_input.get(
+                    ATTR_NAME,
+                    user_input[ATTR_IMEI],
                 )
+                LOGGER.debug(self._options)
                 return self.async_create_entry(
-                    title=self.data[CONF_NAME],
-                    data=self.data,
+                    title="",
+                    data=self._options,
                 )
-
         return self.async_show_form(
             step_id="add",
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_IMEI,
-                        default=(user_input or {}).get(CONF_IMEI, ""),
+                        ATTR_IMEI,
+                        default=(user_input or {}).get(ATTR_IMEI, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
                     vol.Optional(
-                        CONF_NAME,
-                        default=(user_input or {}).get(CONF_NAME, ""),
+                        ATTR_NAME,
+                        default=(user_input or {}).get(ATTR_NAME, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -324,8 +413,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
         last_step = False
         form_schema = {
             vol.Required(
-                CONF_IMEI,
-                default=(user_input or {}).get(CONF_IMEI, ""),
+                ATTR_IMEI,
+                default=(user_input or {}).get(ATTR_IMEI, ""),
             ): selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     options=[
@@ -333,27 +422,27 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                             value=imei,
                             label=f"{name} ({imei})",
                         )
-                        for imei, name in self.data[CONF_MOWERS].items()
+                        for imei, name in self._options[CONF_MOWERS].items()
                     ],
                     mode=selector.SelectSelectorMode.DROPDOWN,
-                    translation_key=CONF_IMEI,
+                    translation_key=ATTR_IMEI,
                     multiple=False,
                 )
             ),
         }
         if user_input is not None:
-            if user_input[CONF_IMEI] not in self.data[CONF_MOWERS]:
+            if user_input[ATTR_IMEI] not in self._options[CONF_MOWERS]:
                 errors["base"] = "imei_not_exists"
             else:
                 last_step = True
-                mower_imei = user_input[CONF_IMEI]
-                if CONF_NAME not in user_input:
-                    mower_name = self.data[CONF_MOWERS][mower_imei]
+                mower_imei = user_input[ATTR_IMEI]
+                if ATTR_NAME not in user_input:
+                    mower_name = self._options[CONF_MOWERS][mower_imei]
                 else:
-                    mower_name = user_input[CONF_NAME]
+                    mower_name = user_input[ATTR_NAME]
                     if (
-                        mower_name != self.data[CONF_MOWERS][mower_imei]
-                        and mower_name in self.data[CONF_MOWERS].values()
+                        mower_name != self._options[CONF_MOWERS][mower_imei]
+                        and mower_name in self._options[CONF_MOWERS].values()
                     ):
                         errors["base"] = "name_exists"
 
@@ -381,17 +470,18 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                             device.id,
                             name=mower_name,
                         )
-                        self.data[CONF_MOWERS][mower_imei] = mower_name
+                        self._options[CONF_MOWERS][mower_imei] = mower_name
 
                         # Input is valid, set data
+                        LOGGER.debug(self._options)
                         return self.async_create_entry(
-                            title=self.data[CONF_NAME],
-                            data=self.data,
+                            title="",
+                            data=self._options,
                         )
                 form_schema.update(
                     {
                         vol.Required(
-                            CONF_NAME,
+                            ATTR_NAME,
                             default=mower_name,
                         ): selector.TextSelector(
                             selector.TextSelectorConfig(
@@ -414,16 +504,16 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
         """Delete a lawn mower from the garage."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            if len(self.data[CONF_MOWERS]) == 1:
+            if len(self._options[CONF_MOWERS]) == 1:
                 errors["base"] = "last_mower"
-            elif user_input[CONF_IMEI] not in self.data[CONF_MOWERS]:
+            elif user_input[ATTR_IMEI] not in self._options[CONF_MOWERS]:
                 errors["base"] = "imei_not_exists"
             elif user_input["confirm"] is not True:
                 errors["base"] = "delete_not_confirmed"
 
             if not errors:
                 device_registry = dr.async_get(self.hass)
-                device = device_registry.async_get_device({(DOMAIN, user_input[CONF_IMEI])})
+                device = device_registry.async_get_device({(DOMAIN, user_input[ATTR_IMEI])})
                 if not device:
                     return self.async_abort(reason="device_error")
                 LOGGER.debug(device)
@@ -439,20 +529,21 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                     for e in entries
                 ]
                 device_registry.async_remove_device(device.id)
-                self.data[CONF_MOWERS].pop(user_input[CONF_IMEI])
+                self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
 
                 # Input is valid, set data
+                LOGGER.debug(self._options)
                 return self.async_create_entry(
-                    title=self.data[CONF_NAME],
-                    data=self.data,
+                    title="",
+                    data=self._options,
                 )
         return self.async_show_form(
             step_id="delete",
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_IMEI,
-                        default=(user_input or {}).get(CONF_IMEI, ""),
+                        ATTR_IMEI,
+                        default=(user_input or {}).get(ATTR_IMEI, ""),
                     ): selector.SelectSelector(
                         selector.SelectSelectorConfig(
                             options=[
@@ -460,10 +551,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                                     value=imei,
                                     label=f"{name} ({imei})",
                                 )
-                                for imei, name in self.data[CONF_MOWERS].items()
+                                for imei, name in self._options[CONF_MOWERS].items()
                             ],
                             mode=selector.SelectSelectorMode.DROPDOWN,
-                            translation_key=CONF_IMEI,
+                            translation_key=ATTR_IMEI,
                             multiple=False,
                         )
                     ),
@@ -471,6 +562,98 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                         "confirm",
                         default=False,
                     ): selector.BooleanSelector(),
+                }
+            ),
+            errors=errors,
+        )
+
+    async def async_step_camera(
+        self,
+        user_input: dict | None = None
+    ) -> FlowResult:
+        """Manage the ZCS Lawn Mower Robot map cam settings."""
+        errors: dict[str, str] = {}
+        gps_top_left = self._options.get(CONF_GPS_TOP_LEFT, "")
+        if gps_top_left != "":
+            gps_top_left = ",".join(
+                [str(x) for x in gps_top_left]
+            )
+        gps_bottom_right = self._options.get(CONF_GPS_BOTTOM_RIGHT, "")
+        if gps_bottom_right != "":
+            gps_bottom_right = ",".join(
+                [str(x) for x in gps_bottom_right]
+            )
+        if user_input is not None:
+            if not errors:
+                # Input is valid, set data
+                self._options.update(
+                    {
+                        CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
+                        CONF_IMG_PATH_MAP: user_input.get(CONF_IMG_PATH_MAP),
+                        CONF_IMG_PATH_MOWER: user_input.get(CONF_IMG_PATH_MOWER),
+                    }
+                )
+                if user_input.get(CONF_GPS_TOP_LEFT):
+                    gps_top_left = user_input.get(CONF_GPS_TOP_LEFT)
+                    self._options[CONF_GPS_TOP_LEFT] = [
+                        float(x.strip())
+                        for x in user_input.get(CONF_GPS_TOP_LEFT).split(",")
+                        if x
+                    ]
+                if user_input.get(CONF_GPS_BOTTOM_RIGHT):
+                    gps_bottom_right = user_input.get(CONF_GPS_BOTTOM_RIGHT)
+                    self._options[CONF_GPS_BOTTOM_RIGHT] = [
+                        float(x.strip())
+                        for x in user_input.get(CONF_GPS_BOTTOM_RIGHT).split(",")
+                        if x
+                    ]
+
+                LOGGER.debug(self._options)
+                return self.async_create_entry(
+                    title="",
+                    data=self._options,
+                )
+        LOGGER.debug(self._options)
+        return self.async_show_form(
+            step_id="camera",
+            data_schema=vol.Schema(
+                {
+                    vol.Optional(
+                        CONF_CAMERA_ENABLE,
+                        default=(user_input or self._options).get(CONF_CAMERA_ENABLE, False),
+                    ): selector.BooleanSelector(),
+                    vol.Required(
+                        CONF_IMG_PATH_MAP,
+                        default=(user_input or self._options).get(CONF_IMG_PATH_MAP, ""),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Required(
+                        CONF_IMG_PATH_MOWER,
+                        default=(user_input or self._options).get(CONF_IMG_PATH_MAP, ""),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Required(
+                        CONF_GPS_TOP_LEFT,
+                        default=gps_top_left,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Required(
+                        CONF_GPS_BOTTOM_RIGHT,
+                        default=gps_bottom_right,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
                 }
             ),
             errors=errors,
@@ -503,31 +686,23 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
 
             if not errors:
                 # Input is valid, set data
-                self.data.update(
+                self._options.update(
                     {
-                        CONF_NAME: user_input[CONF_NAME],
-                        CONF_CLIENT_KEY: user_input[CONF_CLIENT_KEY],
+                        CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY),
                     }
                 )
+                LOGGER.debug(self._options)
                 return self.async_create_entry(
-                    title=self.data[CONF_NAME],
-                    data=self.data,
+                    title="",
+                    data=self._options,
                 )
         return self.async_show_form(
             step_id="settings",
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_NAME,
-                        default=(user_input or self.data).get(CONF_NAME, ""),
-                    ): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.TEXT
-                        ),
-                    ),
-                    vol.Required(
                         CONF_CLIENT_KEY,
-                        default=(user_input or self.data).get(CONF_CLIENT_KEY, ""),
+                        default=(user_input or self._options).get(CONF_CLIENT_KEY, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
