@@ -164,10 +164,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
-                    # TODO: camera
-                    #vol.Optional(
-                    #    CONF_CAMERA_ENABLE,
-                    #): selector.BooleanSelector(),
+                    vol.Optional(
+                        CONF_CAMERA_ENABLE,
+                    ): selector.BooleanSelector(),
                 }
             ),
             errors=errors,
@@ -330,8 +329,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 "add",
                 "change",
                 "delete",
-                # TODO: camera
-                #"camera",
+                "camera",
                 "settings",
             ],
         )
