@@ -42,7 +42,11 @@ UPDATE_INTERVAL_DEFAULT = 300
 UPDATE_INTERVAL_WORKING = 60
 
 CONF_CLIENT_KEY = "client_key"
-CONF_IMEI = "imei"
+CONF_CAMERA_ENABLE = "camera_enable"
+CONF_IMG_PATH_MAP = "img_path_map"
+CONF_IMG_PATH_MOWER = "img_path_mower"
+CONF_GPS_TOP_LEFT = "gps_top_left"
+CONF_GPS_BOTTOM_RIGHT = "gps_bottom_right"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"

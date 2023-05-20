@@ -6,11 +6,17 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
+    LOGGER,
     DOMAIN,
     PLATFORMS,
     API_BASE_URI,
     API_APP_TOKEN,
     CONF_CLIENT_KEY,
+    CONF_CAMERA_ENABLE,
+    CONF_IMG_PATH_MAP,
+    CONF_IMG_PATH_MOWER,
+    CONF_GPS_TOP_LEFT,
+    CONF_GPS_BOTTOM_RIGHT,
     CONF_MOWERS,
 )
 from .services import async_setup_services
@@ -31,15 +37,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator = ZcsMowerDataUpdateCoordinator(
-        mowers=entry.data[CONF_MOWERS],
+        mowers=entry.options[CONF_MOWERS],
         hass=hass,
         client=ZcsMowerApiClient(
             session=async_get_clientsession(hass),
             options={
                 "endpoint": API_BASE_URI,
-                "app_id": entry.data[CONF_CLIENT_KEY],
+                "app_id": entry.options[CONF_CLIENT_KEY],
                 "app_token": API_APP_TOKEN,
-                "thing_key": entry.data[CONF_CLIENT_KEY]
+                "thing_key": entry.options[CONF_CLIENT_KEY]
             }
         ),
     )
@@ -63,3 +69,27 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)
+
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
+    """Migrate old entry."""
+    LOGGER.debug("Migrating from version %s", config_entry.version)
+
+    if config_entry.version != 3:
+        config_entry.version = 3
+        hass.config_entries.async_update_entry(
+            config_entry,
+            title=str(config_entry.title),
+            data={},
+            options={
+                CONF_CLIENT_KEY: config_entry.data.get(CONF_CLIENT_KEY, ""),
+                CONF_CAMERA_ENABLE: False,
+                CONF_IMG_PATH_MAP: "",
+                CONF_IMG_PATH_MOWER: "",
+                CONF_GPS_TOP_LEFT: "",
+                CONF_GPS_BOTTOM_RIGHT: "",
+                CONF_MOWERS: config_entry.data.get(CONF_MOWERS, {}),
+            },
+        )
+        LOGGER.info("Migration to version %s successful", config_entry.version)
+
+    return True

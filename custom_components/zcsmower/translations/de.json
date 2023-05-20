@@ -13,7 +13,18 @@
         "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel aus der mobilen App ein.",
         "data": {
           "name": "Garagenname",
-          "client_key": "Kundenschlüssel"
+          "client_key": "Kundenschlüssel",
+          "camera_enable": "Kartenkamera aktivieren"
+        }
+      },
+      "camera": {
+        "title": "Konfigurieren der Kartenkamera",
+        "description": "Einstellungen der Kamera.",
+        "data": {
+          "img_path_map": "Pfad zum Kartenbild",
+          "img_path_mower": "Pfad zum Bild des Mäherstandorts",
+          "gps_top_left": "GPS-Koordinaten der oberen linken Bildecke",
+          "gps_bottom_right": "GPS-Koordinaten der unteren rechten Bildecke"
         }
       },
       "mower": {
@@ -48,7 +59,8 @@
           "add": "Rasenmähroboter hinzufügen",
           "change": "Rasenmähroboter bearbeiten",
           "delete": "Rasenmähroboter löschen",
-          "settings": "Einstellungen anpassen"
+          "camera": "Einstellungen der Kartenkamera",
+          "settings": "Einstellungen zur Authentifizierung"
         }
       },
       "add": {
@@ -75,11 +87,21 @@
           "confirm": "Löschung bestätigen"
         }
       },
+      "camera": {
+        "title": "Konfigurieren der Kartenkamera",
+        "description": "Einstellungen der Kamera.",
+        "data": {
+          "camera_enable": "Kartenkamera aktivieren",
+          "img_path_map": "Pfad zum Kartenbild",
+          "img_path_mower": "Pfad zum Bild des Mäherstandorts",
+          "gps_top_left": "GPS-Koordinaten der oberen linken Bildecke",
+          "gps_bottom_right": "GPS-Koordinaten der unteren rechten Bildecke"
+        }
+      },
       "settings": {
         "title": "Authentifizierung",
-        "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel aus der mobilen App ein:",
+        "description": "Gib deinen Kundenschlüssel aus der mobilen App ein:",
         "data": {
-          "name": "Garagenname",
           "client_key": "Kundenschlüssel"
         }
       }
