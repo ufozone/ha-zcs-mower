@@ -2,12 +2,9 @@
 from __future__ import annotations
 
 import io
+import os
 import math
 import numpy as np
-
-from datetime import (
-    timedelta,
-)
 
 from PIL import (
     Image,
@@ -16,7 +13,10 @@ from PIL import (
 
 from collections.abc import Callable
 
-from homeassistant.core import HomeAssistant
+from homeassistant.core import (
+    callback,
+    HomeAssistant,
+)
 from homeassistant.const import (
     ATTR_MANUFACTURER,
     ATTR_MODEL,
@@ -30,26 +30,25 @@ from homeassistant.components.camera import (
     CameraEntityDescription,
     SUPPORT_ON_OFF,
 )
-from homeassistant.components.recorder import (
-    get_instance,
-    history,
-)
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.typing import (
     ConfigType,
     DiscoveryInfoType,
     HomeAssistantType,
 )
-import homeassistant.util.dt as dt_util
 
 from .const import (
     LOGGER,
     DOMAIN,
+    UPDATE_INTERVAL_DEFAULT,
+    UPDATE_INTERVAL_WORKING,
     CONF_CAMERA_ENABLE,
     CONF_IMG_PATH_MAP,
-    CONF_IMG_PATH_MOWER,
+    CONF_IMG_PATH_MARKER,
     CONF_GPS_TOP_LEFT,
     CONF_GPS_BOTTOM_RIGHT,
+    ATTR_WORKING,
+    ATTR_LOCATION_HISTORY,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -101,8 +100,9 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
     """Representation of a ZCS Lawn Mower Robot camera."""
 
     _attr_entity_registry_enabled_default = False
-    _attr_frame_interval: float = 300
+    _attr_frame_interval: float = UPDATE_INTERVAL_DEFAULT
     _attr_name = "Map"
+    _attr_should_poll = True
 
     def __init__(
         self,
@@ -121,81 +121,39 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
             coordinator=coordinator,
             imei=imei,
             name=name,
-            entity_type="sensor",
+            entity_type="camera",
             entity_key=entity_description.key,
         )
+        self.content_type = "image/png"
         self.entity_description = entity_description
-        self._position_history = []
-        self._image = Image.new(mode="RGB", size=(200, 200))
-        self._image_bytes = None
-        self._image_to_bytes()
-        
+
         self.gps_top_left = None
         self.gps_bottom_right = None
 
         if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
             LOGGER.debug("Camera enabled")
-            self.gps_top_left = self.config_entry.options.get(CONF_GPS_TOP_LEFT)
-            self.gps_bottom_right = self.config_entry.options.get(CONF_GPS_BOTTOM_RIGHT)
-            self._generate_image()
+            self.gps_top_left = self.config_entry.options.get(CONF_GPS_TOP_LEFT, None)
+            self.gps_bottom_right = self.config_entry.options.get(CONF_GPS_BOTTOM_RIGHT, None)
         else:
             LOGGER.debug("Camera disabled")
-            lat = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
-            lon = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
-            if lat and lon:
+            latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
+            longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
+            if latitude and longitude:
                 self._attr_entity_registry_enabled_default = True
                 earth_radius = 6371008  # meters
                 offset = 100  # meters
                 pi = 3.14159
-                top_left_lat = lat - (offset / earth_radius) * (180 / pi)
-                top_left_lon = lon - (offset / earth_radius) * (180 / pi) / math.cos(lat * pi / 180)
-                bottom_right_lat = lat + (offset / earth_radius) * (180 / pi)
-                bottom_right_lon = lon + (offset / earth_radius) * (180 / pi) / math.cos(lat * pi / 180)
-                self.gps_top_left = (top_left_lat, top_left_lon)
-                self.gps_bottom_right = (bottom_right_lat, bottom_right_lon)
+                top_left_latitude = latitude - (offset / earth_radius) * (180 / pi)
+                top_left_longitude = longitude - (offset / earth_radius) * (180 / pi) / math.cos(latitude * pi / 180)
+                bottom_right_latitude = latitude + (offset / earth_radius) * (180 / pi)
+                bottom_right_longitude = longitude + (offset / earth_radius) * (180 / pi) / math.cos(latitude * pi / 180)
+                self.gps_top_left = (top_left_latitude, top_left_longitude)
+                self.gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
 
-        _res = history.state_changes_during_period(
-            self.hass,
-            dt_util.now() - timedelta(hours=48),
-            dt_util.now(),
-            "device_tracker.mower_356234104718239",
-            include_start_time_state=True,
-            no_attributes=True,
-        ).get("device_tracker.mower_356234104718239", [])
-        LOGGER.debug(_res)
-
-    def camera_image(
-        self, width: int | None = None, height: int | None = None
-    ) -> bytes | None:
-        """Return the camera image."""
-        return self._image_bytes
-
-    @property
-    def brand(self) -> str | None:
-        """Return the lawn mower brand."""
-        return self._get_attribute(ATTR_MANUFACTURER)
-
-    @property
-    def model(self) -> str:
-        """Return the lawn mower model."""
-        return self._get_attribute(ATTR_MODEL)
-
-    @property
-    def supported_features(self) -> int:
-        """Show supported features."""
-        return SUPPORT_ON_OFF
-
-    def turn_off(self) -> None:
-        """Turn off camera."""
-        raise NotImplementedError()
-
-    async def async_turn_off(self) -> None:
-        """Turn off camera."""
-        await self.hass.async_add_executor_job(self.turn_off)
-
-    def turn_on(self) -> None:
-        """Turn off camera."""
-        raise NotImplementedError()
+        self._image = self._create_empty_map_image("Map camera initialization.")
+        self._image_bytes = None
+        self._image_to_bytes()
+        self._generate_image()
 
     def _image_to_bytes(self) -> None:
         img_byte_arr = io.BytesIO()
@@ -203,27 +161,56 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         self._image_bytes = img_byte_arr.getvalue()
 
     def _generate_image(self) -> None:
-        latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
-        longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
-        if latitude is None or longitude is None:
-            return None
+        if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
+            map_image_path = self.config_entry.options.get(CONF_IMG_PATH_MAP, None)
+            if map_image_path and os.path.isfile(map_image_path):
+                map_image = Image.open(map_image_path, "r")
+            else:
+                map_image = self._create_empty_map_image("No path configured to a map cutout.")
+                LOGGER.warning("No map camera path configured")
+        else:
+            map_image = self._create_empty_map_image("Map camera is disabled.")
+            LOGGER.warning("Map camera is disabled")
 
-        location = (latitude, longitude)
-        #map_image_path = self.entry.options.get(CONF_IMG_PATH_MAP)
-        map_image_path = "/config/custom_components/zcsmower/resources/map_image.png"
-        map_image = Image.open(map_image_path, "r")
-        #overlay_path = self.entry.options.get(CONF_IMG_PATH_MOWER)
-        overlay_path = "/config/custom_components/zcsmower/resources/mower.png"
-        overlay_image = Image.open(overlay_path, "r")
-        x1, y1 = self._scale_to_img(location, (map_image.size[0], map_image.size[1]))
-        img_draw = ImageDraw.Draw(map_image)
-
-
-        overlay_image = overlay_image.resize((64, 64))
-        img_w, img_h = overlay_image.size
-        map_image.paste(
-            overlay_image, (x1 - img_w // 2, y1 - img_h // 2), overlay_image
-        )
+        if self.gps_top_left is not None and self.gps_bottom_right is not None:
+            img_draw = ImageDraw.Draw(map_image)
+            location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
+            if location_history is not None:
+                for i in range(len(location_history) - 1, 0, -1):
+                    point_1 = location_history[i]
+                    scaled_loc_1 = self._scale_to_img(
+                        point_1, (map_image.size[0], map_image.size[1])
+                    )
+                    point_2 = location_history[i - 1]
+                    scaled_loc_2 = self._scale_to_img(
+                        point_2, (map_image.size[0], map_image.size[1])
+                    )
+                    plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
+                    for p in range(0, len(plot_points) - 1, 2):
+                        img_draw.line(
+                            (plot_points[p], plot_points[p + 1]),
+                            fill=(153, 194, 136),
+                            width=2
+                        )
+            latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
+            longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
+            if latitude and longitude:
+                overlay_path = self.config_entry.options.get(CONF_IMG_PATH_MARKER, None)
+                if not overlay_path or not os.path.isfile(overlay_path):
+                    overlay_path = f"{os.path.dirname(__file__)}/resources/marker.png"
+                overlay_image = Image.open(overlay_path, "r")
+                overlay_image = overlay_image.resize((64, 64))
+    
+                location = (latitude, longitude)
+                x1, y1 = self._scale_to_img(location, (map_image.size[0], map_image.size[1]))
+                img_w, img_h = overlay_image.size
+                # TODO: sometimes we get ValueError: bad transparency mask
+                try:
+                    map_image.paste(
+                        overlay_image, (x1 - img_w // 2, y1 - img_h // 2), overlay_image
+                    )
+                except Exception as exception:
+                    LOGGER.exception(exception)
 
         self._image = map_image
         self._image_to_bytes()
@@ -275,3 +262,57 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         new = (0, h_w[0])
         x = ((lat_lon[1] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
         return int(x), h_w[1] - int(y)
+
+    def _create_empty_map_image(self, text: str = "No map") -> ImageType:
+        """Create empty map image."""
+        map_image = Image.new("RGBA", (600, 400), color=(255, 255, 255))
+        img_draw = ImageDraw.Draw(map_image)
+        w, h = img_draw.textsize(text.upper())
+        img_draw.text(((map_image.size[0] - w) / 2, (map_image.size[1] - h) / 2), text.upper(), fill=(0, 0, 0))
+        return map_image
+
+    def camera_image(
+        self, width: int | None = None, height: int | None = None
+    ) -> bytes | None:
+        """Return the camera image."""
+        return self._image_bytes
+
+    @property
+    def brand(self) -> str | None:
+        """Return the lawn mower brand."""
+        return self._get_attribute(ATTR_MANUFACTURER)
+
+    @property
+    def model(self) -> str:
+        """Return the lawn mower model."""
+        return self._get_attribute(ATTR_MODEL)
+
+    @property
+    def supported_features(self) -> int:
+        """Show supported features."""
+        return SUPPORT_ON_OFF
+
+    def turn_off(self) -> None:
+        """Turn off camera."""
+        # TODO
+        raise NotImplementedError()
+
+    def turn_on(self) -> None:
+        """Turn off camera."""
+        # TODO
+        raise NotImplementedError()
+
+    async def async_update(self) -> None:
+        """Handle map image update."""
+        self._generate_image()
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator and set frame interval according to working status."""
+        super()._handle_coordinator_update()
+        self._generate_image()
+
+        if self._get_attribute(ATTR_WORKING, False):
+            self._attr_frame_interval = UPDATE_INTERVAL_WORKING
+        else:
+            self._attr_frame_interval = UPDATE_INTERVAL_DEFAULT
