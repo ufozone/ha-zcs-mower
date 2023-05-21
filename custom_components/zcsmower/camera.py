@@ -56,6 +56,7 @@ from .entity import ZcsMowerEntity
 ENTITY_DESCRIPTIONS = (
     CameraEntityDescription(
         key="map",
+        icon="mdi:map",
         translation_key="map",
     ),
 )
@@ -197,6 +198,7 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
                                 fill=(153, 194, 136),
                                 width=2
                             )
+
                 latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
                 longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
                 if latitude and longitude:
@@ -270,13 +272,15 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         h_w: ImgDimensions
     ) -> ImgPoint:
         """Convert from latitude and longitude to the image pixels."""
-        old = (self.gps_bottom_right[0], self.gps_top_left[0])
+        old = (self.gps_top_left[0], self.gps_bottom_right[0])
         new = (0, h_w[1])
         y = ((lat_lon[0] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
+
         old = (self.gps_top_left[1], self.gps_bottom_right[1])
         new = (0, h_w[0])
         x = ((lat_lon[1] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
-        return int(x), h_w[1] - int(y)
+
+        return h_w[0] - int(x), h_w[1] - int(y)
 
     def _create_empty_map_image(self, text: str = "No map") -> Image:
         """Create empty map image."""
@@ -307,15 +311,23 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         """Show supported features."""
         return SUPPORT_ON_OFF
 
+    @property
+    def is_streaming(self) -> bool:
+        """Return true if the lawn mower is working."""
+        return self._get_attribute(ATTR_WORKING, False)
+
+    @property
+    def should_poll(self) -> bool:
+        """Return polling enabled."""
+        return self._attr_should_poll
+
     def turn_off(self) -> None:
-        """Turn off camera."""
-        # TODO
-        raise NotImplementedError()
+        """Disable polling for map image."""
+        self._attr_should_poll = False
 
     def turn_on(self) -> None:
-        """Turn off camera."""
-        # TODO
-        raise NotImplementedError()
+        """Enable polling for map image."""
+        self._attr_should_poll = True
 
     async def async_update(self) -> None:
         """Handle map image update."""
