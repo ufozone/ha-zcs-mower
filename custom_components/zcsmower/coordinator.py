@@ -2,12 +2,10 @@
 from __future__ import annotations
 
 import asyncio
-import pytz
 
 from datetime import (
     timedelta,
     datetime,
-    timezone,
 )
 
 from homeassistant.core import HomeAssistant
@@ -27,6 +25,7 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 from homeassistant.exceptions import ConfigEntryAuthFailed
+import homeassistant.util.dt as dt_util
 
 from .api import (
     ZcsMowerApiClient,
@@ -113,22 +112,21 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> datetime:
         """Convert datetime string from API data into datetime object."""
         try:
-            return datetime.strptime(date_string, API_DATETIME_FORMAT_DEFAULT)
+            _dt = datetime.strptime(date_string, API_DATETIME_FORMAT_DEFAULT)
         except ValueError:
-            return datetime.strptime(date_string, API_DATETIME_FORMAT_FALLBACK)
+            _dt = datetime.strptime(date_string, API_DATETIME_FORMAT_FALLBACK)
+        return dt_util.as_local(_dt)
 
     def _get_datetime_now(self) -> datetime:
-        """Get current datetime in UTC."""
-        return datetime.utcnow().replace(tzinfo=timezone.utc)
+        """Get current datetime in local time."""
+        return dt_util.now()
 
     def _get_datetime_from_duration(
         self,
         duration: int,
     ) -> datetime:
         """Get datetime object by adding a duration to the current time."""
-        locale_timezone = pytz.timezone(str(self.hass.config.time_zone))
-        datetime_now = datetime.utcnow().astimezone(locale_timezone)
-        return datetime_now + timedelta(minutes=duration)
+        return dt_util.now() + timedelta(minutes=duration)
 
     async def __aenter__(self):
         """Return Self."""
