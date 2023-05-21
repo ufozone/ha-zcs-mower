@@ -73,6 +73,10 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Update extra attributes."""
         self._additional_extra_state_attributes = {}
 
+    def _update_handler(self) -> None:
+        """Handle updated data."""
+        self._update_extra_state_attributes()
+
     @property
     def name(self) -> str:
         """Return the name of the entity."""
@@ -116,16 +120,8 @@ class ZcsMowerEntity(CoordinatorEntity):
         )
         return _extra_state_attributes
 
-    async def async_update(self) -> None:
-        """Peform async_update."""
-        self._update_handler()
-
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
         self._update_handler()
         self.async_write_ha_state()
-
-    def _update_handler(self) -> None:
-        """Handle updated data."""
-        self._update_extra_state_attributes()

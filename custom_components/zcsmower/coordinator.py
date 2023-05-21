@@ -42,10 +42,12 @@ from .const import (
     API_ACK_TIMEOUT,
     UPDATE_INTERVAL_DEFAULT,
     UPDATE_INTERVAL_WORKING,
+    LOCATION_HISTORY_ITEMS,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_WORKING,
     ATTR_ERROR,
+    ATTR_LOCATION_HISTORY,
     ATTR_AVAILABLE,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
@@ -93,6 +95,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_AVAILABLE: False,
                 ATTR_ERROR: 0,
                 ATTR_LOCATION: {},
+                ATTR_LOCATION_HISTORY: [],
                 ATTR_SERIAL: None,
                 ATTR_MANUFACTURER: MANUFACTURER_DEFAULT,
                 ATTR_MODEL: None,
@@ -171,6 +174,23 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> dict[str, any] | None:
         """Get attributes of an given lawn mower."""
         return self.data.get(imei, None)
+
+    def add_location_history(
+        self,
+        imei: str,
+        latitude: float,
+        longitude: float,
+    ) -> bool:
+        """Add item to location history."""
+        location = (latitude, longitude)
+        location_history = self.data[imei][ATTR_LOCATION_HISTORY].copy()
+        if location in location_history:
+            return False
+
+        location_history.append(location)
+        self.data[imei][ATTR_LOCATION_HISTORY] = location_history[-LOCATION_HISTORY_ITEMS:]
+
+        return True
 
     def has_working_mowers(
         self,

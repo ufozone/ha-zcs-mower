@@ -27,6 +27,7 @@ ATTRIBUTION = "Data provided gently by Telit IoT Platform"
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
+    Platform.CAMERA,
     Platform.DEVICE_TRACKER,
     Platform.SENSOR,
     Platform.VACUUM,
@@ -41,6 +42,8 @@ API_ACK_TIMEOUT = 30
 UPDATE_INTERVAL_DEFAULT = 300
 UPDATE_INTERVAL_WORKING = 60
 
+LOCATION_HISTORY_ITEMS = 25
+
 CONF_CLIENT_KEY = "client_key"
 CONF_CAMERA_ENABLE = "camera_enable"
 CONF_IMG_PATH_MAP = "img_path_map"
@@ -53,6 +56,7 @@ ATTR_IMEI = "imei"
 ATTR_SERIAL = "serial"
 ATTR_WORKING = "working"
 ATTR_ERROR = "error"
+ATTR_LOCATION_HISTORY = "location_history"
 ATTR_AVAILABLE = "available"
 ATTR_CONNECTED = "connected"
 ATTR_LAST_COMM = "last_communication"
