@@ -4,10 +4,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from datetime import timedelta
 
-from homeassistant.core import (
-    HomeAssistant,
-    State,
-)
+from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_LOCATION,
     ATTR_LATITUDE,

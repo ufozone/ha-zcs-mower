@@ -60,6 +60,10 @@ ENTITY_DESCRIPTIONS = (
     ),
 )
 
+GpsPoint = tuple[float, float]
+ImgPoint = tuple[int, int]
+ImgDimensions = tuple[int, int]
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -200,7 +204,7 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
                     overlay_path = f"{os.path.dirname(__file__)}/resources/marker.png"
                 overlay_image = Image.open(overlay_path, "r")
                 overlay_image = overlay_image.resize((64, 64))
-    
+
                 location = (latitude, longitude)
                 x1, y1 = self._scale_to_img(location, (map_image.size[0], map_image.size[1]))
                 img_w, img_h = overlay_image.size
@@ -228,7 +232,7 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
 
         points = []
         points.append(point_1)
-        for i in range(dashes):
+        for _i in range(dashes):
             points.append(self._get_point_on_vector(points[-1], point_2, dash_length))
 
         points.append(point_2)
