@@ -9,6 +9,7 @@ from homeassistant.const import (
     ATTR_MODEL,
     ATTR_SW_VERSION,
 )
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -32,6 +33,7 @@ class ZcsMowerEntity(CoordinatorEntity):
 
     def __init__(
         self,
+        config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
         imei: str,
         name: str,
@@ -41,6 +43,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Initialize."""
         super().__init__(coordinator)
 
+        self._config_entry = config_entry
         self._imei = imei
         self._name = name
         self._entity_type = entity_type
