@@ -47,6 +47,8 @@ async def async_setup_entry(
     async_add_entities(
         [
             ZcsMowerSensor(
+                hass=hass,
+                config_entry=config_entry,
                 coordinator=coordinator,
                 entity_description=entity_description,
                 imei=imei,
@@ -75,6 +77,8 @@ class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
 
     def __init__(
         self,
+        hass: HomeAssistant,
+        config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: SensorEntityDescription,
         imei: str,
@@ -82,6 +86,8 @@ class ZcsMowerSensor(ZcsMowerEntity, SensorEntity):
     ) -> None:
         """Initialize the sensor class."""
         super().__init__(
+            hass=hass,
+            config_entry=config_entry,
             coordinator=coordinator,
             imei=imei,
             name=name,

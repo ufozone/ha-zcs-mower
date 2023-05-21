@@ -2,12 +2,10 @@
 from __future__ import annotations
 
 import asyncio
-import pytz
 
 from datetime import (
     timedelta,
     datetime,
-    timezone,
 )
 
 from homeassistant.core import HomeAssistant
@@ -27,6 +25,7 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 from homeassistant.exceptions import ConfigEntryAuthFailed
+import homeassistant.util.dt as dt_util
 
 from .api import (
     ZcsMowerApiClient,
@@ -43,10 +42,12 @@ from .const import (
     API_ACK_TIMEOUT,
     UPDATE_INTERVAL_DEFAULT,
     UPDATE_INTERVAL_WORKING,
+    LOCATION_HISTORY_ITEMS,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_WORKING,
     ATTR_ERROR,
+    ATTR_LOCATION_HISTORY,
     ATTR_AVAILABLE,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
@@ -94,6 +95,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_AVAILABLE: False,
                 ATTR_ERROR: 0,
                 ATTR_LOCATION: {},
+                ATTR_LOCATION_HISTORY: None,
                 ATTR_SERIAL: None,
                 ATTR_MANUFACTURER: MANUFACTURER_DEFAULT,
                 ATTR_MODEL: None,
@@ -113,22 +115,21 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> datetime:
         """Convert datetime string from API data into datetime object."""
         try:
-            return datetime.strptime(date_string, API_DATETIME_FORMAT_DEFAULT)
+            _dt = datetime.strptime(date_string, API_DATETIME_FORMAT_DEFAULT)
         except ValueError:
-            return datetime.strptime(date_string, API_DATETIME_FORMAT_FALLBACK)
+            _dt = datetime.strptime(date_string, API_DATETIME_FORMAT_FALLBACK)
+        return dt_util.as_local(_dt)
 
     def _get_datetime_now(self) -> datetime:
-        """Get current datetime in UTC."""
-        return datetime.utcnow().replace(tzinfo=timezone.utc)
+        """Get current datetime in local time."""
+        return dt_util.now()
 
     def _get_datetime_from_duration(
         self,
         duration: int,
     ) -> datetime:
         """Get datetime object by adding a duration to the current time."""
-        locale_timezone = pytz.timezone(str(self.hass.config.time_zone))
-        datetime_now = datetime.utcnow().astimezone(locale_timezone)
-        return datetime_now + timedelta(minutes=duration)
+        return dt_util.now() + timedelta(minutes=duration)
 
     async def __aenter__(self):
         """Return Self."""
@@ -173,6 +174,32 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> dict[str, any] | None:
         """Get attributes of an given lawn mower."""
         return self.data.get(imei, None)
+
+    def init_location_history(
+        self,
+        imei: str,
+    ) -> None:
+        """Initiate location history for lawn mower."""
+        if self.data[imei][ATTR_LOCATION_HISTORY] is None:
+            self.data[imei][ATTR_LOCATION_HISTORY] = []
+
+    def add_location_history(
+        self,
+        imei: str,
+        location: tuple[float, float],
+    ) -> bool:
+        """Add item to location history."""
+        if self.data[imei][ATTR_LOCATION_HISTORY] is None:
+            return False
+
+        location_history = self.data[imei][ATTR_LOCATION_HISTORY].copy()
+        if location in location_history:
+            return False
+
+        location_history.append(location)
+        self.data[imei][ATTR_LOCATION_HISTORY] = location_history[-LOCATION_HISTORY_ITEMS:]
+
+        return True
 
     def has_working_mowers(
         self,
@@ -265,10 +292,16 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 mower[ATTR_ERROR] = ROBOT_ERRORS.get(int(robot_state["msg"]), None)
             # latitude and longitude not always available
             if "lat" in robot_state and "lng" in robot_state:
+                latitude = float(robot_state["lat"])
+                longitude = float(robot_state["lng"])
                 mower[ATTR_LOCATION] = {
-                    ATTR_LATITUDE: robot_state["lat"],
-                    ATTR_LONGITUDE: robot_state["lng"],
+                    ATTR_LATITUDE: latitude,
+                    ATTR_LONGITUDE: longitude,
                 }
+                self.add_location_history(
+                    imei=imei,
+                    location=(latitude, longitude),
+                )
         if "attrs" in data:
             # In some cases, robot_serial is not available
             if "robot_serial" in data["attrs"]:

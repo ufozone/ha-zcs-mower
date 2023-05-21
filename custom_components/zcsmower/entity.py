@@ -1,7 +1,10 @@
 """ZCS Lawn Mower Robot entity."""
 from __future__ import annotations
 
-from homeassistant.core import callback
+from homeassistant.core import (
+    callback,
+    HomeAssistant,
+)
 from homeassistant.const import (
     ATTR_NAME,
     ATTR_IDENTIFIERS,
@@ -9,6 +12,7 @@ from homeassistant.const import (
     ATTR_MODEL,
     ATTR_SW_VERSION,
 )
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -32,6 +36,8 @@ class ZcsMowerEntity(CoordinatorEntity):
 
     def __init__(
         self,
+        hass: HomeAssistant,
+        config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
         imei: str,
         name: str,
@@ -51,6 +57,8 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._unique_id = slugify(f"mower_{self._imei}")
         self._additional_extra_state_attributes = {}
 
+        self.hass = hass
+        self.config_entry = config_entry
         self.entity_id = f"{entity_type}.{self._unique_id}"
 
     def _get_attribute(
@@ -64,6 +72,10 @@ class ZcsMowerEntity(CoordinatorEntity):
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
         self._additional_extra_state_attributes = {}
+
+    def _update_handler(self) -> None:
+        """Handle updated data."""
+        self._update_extra_state_attributes()
 
     @property
     def name(self) -> str:
@@ -108,16 +120,8 @@ class ZcsMowerEntity(CoordinatorEntity):
         )
         return _extra_state_attributes
 
-    async def async_update(self) -> None:
-        """Peform async_update."""
-        self._update_handler()
-
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
         self._update_handler()
         self.async_write_ha_state()
-
-    def _update_handler(self) -> None:
-        """Handle updated data."""
-        self._update_extra_state_attributes()
