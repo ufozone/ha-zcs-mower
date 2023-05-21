@@ -1,7 +1,10 @@
 """ZCS Lawn Mower Robot entity."""
 from __future__ import annotations
 
-from homeassistant.core import callback
+from homeassistant.core import (
+    callback,
+    HomeAssistant,
+)
 from homeassistant.const import (
     ATTR_NAME,
     ATTR_IDENTIFIERS,
@@ -33,6 +36,7 @@ class ZcsMowerEntity(CoordinatorEntity):
 
     def __init__(
         self,
+        hass: HomeAssistant,
         config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
         imei: str,
@@ -43,7 +47,6 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Initialize."""
         super().__init__(coordinator)
 
-        self._config_entry = config_entry
         self._imei = imei
         self._name = name
         self._entity_type = entity_type
@@ -54,6 +57,8 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._unique_id = slugify(f"mower_{self._imei}")
         self._additional_extra_state_attributes = {}
 
+        self.hass = hass
+        self.config_entry = config_entry
         self.entity_id = f"{entity_type}.{self._unique_id}"
 
     def _get_attribute(

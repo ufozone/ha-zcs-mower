@@ -63,6 +63,7 @@ async def async_setup_entry(
     async_add_entities(
         [
             ZcsMowerVacuum(
+                hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
                 entity_description=entity_description,
@@ -92,6 +93,7 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
 
     def __init__(
         self,
+        hass: HomeAssistant,
         config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: VacuumEntityDescription,
@@ -100,6 +102,7 @@ class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
     ) -> None:
         """Initialize the vacuum class."""
         super().__init__(
+            hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
             imei=imei,
