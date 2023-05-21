@@ -179,10 +179,20 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         """Second step in config flow to configure camera."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            # TODO
+            image_map_path = user_input.get(CONF_IMG_PATH_MAP, "").strip()
+            image_marker_path = user_input.get(CONF_IMG_PATH_MARKER, "").strip()
+            if not os.path.isfile(image_map_path):
+                errors["base"] = "path_invalid"
+            if user_input.get(CONF_GPS_TOP_LEFT).count(",") != 1:
+                errors["base"] = "coordinates_invalid"
+            if user_input.get(CONF_GPS_BOTTOM_RIGHT).count(",") != 1:
+                errors["base"] = "coordinates_invalid"
+            if image_marker_path and not os.path.isfile(image_marker_path):
+                errors["base"] = "path_invalid"
+
             if not errors:
-                self.options[CONF_IMG_PATH_MAP] = user_input.get(CONF_IMG_PATH_MAP, "").strip()
-                self.options[CONF_IMG_PATH_MARKER] = user_input.get(CONF_IMG_PATH_MARKER, "").strip()
+                self.options[CONF_IMG_PATH_MAP] = image_map_path
+                self.options[CONF_IMG_PATH_MARKER] = image_marker_path
                 if user_input.get(CONF_GPS_TOP_LEFT):
                     self.options[CONF_GPS_TOP_LEFT] = [
                         float(x.strip())
@@ -584,14 +594,24 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 [str(x) for x in gps_bottom_right]
             )
         if user_input is not None:
-            # TODO
+            image_map_path = user_input.get(CONF_IMG_PATH_MAP, "").strip()
+            image_marker_path = user_input.get(CONF_IMG_PATH_MARKER, "").strip()
+            if not os.path.isfile(image_map_path):
+                errors["base"] = "path_invalid"
+            if user_input.get(CONF_GPS_TOP_LEFT).count(",") != 1:
+                errors["base"] = "coordinates_invalid"
+            if user_input.get(CONF_GPS_BOTTOM_RIGHT).count(",") != 1:
+                errors["base"] = "coordinates_invalid"
+            if image_marker_path and not os.path.isfile(image_marker_path):
+                errors["base"] = "path_invalid"
+
             if not errors:
                 # Input is valid, set data
                 self._options.update(
                     {
                         CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
-                        CONF_IMG_PATH_MAP: user_input.get(CONF_IMG_PATH_MAP, "").strip(),
-                        CONF_IMG_PATH_MARKER: user_input.get(CONF_IMG_PATH_MARKER, "").strip(),
+                        CONF_IMG_PATH_MAP: image_map_path,
+                        CONF_IMG_PATH_MARKER: image_marker_path,
                     }
                 )
                 if user_input.get(CONF_GPS_TOP_LEFT):

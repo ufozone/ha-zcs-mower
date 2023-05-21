@@ -5,6 +5,8 @@
       "auth_failed": "Authorization failed.",
       "communication_failed": "Action could not be executed.",
       "connection_failed": "Unable to connect to the server.",
+      "path_invalid": "The specified path to the file is invalid: absolute path is needed.",
+      "coordinates_invalid": "The GPS coordinates provided are not valid: latitude and longitude separated by commas is needed.",
       "imei_invalid": "The IMEI provided is not valid."
     },
     "step": {
@@ -49,7 +51,9 @@
       "name_exists": "A lawn mower with this name already exists.",
       "imei_not_exists": "A lawn mower with this IMEI does not exists.",
       "delete_not_confirmed": "Deletion of lawn mower was not confirmed.",
-      "last_mower": "Last lawn mower cannot be deleted."
+      "last_mower": "Last lawn mower cannot be deleted.",
+      "path_invalid": "The specified path to the file is invalid: absolute path is needed.",
+      "coordinates_invalid": "The GPS coordinates provided are not valid: latitude and longitude separated by commas is needed."
     },
     "step": {
       "init": {
