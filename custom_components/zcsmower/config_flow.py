@@ -38,7 +38,7 @@ from .const import (
     CONF_CLIENT_KEY,
     CONF_CAMERA_ENABLE,
     CONF_IMG_PATH_MAP,
-    CONF_IMG_PATH_MOWER,
+    CONF_IMG_PATH_MARKER,
     CONF_GPS_TOP_LEFT,
     CONF_GPS_BOTTOM_RIGHT,
     CONF_MOWERS,
@@ -133,7 +133,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, ""),
                     CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
                     CONF_IMG_PATH_MAP: "",
-                    CONF_IMG_PATH_MOWER: "",
+                    CONF_IMG_PATH_MARKER: "",
                     CONF_GPS_TOP_LEFT: "",
                     CONF_GPS_BOTTOM_RIGHT: "",
                     CONF_MOWERS: {},
@@ -179,36 +179,31 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         """Second step in config flow to configure camera."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            self.options[CONF_IMG_PATH_MAP] = user_input.get(CONF_IMG_PATH_MAP)
-            self.options[CONF_IMG_PATH_MOWER] = user_input.get(CONF_IMG_PATH_MOWER)
-            if user_input.get(CONF_GPS_TOP_LEFT):
-                self.options[CONF_GPS_TOP_LEFT] = [
-                    float(x.strip())
-                    for x in user_input.get(CONF_GPS_TOP_LEFT).split(",")
-                    if x
-                ]
-            if user_input.get(CONF_GPS_BOTTOM_RIGHT):
-                self.options[CONF_GPS_BOTTOM_RIGHT] = [
-                    float(x.strip())
-                    for x in user_input.get(CONF_GPS_BOTTOM_RIGHT).split(",")
-                    if x
-                ]
-            LOGGER.debug(self.options)
-            # Return the form of the next step
-            return await self.async_step_mower()
+            # TODO
+            if not errors:
+                self.options[CONF_IMG_PATH_MAP] = user_input.get(CONF_IMG_PATH_MAP)
+                self.options[CONF_IMG_PATH_MARKER] = user_input.get(CONF_IMG_PATH_MARKER, None)
+                if user_input.get(CONF_GPS_TOP_LEFT):
+                    self.options[CONF_GPS_TOP_LEFT] = [
+                        float(x.strip())
+                        for x in user_input.get(CONF_GPS_TOP_LEFT).split(",")
+                        if x
+                    ]
+                if user_input.get(CONF_GPS_BOTTOM_RIGHT):
+                    self.options[CONF_GPS_BOTTOM_RIGHT] = [
+                        float(x.strip())
+                        for x in user_input.get(CONF_GPS_BOTTOM_RIGHT).split(",")
+                        if x
+                    ]
+                LOGGER.debug(self.options)
+                # Return the form of the next step
+                return await self.async_step_mower()
         return self.async_show_form(
             step_id="camera",
             data_schema=vol.Schema(
                 {
                     vol.Required(
                         CONF_IMG_PATH_MAP,
-                    ): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.TEXT
-                        ),
-                    ),
-                    vol.Required(
-                        CONF_IMG_PATH_MOWER,
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -223,6 +218,13 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ),
                     vol.Required(
                         CONF_GPS_BOTTOM_RIGHT,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Optional(
+                        CONF_IMG_PATH_MARKER,
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -582,13 +584,14 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 [str(x) for x in gps_bottom_right]
             )
         if user_input is not None:
+            # TODO
             if not errors:
                 # Input is valid, set data
                 self._options.update(
                     {
                         CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
                         CONF_IMG_PATH_MAP: user_input.get(CONF_IMG_PATH_MAP),
-                        CONF_IMG_PATH_MOWER: user_input.get(CONF_IMG_PATH_MOWER),
+                        CONF_IMG_PATH_MARKER: user_input.get(CONF_IMG_PATH_MARKER, None),
                     }
                 )
                 if user_input.get(CONF_GPS_TOP_LEFT):
@@ -629,14 +632,6 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                     ),
                     vol.Required(
-                        CONF_IMG_PATH_MOWER,
-                        default=(user_input or self._options).get(CONF_IMG_PATH_MAP, ""),
-                    ): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.TEXT
-                        ),
-                    ),
-                    vol.Required(
                         CONF_GPS_TOP_LEFT,
                         default=gps_top_left,
                     ): selector.TextSelector(
@@ -647,6 +642,14 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     vol.Required(
                         CONF_GPS_BOTTOM_RIGHT,
                         default=gps_bottom_right,
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.TEXT
+                        ),
+                    ),
+                    vol.Optional(
+                        CONF_IMG_PATH_MARKER,
+                        default=(user_input or self._options).get(CONF_IMG_PATH_MAP, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT

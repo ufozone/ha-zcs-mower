@@ -22,7 +22,7 @@
         "description": "Einstellungen der Kamera.",
         "data": {
           "img_path_map": "Pfad zum Kartenbild",
-          "img_path_mower": "Pfad zum Bild des Mäherstandorts",
+          "img_path_marker": "Pfad zum Bild des Mäherstandorts",
           "gps_top_left": "GPS-Koordinaten der oberen linken Bildecke",
           "gps_bottom_right": "GPS-Koordinaten der unteren rechten Bildecke"
         }
@@ -93,7 +93,7 @@
         "data": {
           "camera_enable": "Kartenkamera aktivieren",
           "img_path_map": "Pfad zum Kartenbild",
-          "img_path_mower": "Pfad zum Bild des Mäherstandorts",
+          "img_path_marker": "Pfad zum Bild des Mäherstandorts",
           "gps_top_left": "GPS-Koordinaten der oberen linken Bildecke",
           "gps_bottom_right": "GPS-Koordinaten der unteren rechten Bildecke"
         }

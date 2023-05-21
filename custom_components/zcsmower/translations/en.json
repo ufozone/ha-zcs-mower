@@ -22,7 +22,7 @@
         "description": "Camera settings.",
         "data": {
           "img_path_map": "Path to the map image",
-          "img_path_mower": "Path to the mower location image",
+          "img_path_marker": "Path to the mower location image",
           "gps_top_left": "GPS coordinates of the top left image corner",
           "gps_bottom_right": "GPS coordinates of the bottom right image corner"
         }
@@ -93,7 +93,7 @@
         "data": {
           "camera_enable": "Enable map camera",
           "img_path_map": "Path to the map image",
-          "img_path_mower": "Path to the mower location image",
+          "img_path_marker": "Path to the mower location image",
           "gps_top_left": "GPS coordinates of the top left image corner",
           "gps_bottom_right": "GPS coordinates of the bottom right image corner"
         }
