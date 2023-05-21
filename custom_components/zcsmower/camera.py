@@ -176,45 +176,56 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
             map_image = self._create_empty_map_image("Map camera is disabled.")
             LOGGER.warning("Map camera is disabled")
 
-        if self.gps_top_left is not None and self.gps_bottom_right is not None:
-            img_draw = ImageDraw.Draw(map_image)
-            location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
-            if location_history is not None:
-                for i in range(len(location_history) - 1, 0, -1):
-                    point_1 = location_history[i]
-                    scaled_loc_1 = self._scale_to_img(
-                        point_1, (map_image.size[0], map_image.size[1])
-                    )
-                    point_2 = location_history[i - 1]
-                    scaled_loc_2 = self._scale_to_img(
-                        point_2, (map_image.size[0], map_image.size[1])
-                    )
-                    plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
-                    for p in range(0, len(plot_points) - 1, 2):
-                        img_draw.line(
-                            (plot_points[p], plot_points[p + 1]),
-                            fill=(153, 194, 136),
-                            width=2
+        try:
+            if self.gps_top_left is not None and self.gps_bottom_right is not None:
+                img_draw = ImageDraw.Draw(map_image)
+                location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
+                if location_history is not None:
+                    for i in range(len(location_history) - 1, 0, -1):
+                        point_1 = location_history[i]
+                        scaled_loc_1 = self._scale_to_img(
+                            point_1, (map_image.size[0], map_image.size[1])
                         )
-            latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
-            longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
-            if latitude and longitude:
-                overlay_path = self.config_entry.options.get(CONF_IMG_PATH_MARKER, None)
-                if not overlay_path or not os.path.isfile(overlay_path):
-                    overlay_path = f"{os.path.dirname(__file__)}/resources/marker.png"
-                overlay_image = Image.open(overlay_path, "r")
-                overlay_image = overlay_image.resize((64, 64))
+                        point_2 = location_history[i - 1]
+                        scaled_loc_2 = self._scale_to_img(
+                            point_2, (map_image.size[0], map_image.size[1])
+                        )
+                        plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
+                        for p in range(0, len(plot_points) - 1, 2):
+                            img_draw.line(
+                                (plot_points[p], plot_points[p + 1]),
+                                fill=(153, 194, 136),
+                                width=2
+                            )
+                latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
+                longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
+                if latitude and longitude:
+                    map_marker_path = self.config_entry.options.get(CONF_IMG_PATH_MARKER, None)
+                    if not map_marker_path or not os.path.isfile(map_marker_path):
+                        map_marker_path = f"{os.path.dirname(__file__)}/resources/marker.png"
+                    map_marker = Image.open(map_marker_path, "r")
+                    img_w, img_h = map_marker.size
+                    if img_w > img_h:
+                        img_h = int((img_h / img_w) * 64)
+                        img_w = 64
+                    else:
+                        img_w = int((img_w / img_h) * 64)
+                        img_h = 64
+                    map_marker = map_marker.resize((img_w, img_h))
 
-                location = (latitude, longitude)
-                x1, y1 = self._scale_to_img(location, (map_image.size[0], map_image.size[1]))
-                img_w, img_h = overlay_image.size
-                # TODO: sometimes we get ValueError: bad transparency mask
-                try:
-                    map_image.paste(
-                        overlay_image, (x1 - img_w // 2, y1 - img_h // 2), overlay_image
-                    )
-                except Exception as exception:
-                    LOGGER.exception(exception)
+                    location = (latitude, longitude)
+                    x1, y1 = self._scale_to_img(location, (map_image.size[0], map_image.size[1]))
+                    img_w, img_h = map_marker.size
+                    # TODO: sometimes we get ValueError: bad transparency mask
+                    try:
+                        map_image.paste(
+                            map_marker, (x1 - img_w // 2, y1 - img_h // 2), map_marker
+                        )
+                    except Exception as exception:
+                        LOGGER.exception(exception)
+        except Exception as exception:
+            map_image = self._create_empty_map_image("Could not generate the map. Check error log for details.")
+            LOGGER.exception(exception)
 
         self._image = map_image
         self._image_to_bytes()
