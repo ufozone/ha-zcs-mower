@@ -95,7 +95,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_AVAILABLE: False,
                 ATTR_ERROR: 0,
                 ATTR_LOCATION: {},
-                ATTR_LOCATION_HISTORY: [],
+                ATTR_LOCATION_HISTORY: None,
                 ATTR_SERIAL: None,
                 ATTR_MANUFACTURER: MANUFACTURER_DEFAULT,
                 ATTR_MODEL: None,
@@ -175,14 +175,23 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Get attributes of an given lawn mower."""
         return self.data.get(imei, None)
 
+    def init_location_history(
+        self,
+        imei: str,
+    ) -> None:
+        """Initiate location history for lawn mower."""
+        if self.data[imei][ATTR_LOCATION_HISTORY] is None:
+            self.data[imei][ATTR_LOCATION_HISTORY] = []
+
     def add_location_history(
         self,
         imei: str,
-        latitude: float,
-        longitude: float,
+        location: tuple[float, float],
     ) -> bool:
         """Add item to location history."""
-        location = (latitude, longitude)
+        if self.data[imei][ATTR_LOCATION_HISTORY] is None:
+            return False
+
         location_history = self.data[imei][ATTR_LOCATION_HISTORY].copy()
         if location in location_history:
             return False
@@ -283,10 +292,16 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 mower[ATTR_ERROR] = ROBOT_ERRORS.get(int(robot_state["msg"]), None)
             # latitude and longitude not always available
             if "lat" in robot_state and "lng" in robot_state:
+                latitude = float(robot_state["lat"])
+                longitude = float(robot_state["lng"])
                 mower[ATTR_LOCATION] = {
-                    ATTR_LATITUDE: robot_state["lat"],
-                    ATTR_LONGITUDE: robot_state["lng"],
+                    ATTR_LATITUDE: latitude,
+                    ATTR_LONGITUDE: longitude,
                 }
+                self.add_location_history(
+                    imei=imei,
+                    location=(latitude, longitude),
+                )
         if "attrs" in data:
             # In some cases, robot_serial is not available
             if "robot_serial" in data["attrs"]:

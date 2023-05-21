@@ -107,27 +107,33 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
         self.entity_description = entity_description
 
         get_instance(self.hass).async_add_executor_job(
-            self._state_changes_during_period,
+            self._get_location_history,
         )
 
-    def _state_changes_during_period(self) -> None:
+    def _get_location_history(self) -> None:
         states = history.state_changes_during_period(
             self.hass,
-            dt_util.now() - timedelta(days=2),
+            dt_util.now() - timedelta(days=3), # TODO
             dt_util.now(),
             self.entity_id,
             include_start_time_state=True,
             no_attributes=False,
         ).get(self.entity_id, [])
+        self.coordinator.init_location_history(
+            imei=self._imei,
+        )
         for state in states:
             latitude = state.attributes.get(ATTR_LATITUDE, None)
             longitude = state.attributes.get(ATTR_LONGITUDE, None)
             if latitude and longitude:
                 self.coordinator.add_location_history(
                     imei=self._imei,
-                    latitude=latitude,
-                    longitude=latitude,
+                    location=(latitude, longitude),
                 )
+        # Always update HA states after getting location history.
+        self.hass.async_create_task(
+            self.coordinator._async_update_listeners()
+        )
 
     @property
     def latitude(self) -> float | None:
