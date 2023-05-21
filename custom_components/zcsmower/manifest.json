@@ -1,4 +1,6 @@
 {
+  "domain": "zcsmower",
+  "name": "ZCS Lawn Mower Robot",
   "after_dependencies": [
     "recorder"
   ],
@@ -7,12 +9,10 @@
   ],
   "config_flow": true,
   "dependencies": [],
-  "domain": "zcsmower",
   "documentation": "https://github.com/ufozone/ha-zcs-mower",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/ufozone/ha-zcs-mower/issues",
-  "name": "ZCS Lawn Mower Robot",
   "requirements": [
     "numpy>=1.21.6"
   ],
