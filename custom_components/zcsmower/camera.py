@@ -267,7 +267,7 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         x = ((lat_lon[1] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
         return int(x), h_w[1] - int(y)
 
-    def _create_empty_map_image(self, text: str = "No map") -> ImageType:
+    def _create_empty_map_image(self, text: str = "No map") -> Image:
         """Create empty map image."""
         map_image = Image.new("RGBA", (600, 400), color=(255, 255, 255))
         img_draw = ImageDraw.Draw(map_image)
