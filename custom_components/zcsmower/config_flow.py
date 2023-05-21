@@ -130,7 +130,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 # Input is valid, set data and options
                 self.title = user_input.get(CONF_NAME, "")
                 self.options = {
-                    CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, ""),
+                    CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
                     CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
                     CONF_IMG_PATH_MAP: "",
                     CONF_IMG_PATH_MARKER: "",
@@ -181,8 +181,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             # TODO
             if not errors:
-                self.options[CONF_IMG_PATH_MAP] = user_input.get(CONF_IMG_PATH_MAP)
-                self.options[CONF_IMG_PATH_MARKER] = user_input.get(CONF_IMG_PATH_MARKER, None)
+                self.options[CONF_IMG_PATH_MAP] = user_input.get(CONF_IMG_PATH_MAP, "").strip()
+                self.options[CONF_IMG_PATH_MARKER] = user_input.get(CONF_IMG_PATH_MARKER, "").strip()
                 if user_input.get(CONF_GPS_TOP_LEFT):
                     self.options[CONF_GPS_TOP_LEFT] = [
                         float(x.strip())
@@ -590,8 +590,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options.update(
                     {
                         CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
-                        CONF_IMG_PATH_MAP: user_input.get(CONF_IMG_PATH_MAP),
-                        CONF_IMG_PATH_MARKER: user_input.get(CONF_IMG_PATH_MARKER, None),
+                        CONF_IMG_PATH_MAP: user_input.get(CONF_IMG_PATH_MAP, "").strip(),
+                        CONF_IMG_PATH_MARKER: user_input.get(CONF_IMG_PATH_MARKER, "").strip(),
                     }
                 )
                 if user_input.get(CONF_GPS_TOP_LEFT):
@@ -649,7 +649,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_IMG_PATH_MARKER,
-                        default=(user_input or self._options).get(CONF_IMG_PATH_MAP, ""),
+                        default=(user_input or self._options).get(CONF_IMG_PATH_MARKER, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -689,7 +689,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 # Input is valid, set data
                 self._options.update(
                     {
-                        CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY),
+                        CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
                     }
                 )
                 LOGGER.debug(self._options)
