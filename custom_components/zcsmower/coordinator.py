@@ -193,7 +193,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             return False
 
         location_history = self.data[imei][ATTR_LOCATION_HISTORY].copy()
-        if location in location_history:
+        # Abort, if provided location is last item in location history
+        if location in location_history[-1:]:
             return False
 
         location_history.append(location)
