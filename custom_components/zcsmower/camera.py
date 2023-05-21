@@ -272,7 +272,7 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         h_w: ImgDimensions
     ) -> ImgPoint:
         """Convert from latitude and longitude to the image pixels."""
-        old = (self.gps_top_left[0], self.gps_bottom_right[0])
+        old = (self.gps_bottom_right[0], self.gps_top_left[0])
         new = (0, h_w[1])
         y = ((lat_lon[0] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
 
@@ -280,7 +280,7 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         new = (0, h_w[0])
         x = ((lat_lon[1] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
 
-        return h_w[0] - int(x), h_w[1] - int(y)
+        return int(x), h_w[1] - int(y)
 
     def _create_empty_map_image(self, text: str = "No map") -> Image:
         """Create empty map image."""
