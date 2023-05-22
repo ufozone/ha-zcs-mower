@@ -74,7 +74,7 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 
     ```
     attributes: 
-    calibration
+    calibration_points
     ```
 
 ### Device Tracker
