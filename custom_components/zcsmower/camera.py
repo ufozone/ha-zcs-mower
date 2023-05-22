@@ -67,7 +67,7 @@ async def async_setup_entry(
     async_add_entities: Entity,
 ) -> None:
     """Do setup cameras from a config entry created in the integrations UI."""
-    if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
+    if config_entry.options.get(CONF_CAMERA_ENABLE, False):
         coordinator = hass.data[DOMAIN][config_entry.entry_id]
         async_add_entities(
             [
