@@ -25,6 +25,7 @@ import homeassistant.util.dt as dt_util
 from .const import (
     LOGGER,
     DOMAIN,
+    LOCATION_HISTORY_DAYS,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -91,18 +92,20 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
         )
 
     def _get_location_history(self) -> None:
-        states = history.state_changes_during_period(
+        # Getting history with history.get_last_state_changes can cause instability
+        # because it has to scan the table to find the last number_of_states states
+        # because the metadata_id_last_updated_ts index is in ascending order.
+        history_list = history.state_changes_during_period(
             self.hass,
-            dt_util.now() - timedelta(days=3), # TODO: Settings
-            dt_util.now(),
-            self.entity_id,
-            include_start_time_state=True,
+            start_time=dt_util.now() - timedelta(days=LOCATION_HISTORY_DAYS),
+            entity_id=self.entity_id,
             no_attributes=False,
-        ).get(self.entity_id, [])
+            include_start_time_state=True,
+        )
         self.coordinator.init_location_history(
             imei=self._imei,
         )
-        for state in states:
+        for state in history_list.get(self.entity_id, []):
             latitude = state.attributes.get(ATTR_LATITUDE, None)
             longitude = state.attributes.get(ATTR_LONGITUDE, None)
             if latitude and longitude:

@@ -35,12 +35,14 @@ from .const import (
     DOMAIN,
     API_BASE_URI,
     API_APP_TOKEN,
+    MAP_POINTS_DEFAULT,
     CONF_CLIENT_KEY,
     CONF_CAMERA_ENABLE,
     CONF_IMG_PATH_MAP,
     CONF_IMG_PATH_MARKER,
     CONF_GPS_TOP_LEFT,
     CONF_GPS_BOTTOM_RIGHT,
+    CONF_MAP_POINTS,
     CONF_MOWERS,
     ATTR_IMEI,
 )
@@ -136,6 +138,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_IMG_PATH_MARKER: "",
                     CONF_GPS_TOP_LEFT: "",
                     CONF_GPS_BOTTOM_RIGHT: "",
+                    CONF_MAP_POINTS: int(MAP_POINTS_DEFAULT),
                     CONF_MOWERS: {},
                 }
                 LOGGER.debug(self.options)
@@ -191,8 +194,14 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "path_invalid"
 
             if not errors:
-                self.options[CONF_IMG_PATH_MAP] = image_map_path
-                self.options[CONF_IMG_PATH_MARKER] = image_marker_path
+                # Input is valid, set data
+                self._options.update(
+                    {
+                        CONF_IMG_PATH_MAP: image_map_path,
+                        CONF_IMG_PATH_MARKER: image_marker_path,
+                        CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
+                    }
+                )
                 if user_input.get(CONF_GPS_TOP_LEFT):
                     self.options[CONF_GPS_TOP_LEFT] = [
                         float(x.strip())
@@ -239,6 +248,16 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
+                    ),
+                    vol.Required(
+                        CONF_MAP_POINTS,
+                        default=(user_input or self._options).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=1,
+                            max=100,
+                            mode=selector.NumberSelectorMode.BOX,
+                        )
                     ),
                 }
             ),
@@ -612,6 +631,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
                         CONF_IMG_PATH_MAP: image_map_path,
                         CONF_IMG_PATH_MARKER: image_marker_path,
+                        CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
                     }
                 )
                 if user_input.get(CONF_GPS_TOP_LEFT):
@@ -628,13 +648,11 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         for x in user_input.get(CONF_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
-
                 LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
                     data=self._options,
                 )
-        LOGGER.debug(self._options)
         return self.async_show_form(
             step_id="camera",
             data_schema=vol.Schema(
@@ -674,6 +692,16 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
+                    ),
+                    vol.Required(
+                        CONF_MAP_POINTS,
+                        default=(user_input or self._options).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=1,
+                            max=100,
+                            mode=selector.NumberSelectorMode.BOX,
+                        )
                     ),
                 }
             ),

@@ -35,11 +35,13 @@ from .const import (
     DOMAIN,
     UPDATE_INTERVAL_DEFAULT,
     UPDATE_INTERVAL_WORKING,
+    MAP_POINTS_DEFAULT,
     CONF_CAMERA_ENABLE,
     CONF_IMG_PATH_MAP,
     CONF_IMG_PATH_MARKER,
     CONF_GPS_TOP_LEFT,
     CONF_GPS_BOTTOM_RIGHT,
+    CONF_MAP_POINTS,
     ATTR_WORKING,
     ATTR_LOCATION_HISTORY,
 )
@@ -164,7 +166,10 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
                 img_draw = ImageDraw.Draw(map_image)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
                 if location_history is not None:
-                    for i in range(len(location_history) - 1, 0, -1):
+                    map_points_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
+                    map_points = min(map_points_max, len(location_history) - 1)
+                    LOGGER.debug(map_points)
+                    for i in range(map_points, 0, -1):
                         point_1 = location_history[i]
                         scaled_loc_1 = self._scale_to_img(
                             point_1, (map_image.size[0], map_image.size[1])
