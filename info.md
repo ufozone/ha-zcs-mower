@@ -19,16 +19,19 @@ Latest -
 
 > :warning: **This integration is in development.**
 
-ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogio, Techline, Wiper, Kubota, Stiga and Worlf robotic lawn mowers with Connect module are supported.
+ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogio, Techline, Wiper, Kubota, Stiga and Wolf robotic lawn mowers with Connect module are supported.
 
 ## Installation
 * First: This is not a Home Assistant Add-On. It's a custom component.
-* There are two ways to install. First you can download the folder custom_component and copy it into your Home-Assistant config folder. Second option is to install HACS (Home Assistant Custom Component Store) and select "ZCS Lawn Mower Robot" from the Integrations catalog.
-* Restart Home Assistant after installation
-* Make sure that you refresh your browser window too
-* Use the "Add Integration" in Home Assistant, Settings, Devices & Services and select "ZCS Lawn Mower Robot"
+* There are three ways to install:
+    * First you can download the folder custom_component and copy it into your Home-Assistant config folder.
+    * Second option is to install HACS (Home Assistant Custom Component Store) and visit the HACS _Integrations_ pane and add `https://github.com/ufozone/ha-zcs-mower.git` as an `Integration` by following [these instructions](https://hacs.xyz/docs/faq/custom_repositories/). You'll then be able to install it through the _Integrations_ pane.
+    * ~~Third option is to install HACS (Home Assistant Custom Component Store) and select "ZCS Lawn Mower Robot" from the Integrations catalog.~~
+* Restart Home Assistant after installation.
+* Make sure that you refresh your browser window too.
+* Use the "Add Integration" in Home Assistant, Settings, Devices & Services and select "ZCS Lawn Mower Robot".
 * In the best case, create a new account (via the mobile app) and connect it to your lawn mower(s). Then there should be no problems when you use the HA integration and the mobile app at the same time.
-* Get account key and IMEI from lawn mower:
+* Get client key and IMEI from lawn mower:
     * Open the app on your mobile device.
     * Click on the `Setup` tab.
     * In the `Connect Settings` section, click `Registered "Connect Clients"`:
@@ -38,7 +41,12 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
     * Now you need the IMEI of your lawn mower
     * Click on the `More info` tab and scroll to the `Connect Informations` section:
     * ![Get IMEI address](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_imei.jpg?raw=true)
-* Type both information into the config flow dialog.
+	* Type both information into the config flow dialog.
+* Configure map camera:
+    * The best way is to create a new map on [Google My Maps](https://mymaps.google.com/).
+    * Take a snapshot of the desired area.
+    * Mark the corner points and export as CSV.
+    * Type the coordinates into the config flow dialog. Pay attention to the correct order of latitude and longitude.
 
 ## Available components 
 
@@ -58,6 +66,15 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
     ```
     attributes: 
     reason
+    ```
+
+### Camera
+
+* map
+
+    ```
+    attributes: 
+    calibration
     ```
 
 ### Device Tracker
@@ -98,34 +115,34 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 
 ### Services
 
-* set_profile
+* set_profile:
   Configure the profile for auto-mode.
   
-* work_now
+* work_now:
   Command the lawn mower to mow now.
   
-* work_for
+* work_for:
   Command the lawn mower to mow for a certain duration.
   
-* work_until
+* work_until:
   Command the lawn mower to mow until a certain time.
   
-* border_cut
+* border_cut:
   Command the lawn mower to cut the border.
   
-* charge_now
+* charge_now:
   Command the lawn mower to charge now.
   
-* charge_for
+* charge_for:
   Command the lawn mower to charge for a certain duration.
   
-* charge_until
+* charge_until:
   Command the lawn mower to charge until a certain time.
   
-* trace_position
+* trace_position:
   Command the lawn mower to report its current position.
   
-* keep_out
+* keep_out:
   Commands the lawn mower to keep out of a location (no-go area).
 
 ### Logging
