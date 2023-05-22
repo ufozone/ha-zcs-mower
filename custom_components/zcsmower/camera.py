@@ -67,22 +67,23 @@ async def async_setup_entry(
     async_add_entities: Entity,
 ) -> None:
     """Do setup cameras from a config entry created in the integrations UI."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]
-    async_add_entities(
-        [
-            ZcsMowerCamera(
-                hass=hass,
-                config_entry=config_entry,
-                coordinator=coordinator,
-                entity_description=entity_description,
-                imei=imei,
-                name=name,
-            )
-            for imei, name in coordinator.mowers.items()
-            for entity_description in ENTITY_DESCRIPTIONS
-        ],
-        update_before_add=True,
-    )
+    if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
+        coordinator = hass.data[DOMAIN][config_entry.entry_id]
+        async_add_entities(
+            [
+                ZcsMowerCamera(
+                    hass=hass,
+                    config_entry=config_entry,
+                    coordinator=coordinator,
+                    entity_description=entity_description,
+                    imei=imei,
+                    name=name,
+                )
+                for imei, name in coordinator.mowers.items()
+                for entity_description in ENTITY_DESCRIPTIONS
+            ],
+            update_before_add=True,
+        )
 
 
 class ZcsMowerCamera(ZcsMowerEntity, Camera):
@@ -120,11 +121,11 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         self.gps_bottom_right = None
 
         if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
-            LOGGER.debug("Camera enabled")
+            LOGGER.debug("Map camera enabled")
             self.gps_top_left = self.config_entry.options.get(CONF_GPS_TOP_LEFT, None)
             self.gps_bottom_right = self.config_entry.options.get(CONF_GPS_BOTTOM_RIGHT, None)
         else:
-            LOGGER.debug("Camera disabled")
+            LOGGER.debug("Map camera disabled")
             latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
             longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
             if latitude and longitude:
@@ -168,7 +169,6 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
                 if location_history is not None:
                     map_points_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
                     map_points = min(map_points_max, len(location_history) - 1)
-                    LOGGER.debug(map_points)
                     for i in range(map_points, 0, -1):
                         point_1 = location_history[i]
                         scaled_loc_1 = self._scale_to_img(

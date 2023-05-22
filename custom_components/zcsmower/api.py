@@ -136,6 +136,7 @@ class ZcsMowerApiClient:
             data = json.loads(data)
 
         data = await self.set_json_auth(data)
+        LOGGER.debug("API.request:")
         LOGGER.debug(data)
 
         try:
@@ -166,6 +167,7 @@ class ZcsMowerApiClient:
                     if "success" in self._response["auth"]:
                         self._status = self._response["auth"]["success"]
 
+                LOGGER.debug("API.response:")
                 LOGGER.debug(self._response)
 
                 if self._status:

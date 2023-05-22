@@ -100,8 +100,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 3
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
-    title: str | None
-    options: dict[str, any] | None
+    _title: str | None
+    _options: dict[str, any] | None
 
     async def async_step_user(
         self,
@@ -130,8 +130,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
             if not errors:
                 # Input is valid, set data and options
-                self.title = user_input.get(CONF_NAME, "")
-                self.options = {
+                self._title = user_input.get(CONF_NAME, "")
+                self._options = {
                     CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
                     CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
                     CONF_IMG_PATH_MAP: "",
@@ -141,7 +141,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_MAP_POINTS: int(MAP_POINTS_DEFAULT),
                     CONF_MOWERS: {},
                 }
-                LOGGER.debug(self.options)
+                LOGGER.debug(self._options)
                 # Return the form of the next step
                 # If user ticked the box go to camera step
                 if user_input.get(CONF_CAMERA_ENABLE, False):
@@ -203,18 +203,18 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     }
                 )
                 if user_input.get(CONF_GPS_TOP_LEFT):
-                    self.options[CONF_GPS_TOP_LEFT] = [
+                    self._options[CONF_GPS_TOP_LEFT] = [
                         float(x.strip())
                         for x in user_input.get(CONF_GPS_TOP_LEFT).split(",")
                         if x
                     ]
                 if user_input.get(CONF_GPS_BOTTOM_RIGHT):
-                    self.options[CONF_GPS_BOTTOM_RIGHT] = [
+                    self._options[CONF_GPS_BOTTOM_RIGHT] = [
                         float(x.strip())
                         for x in user_input.get(CONF_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
-                LOGGER.debug(self.options)
+                LOGGER.debug(self._options)
                 # Return the form of the next step
                 return await self.async_step_mower()
         return self.async_show_form(
@@ -223,6 +223,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(
                         CONF_IMG_PATH_MAP,
+                        default=(user_input or {}).get(CONF_IMG_PATH_MAP, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -230,6 +231,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ),
                     vol.Required(
                         CONF_GPS_TOP_LEFT,
+                        default=(user_input or {}).get(CONF_GPS_TOP_LEFT, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -237,6 +239,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ),
                     vol.Required(
                         CONF_GPS_BOTTOM_RIGHT,
+                        default=(user_input or {}).get(CONF_GPS_BOTTOM_RIGHT, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -244,6 +247,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ),
                     vol.Optional(
                         CONF_IMG_PATH_MARKER,
+                        default=(user_input or {}).get(CONF_IMG_PATH_MARKER, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -275,7 +279,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             try:
                 await validate_imei(
                     imei=user_input[ATTR_IMEI],
-                    client_key=self.options[CONF_CLIENT_KEY],
+                    client_key=self._options[CONF_CLIENT_KEY],
                     hass=self.hass
                 )
             except ValueError as exception:
@@ -290,11 +294,11 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
             if not errors:
                 # Input is valid, set data.
-                self.options[CONF_MOWERS][user_input[ATTR_IMEI]] = user_input.get(
+                self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = user_input.get(
                     ATTR_NAME,
                     user_input[ATTR_IMEI],
                 )
-                LOGGER.debug(self.options)
+                LOGGER.debug(self._options)
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
                 if user_input.get("add_another", False):
@@ -302,9 +306,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
                 # User is done adding lawn mowers, create the config entry.
                 return self.async_create_entry(
-                    title=self.title,
+                    title=self._title,
                     data={},
-                    options=self.options,
+                    options=self._options,
                 )
         return self.async_show_form(
             step_id="mower",
