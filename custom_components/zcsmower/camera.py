@@ -11,8 +11,6 @@ from PIL import (
     ImageDraw,
 )
 
-from collections.abc import Callable
-
 from homeassistant.core import (
     callback,
     HomeAssistant,
@@ -31,11 +29,6 @@ from homeassistant.components.camera import (
     SUPPORT_ON_OFF,
 )
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.typing import (
-    ConfigType,
-    DiscoveryInfoType,
-    HomeAssistantType,
-)
 
 from .const import (
     LOGGER,
@@ -88,17 +81,6 @@ async def async_setup_entry(
         ],
         update_before_add=True,
     )
-
-
-async def async_setup_platform(
-    hass: HomeAssistantType,
-    config: ConfigType,
-    async_add_entities: Callable,
-    discovery_info: DiscoveryInfoType | None = None,
-) -> None:
-    """Set up the sensor platform."""
-    # TODO
-    LOGGER.debug("async_setup_platform")
 
 
 class ZcsMowerCamera(ZcsMowerEntity, Camera):

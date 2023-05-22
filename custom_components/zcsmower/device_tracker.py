@@ -1,7 +1,6 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
-from collections.abc import Callable
 from datetime import timedelta
 
 from homeassistant.core import HomeAssistant
@@ -20,11 +19,6 @@ from homeassistant.components.recorder import (
 from homeassistant.helpers.entity import (
     Entity,
     EntityDescription,
-)
-from homeassistant.helpers.typing import (
-    ConfigType,
-    DiscoveryInfoType,
-    HomeAssistantType,
 )
 import homeassistant.util.dt as dt_util
 
@@ -68,17 +62,6 @@ async def async_setup_entry(
     )
 
 
-async def async_setup_platform(
-    hass: HomeAssistantType,
-    config: ConfigType,
-    async_add_entities: Callable,
-    discovery_info: DiscoveryInfoType | None = None,
-) -> None:
-    """Set up the sensor platform."""
-    # TODO
-    LOGGER.debug("async_setup_platform")
-
-
 class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
     """Representation of a ZCS Lawn Mower Robot sensor."""
 
@@ -110,7 +93,7 @@ class ZcsMowerDeviceTracker(ZcsMowerEntity, TrackerEntity):
     def _get_location_history(self) -> None:
         states = history.state_changes_during_period(
             self.hass,
-            dt_util.now() - timedelta(days=3), # TODO
+            dt_util.now() - timedelta(days=3), # TODO: Settings
             dt_util.now(),
             self.entity_id,
             include_start_time_state=True,

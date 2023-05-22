@@ -1,8 +1,6 @@
 """ZCS Lawn Mower Robot binary sensor platform."""
 from __future__ import annotations
 
-from collections.abc import Callable
-
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_STATE,
@@ -14,11 +12,6 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntityDescription,
 )
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.typing import (
-    ConfigType,
-    DiscoveryInfoType,
-    HomeAssistantType,
-)
 
 from .const import (
     LOGGER,
@@ -59,17 +52,6 @@ async def async_setup_entry(
         ],
         update_before_add=True,
     )
-
-
-async def async_setup_platform(
-    hass: HomeAssistantType,
-    config: ConfigType,
-    async_add_entities: Callable,
-    discovery_info: DiscoveryInfoType | None = None,
-) -> None:
-    """Set up the binary sensor platform."""
-    # TODO
-    LOGGER.debug("async_setup_platform")
 
 
 class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
