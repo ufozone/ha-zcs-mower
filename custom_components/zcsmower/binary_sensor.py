@@ -14,7 +14,6 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.helpers.entity import Entity
 
 from .const import (
-    LOGGER,
     DOMAIN,
     ATTR_ERROR,
 )

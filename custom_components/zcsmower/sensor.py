@@ -15,7 +15,6 @@ from homeassistant.components.sensor import (
 from homeassistant.helpers.entity import Entity
 
 from .const import (
-    LOGGER,
     DOMAIN,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator

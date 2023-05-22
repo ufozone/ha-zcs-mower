@@ -23,7 +23,6 @@ from homeassistant.helpers.entity import (
 import homeassistant.util.dt as dt_util
 
 from .const import (
-    LOGGER,
     DOMAIN,
     LOCATION_HISTORY_DAYS,
 )
