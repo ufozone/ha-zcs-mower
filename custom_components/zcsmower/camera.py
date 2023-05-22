@@ -44,6 +44,7 @@ from .const import (
     CONF_MAP_POINTS,
     ATTR_WORKING,
     ATTR_LOCATION_HISTORY,
+    ATTR_CALIBRATION,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -276,6 +277,13 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         w, h = img_draw.textsize(text.upper())
         img_draw.text(((map_image.size[0] - w) / 2, (map_image.size[1] - h) / 2), text.upper(), fill=(0, 0, 0))
         return map_image
+
+    def _update_extra_state_attributes(self) -> None:
+        """Update extra attributes."""
+        # TODO: Calibration points
+        self._additional_extra_state_attributes = {
+            ATTR_CALIBRATION: None,
+        }
 
     def camera_image(
         self, width: int | None = None, height: int | None = None

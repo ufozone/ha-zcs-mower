@@ -508,6 +508,9 @@
           },
           "last_pull": {
             "name": "Zuletzt abgerufen"
+          },
+          "calibration_points": {
+            "name": "Kalibrierungspunkte"
           }
         }
       }
