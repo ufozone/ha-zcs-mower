@@ -12,21 +12,21 @@
     "step": {
       "user": {
         "title": "Authentifizierung",
-        "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel aus der mobilen App ein.",
+        "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "name": "Garagenname",
           "client_key": "Kundenschlüssel",
-          "camera_enable": "Kartenkamera aktivieren"
+          "camera_enable": "Kartenkamera aktivieren?"
         }
       },
       "camera": {
         "title": "Konfigurieren der Kartenkamera",
-        "description": "Einstellungen der Kamera.",
+        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad.",
         "data": {
           "img_path_map": "Pfad zum Kartenbild",
           "img_path_marker": "Pfad zum Bild des Mäherstandorts",
-          "gps_top_left": "GPS-Koordinaten der oberen linken Bildecke",
-          "gps_bottom_right": "GPS-Koordinaten der unteren rechten Bildecke",
+          "gps_top_left": "GPS-Koordinaten der oberen linken Bildecke (Längengrad, Breitengrad)",
+          "gps_bottom_right": "GPS-Koordinaten der unteren rechten Bildecke (Längengrad, Breitengrad)",
           "map_points": "Wie viele Standortpunkte sollen auf der Karte maximal angezeigt werden?"
         }
       },
@@ -70,7 +70,7 @@
       },
       "add": {
         "title": "Rasenmähroboter hinzufügen",
-        "description": "Einen weiteren Rasenmäher hinzufügen:",
+        "description": "Einen weiteren Rasenmäher hinzufügen.",
         "data": {
           "name": "Name des Rasenmähers",
           "imei": "IMEI des Rasenmähers"
@@ -78,7 +78,7 @@
       },
       "change": {
         "title": "Rasenmähroboter bearbeiten",
-        "description": "Einen Rasenmähroboter bearbeiten:",
+        "description": "Einen Rasenmähroboter bearbeiten.",
         "data": {
           "imei": "Rasenmäher auswählen",
           "name": "Name des Rasenmähers"
@@ -86,7 +86,7 @@
       },
       "delete": {
         "title": "Rasenmäher löschen",
-        "description": "Lösche einen Rasenmäher:",
+        "description": "Lösche einen Rasenmäher.",
         "data": {
           "imei": "Rasenmäher auswählen",
           "confirm": "Löschung bestätigen"
@@ -94,19 +94,19 @@
       },
       "camera": {
         "title": "Konfigurieren der Kartenkamera",
-        "description": "Einstellungen der Kamera.",
+        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad.",
         "data": {
-          "camera_enable": "Kartenkamera aktivieren",
+          "camera_enable": "Kartenkamera aktivieren?",
           "img_path_map": "Pfad zum Kartenbild",
           "img_path_marker": "Pfad zum Bild des Mäherstandorts",
-          "gps_top_left": "GPS-Koordinaten der oberen linken Bildecke",
-          "gps_bottom_right": "GPS-Koordinaten der unteren rechten Bildecke",
+          "gps_top_left": "GPS-Koordinaten der oberen linken Bildecke (Längengrad, Breitengrad)",
+          "gps_bottom_right": "GPS-Koordinaten der unteren rechten Bildecke (Längengrad, Breitengrad)",
           "map_points": "Wie viele Standortpunkte sollen auf der Karte maximal angezeigt werden?"
         }
       },
       "settings": {
         "title": "Authentifizierung",
-        "description": "Gib deinen Kundenschlüssel aus der mobilen App ein:",
+        "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Kundenschlüssel"
         }

@@ -12,21 +12,21 @@
     "step": {
       "user": {
         "title": "Authentication",
-        "description": "Enter your garage name client key from mobile app.",
+        "description": "Enter your garage name and client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "name": "Garage Name",
           "client_key": "Client Key",
-          "camera_enable": "Enable map camera"
+          "camera_enable": "Enable map camera?"
         }
       },
       "camera": {
         "title": "Configure map camera",
-        "description": "Camera settings.",
+        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude.",
         "data": {
           "img_path_map": "Path to the map image",
           "img_path_marker": "Path to the mower location image",
-          "gps_top_left": "GPS coordinates of the top left image corner",
-          "gps_bottom_right": "GPS coordinates of the bottom right image corner",
+          "gps_top_left": "GPS coordinates of the top left image corner (latitude, longitude)",
+          "gps_bottom_right": "GPS coordinates of the bottom right image corner (latitude, longitude)",
           "map_points": "What is the maximum number of location points to be displayed on the map?"
         }
       },
@@ -70,7 +70,7 @@
       },
       "add": {
         "title": "Add lawn mower",
-        "description": "Add another lawn mower:",
+        "description": "Add another lawn mower.",
         "data": {
           "name": "Name of lawn mower",
           "imei": "IMEI of lawn mower"
@@ -78,7 +78,7 @@
       },
       "change": {
         "title": "Change lawn mower",
-        "description": "Change a lawn mower:",
+        "description": "Change a lawn mower.",
         "data": {
           "imei": "Select lawn mower",
           "name": "Name of lawn mower"
@@ -86,7 +86,7 @@
       },
       "delete": {
         "title": "Delete lawn mower",
-        "description": "Delete a lawn mower:",
+        "description": "Delete a lawn mower.",
         "data": {
           "imei": "Select lawn mower",
           "confirm": "Confirm deletion"
@@ -94,19 +94,19 @@
       },
       "camera": {
         "title": "Configure map camera",
-        "description": "Camera settings.",
+        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude.",
         "data": {
-          "camera_enable": "Enable map camera",
+          "camera_enable": "Enable map camera?",
           "img_path_map": "Path to the map image",
           "img_path_marker": "Path to the mower location image",
-          "gps_top_left": "GPS coordinates of the top left image corner",
-          "gps_bottom_right": "GPS coordinates of the bottom right image corner",
+          "gps_top_left": "GPS coordinates of the top left image corner (latitude, longitude)",
+          "gps_bottom_right": "GPS coordinates of the bottom right image corner (latitude, longitude)",
           "map_points": "What is the maximum number of location points to be displayed on the map?"
         }
       },
       "settings": {
         "title": "Authentication",
-        "description": "Enter your client key from mobile app:",
+        "description": "Enter your client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Client Key"
         }
