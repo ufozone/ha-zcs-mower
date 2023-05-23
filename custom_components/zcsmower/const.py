@@ -27,6 +27,7 @@ ATTRIBUTION = "Data provided gently by Telit IoT Platform"
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
+    Platform.BUTTON,
     Platform.CAMERA,
     Platform.DEVICE_TRACKER,
     Platform.NUMBER,
