@@ -108,6 +108,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_LAST_WAKE_UP: None,
             }
         self._loop = asyncio.get_event_loop()
+        self._scheduled_refresh: asyncio.TimerHandle | None = None
 
     def _convert_datetime_from_api(
         self,
@@ -145,7 +146,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             """Update all mowers."""
             await self.async_fetch_all_mowers()
 
-            # TODO
             LOGGER.debug("_async_update_data")
             LOGGER.debug(self.data)
 
@@ -163,6 +163,17 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             raise ConfigEntryAuthFailed(exception) from exception
         except ZcsMowerApiError as exception:
             raise UpdateFailed(exception) from exception
+
+    def schedule_refresh(self) -> None:
+        """Schedule coordinator refresh after 1 second."""
+        if self._scheduled_refresh:
+            self._scheduled_refresh.cancel()
+        self._scheduled_refresh = self.hass.loop.call_later(
+            1,
+            lambda: asyncio.create_task(
+                self.async_refresh()
+            ),
+        )
 
     async def _async_update_listeners(self) -> None:
         """Update all registered listeners."""
