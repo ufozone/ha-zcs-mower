@@ -170,9 +170,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             self._scheduled_update_listeners.cancel()
         self._scheduled_update_listeners = self.hass.loop.call_later(
             1,
-            lambda: asyncio.create_task(
-                self.async_update_listeners()
-            ),
+            lambda: self.async_update_listeners(),
         )
 
     def get_mower_attributes(
