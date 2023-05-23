@@ -149,7 +149,6 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         img_byte_arr = io.BytesIO()
         self._image.save(img_byte_arr, format="PNG")
         self._image_bytes = img_byte_arr.getvalue()
-        self.coordinator.schedule_refresh()
 
     def _generate_image(self) -> None:
         if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):

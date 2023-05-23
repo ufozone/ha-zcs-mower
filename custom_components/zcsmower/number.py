@@ -102,4 +102,3 @@ class ZcsMowerDurationNumberEntity(ZcsMowerNumberEntity):
             imei=self._imei,
             duration=duration,
         )
-        self.coordinator.schedule_refresh()
