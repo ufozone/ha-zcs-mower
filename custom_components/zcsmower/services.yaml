@@ -76,7 +76,7 @@ work_for:
       selector:
         number:
           min: 1
-          max: 10
+          max: 8
           mode: box
 
 work_until:
@@ -126,7 +126,7 @@ work_until:
       selector:
         number:
           min: 1
-          max: 10
+          max: 8
           mode: box
 
 border_cut:

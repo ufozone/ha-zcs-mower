@@ -87,7 +87,7 @@ SERVICE_WORK_FOR_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("duration"): vol.All(vol.Coerce(int), vol.Range(min=1, max=1439)),
-        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10)),
+        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
     }
 )
 SERVICE_WORK_UNTIL = "work_until"
@@ -96,7 +96,7 @@ SERVICE_WORK_UNTIL_SCHEMA = vol.Schema(
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
         vol.Required("hours"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
         vol.Required("minutes"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
-        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10)),
+        vol.Optional("area"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
     }
 )
 SERVICE_BORDER_CUT = "border_cut"

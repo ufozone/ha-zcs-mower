@@ -484,7 +484,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             "hh": hours,
             "mm": minutes,
         }
-        if isinstance(area, int) and area in range(1, 10):
+        if isinstance(area, int) and area in range(1, 8):
             _params["area"] = area - 1
         else:
             _params["area"] = 255
