@@ -267,7 +267,7 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         new = (0, h_w[0])
         x = ((lat_lon[1] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
 
-        return int(x), h_w[1] - int(y)
+        return (int(x), h_w[1] - int(y))
 
     def _create_empty_map_image(self, text: str = "No map") -> Image:
         """Create empty map image."""
@@ -279,9 +279,28 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        # TODO: Calibration points
+        calibration_points = []
+        for point in [
+            self.gps_top_left,
+            self.gps_bottom_right,
+        ]:
+            img_point = self._scale_to_img(
+                (point[0], point[1]), (self._image.size[0], self._image.size[1])
+            )
+            calibration_points.append(
+                {
+                    "vacuum": {
+                        "x": point[0],
+                        "y": point[1],
+                    },
+                    "map": {
+                        "x": int(img_point[0]),
+                        "y": int(img_point[1])
+                    },
+                }
+            )
         self._additional_extra_state_attributes = {
-            ATTR_CALIBRATION: None,
+            ATTR_CALIBRATION: calibration_points,
         }
 
     def camera_image(
