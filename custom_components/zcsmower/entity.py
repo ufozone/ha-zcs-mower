@@ -80,6 +80,8 @@ class ZcsMowerEntity(CoordinatorEntity):
     @property
     def name(self) -> str:
         """Return the name of the entity."""
+        if self.entity_description.name:
+            return f"{self._name} {self.entity_description.name}"
         return self._name
 
     @property
