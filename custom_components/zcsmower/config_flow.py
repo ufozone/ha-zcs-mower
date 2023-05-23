@@ -247,7 +247,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ),
                     vol.Optional(
                         CONF_IMG_PATH_MARKER,
-                        default=(user_input or {}).get(CONF_IMG_PATH_MARKER, ""),
+                        description={
+                            "suggested_value": (user_input or {}).get(CONF_IMG_PATH_MARKER, ""),
+                        },
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -316,6 +318,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(
                         ATTR_IMEI,
+                        default=(user_input or {}).get(ATTR_IMEI, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -323,6 +326,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ),
                     vol.Optional(
                         ATTR_NAME,
+                        description={
+                            "suggested_value": (user_input or {}).get(ATTR_NAME, ""),
+                        },
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -330,6 +336,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ),
                     vol.Optional(
                         "add_another",
+                        default=(user_input or {}).get("add_another", False),
                     ): selector.BooleanSelector(),
                 }
             ),
@@ -426,7 +433,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         ATTR_NAME,
-                        default=(user_input or {}).get(ATTR_NAME, ""),
+                        description={
+                            "suggested_value": (user_input or {}).get(ATTR_NAME, ""),
+                        },
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -691,7 +700,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_IMG_PATH_MARKER,
-                        default=(user_input or self._options).get(CONF_IMG_PATH_MARKER, ""),
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_IMG_PATH_MARKER, ""),
+                        },
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
