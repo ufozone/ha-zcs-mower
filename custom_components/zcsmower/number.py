@@ -46,7 +46,7 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerNumber(
+            ZcsMowerDurationNumberEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -61,13 +61,10 @@ async def async_setup_entry(
     )
 
 
-class ZcsMowerNumber(ZcsMowerEntity, NumberEntity):
+class ZcsMowerNumberEntity(ZcsMowerEntity, NumberEntity):
     """Representation of a ZCS Lawn Mower Robot number."""
 
-    _attr_native_value: float = 60
-    _attr_native_min_value: float = 1
-    _attr_native_max_value: float = 1439
-    _attr_native_step: float = 1
+    _attr_entity_registry_enabled_default = False
 
     def __init__(
         self,
@@ -85,21 +82,23 @@ class ZcsMowerNumber(ZcsMowerEntity, NumberEntity):
             coordinator=coordinator,
             imei=imei,
             name=name,
-            entity_type="binary_sensor",
+            entity_type="number",
             entity_key=entity_description.key,
         )
         self.entity_description = entity_description
 
+class ZcsMowerDurationNumberEntity(ZcsMowerNumberEntity):
+    """Representation of a ZCS Lawn Mower Robot number for command with duration."""
+
+    _attr_native_value: float = 60
+    _attr_native_min_value: float = 1
+    _attr_native_max_value: float = 1439
+    _attr_native_step: float = 1
+
     async def async_set_native_value(self, value: float) -> None:
         """Change the value."""
         duration = int(value)
-        if self.entity_key == "work_for":
-            await self.coordinator.async_work_for(
-                self._imei,
-                duration,
-            )
-        elif self.entity_key == "charge_for":
-            await self.coordinator.async_charge_for(
-                self._imei,
-                duration,
-            )
+        await getattr(self.coordinator, f"async_{self._entity_key}")(
+            imei=self._imei,
+            duration=duration,
+        )
