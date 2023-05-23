@@ -463,6 +463,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> bool:
         """Prepare command work_for."""
         LOGGER.debug(f"work_for: {imei}")
+        LOGGER.debug(_target)
         _target = self._get_datetime_from_duration(duration)
         await self.async_work_until(
             imei=imei,
@@ -484,7 +485,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             "hh": hours,
             "mm": minutes,
         }
-        if isinstance(area, int) and area in range(1, 8):
+        if isinstance(area, int) and area in range(1, 9):
             _params["area"] = area - 1
         else:
             _params["area"] = 255
@@ -550,6 +551,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> bool:
         """Prepare command charge_until."""
         _target = self._get_datetime_from_duration(duration)
+        LOGGER.debug(f"charge_for: {imei}")
+        LOGGER.debug(_target)
         await self.async_charge_until(
             imei=imei,
             hours=_target.hour,
@@ -622,9 +625,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             "longitude": longitude,
             "radius": radius,
         }
-        if isinstance(hours, int) and hours in range(0, 23):
+        if isinstance(hours, int) and hours in range(0, 24):
             _params["hh"] = hours
-        if isinstance(minutes, int) and minutes in range(0, 59):
+        if isinstance(minutes, int) and minutes in range(0, 60):
             _params["mm"] = minutes
         if isinstance(index, int):
             _params["index"] = index
