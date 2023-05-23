@@ -459,8 +459,36 @@
         }
       }
     },
+    "camera": {
+      "map": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Zuletzt kommuniziert"
+          },
+          "last_seen": {
+            "name": "Zuletzt gesehen"
+          },
+          "last_pull": {
+            "name": "Zuletzt abgerufen"
+          },
+          "calibration_points": {
+            "name": "Kalibrierungspunkte"
+          }
+        }
+      }
+    },
     "vacuum": {
-      "mower": {
+      "_": {
         "state": {
           "cleaning": "Mähen"
         },
@@ -487,8 +515,8 @@
         }
       }
     },
-    "camera": {
-      "map": {
+    "button": {
+      "_": {
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -508,9 +536,31 @@
           },
           "last_pull": {
             "name": "Zuletzt abgerufen"
+          }
+        }
+      }
+    },
+    "number": {
+      "_": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
           },
-          "calibration_points": {
-            "name": "Kalibrierungspunkte"
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Zuletzt kommuniziert"
+          },
+          "last_seen": {
+            "name": "Zuletzt gesehen"
+          },
+          "last_pull": {
+            "name": "Zuletzt abgerufen"
           }
         }
       }

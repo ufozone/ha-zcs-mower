@@ -459,8 +459,36 @@
         }
       }
     },
+    "camera": {
+      "map": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "Connected",
+              "false": "Disconnected"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "calibration_points": {
+            "name": "Calibration points"
+          }
+        }
+      }
+    },
     "vacuum": {
-      "mower": {
+      "_": {
         "state": {
           "cleaning": "Mowing"
         },
@@ -487,8 +515,8 @@
         }
       }
     },
-    "camera": {
-      "map": {
+    "button": {
+      "_": {
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -496,8 +524,8 @@
           "connected": {
             "name": "Connection State",
             "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
+              "true": "Connected",
+              "false": "Disconnected"
             }
           },
           "last_communication": {
@@ -508,9 +536,31 @@
           },
           "last_pull": {
             "name": "Last pull"
+          }
+        }
+      }
+    },
+    "number": {
+      "_": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
           },
-          "calibration_points": {
-            "name": "Calibration points"
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "Connected",
+              "false": "Disconnected"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
           }
         }
       }
