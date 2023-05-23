@@ -463,8 +463,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> bool:
         """Prepare command work_for."""
         LOGGER.debug(f"work_for: {imei}")
-        LOGGER.debug(_target)
         _target = self._get_datetime_from_duration(duration)
+        LOGGER.debug(_target)
         await self.async_work_until(
             imei=imei,
             hours=_target.hour,
@@ -550,8 +550,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         duration: int,
     ) -> bool:
         """Prepare command charge_until."""
-        _target = self._get_datetime_from_duration(duration)
         LOGGER.debug(f"charge_for: {imei}")
+        _target = self._get_datetime_from_duration(duration)
         LOGGER.debug(_target)
         await self.async_charge_until(
             imei=imei,
