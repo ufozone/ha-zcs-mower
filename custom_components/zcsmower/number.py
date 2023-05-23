@@ -78,7 +78,7 @@ class ZcsMowerNumber(ZcsMowerEntity, NumberEntity):
         imei: str,
         name: str,
     ) -> None:
-        """Initialize the binary sensor class."""
+        """Initialize the number class."""
         super().__init__(
             hass=hass,
             config_entry=config_entry,
