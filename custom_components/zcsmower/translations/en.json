@@ -435,7 +435,6 @@
     },
     "device_tracker": {
       "location": {
-        "name": "Location",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -488,7 +487,7 @@
       }
     },
     "vacuum": {
-      "_": {
+      "mower": {
         "state": {
           "cleaning": "Mowing"
         },
@@ -516,7 +515,7 @@
       }
     },
     "button": {
-      "_": {
+      "default": {
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -541,7 +540,7 @@
       }
     },
     "number": {
-      "_": {
+      "default": {
         "state_attributes": {
           "imei": {
             "name": "IMEI"

@@ -41,7 +41,7 @@ ENTITY_DESCRIPTIONS = (
     VacuumEntityDescription(
         key="",
         icon="mdi:robot-mower",
-        translation_key="_",
+        translation_key="mower",
     ),
 )
 

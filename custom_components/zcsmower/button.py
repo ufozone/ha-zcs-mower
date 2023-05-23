@@ -21,14 +21,14 @@ ENTITY_DESCRIPTIONS = (
         key="work_now",
         name="Work now",
         icon="mdi:state-machine",
-        translation_key="_",
+        translation_key="default",
         device_class=ButtonDeviceClass.UPDATE,
     ),
     ButtonEntityDescription(
         key="charge_now",
         name="Charge now",
         icon="mdi:ev-station",
-        translation_key="_",
+        translation_key="default",
         device_class=ButtonDeviceClass.UPDATE,
     ),
 )

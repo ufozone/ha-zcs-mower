@@ -23,7 +23,6 @@ from .entity import ZcsMowerEntity
 ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
         key="error",
-        name="Error",
         translation_key="error",
         device_class=BinarySensorDeviceClass.PROBLEM,
     ),

@@ -33,6 +33,7 @@ class ZcsMowerEntity(CoordinatorEntity):
     """ZCS Lawn Mower Robot class."""
 
     _attr_attribution = ATTRIBUTION
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -76,13 +77,6 @@ class ZcsMowerEntity(CoordinatorEntity):
     def _update_handler(self) -> None:
         """Handle updated data."""
         self._update_extra_state_attributes()
-
-    @property
-    def name(self) -> str:
-        """Return the name of the entity."""
-        if self.entity_description.name:
-            return f"{self._name} {self.entity_description.name}"
-        return self._name
 
     @property
     def unique_id(self) -> str:

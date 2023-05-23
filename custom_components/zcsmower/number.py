@@ -24,14 +24,14 @@ ENTITY_DESCRIPTIONS = (
         name="Work for",
         icon="mdi:clock-outline",
         native_unit_of_measurement=UnitOfTime.MINUTES,
-        translation_key="_",
+        translation_key="default",
     ),
     NumberEntityDescription(
         key="charge_for",
         name="Charge for",
         icon="mdi:clock-outline",
         native_unit_of_measurement=UnitOfTime.MINUTES,
-        translation_key="_",
+        translation_key="default",
     ),
 )
 
