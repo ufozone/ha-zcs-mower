@@ -1,4 +1,4 @@
-"""ZCS Lawn Mower Robot binary sensor platform."""
+"""ZCS Lawn Mower Robot vacuum platform."""
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
