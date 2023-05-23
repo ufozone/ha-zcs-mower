@@ -21,17 +21,15 @@ from .entity import ZcsMowerEntity
 ENTITY_DESCRIPTIONS = (
     NumberEntityDescription(
         key="work_for",
-        name="Work for",
         icon="mdi:clock-outline",
         native_unit_of_measurement=UnitOfTime.MINUTES,
-        translation_key="default",
+        translation_key="work_for",
     ),
     NumberEntityDescription(
         key="charge_for",
-        name="Charge for",
         icon="mdi:clock-outline",
         native_unit_of_measurement=UnitOfTime.MINUTES,
-        translation_key="default",
+        translation_key="charge_for",
     ),
 )
 

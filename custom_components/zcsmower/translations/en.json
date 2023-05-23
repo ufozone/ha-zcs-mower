@@ -460,6 +460,7 @@
     },
     "camera": {
       "map": {
+        "name": "Map",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -515,7 +516,32 @@
       }
     },
     "button": {
-      "default": {
+      "work_now": {
+        "name": "Work now",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "Connected",
+              "false": "Disconnected"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      },
+      "charge_now": {
+        "name": "Charge now",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -540,7 +566,8 @@
       }
     },
     "number": {
-      "default": {
+      "work_for": {
+        "name": "Work for",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -550,6 +577,30 @@
             "state": {
               "true": "Connected",
               "false": "Disconnected"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      },
+      "charge_for": {
+        "name": "Charge for",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
             }
           },
           "last_communication": {

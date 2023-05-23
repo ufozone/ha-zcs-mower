@@ -460,6 +460,7 @@
     },
     "camera": {
       "map": {
+        "name": "Karte",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -515,7 +516,32 @@
       }
     },
     "button": {
-      "default": {
+      "work_now": {
+        "name": "Mähe jetzt",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Zuletzt kommuniziert"
+          },
+          "last_seen": {
+            "name": "Zuletzt gesehen"
+          },
+          "last_pull": {
+            "name": "Zuletzt abgerufen"
+          }
+        }
+      },
+      "charge_now": {
+        "name": "Lade jetzt",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
@@ -540,7 +566,32 @@
       }
     },
     "number": {
-      "default": {
+      "work_for": {
+        "name": "Arbeite für",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Zuletzt kommuniziert"
+          },
+          "last_seen": {
+            "name": "Zuletzt gesehen"
+          },
+          "last_pull": {
+            "name": "Zuletzt abgerufen"
+          }
+        }
+      },
+      "charge_for": {
+        "name": "Lade für",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
