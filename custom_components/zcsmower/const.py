@@ -29,6 +29,7 @@ PLATFORMS = [
     Platform.BINARY_SENSOR,
     Platform.CAMERA,
     Platform.DEVICE_TRACKER,
+    Platform.NUMBER,
     Platform.SENSOR,
     Platform.VACUUM,
 ]
