@@ -35,6 +35,7 @@ from .const import (
     DOMAIN,
     API_BASE_URI,
     API_APP_TOKEN,
+    LOCATION_HISTORY_ITEMS,
     MAP_POINTS_DEFAULT,
     CONF_CLIENT_KEY,
     CONF_CAMERA_ENABLE,
@@ -261,7 +262,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             min=1,
-                            max=100,
+                            max=LOCATION_HISTORY_ITEMS,
                             mode=selector.NumberSelectorMode.BOX,
                         )
                     ),
@@ -714,7 +715,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             min=1,
-                            max=100,
+                            max=LOCATION_HISTORY_ITEMS,
                             mode=selector.NumberSelectorMode.BOX,
                         )
                     ),
