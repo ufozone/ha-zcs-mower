@@ -68,23 +68,22 @@ async def async_setup_entry(
     async_add_entities: Entity,
 ) -> None:
     """Do setup cameras from a config entry created in the integrations UI."""
-    if config_entry.options.get(CONF_CAMERA_ENABLE, False):
-        coordinator = hass.data[DOMAIN][config_entry.entry_id]
-        async_add_entities(
-            [
-                ZcsMowerCamera(
-                    hass=hass,
-                    config_entry=config_entry,
-                    coordinator=coordinator,
-                    entity_description=entity_description,
-                    imei=imei,
-                    name=name,
-                )
-                for imei, name in coordinator.mowers.items()
-                for entity_description in ENTITY_DESCRIPTIONS
-            ],
-            update_before_add=True,
-        )
+    coordinator = hass.data[DOMAIN][config_entry.entry_id]
+    async_add_entities(
+        [
+            ZcsMowerCamera(
+                hass=hass,
+                config_entry=config_entry,
+                coordinator=coordinator,
+                entity_description=entity_description,
+                imei=imei,
+                name=name,
+            )
+            for imei, name in coordinator.mowers.items()
+            for entity_description in ENTITY_DESCRIPTIONS
+        ],
+        update_before_add=True,
+    )
 
 
 class ZcsMowerCamera(ZcsMowerEntity, Camera):
@@ -121,7 +120,8 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
         self.gps_top_left = None
         self.gps_bottom_right = None
 
-        if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
+        self._attr_entity_registry_enabled_default = self.config_entry.options.get(CONF_CAMERA_ENABLE, False)
+        if self._attr_entity_registry_enabled_default:
             LOGGER.debug("Map camera enabled")
             self.gps_top_left = self.config_entry.options.get(CONF_GPS_TOP_LEFT, None)
             self.gps_bottom_right = self.config_entry.options.get(CONF_GPS_BOTTOM_RIGHT, None)
@@ -130,7 +130,6 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
             latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
             longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
             if latitude and longitude:
-                self._attr_entity_registry_enabled_default = True
                 earth_radius = 6371008  # meters
                 offset = 100  # meters
                 pi = 3.14159
