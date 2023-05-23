@@ -167,9 +167,10 @@ class ZcsMowerCamera(ZcsMowerEntity, Camera):
                 img_draw = ImageDraw.Draw(map_image)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
                 if location_history is not None:
+                    location_history_items = len(location_history)
                     map_points_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
-                    map_points = min(map_points_max, len(location_history) - 1)
-                    for i in range(map_points, 0, -1):
+                    map_points = location_history_items - min(map_points_max, location_history_items)
+                    for i in range(location_history_items - 1, map_points, -1):
                         point_1 = location_history[i]
                         scaled_loc_1 = self._scale_to_img(
                             point_1, (map_image.size[0], map_image.size[1])
