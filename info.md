@@ -68,6 +68,12 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
     reason
     ```
 
+### Button
+
+* work_now
+
+* charge_now
+
 ### Camera
 
 * map
@@ -80,6 +86,12 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 ### Device Tracker
 
 * location
+
+### Number
+
+* work_for
+
+* charge_for
 
 ### Sensor
 
