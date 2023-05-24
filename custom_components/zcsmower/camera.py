@@ -71,7 +71,7 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerCamera(
+            ZcsMowerCameraEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -86,7 +86,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsMowerCamera(ZcsMowerEntity, Camera):
+class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
     """Representation of a ZCS Lawn Mower Robot camera."""
 
     _attr_entity_registry_enabled_default = False

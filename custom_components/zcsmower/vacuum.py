@@ -55,7 +55,7 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerVacuum(
+            ZcsMowerVacuumEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -70,7 +70,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsMowerVacuum(ZcsMowerEntity, StateVacuumEntity):
+class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
     """Representation of a ZCS Lawn Mower Robot vacuum."""
 
     def __init__(

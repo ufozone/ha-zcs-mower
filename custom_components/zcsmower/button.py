@@ -41,7 +41,7 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerButton(
+            ZcsMowerButtonEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -56,7 +56,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsMowerButton(ZcsMowerEntity, ButtonEntity):
+class ZcsMowerButtonEntity(ZcsMowerEntity, ButtonEntity):
     """Representation of a ZCS Lawn Mower Robot button."""
 
     def __init__(

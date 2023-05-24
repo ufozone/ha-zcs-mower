@@ -38,7 +38,7 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerBinarySensor(
+            ZcsMowerBinarySensorEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -53,7 +53,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsMowerBinarySensor(ZcsMowerEntity, BinarySensorEntity):
+class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
     """Representation of a ZCS Lawn Mower Robot binary sensor."""
 
     def __init__(
