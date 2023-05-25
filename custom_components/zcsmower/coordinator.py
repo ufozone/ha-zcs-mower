@@ -93,7 +93,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_ICON: None,
                 ATTR_WORKING: False,
                 ATTR_AVAILABLE: False,
-                ATTR_ERROR: 0,
+                ATTR_ERROR: None,
                 ATTR_LOCATION: {},
                 ATTR_LOCATION_HISTORY: None,
                 ATTR_SERIAL: None,
@@ -104,7 +104,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_LAST_COMM: None,
                 ATTR_LAST_SEEN: None,
                 ATTR_LAST_PULL: None,
-                ATTR_LAST_STATE: 0,
+                ATTR_LAST_STATE: None,
                 ATTR_LAST_WAKE_UP: None,
             }
         self._loop = asyncio.get_event_loop()
