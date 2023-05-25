@@ -81,8 +81,15 @@ class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
         """Update extra attributes."""
         if self._entity_key == "error":
             if self._get_attribute(ATTR_STATE) == "fail":
+                assert self.platform
+                _error = self._get_attribute(ATTR_ERROR, "unknown")
+                _name_translation_key = (
+                    f"component.{self.platform.platform_name}.entity"
+                    f".sensor.error.state.{_error}"
+                )
+                _error_reason: str = self.platform.entity_translations.get(_name_translation_key, _error)
                 self._additional_extra_state_attributes = {
-                    "reason": self._get_attribute(ATTR_ERROR, "unknown"),
+                    "reason": _error_reason,
                 }
 
     @property

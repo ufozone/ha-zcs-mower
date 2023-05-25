@@ -36,6 +36,7 @@ ROBOT_SUPPORTED_FEATURES = (
     | VacuumEntityFeature.STATE
     | VacuumEntityFeature.STATUS
     | VacuumEntityFeature.START
+    | VacuumEntityFeature.MAP
 )
 ENTITY_DESCRIPTIONS = (
     VacuumEntityDescription(
@@ -97,12 +98,20 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
+        assert self.platform
         if self._get_attribute(ATTR_STATE) == "fail":
-            _attr_status = self._get_attribute(ATTR_ERROR, "unknown")
+            _status = self._get_attribute(ATTR_ERROR, "unknown")
+            _name_translation_key = (
+                f"component.{self.platform.platform_name}.entity"
+                f".sensor.error.state.{_status}"
+            )
         else:
-            _attr_status = self._get_attribute(ATTR_STATE)
-        # TODO: Currently no way to map this status, but it would be the best way to
-        #       present detailed error messages.
+            _status = self._get_attribute(ATTR_STATE, "unknown")
+            _name_translation_key = (
+                f"component.{self.platform.platform_name}.entity"
+                f".sensor.state.state.{_status}"
+            )
+        _attr_status: str = self.platform.entity_translations.get(_name_translation_key, _status)
         self._additional_extra_state_attributes = {
             ATTR_STATUS: _attr_status,
         }
@@ -123,10 +132,17 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
         return STATE_ERROR
 
     @property
-    def error(self) -> str:
+    def error(self) -> str | None:
         """Define an error message if the vacuum is in STATE_ERROR."""
         if self._get_attribute(ATTR_STATE) == "fail":
-            return self._get_attribute(ATTR_ERROR, "unknown")
+            assert self.platform
+            _error = self._get_attribute(ATTR_ERROR, "unknown")
+            _name_translation_key = (
+                f"component.{self.platform.platform_name}.entity"
+                f".sensor.error.state.{_error}"
+            )
+            _error_reason: str = self.platform.entity_translations.get(_name_translation_key, _error)
+            return _error_reason
         return None
 
     async def async_start(self) -> None:
