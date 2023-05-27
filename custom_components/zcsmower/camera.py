@@ -145,16 +145,13 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         self._image_to_bytes()
         self._generate_image()
 
-    def _image_to_bytes(self) -> None:
-        img_byte_arr = io.BytesIO()
-        self._image.save(img_byte_arr, format="PNG")
-        self._image_bytes = img_byte_arr.getvalue()
-
     def _generate_image(self) -> None:
         if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
             map_image_path = self.config_entry.options.get(CONF_IMG_PATH_MAP, None)
             if map_image_path and os.path.isfile(map_image_path):
                 map_image = Image.open(map_image_path, "r")
+                map_image_size = self._calculate_image_size(map_image, (600, 600))
+                map_image = map_image.resize(map_image_size)
             else:
                 map_image = self._create_empty_map_image("No path configured to a map cutout.")
                 LOGGER.warning("No map camera path configured")
@@ -172,19 +169,19 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                     map_points = location_history_items - min(map_points_max, location_history_items)
                     for i in range(location_history_items - 1, map_points, -1):
                         point_1 = location_history[i]
-                        scaled_loc_1 = self._scale_to_img(
+                        scaled_loc_1 = self._scale_to_image(
                             point_1, (map_image.size[0], map_image.size[1])
                         )
                         point_2 = location_history[i - 1]
-                        scaled_loc_2 = self._scale_to_img(
+                        scaled_loc_2 = self._scale_to_image(
                             point_2, (map_image.size[0], map_image.size[1])
                         )
                         plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
                         for p in range(0, len(plot_points) - 1, 2):
                             img_draw.line(
                                 (plot_points[p], plot_points[p + 1]),
-                                fill=(153, 194, 136),
-                                width=2
+                                fill=(64, 185, 60),
+                                width=1
                             )
 
                 latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
@@ -194,17 +191,11 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                     if not map_marker_path or not os.path.isfile(map_marker_path):
                         map_marker_path = f"{os.path.dirname(__file__)}/resources/marker.png"
                     map_marker = Image.open(map_marker_path, "r")
-                    img_w, img_h = map_marker.size
-                    if img_w > img_h:
-                        img_h = int((img_h / img_w) * 64)
-                        img_w = 64
-                    else:
-                        img_w = int((img_w / img_h) * 64)
-                        img_h = 64
-                    map_marker = map_marker.resize((img_w, img_h))
+                    map_marker_size = self._calculate_image_size(map_marker, (32, 32))
+                    map_marker = map_marker.resize(map_marker_size)
 
                     location = (latitude, longitude)
-                    x1, y1 = self._scale_to_img(location, (map_image.size[0], map_image.size[1]))
+                    x1, y1 = self._scale_to_image(location, (map_image.size[0], map_image.size[1]))
                     img_w, img_h = map_marker.size
                     # TODO: sometimes we get ValueError: bad transparency mask
                     try:
@@ -254,21 +245,36 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
         return tuple(point)
 
-    def _scale_to_img(
+    def _scale_to_image(
         self,
         lat_lon: GpsPoint,
-        h_w: ImgDimensions
+        size: ImgDimensions
     ) -> ImgPoint:
         """Convert from latitude and longitude to the image pixels."""
         old = (self.gps_bottom_right[0], self.gps_top_left[0])
-        new = (0, h_w[1])
+        new = (0, size[1])
         y = ((lat_lon[0] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
 
         old = (self.gps_top_left[1], self.gps_bottom_right[1])
-        new = (0, h_w[0])
+        new = (0, size[0])
         x = ((lat_lon[1] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
 
-        return (int(x), h_w[1] - int(y))
+        return (int(x), size[1] - int(y))
+
+    def _calculate_image_size(
+        self,
+        image: Image,
+        max_size: ImgDimensions,
+    ) -> ImgDimensions:
+        """Calculate new image size with max dimensions."""
+        img_w, img_h = image.size
+        max_w, max_h = max_size
+
+        scale = max(1, max((img_w / max_w), (img_h / max_h)))
+        new_w = round(img_w / scale)
+        new_h = round(img_h / scale)
+
+        return (new_w, new_h)
 
     def _create_empty_map_image(self, text: str = "No map") -> Image:
         """Create empty map image."""
@@ -278,6 +284,16 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         img_draw.text(((map_image.size[0] - w) / 2, (map_image.size[1] - h) / 2), text.upper(), fill=(0, 0, 0))
         return map_image
 
+    def _image_to_bytes(self) -> None:
+        img_byte_arr = io.BytesIO()
+        self._image.save(
+            img_byte_arr,
+            format="PNG",
+            #optimize=True,
+            #compress_level=9,
+        )
+        self._image_bytes = img_byte_arr.getvalue()
+
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
         calibration_points = []
@@ -285,7 +301,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
             self.gps_top_left,
             self.gps_bottom_right,
         ]:
-            img_point = self._scale_to_img(
+            img_point = self._scale_to_image(
                 (point[0], point[1]), (self._image.size[0], self._image.size[1])
             )
             calibration_points.append(
