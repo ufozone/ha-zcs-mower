@@ -150,18 +150,19 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
             map_image_path = self.config_entry.options.get(CONF_IMG_PATH_MAP, None)
             if map_image_path and os.path.isfile(map_image_path):
                 map_image = Image.open(map_image_path, "r")
+                map_image = map_image.convert("RGB")
                 map_image_size = self._calculate_image_size(map_image, (600, 600))
                 map_image = map_image.resize(map_image_size)
             else:
-                map_image = self._create_empty_map_image("No path configured to a map cutout.")
-                LOGGER.warning("No map camera path configured")
+                map_image = self._create_empty_map_image("No valid path configured to a map cutout.")
+                LOGGER.warning("No valid map camera path configured")
         else:
             map_image = self._create_empty_map_image("Map camera is disabled.")
             LOGGER.warning("Map camera is disabled")
 
         try:
             if self.gps_top_left is not None and self.gps_bottom_right is not None:
-                img_draw = ImageDraw.Draw(map_image)
+                img_draw = ImageDraw.Draw(map_image, "RGBA")
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
                 if location_history is not None:
                     location_history_items = len(location_history)
@@ -170,11 +171,11 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                     for i in range(location_history_items - 1, map_points, -1):
                         point_1 = location_history[i]
                         scaled_loc_1 = self._scale_to_image(
-                            point_1, (map_image.size[0], map_image.size[1])
+                            point_1, map_image.size
                         )
                         point_2 = location_history[i - 1]
                         scaled_loc_2 = self._scale_to_image(
-                            point_2, (map_image.size[0], map_image.size[1])
+                            point_2, map_image.size
                         )
                         plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
                         for p in range(0, len(plot_points) - 1, 2):
@@ -183,6 +184,22 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                                 fill=(64, 185, 60),
                                 width=1
                             )
+
+                    marker_radius = 4
+                    for i in range(map_points, location_history_items -1):
+                        point = location_history[i]
+                        scaled_loc = self._scale_to_image(
+                            point, map_image.size
+                        )
+                        img_draw.ellipse(
+                            [
+                                (scaled_loc[0] - marker_radius, scaled_loc[1] - marker_radius),
+                                (scaled_loc[0] + marker_radius, scaled_loc[1] + marker_radius)
+                            ],
+                            fill=(255, 0, 0, round(i * (255 / (location_history_items)))),
+                            outline=(64, 185, 60),
+                            width=1
+                        )
 
                 latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
                 longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
@@ -195,7 +212,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                     map_marker = map_marker.resize(map_marker_size)
 
                     location = (latitude, longitude)
-                    x1, y1 = self._scale_to_image(location, (map_image.size[0], map_image.size[1]))
+                    x1, y1 = self._scale_to_image(location, map_image.size)
                     img_w, img_h = map_marker.size
                     # TODO: sometimes we get ValueError: bad transparency mask
                     try:
@@ -278,7 +295,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
     def _create_empty_map_image(self, text: str = "No map") -> Image:
         """Create empty map image."""
-        map_image = Image.new("RGBA", (600, 400), color=(255, 255, 255))
+        map_image = Image.new("RGB", (600, 400), color=(255, 255, 255))
         img_draw = ImageDraw.Draw(map_image)
         w, h = img_draw.textsize(text.upper())
         img_draw.text(((map_image.size[0] - w) / 2, (map_image.size[1] - h) / 2), text.upper(), fill=(0, 0, 0))
