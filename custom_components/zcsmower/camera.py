@@ -313,29 +313,30 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        calibration_points = []
-        for point in [
-            self.gps_top_left,
-            self.gps_bottom_right,
-        ]:
-            img_point = self._scale_to_image(
-                (point[0], point[1]), (self._image.size[0], self._image.size[1])
-            )
-            calibration_points.append(
-                {
-                    "vacuum": {
-                        "x": point[0],
-                        "y": point[1],
-                    },
-                    "map": {
-                        "x": int(img_point[0]),
-                        "y": int(img_point[1])
-                    },
-                }
-            )
-        self._additional_extra_state_attributes = {
-            ATTR_CALIBRATION: calibration_points,
-        }
+        if self._attr_entity_registry_enabled_default:
+            calibration_points = []
+            for point in [
+                self.gps_top_left,
+                self.gps_bottom_right,
+            ]:
+                img_point = self._scale_to_image(
+                    (point[0], point[1]), (self._image.size[0], self._image.size[1])
+                )
+                calibration_points.append(
+                    {
+                        "vacuum": {
+                            "x": point[0],
+                            "y": point[1],
+                        },
+                        "map": {
+                            "x": int(img_point[0]),
+                            "y": int(img_point[1])
+                        },
+                    }
+                )
+            self._additional_extra_state_attributes = {
+                ATTR_CALIBRATION: calibration_points,
+            }
 
     def camera_image(
         self, width: int | None = None, height: int | None = None
