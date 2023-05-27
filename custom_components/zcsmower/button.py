@@ -29,6 +29,12 @@ ENTITY_DESCRIPTIONS = (
         translation_key="charge_now",
         device_class=ButtonDeviceClass.UPDATE,
     ),
+    ButtonEntityDescription(
+        key="trace_position",
+        icon="mdi:map-marker",
+        translation_key="trace_position",
+        device_class=ButtonDeviceClass.UPDATE,
+    ),
 )
 
 

@@ -566,6 +566,30 @@
             "name": "Ultimo tiro"
           }
         }
+      },
+      "trace_position": {
+        "name": "Trovare la posizione",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          }
+        }
       }
     },
     "number": {
