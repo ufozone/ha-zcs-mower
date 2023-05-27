@@ -1,0 +1,622 @@
+{
+  "config": {
+    "error": {
+      "key_invalid": "La chiave client fornita non è valida.",
+      "auth_failed": "Autorizzazione fallita.",
+      "communication_failed": "Non è stato possibile eseguire l'azione.",
+      "connection_failed": "Impossibile connettersi al server.",
+      "path_invalid": "Il percorso specificato per il file non è valido: è necessario un percorso assoluto.",
+      "coordinates_invalid": "Le coordinate GPS fornite non sono valide: sono necessarie latitudine e longitudine separate da virgole.",
+      "imei_invalid": "L'IMEI fornito non è valido."
+    },
+    "step": {
+      "user": {
+        "title": "Autenticazione",
+        "description": "Immettere il nome dell'officina e la chiave cliente, che si trova nell'app mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "data": {
+          "name": "Nome del garage",
+          "client_key": "Chiave cliente",
+          "camera_enable": "Abilita la telecamera della mappa"
+        }
+      },
+      "camera": {
+        "title": "Configurare la telecamera della mappa",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
+        "data": {
+          "img_path_map": "Percorso dell'immagine della mappa",
+          "img_path_marker": "Percorso dell'immagine della posizione della falciatrice",
+          "gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
+          "gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
+          "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?"
+        }
+      },
+      "mower": {
+        "title": "Aggiungi un tosaerba",
+        "description": "Aggiungere un tosaerba, selezionare la casella per aggiungerne un altro.",
+        "data": {
+          "name": "Nome del tosaerba",
+          "imei": "IMEI del tosaerba",
+          "add_another": "Aggiungere un altro tosaerba?"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "key_invalid": "La chiave client fornita non è valida.",
+      "auth_failed": "Autorizzazione fallita.",
+      "communication_failed": "Non è stato possibile eseguire l'azione.",
+      "connection_failed": "Impossibile connettersi al server.",
+      "imei_invalid": "L'IMEI fornito non è valido.",
+      "imei_exists": "Un tosaerba con questo IMEI esiste già.",
+      "name_exists": "Un tosaerba con questo nome esiste già.",
+      "imei_not_exists": "Un tagliaerba con questo IMEI non esiste.",
+      "delete_not_confirmed": "La cancellazione del tosaerba non è stata confermata.",
+      "last_mower": "Non è possibile eliminare l'ultimo tosaerba.",
+      "path_invalid": "Il percorso specificato per il file non è valido: è necessario un percorso assoluto.",
+      "coordinates_invalid": "Le coordinate GPS fornite non sono valide: sono necessarie latitudine e longitudine separate da virgole."
+    },
+    "step": {
+      "init": {
+        "title": "Gestire i tosaerba",
+        "description": "Gestire i tosaerba e le impostazioni.",
+        "menu_options": {
+          "add": "Aggiungi un tosaerba",
+          "change": "Cambiare il tosaerba",
+          "delete": "Rimuovere il tosaerba",
+          "camera": "Impostazioni della telecamera a mappa",
+          "settings": "Impostazioni di autenticazione"
+        }
+      },
+      "add": {
+        "title": "Aggiungi un tosaerba",
+        "description": "Aggiungete un altro tosaerba.",
+        "data": {
+          "name": "Nome del tosaerba",
+          "imei": "IMEI del tosaerba"
+        }
+      },
+      "change": {
+        "title": "Cambiare il tosaerba",
+        "description": "Cambiare un tosaerba.",
+        "data": {
+          "imei": "Selezionare il tosaerba",
+          "name": "Nome del tosaerba"
+        }
+      },
+      "delete": {
+        "title": "Eliminare il tosaerba",
+        "description": "Eliminare un tosaerba.",
+        "data": {
+          "imei": "Selezionare il tosaerba",
+          "confirm": "Confermare l'eliminazione"
+        }
+      },
+      "camera": {
+        "title": "Configurare la telecamera della mappa",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
+        "data": {
+          "camera_enable": "Attivare la telecamera della mappa?",
+          "img_path_map": "Percorso dell'immagine della mappa",
+          "img_path_marker": "Percorso dell'immagine della posizione della falciatrice",
+          "gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
+          "gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
+          "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?"
+        }
+      },
+      "settings": {
+        "title": "Autenticazione",
+        "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "data": {
+          "client_key": "Chiave cliente"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Errore",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          },
+          "reason": {
+            "name": "Ragione"
+          }
+        }
+      }
+    },
+    "sensor": {
+      "state": {
+        "name": "State",
+        "state": {
+          "unknown": "Sconosciuto",
+          "charge": "Carica",
+          "work": "Lavoro",
+          "pause": "In pausa",
+          "fail": "Errore",
+          "nosignal": "Nessun segnale",
+          "gotostation": "Ritorno alla base",
+          "gotoarea": "Andare nella zona",
+          "bordercut": "Taglio del bordo",
+          "expired": "Scaduto",
+          "renewed": "Rinnovato",
+          "work_standby": "Standby di lavoro"
+        },
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          }
+        }
+      },
+      "error": {
+        "name": "Errore",
+        "state": {
+          "unknown": "Sconosciuto",
+          "bus_error": "BUS ERROR",
+          "sync_error": "SYNC ERROR",
+          "blackout_sig02": "Blackout - SIG02",
+          "blackout_sig03": "Blackout - SIG03",
+          "blackout_sig04": "Blackout - SIG04",
+          "blocked": "Bloccato",
+          "bump_error": "Errore urto",
+          "bump_error_bump03": "Errore urto - BUMP03",
+          "grass_too_high": "Erba alta",
+          "out_of_border_block": "Fuori perimetro",
+          "out_of_border_bord01": "Fuori perimetro - BORD01",
+          "out_of_border_bord02": "Fuori perimetro - BORD02",
+          "out_of_border_bord03": "Fuori perimetro - BORD03",
+          "out_of_border_bump01": "Fuori perimetro - BUMP01",
+          "out_of_border_bump02": "Fuori perimetro - BUMP02",
+          "out_of_border_out01": "Fuori perimetro - OUT01",
+          "out_of_border_out02": "Fuori perimetro - OUT02",
+          "out_of_border_start": "Fuori perimetro - START",
+          "out_of_border_sync01": "Fuori perimetro - SYNC01",
+          "out_of_border_sync02": "Fuori perimetro - SYNC02",
+          "tilt": "Incilinato",
+          "blade_error": "Errore lama",
+          "blade_error_tmotor": "Errore lama - TMOTOR",
+          "blade_error_tdrv": "Errore lama - TDRV",
+          "blade_error_curr": "Errore lama - CURR",
+          "blade_error_rpm": "Errore lama - RPM",
+          "blade_error_wdog": "Errore lama - WDOG",
+          "blade_error_fail": "Errore lama - FAIL",
+          "wheel_error_left": "Errore ruota SX",
+          "wheel_error_left_tmotor": "Errore ruota SX - TMOTOR",
+          "wheel_error_left_tdrv": "Errore ruota SX - TDRV",
+          "wheel_error_left_curr": "Errore ruota SX - CURR",
+          "wheel_error_left_rpm": "Errore ruota SX - RPM",
+          "wheel_error_left_wdog": "Errore ruota SX - WDOG",
+          "wheel_error_left_fail": "Errore ruota SX - FAIL",
+          "wheel_error_right": "Errore ruota DX",
+          "wheel_error_right_tmotor": "Errore ruota DX - TMOTOR",
+          "wheel_error_right_tdrv": "Errore ruota DX - TDRV",
+          "wheel_error_right_curr": "Errore ruota DX - CURR",
+          "wheel_error_right_rpm": "Errore ruota DX - RPM",
+          "wheel_error_right_wdog": "Errore ruota DX - WDOG",
+          "wheel_error_right_fail": "Errore ruota DX - FAIL",
+          "out_of_border_out03": "Fuori perimetro - OUT03",
+          "rollover": "Ribaltato",
+          "lift": "Sollevato",
+          "lift_lift2": "Sollevamento - LIFT2",
+          "lift_lift3": "Sollevamento - LIFT3",
+          "lift_lift4": "Sollevamento - LIFT4",
+          "tilt_tilt3": "Ribaltamento - TILT3",
+          "tilt_tilt4": "Ribaltamento - TILT4",
+          "out_of_border_bump04": "Fuori perimetro - BUMP04",
+          "low_battery": "Batteria bassa",
+          "power_off": "Power off",
+          "no_signal": "No segnale",
+          "out_of_border_out04": "Fuori perimetro - OUT04",
+          "signal_returned": "Signal Returned",
+          "autocheck_start": "Autocheck start",
+          "autocheck_stop": "Autocheck stop",
+          "out_of_border_nosig": "Fuori perimetro - NOSIG",
+          "no_signal_c1": "No signal C1",
+          "no_signal_c2": "No signal C2",
+          "no_signal_c2_1": "No signal C2",
+          "no_signal_c1_1": "No signal C1",
+          "out_of_border_bord04": "Fuori perimetro - BORD04",
+          "emergency_stop": "STOP EMERGENZA",
+          "display_required": "Display R0 Required Rxxxx",
+          "receiver_required": "Receiver R0 Required Rxxxx",
+          "gsm_required": "GSM R0 Required Rxxxx",
+          "driver_l_required": "Driver L R0 Required Rxxxx",
+          "driver_r_required": "Driver R R0 Required Rxxxx",
+          "driver_b_required": "Driver B R0 Required Rxxxx",
+          "magnet_required": "Magnet R0 Required Rxxxx",
+          "blocked_block1": "Bloccato - BLOCK1",
+          "blocked_block3": "Bloccato - BLOCK3",
+          "compass_required": "Compass R0 Required Rxxxx",
+          "bump_error_front": "Errore urto - FRONT",
+          "bump_error_back": "Errore urto - BACK",
+          "date_error": "DATE ERROR",
+          "program_error": "PROGRAM ERROR",
+          "version_error": "VERSION ERROR",
+          "safety_lift_sensor_damaged_or_dirty": "Sensore LIFT difettoso o sporco",
+          "recharge_error": "RECHARGE ERROR",
+          "autocheck_gyro": "Autocheck GYRO",
+          "autocheck_fail": "Autocheck FAIL",
+          "autocheck_rain": "Autocheck RAIN",
+          "autocheck_coils": "Autocheck COILS",
+          "autocheck_motion": "Autocheck MOTION",
+          "autocheck_wheels_blocked": "Autocheck WHEELS BLOCKED",
+          "autocheck_wheels_error": "Autocheck WHEELS ERROR",
+          "autocheck_recharge": "Autocheck RECHARGE",
+          "autocheck_button_wrong": "Autocheck BUTTON WRONG",
+          "autocheck_button_not_released": "Autocheck BUTTON NOT RELEASED",
+          "autocheck_not_lifted": "Autocheck NOT LIFTED",
+          "display_error": "DISPLAY ERROR",
+          "blade_error_blocked": "Errore lama - BLOCKED",
+          "wheel_error_left_blocked": "Errore ruota SX - BLOCKED",
+          "wheel_error_right_blocked": "Errore ruota DX - BLOCKED",
+          "blade_error_left": "Errore lama sinistro",
+          "blade_error_left_tmotor": "Errore lama sinistro - TMOTOR",
+          "blade_error_left_tdrv": "Errore lama sinistro - TDRV",
+          "blade_error_left_curr": "Errore lama sinistro - CURR",
+          "blade_error_left_rpm": "Errore lama sinistro - RPM",
+          "blade_error_left_wdog": "Errore lama sinistro - WDOG",
+          "blade_error_left_fail": "Errore lama sinistro - FAIL",
+          "blade_error_left_blocked": "Errore lama sinistro - BLOCKED",
+          "blade_error_right": "Errore lama destro",
+          "blade_error_right_tmotor": "Errore lama destro - TMOTOR",
+          "blade_error_right_tdrv": "Errore lama destro - TDRV",
+          "blade_error_right_curr": "Errore lama destro - CURR",
+          "blade_error_right_rpm": "Errore lama destro - RPM",
+          "blade_error_right_wdog": "Errore lama destro - WDOG",
+          "blade_error_right_fail": "Errore lama destro - FAIL",
+          "blade_error_right_blocked": "Errore lama destro - BLOCKED",
+          "wheel_error_fl": "Errore Motore Ruota - FL",
+          "wheel_error_fl_tmotor": "Errore Motore Ruota - FL-TMOTOR",
+          "wheel_error_fl_tdrv": "Errore Motore Ruota - FL-TDRV",
+          "wheel_error_fl_curr": "Errore Motore Ruota - FL-CURR",
+          "wheel_error_fl_rpm": "Errore Motore Ruota - FL-RPM",
+          "wheel_error_fl_wdog": "Errore Motore Ruota - FL-WDOG",
+          "wheel_error_fl_fail": "Errore Motore Ruota - FL-FAIL",
+          "wheel_error_fl_blocked": "Errore Motore Ruota - FL-BLOCKED",
+          "wheel_error_fr": "Errore Motore Ruota - FR",
+          "wheel_error_fr_tmotor": "Errore Motore Ruota - FR-TMOTOR",
+          "wheel_error_fr_tdrv": "Errore Motore Ruota - FR-TDRV",
+          "wheel_error_fr_curr": "Errore Motore Ruota - FR-CURR",
+          "wheel_error_fr_rpm": "Errore Motore Ruota - FR-RPM",
+          "wheel_error_fr_wdog": "Errore Motore Ruota - FR-WDOG",
+          "wheel_error_fr_fail": "Errore Motore Ruota - FR-FAIL",
+          "wheel_error_fr_blocked": "Errore Motore Ruota - FR-BLOCKED",
+          "steer_error_fl": "Errore Sterzata - FL",
+          "steer_error_fl_tmotor": "Errore Sterzata - FL-TMOTOR",
+          "steer_error_fl_tdrv": "Errore Sterzata - FL-TDRV",
+          "steer_error_fl_curr": "Errore Sterzata - FL-CURR",
+          "steer_error_fl_rpm": "Errore Sterzata - FL-RPM",
+          "steer_error_fl_wdog": "Errore Sterzata - FL-WDOG",
+          "steer_error_fl_fail": "Errore Sterzata - FL-FAIL",
+          "steer_error_fl_blocked": "Errore Sterzata - FL-BLOCKED",
+          "steer_error_fr": "Errore Sterzata - FR",
+          "steer_error_fr_tmotor": "Errore Sterzata - FR-TMOTOR",
+          "steer_error_fr_tdrv": "Errore Sterzata - FR-TDRV",
+          "steer_error_fr_curr": "Errore Sterzata - FR-CURR",
+          "steer_error_fr_rpm": "Errore Sterzata - FR-RPM",
+          "steer_error_fr_wdog": "Errore Sterzata - FR-WDOG",
+          "steer_error_fr_fail": "Errore Sterzata - FR-FAIL",
+          "steer_error_fr_blocked": "Errore Sterzata - FR-BLOCKED",
+          "steer_error_bl": "Errore Sterzata - BL",
+          "steer_error_bl_tmotor": "Errore Sterzata - BL-TMOTOR",
+          "steer_error_bl_tdrv": "Errore Sterzata - BL-TDRV",
+          "steer_error_bl_curr": "Errore Sterzata - BL-CURR",
+          "steer_error_bl_rpm": "Errore Sterzata - BL-RPM",
+          "steer_error_bl_wdog": "Errore Sterzata - BL-WDOG",
+          "steer_error_bl_fail": "Errore Sterzata - BL-FAIL",
+          "steer_error_bl_blocked": "Errore Sterzata - BL-BLOCKED",
+          "steer_error_br": "Errore Sterzata - BR",
+          "steer_error_br_tmotor": "Errore Sterzata - BR-TMOTOR",
+          "steer_error_br_tdrv": "Errore Sterzata - BR-TDRV",
+          "steer_error_br_curr": "Errore Sterzata - BR-CURR",
+          "steer_error_br_rpm": "Errore Sterzata - BR-RPM",
+          "steer_error_br_wdog": "Errore Sterzata - BR-WDOG",
+          "steer_error_br_fail": "Errore Sterzata - BR-FAIL",
+          "steer_error_br_blocked": "Errore Sterzata - BR-BLOCKED",
+          "radar_error": "Errore Radar",
+          "board_error": "BOARD ERROR",
+          "config_error": "CONFIG ERROR",
+          "test_b_required": "TEST B RICHIESTO",
+          "test_c_required": "TEST C RICHIESTO",
+          "trapped": "INTRAPPOLATO",
+          "sd_card_error": "ERRORE SCHEDA SD",
+          "tilt_communication_error": "ERRORE COMMUNICAZIONE TILT",
+          "rtc_error": "ERRORE RTC",
+          "can_0_error": "ERRORE CAN 0",
+          "can_1_error": "ERRORE CAN 1",
+          "blade_motor_communication_error": "ERRORE COMMUNICAZIONE MOTORE LAMA",
+          "wheel_left_communication_error": "ERRORE COMMUNICAZIONE MOTORE RUOTA SINISTRO",
+          "wheel_right_communication_error": "ERRORE COMMUNICAZIONE MOTORE RUOTA DESTRO",
+          "receiver_left_communication_error": "ERRORE COMIUNICAZIONE RICEVITORE SINISTRO",
+          "connect_error": "ERRORE CONNECT",
+          "blade_height_error": "ERRORE ALZALAMA",
+          "bluetooth_error": "ERRORE BLUETOOTH",
+          "geofence_error": "ERRORE GEOFENCE",
+          "gps_error": "ERRORE GPS",
+          "connect_error_1": "Errore Connect",
+          "over_current_error": "ERRORE SOVRACORRENTE",
+          "over_voltage_error": "ERRORE SOVRATENSIONE",
+          "eeprom_error": "ERRORE EEPROM",
+          "tilt_left_disconnect": "Disconnessione TILT sinistro",
+          "tilt_right_disconnect": "Disconnessione TILT destro",
+          "receiver_left_disconnect": "Disconnessione ricevitore sinistro",
+          "receiver_right_disconnect": "Disconnessione ricevitore destro",
+          "inductive_module_error": "Errore modulo induttivo",
+          "inductive_module_error_1": "Errore modulo induttivo",
+          "inductive_module_error_2": "Errore modulo induttivo",
+          "connect_module_error": "Errore modulo connect",
+          "middle_blade_driver_disconnected": "Disconnessione driver lama centrale",
+          "blade_left_driver_disconnected": "Disconnessione driver lama sinistro",
+          "blade_right_driver_disconnected": "Disconnessione driver lama destro",
+          "display_communication_error": "Errore comunicazione display",
+          "low_battery_while_charging": "BATTERIA BASSSA DURANTE RICARICA",
+          "blade_height_left": "Errore alzalama sinistro",
+          "blade_height_right": "Errore alzalama destro",
+          "device_error_devicex_require": "Errore Slave \"Componente - Rxxxxx Richiesto - Ryyyyy\"",
+          "long_disconnection_middle_blade": "Disconnessione lunga - lama centrale",
+          "long_disconnection_blade_left": "Errore di spegnimento imprevisto",
+          "long_disconnection_blade_right": "Disconnessione lunga - lama destra",
+          "battery_not_detected": "Batteria non trovata",
+          "zdefender_error": "Errore Zdefender",
+          "radar_data_save_error": "Errore salvataggio dati radar",
+          "docking_error": "Errore ingresso in base",
+          "invalid_voucher": "Voucher non valido",
+          "used_voucher": "Voucher usato",
+          "voucher_zone_error": "Voucher Errore Area",
+          "server_connection_error": "Connessione server fallita",
+          "mismatch_wheel_motors": "MOTORI RUOTA DIVERSI",
+          "mismatch_back_coils": "BOBINE POSTERIORI INCOMPATIBILI",
+          "mismatch_left_coils": "BOBINE SINISTRE INCOMPATIBILI",
+          "mismatch_right_coils": "BOBINE DESTRE INCOMPATIBILI",
+          "mismatch_front_coils": "BOBINE FRONTALI INCOMPATIBILI",
+          "wrong_measurament_back_left_coil": "MISURAZIONE ERRATA RX POSTERIORE (BOBINA SINISTRA)",
+          "wrong_measurament_back_right_coil": "MISURAZIONE ERRATA RX POSTERIORE (BOBINA DESTRA)",
+          "wrong_measurament_left_left_coil": "MISURAZIONE ERRATA RX SINISTRO (BOBINA SINSITRA)",
+          "wrong_measurament_left_right_coil": "MISURAZIONE ERRATA RX SINISTRO (BOBINA DESTRA)",
+          "wrong_measurament_right_left_coil": "MISURAZIONE ERRATA RX DESTRO (BOBINA SINISTRA)",
+          "wrong_measurament_right_right_coil": "MISURAZIONE ERRATA RX DESTRO (BOBINA DESTRA)",
+          "wrong_measurament_front_left_coil": "MISURAZIONE ERRATA RX FRONTALE (BOBINA SINISTRA)",
+          "wrong_measurament_front_right_coil": "MISURAZIONE ERRATA FRONTALE (BOBINA DESTRA)",
+          "mismatch_bump": "ATTIVAZIONE URTO ERRATA",
+          "bump_sensor_blocked": "SENSORE URTO BLOCCATO",
+          "lift_error": "ERRORE LIFT",
+          "mismatch_lift_sensors": "DISALLINEAMENTO LIFT",
+          "rain_error": "ERRORE PIOGGIA",
+          "stop_button_blocked": "STOP BUTTON BLOCCATO",
+          "no_signal_back_receiver": "NO SEGNALE RICEVITORE POSTERIORE",
+          "no_signal_receiver_left": "NO SEGNALE RICEVITORE SINISTRO",
+          "no_signal_receiver_right": "NO SEGNALE RICEVITORE DESTRO",
+          "no_signal_front_receiver": "NO SEGNALE RICEVITORE FRONTALE",
+          "wrong_or_missing_action": "AZIONE SBAGLIATA O MANCANTE",
+          "trapped_no_grass": "INTRAPPOLATO (No erba)",
+          "trapped_drop_off": "INTRAPPOLATO (Baratro)",
+          "trapped_bump": "INTRAPPOLATO (Urto)",
+          "trapped_tilt": "INTRAPPOLATO Inclinometro)",
+          "unexpected_shutdown_error": "Errore di spegnimento imprevisto",
+          "unexpected_shutdown_resume_from_failure": "SPEGNIMENTO INASPETTATO GESTIONE ERRORE",
+          "unexpected_shutdown_autocheck": "SPEGNIMENTO INASPETTATO AUTOCHECK",
+          "unexpected_shutdown_charge": "SPEGNIMENTO INASPETTATO IN CARICA",
+          "unexpected_shutdown_work": "SPEGNIMENTO INASPETTATO LAVORO",
+          "unexpected_shutdown_work_pause": "SPEGNIMENTO INASPETTATO IN PAUSA",
+          "unexpected_shutdown_done": "SPEGNIMENTO INASPETTATO TERMINE AREA CHIUSA"
+        }
+      }
+    },
+    "device_tracker": {
+      "location": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          }
+        }
+      }
+    },
+    "camera": {
+      "map": {
+        "name": "Mappa",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          },
+          "calibration_points": {
+            "name": "Calibration points"
+          }
+        }
+      }
+    },
+    "vacuum": {
+      "mower": {
+        "state": {
+          "cleaning": "Falciatura"
+        },
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          }
+        }
+      }
+    },
+    "button": {
+      "work_now": {
+        "name": "Lavorare ora",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          }
+        }
+      },
+      "charge_now": {
+        "name": "Carica ora",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          }
+        }
+      }
+    },
+    "number": {
+      "work_for": {
+        "name": "Lavorare per",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          }
+        }
+      },
+      "charge_for": {
+        "name": "Addebito per",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tiro"
+          }
+        }
+      }
+    }
+  }
+}
