@@ -187,7 +187,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                             scaled_loc_2 = self._scale_to_image(
                                 point_2, map_image.size
                             )
-                            opacity = self._get_location_opacity(i, map_point_count)
+                            opacity = self._get_location_opacity(i, map_point_count, map_point_first)
                             plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
                             for p in range(0, len(plot_points) - 1, 2):
                                 img_draw.line(
@@ -203,7 +203,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                         scaled_loc = self._scale_to_image(
                             point, map_image.size
                         )
-                        opacity = self._get_location_opacity(i, map_point_count)
+                        opacity = self._get_location_opacity(i, map_point_count, map_point_first)
                         img_draw.ellipse(
                             [
                                 (scaled_loc[0] - marker_radius, scaled_loc[1] - marker_radius),
@@ -243,9 +243,10 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         self,
         loc_index: int,
         loc_count: int,
+        loc_first: int | None = 0,
     ) -> int:
         """Get opacity of one location point for map."""
-        return round(loc_index * (200 / (loc_count))) + 55
+        return round((loc_index - loc_first) * (200 / loc_count)) + 55
 
     def _find_points_on_line(
         self,
