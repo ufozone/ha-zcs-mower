@@ -173,11 +173,12 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 if location_history is not None:
                     location_history_items = len(location_history)
                     map_point_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
-                    map_point_count = location_history_items - min(map_point_max, location_history_items)
+                    map_point_count = min(map_point_max, location_history_items)
+                    map_point_first = location_history_items - map_point_count
 
                     # at first draw lines between location points, if lines should show
                     if self.draw_lines:
-                        for i in range(location_history_items - 1, map_point_count, -1):
+                        for i in range(location_history_items - 1, map_point_first, -1):
                             point_1 = location_history[i]
                             scaled_loc_1 = self._scale_to_image(
                                 point_1, map_image.size
@@ -186,7 +187,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                             scaled_loc_2 = self._scale_to_image(
                                 point_2, map_image.size
                             )
-                            opacity = self._get_location_opacity(i, location_history_items)
+                            opacity = self._get_location_opacity(i, map_point_count)
                             plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
                             for p in range(0, len(plot_points) - 1, 2):
                                 img_draw.line(
@@ -197,12 +198,12 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
                     # at second draw location points
                     map_point_items = location_history_items -1 if latitude and longitude else location_history_items
-                    for i in range(map_point_count, map_point_items):
+                    for i in range(map_point_first, map_point_items):
                         point = location_history[i]
                         scaled_loc = self._scale_to_image(
                             point, map_image.size
                         )
-                        opacity = self._get_location_opacity(i, location_history_items)
+                        opacity = self._get_location_opacity(i, map_point_count)
                         img_draw.ellipse(
                             [
                                 (scaled_loc[0] - marker_radius, scaled_loc[1] - marker_radius),
