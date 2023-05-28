@@ -118,6 +118,7 @@ Get IMEI from your lawn mower(s):
 2. Click on the `More info` tab and scroll to the `Connect Informations` section:
 
 3. You need the `Imei Address` (bold string, starts with `3`):
+
     ![Get IMEI address](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_imei.jpg?raw=true)
 
 4. Type this information into the config flow dialog.
