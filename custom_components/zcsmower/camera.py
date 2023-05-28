@@ -182,11 +182,12 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                         scaled_loc_2 = self._scale_to_image(
                             point_2, map_image.size
                         )
+                        opacity = self._get_location_opacity(i, location_history_items)
                         plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
                         for p in range(0, len(plot_points) - 1, 2):
                             img_draw.line(
                                 (plot_points[p], plot_points[p + 1]),
-                                fill=(64, 185, 60),
+                                fill=(64, 185, 60, opacity),
                                 width=1
                             )
 
@@ -197,14 +198,15 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                         scaled_loc = self._scale_to_image(
                             point, map_image.size
                         )
+                        opacity = self._get_location_opacity(i, location_history_items)
                         img_draw.ellipse(
                             [
                                 (scaled_loc[0] - marker_radius, scaled_loc[1] - marker_radius),
                                 (scaled_loc[0] + marker_radius, scaled_loc[1] + marker_radius)
                             ],
-                            fill=(255, 0, 0, round(i * (255 / (location_history_items)))),
-                            outline=(64, 185, 60),
-                            width=1
+                            fill=(255, 0, 0, opacity),
+                            outline=(64, 185, 60, opacity),
+                            width=2
                         )
 
                 if latitude and longitude:
@@ -231,6 +233,14 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
         self._image = map_image
         self._image_to_bytes()
+
+    def _get_location_opacity(
+        self,
+        loc_index: int,
+        loc_count: int,
+    ) -> int:
+        """Get opacity of one location point for map."""
+        return round(loc_index * (200 / (loc_count))) + 55
 
     def _find_points_on_line(
         self,
