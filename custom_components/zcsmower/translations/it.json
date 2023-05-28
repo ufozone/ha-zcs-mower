@@ -27,7 +27,8 @@
           "img_path_marker": "Percorso dell'immagine della posizione della falciatrice",
           "gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
           "gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
-          "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?"
+          "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?",
+          "draw_lines": "Si devono tracciare linee tra i punti del sito?"
         }
       },
       "mower": {
@@ -101,7 +102,8 @@
           "img_path_marker": "Percorso dell'immagine della posizione della falciatrice",
           "gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
           "gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
-          "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?"
+          "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?",
+          "draw_lines": "Si devono tracciare linee tra i punti del sito?"
         }
       },
       "settings": {

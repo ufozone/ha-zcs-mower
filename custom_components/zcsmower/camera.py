@@ -41,6 +41,7 @@ from .const import (
     CONF_IMG_PATH_MARKER,
     CONF_GPS_TOP_LEFT,
     CONF_GPS_BOTTOM_RIGHT,
+    CONF_DRAW_LINES,
     CONF_MAP_POINTS,
     ATTR_WORKING,
     ATTR_LOCATION_HISTORY,
@@ -119,12 +120,14 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
         self.gps_top_left = None
         self.gps_bottom_right = None
+        self.draw_lines = True
 
         self._attr_entity_registry_enabled_default = self.config_entry.options.get(CONF_CAMERA_ENABLE, False)
         if self._attr_entity_registry_enabled_default:
             LOGGER.debug("Map camera enabled")
             self.gps_top_left = self.config_entry.options.get(CONF_GPS_TOP_LEFT, None)
             self.gps_bottom_right = self.config_entry.options.get(CONF_GPS_BOTTOM_RIGHT, None)
+            self.draw_lines = self.config_entry.options.get(CONF_DRAW_LINES, True)
         else:
             LOGGER.debug("Map camera disabled")
             latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
@@ -172,24 +175,25 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                     map_point_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
                     map_point_count = location_history_items - min(map_point_max, location_history_items)
 
-                    # at first draw lines between location points
-                    for i in range(location_history_items - 1, map_point_count, -1):
-                        point_1 = location_history[i]
-                        scaled_loc_1 = self._scale_to_image(
-                            point_1, map_image.size
-                        )
-                        point_2 = location_history[i - 1]
-                        scaled_loc_2 = self._scale_to_image(
-                            point_2, map_image.size
-                        )
-                        opacity = self._get_location_opacity(i, location_history_items)
-                        plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
-                        for p in range(0, len(plot_points) - 1, 2):
-                            img_draw.line(
-                                (plot_points[p], plot_points[p + 1]),
-                                fill=(64, 185, 60, opacity),
-                                width=1
+                    # at first draw lines between location points, if lines should show
+                    if self.draw_lines:
+                        for i in range(location_history_items - 1, map_point_count, -1):
+                            point_1 = location_history[i]
+                            scaled_loc_1 = self._scale_to_image(
+                                point_1, map_image.size
                             )
+                            point_2 = location_history[i - 1]
+                            scaled_loc_2 = self._scale_to_image(
+                                point_2, map_image.size
+                            )
+                            opacity = self._get_location_opacity(i, location_history_items)
+                            plot_points = self._find_points_on_line(scaled_loc_1, scaled_loc_2)
+                            for p in range(0, len(plot_points) - 1, 2):
+                                img_draw.line(
+                                    (plot_points[p], plot_points[p + 1]),
+                                    fill=(64, 185, 60, opacity),
+                                    width=1
+                                )
 
                     # at second draw location points
                     map_point_items = location_history_items -1 if latitude and longitude else location_history_items

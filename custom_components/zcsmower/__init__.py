@@ -17,7 +17,10 @@ from .const import (
     CONF_IMG_PATH_MARKER,
     CONF_GPS_TOP_LEFT,
     CONF_GPS_BOTTOM_RIGHT,
+    CONF_MAP_POINTS,
+    CONF_DRAW_LINES,
     CONF_MOWERS,
+    MAP_POINTS_DEFAULT,
 )
 from .services import async_setup_services
 from .api import ZcsMowerApiClient
@@ -72,7 +75,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
     """Migrate old entry."""
     LOGGER.debug("Migrating from version %s", config_entry.version)
 
-    if config_entry.version != 3:
+    if config_entry.version < 3:
         config_entry.version = 3
         hass.config_entries.async_update_entry(
             config_entry,
@@ -88,6 +91,21 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                 CONF_MOWERS: config_entry.data.get(CONF_MOWERS, {}),
             },
         )
-        LOGGER.info("Migration to version %s successful", config_entry.version)
+    if config_entry.version < 4:
+        config_entry.version = 4
+        _options = dict(config_entry.options)
+        _options.update(
+            {
+                CONF_DRAW_LINES: True,
+                CONF_MAP_POINTS: config_entry.data.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+            }
+        )
+        hass.config_entries.async_update_entry(
+            config_entry,
+            title=str(config_entry.title),
+            data={},
+            options=_options,
+        )
 
+    LOGGER.info("Migration to version %s successful", config_entry.version)
     return True

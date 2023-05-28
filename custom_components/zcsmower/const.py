@@ -55,6 +55,7 @@ CONF_IMG_PATH_MARKER = "img_path_marker"
 CONF_GPS_TOP_LEFT = "gps_top_left"
 CONF_GPS_BOTTOM_RIGHT = "gps_bottom_right"
 CONF_MAP_POINTS = "map_points"
+CONF_DRAW_LINES = "draw_lines"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"

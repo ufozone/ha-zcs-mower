@@ -43,6 +43,7 @@ from .const import (
     CONF_IMG_PATH_MARKER,
     CONF_GPS_TOP_LEFT,
     CONF_GPS_BOTTOM_RIGHT,
+    CONF_DRAW_LINES,
     CONF_MAP_POINTS,
     CONF_MOWERS,
     ATTR_IMEI,
@@ -98,7 +99,7 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 3
+    VERSION = 4
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     _title: str | None
@@ -139,6 +140,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_IMG_PATH_MARKER: "",
                     CONF_GPS_TOP_LEFT: "",
                     CONF_GPS_BOTTOM_RIGHT: "",
+                    CONF_DRAW_LINES: True,
                     CONF_MAP_POINTS: int(MAP_POINTS_DEFAULT),
                     CONF_MOWERS: {},
                 }
@@ -201,6 +203,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                         CONF_IMG_PATH_MAP: image_map_path,
                         CONF_IMG_PATH_MARKER: image_marker_path,
                         CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
+                        CONF_DRAW_LINES: user_input.get(CONF_DRAW_LINES, False),
                     }
                 )
                 if user_input.get(CONF_GPS_TOP_LEFT):
@@ -266,6 +269,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                             mode=selector.NumberSelectorMode.BOX,
                         )
                     ),
+                    vol.Optional(
+                        CONF_DRAW_LINES,
+                    ): selector.BooleanSelector(),
                 }
             ),
             errors=errors,
@@ -354,7 +360,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     """Handles options flow for the component."""
 
-    VERSION = 3
+    VERSION = 4
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
@@ -646,6 +652,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_IMG_PATH_MAP: image_map_path,
                         CONF_IMG_PATH_MARKER: image_marker_path,
                         CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
+                        CONF_DRAW_LINES: user_input.get(CONF_DRAW_LINES, False),
                     }
                 )
                 if user_input.get(CONF_GPS_TOP_LEFT):
@@ -719,6 +726,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             mode=selector.NumberSelectorMode.BOX,
                         )
                     ),
+                    vol.Optional(
+                        CONF_DRAW_LINES,
+                        default=(user_input or self._options).get(CONF_DRAW_LINES, False),
+                    ): selector.BooleanSelector(),
                 }
             ),
             errors=errors,
