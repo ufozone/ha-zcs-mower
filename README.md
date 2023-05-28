@@ -70,9 +70,11 @@ Get client key from lawn mower mobile app:
 2. Click on the `Setup` tab.
 
 3. In the `Connect Settings` section, click `Registered "Connect Clients"`:
+
     ![Registered "Connect Clients"](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_account1.jpg?raw=true)
 
 4. You need your account key (italicized string):
+
     ![Get account key](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_account2.jpg?raw=true)
 
 5. Type this information into the config flow dialog.
@@ -200,34 +202,44 @@ Get IMEI from your lawn mower(s):
 ### Services
 
 * set_profile:
-  Configure the profile for auto-mode.
+
+    Configure the profile for auto-mode.
   
 * work_now:
-  Command the lawn mower to mow now.
+
+    Command the lawn mower to mow now.
   
 * work_for:
-  Command the lawn mower to mow for a certain duration.
+
+    Command the lawn mower to mow for a certain duration.
   
 * work_until:
-  Command the lawn mower to mow until a certain time.
+
+    Command the lawn mower to mow until a certain time.
   
 * border_cut:
-  Command the lawn mower to cut the border.
+
+    Command the lawn mower to cut the border.
   
 * charge_now:
-  Command the lawn mower to charge now.
+
+    Command the lawn mower to charge now.
   
 * charge_for:
-  Command the lawn mower to charge for a certain duration.
+
+    Command the lawn mower to charge for a certain duration.
   
 * charge_until:
-  Command the lawn mower to charge until a certain time.
+
+    Command the lawn mower to charge until a certain time.
   
 * trace_position:
-  Command the lawn mower to report its current position.
+
+    Command the lawn mower to report its current position.
   
 * keep_out:
-  Commands the lawn mower to keep out of a location (no-go area).
+
+    Commands the lawn mower to keep out of a location (no-go area).
 
 ## Debugging
 
