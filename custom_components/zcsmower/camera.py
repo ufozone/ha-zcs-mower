@@ -163,12 +163,17 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         try:
             if self.gps_top_left is not None and self.gps_bottom_right is not None:
                 img_draw = ImageDraw.Draw(map_image, "RGBA")
+                marker_radius = 4
+                latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
+                longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
                 if location_history is not None:
                     location_history_items = len(location_history)
-                    map_points_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
-                    map_points = location_history_items - min(map_points_max, location_history_items)
-                    for i in range(location_history_items - 1, map_points, -1):
+                    map_point_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
+                    map_point_count = location_history_items - min(map_point_max, location_history_items)
+
+                    # at first draw lines between location points
+                    for i in range(location_history_items - 1, map_point_count, -1):
                         point_1 = location_history[i]
                         scaled_loc_1 = self._scale_to_image(
                             point_1, map_image.size
@@ -185,8 +190,9 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                                 width=1
                             )
 
-                    marker_radius = 4
-                    for i in range(map_points, location_history_items -1):
+                    # at second draw location points
+                    map_point_items = location_history_items -1 if latitude and longitude else location_history_items
+                    for i in range(map_point_count, map_point_items):
                         point = location_history[i]
                         scaled_loc = self._scale_to_image(
                             point, map_image.size
@@ -201,8 +207,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                             width=1
                         )
 
-                latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
-                longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
                 if latitude and longitude:
                     map_marker_path = self.config_entry.options.get(CONF_IMG_PATH_MARKER, None)
                     if not map_marker_path or not os.path.isfile(map_marker_path):
