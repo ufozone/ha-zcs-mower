@@ -158,22 +158,22 @@ MAP_POINTS_DEFAULT = 100
 ROBOT_WAKE_UP_INTERVAL = 300
 ROBOT_WORKING_STATES = [2, 6, 7, 8, 11]
 ROBOT_MODELS = {
-    "AM015D": "Fifteen Deluxe", # ?
+    "AM015D": "L15 Deluxe",
     "AM020D": "Twenty Deluxe", # ?
     "AM020L": "Twenty Elite",
     "AM020P": "Twenty Elite S+", # ?
-    "AM020R": "Twenty ZR", # ?
-    "AM025D": "Twenty 25 Deluxe", # ?
-    "AM025L": "Twenty 25 Elite", # ?
-    "AM029D": "Twenty 29 Deluxe", # ?
-    "AM029L": "Twenty 29 Elite", # ?
+    "AM020R": "Twenty ZR",
+    "AM025D": "Twenty 25 Deluxe",
+    "AM025L": "Twenty 25 Elite",
+    "AM029D": "Twenty 29 Deluxe",
+    "AM029L": "Twenty 29 Elite",
     "AM032D": "L32 Deluxe", # ?
     "AM035B": "L35 Basic",
     "AM035D": "L35 Deluxe",
-    "AM040B": "4.0 Basic", # ???
-    "AM040L": "4.0 Elite", # ???
+    "AM040B": "4.0 Basic",
+    "AM040L": "4.0 Elite",
     "AM043L": "4.36 Elite",
-    "AM060L": "L60 Elite", # ?
+    "AM060L": "L60 Elite",
     "AM060P": "L60 Elite S+", # ?
     "AM085L": "L85 Elite", # ?
     "AM095L": "Quad Elite 4WD",
@@ -181,11 +181,11 @@ ROBOT_MODELS = {
     "AM250L": "L250i Elite",
     "AM250P": "L250i Elite S+",# ?
     "AM350L": "L350i Elite", # ?
-    "AM400B": "L400i Basic", # ?
-    "AM400D": "L400i Deluxe", # ?
+    "AM400B": "L400 Basic", # ???
+    "AM400D": "L400 Deluxe", # ???
     "AM400L": "L400 Elite", # ?
-    #"AM450B": "", # DB:21
-    #"AM450D": "", # DB:99
+    "AM450B": "L400i Basic",
+    "AM450D": "L400i Deluxe",
     "KB250L": "KR 250", # ?
     "KB250P": "KR 250", # ?
     "KB350L": "KR 350", # ?
@@ -214,31 +214,34 @@ ROBOT_MODELS = {
     "TH250L": "L25 i", # ?
     "TH250P": "S25 i", # ?
     #"TH350L": "", # DB:270
-    "TH400B": "B40 i", # ?
-    "TH400D": "D40 i", # ?
-    #"TH450B": "", # DB:14
-    #"TH450D": "", # DB:40
-    #"WI015D": "", # DB:26
-    #"WI020D": "", # DB:12
-    #"WI020L": "", # DB:1556
-    #"WI020P": "", # DB:516
-    #"WI025D": "", # DB:11
-    #"WI025L": "", # DB:157
-    #"WI029L": "", # DB:30
+    "TH400B": "B40", # ???
+    "TH400D": "D40", # ???
+    "TH450B": "B40 i", # ?
+    "TH450D": "D40 i", # ?
+    "WI015D": "IKE 6", # ?
+    "WI020D": "I70", # ???
+    "WI020L": "I100 S", # ???
+    "WI020P": "I130 S", # ???
+    "WI020R": "I100 R", # ???
+    "WI025D": "I140", # ???
+    "WI025L": "I180 S", # ???
+    "WI029D": "I250", # ???
+    "WI029L": "I350 S", # ???
     #"WI032D": "", # DB:12
-    #"WI035D": "", # DB:386
-    #"WI040B": "", # DB:25
-    #"WI040L": "", # DB:625
+    "WI035D": "Premium C180 S", # ???
+    "WI040B": "K Premium Medium", # ???
+    "WI040L": "K S Premium Medium", # ???
     "WI043L": "KXL S Ultra Premium",
-    #"WI095L": "", # DB:108
-    #"WI250D": "", # DB:11
-    #"WI250L": "", # DB:1140
-    #"WI250P": "", # DB:270
-    #"WI251L": "", # DB:20
+    "WI095L": "Q350 SR", # ?
+    "WI250D": "F28", # ???
+    "WI250L": "F35 S", # ???
+    "WI250P": "F50 S", # ???
+    "WI251L": "P70 S", # ???
     #"WI350L": "", # DB:493
-    #"WI400B": "", # DB:74
-    #"WI400D": "", # DB:70
-    #"WI450D": "", # DB:61
+    "WI400B": "YARD 101", # ???
+    "WI400D": "YARD 2000", # ???
+    "WI450B": "YARD 101 S", # ???
+    "WI450D": "YARD 2000 S", # ???
 }
 ROBOT_STATES = [
     {
