@@ -50,12 +50,13 @@ MAP_POINTS_DEFAULT = 100
 
 CONF_CLIENT_KEY = "client_key"
 CONF_CAMERA_ENABLE = "camera_enable"
-CONF_IMG_PATH_MAP = "img_path_map"
-CONF_IMG_PATH_MARKER = "img_path_marker"
-CONF_GPS_TOP_LEFT = "gps_top_left"
-CONF_GPS_BOTTOM_RIGHT = "gps_bottom_right"
+CONF_MAP_HISTORY_ENABLE = "map_history_enable"
+CONF_MAP_IMAGE_PATH = "map_image_path"
+CONF_MAP_MARKER_PATH = "map_marker_path"
+CONF_MAP_GPS_TOP_LEFT = "map_gps_top_left"
+CONF_MAP_GPS_BOTTOM_RIGHT = "map_gps_bottom_right"
 CONF_MAP_POINTS = "map_points"
-CONF_DRAW_LINES = "draw_lines"
+CONF_MAP_DRAW_LINES = "map_draw_lines"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"

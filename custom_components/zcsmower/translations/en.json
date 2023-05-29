@@ -27,8 +27,8 @@
           "map_marker_path": "Path to the mower location image",
           "map_gps_top_left": "GPS coordinates of the top left image corner (latitude, longitude)",
           "map_gps_bottom_right": "GPS coordinates of the bottom right image corner (latitude, longitude)",
-          "map_history_enable": "Should the location history be displayed on the map?",
-          "map_points": "What is the maximum number of location points to be displayed on the map?",
+          "map_history_enable": "Should the location history be shown on the map?",
+          "map_points": "What is the maximum number of location points to be shown on the map?",
           "map_draw_lines": "Should lines be drawn between the location points?"
         }
       },
@@ -103,8 +103,8 @@
           "map_marker_path": "Path to the mower location image",
           "map_gps_top_left": "GPS coordinates of the top left image corner (latitude, longitude)",
           "map_gps_bottom_right": "GPS coordinates of the bottom right image corner (latitude, longitude)",
-          "map_history_enable": "Should the location history be displayed on the map?",
-          "map_points": "What is the maximum number of location points to be displayed on the map?",
+          "map_history_enable": "Should the location history be shown on the map?",
+          "map_points": "What is the maximum number of location points to be shown on the map?",
           "map_draw_lines": "Should lines be drawn between the location points?"
         }
       },

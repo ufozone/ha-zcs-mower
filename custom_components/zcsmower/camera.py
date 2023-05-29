@@ -37,12 +37,13 @@ from .const import (
     UPDATE_INTERVAL_WORKING,
     MAP_POINTS_DEFAULT,
     CONF_CAMERA_ENABLE,
-    CONF_IMG_PATH_MAP,
-    CONF_IMG_PATH_MARKER,
-    CONF_GPS_TOP_LEFT,
-    CONF_GPS_BOTTOM_RIGHT,
-    CONF_DRAW_LINES,
+    CONF_MAP_IMAGE_PATH,
+    CONF_MAP_MARKER_PATH,
+    CONF_MAP_GPS_TOP_LEFT,
+    CONF_MAP_GPS_BOTTOM_RIGHT,
+    CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_POINTS,
+    CONF_MAP_DRAW_LINES,
     ATTR_WORKING,
     ATTR_LOCATION_HISTORY,
     ATTR_CALIBRATION,
@@ -120,14 +121,12 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
         self.gps_top_left = None
         self.gps_bottom_right = None
-        self.draw_lines = True
 
         self._attr_entity_registry_enabled_default = self.config_entry.options.get(CONF_CAMERA_ENABLE, False)
         if self._attr_entity_registry_enabled_default:
             LOGGER.debug("Map camera enabled")
-            self.gps_top_left = self.config_entry.options.get(CONF_GPS_TOP_LEFT, None)
-            self.gps_bottom_right = self.config_entry.options.get(CONF_GPS_BOTTOM_RIGHT, None)
-            self.draw_lines = self.config_entry.options.get(CONF_DRAW_LINES, True)
+            self.gps_top_left = self.config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)
+            self.gps_bottom_right = self.config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)
         else:
             LOGGER.debug("Map camera disabled")
             latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
@@ -150,7 +149,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
     def _generate_image(self) -> None:
         if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
-            map_image_path = self.config_entry.options.get(CONF_IMG_PATH_MAP, None)
+            map_image_path = self.config_entry.options.get(CONF_MAP_IMAGE_PATH, None)
             if map_image_path and os.path.isfile(map_image_path):
                 map_image = Image.open(map_image_path, "r")
                 map_image = map_image.convert("RGB")
@@ -166,18 +165,19 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         try:
             if self.gps_top_left is not None and self.gps_bottom_right is not None:
                 img_draw = ImageDraw.Draw(map_image, "RGBA")
-                marker_radius = 4
                 latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
                 longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
+                history_enable = self.config_entry.options.get(CONF_MAP_HISTORY_ENABLE, True)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
-                if location_history is not None:
+                if history_enable and location_history is not None:
                     location_history_items = len(location_history)
                     map_point_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
                     map_point_count = min(map_point_max, location_history_items)
                     map_point_first = location_history_items - map_point_count
 
                     # at first draw lines between location points, if lines should show
-                    if self.draw_lines:
+                    draw_lines = self.config_entry.options.get(CONF_MAP_DRAW_LINES, True)
+                    if draw_lines:
                         for i in range(location_history_items - 1, map_point_first, -1):
                             point_1 = location_history[i]
                             scaled_loc_1 = self._scale_to_image(
@@ -197,6 +197,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                                 )
 
                     # at second draw location points
+                    marker_radius = 4
                     map_point_items = location_history_items -1 if latitude and longitude else location_history_items
                     for i in range(map_point_first, map_point_items):
                         point = location_history[i]
@@ -211,11 +212,11 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                             ],
                             fill=(255, 0, 0, opacity),
                             outline=(64, 185, 60, opacity),
-                            width=2
+                            width=3
                         )
 
                 if latitude and longitude:
-                    map_marker_path = self.config_entry.options.get(CONF_IMG_PATH_MARKER, None)
+                    map_marker_path = self.config_entry.options.get(CONF_MAP_MARKER_PATH, None)
                     if not map_marker_path or not os.path.isfile(map_marker_path):
                         map_marker_path = f"{os.path.dirname(__file__)}/resources/marker.png"
                     map_marker = Image.open(map_marker_path, "r")

@@ -39,11 +39,12 @@ from .const import (
     MAP_POINTS_DEFAULT,
     CONF_CLIENT_KEY,
     CONF_CAMERA_ENABLE,
-    CONF_IMG_PATH_MAP,
-    CONF_IMG_PATH_MARKER,
-    CONF_GPS_TOP_LEFT,
-    CONF_GPS_BOTTOM_RIGHT,
-    CONF_DRAW_LINES,
+    CONF_MAP_HISTORY_ENABLE,
+    CONF_MAP_IMAGE_PATH,
+    CONF_MAP_MARKER_PATH,
+    CONF_MAP_GPS_TOP_LEFT,
+    CONF_MAP_GPS_BOTTOM_RIGHT,
+    CONF_MAP_DRAW_LINES,
     CONF_MAP_POINTS,
     CONF_MOWERS,
     ATTR_IMEI,
@@ -99,7 +100,7 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 4
+    VERSION = 5
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     _title: str | None
@@ -136,11 +137,12 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._options = {
                     CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
                     CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
-                    CONF_IMG_PATH_MAP: "",
-                    CONF_IMG_PATH_MARKER: "",
-                    CONF_GPS_TOP_LEFT: "",
-                    CONF_GPS_BOTTOM_RIGHT: "",
-                    CONF_DRAW_LINES: True,
+                    CONF_MAP_IMAGE_PATH: "",
+                    CONF_MAP_MARKER_PATH: "",
+                    CONF_MAP_GPS_TOP_LEFT: "",
+                    CONF_MAP_GPS_BOTTOM_RIGHT: "",
+                    CONF_MAP_HISTORY_ENABLE: True,
+                    CONF_MAP_DRAW_LINES: True,
                     CONF_MAP_POINTS: int(MAP_POINTS_DEFAULT),
                     CONF_MOWERS: {},
                 }
@@ -185,13 +187,13 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         """Second step in config flow to configure camera."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            image_map_path = user_input.get(CONF_IMG_PATH_MAP, "").strip()
-            image_marker_path = user_input.get(CONF_IMG_PATH_MARKER, "").strip()
+            image_map_path = user_input.get(CONF_MAP_IMAGE_PATH, "").strip()
+            image_marker_path = user_input.get(CONF_MAP_MARKER_PATH, "").strip()
             if not os.path.isfile(image_map_path):
                 errors["base"] = "path_invalid"
-            if user_input.get(CONF_GPS_TOP_LEFT).count(",") != 1:
+            if user_input.get(CONF_MAP_GPS_TOP_LEFT).count(",") != 1:
                 errors["base"] = "coordinates_invalid"
-            if user_input.get(CONF_GPS_BOTTOM_RIGHT).count(",") != 1:
+            if user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).count(",") != 1:
                 errors["base"] = "coordinates_invalid"
             if image_marker_path and not os.path.isfile(image_marker_path):
                 errors["base"] = "path_invalid"
@@ -200,22 +202,23 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 # Input is valid, set data
                 self._options.update(
                     {
-                        CONF_IMG_PATH_MAP: image_map_path,
-                        CONF_IMG_PATH_MARKER: image_marker_path,
+                        CONF_MAP_IMAGE_PATH: image_map_path,
+                        CONF_MAP_MARKER_PATH: image_marker_path,
+                        CONF_MAP_HISTORY_ENABLE: user_input.get(CONF_MAP_HISTORY_ENABLE, True),
                         CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
-                        CONF_DRAW_LINES: user_input.get(CONF_DRAW_LINES, False),
+                        CONF_MAP_DRAW_LINES: user_input.get(CONF_MAP_DRAW_LINES, False),
                     }
                 )
-                if user_input.get(CONF_GPS_TOP_LEFT):
-                    self._options[CONF_GPS_TOP_LEFT] = [
+                if user_input.get(CONF_MAP_GPS_TOP_LEFT):
+                    self._options[CONF_MAP_GPS_TOP_LEFT] = [
                         float(x.strip())
-                        for x in user_input.get(CONF_GPS_TOP_LEFT).split(",")
+                        for x in user_input.get(CONF_MAP_GPS_TOP_LEFT).split(",")
                         if x
                     ]
-                if user_input.get(CONF_GPS_BOTTOM_RIGHT):
-                    self._options[CONF_GPS_BOTTOM_RIGHT] = [
+                if user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT):
+                    self._options[CONF_MAP_GPS_BOTTOM_RIGHT] = [
                         float(x.strip())
-                        for x in user_input.get(CONF_GPS_BOTTOM_RIGHT).split(",")
+                        for x in user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
                 LOGGER.debug(self._options)
@@ -226,42 +229,46 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_IMG_PATH_MAP,
-                        default=(user_input or {}).get(CONF_IMG_PATH_MAP, ""),
+                        CONF_MAP_IMAGE_PATH,
+                        default=(user_input or {}).get(CONF_MAP_IMAGE_PATH, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
                     vol.Required(
-                        CONF_GPS_TOP_LEFT,
-                        default=(user_input or {}).get(CONF_GPS_TOP_LEFT, ""),
+                        CONF_MAP_GPS_TOP_LEFT,
+                        default=(user_input or {}).get(CONF_MAP_GPS_TOP_LEFT, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
                     vol.Required(
-                        CONF_GPS_BOTTOM_RIGHT,
-                        default=(user_input or {}).get(CONF_GPS_BOTTOM_RIGHT, ""),
+                        CONF_MAP_GPS_BOTTOM_RIGHT,
+                        default=(user_input or {}).get(CONF_MAP_GPS_BOTTOM_RIGHT, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
                     vol.Optional(
-                        CONF_IMG_PATH_MARKER,
+                        CONF_MAP_MARKER_PATH,
                         description={
-                            "suggested_value": (user_input or {}).get(CONF_IMG_PATH_MARKER, ""),
+                            "suggested_value": (user_input or {}).get(CONF_MAP_MARKER_PATH, ""),
                         },
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
+                    vol.Optional(
+                        CONF_MAP_HISTORY_ENABLE,
+                        default=(user_input or {}).get(CONF_MAP_HISTORY_ENABLE, True),
+                    ): selector.BooleanSelector(),
                     vol.Required(
                         CONF_MAP_POINTS,
-                        default=(user_input or self._options).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+                        default=(user_input or {}).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             min=1,
@@ -270,7 +277,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                         )
                     ),
                     vol.Optional(
-                        CONF_DRAW_LINES,
+                        CONF_MAP_DRAW_LINES,
+                        default=(user_input or {}).get(CONF_MAP_DRAW_LINES, False),
                     ): selector.BooleanSelector(),
                 }
             ),
@@ -360,7 +368,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     """Handles options flow for the component."""
 
-    VERSION = 4
+    VERSION = 5
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
@@ -622,24 +630,24 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     ) -> FlowResult:
         """Manage the ZCS Lawn Mower Robot map cam settings."""
         errors: dict[str, str] = {}
-        gps_top_left = self._options.get(CONF_GPS_TOP_LEFT, "")
+        gps_top_left = self._options.get(CONF_MAP_GPS_TOP_LEFT, "")
         if gps_top_left != "":
             gps_top_left = ",".join(
                 [str(x) for x in gps_top_left]
             )
-        gps_bottom_right = self._options.get(CONF_GPS_BOTTOM_RIGHT, "")
+        gps_bottom_right = self._options.get(CONF_MAP_GPS_BOTTOM_RIGHT, "")
         if gps_bottom_right != "":
             gps_bottom_right = ",".join(
                 [str(x) for x in gps_bottom_right]
             )
         if user_input is not None:
-            image_map_path = user_input.get(CONF_IMG_PATH_MAP, "").strip()
-            image_marker_path = user_input.get(CONF_IMG_PATH_MARKER, "").strip()
+            image_map_path = user_input.get(CONF_MAP_IMAGE_PATH, "").strip()
+            image_marker_path = user_input.get(CONF_MAP_MARKER_PATH, "").strip()
             if not os.path.isfile(image_map_path):
                 errors["base"] = "path_invalid"
-            if user_input.get(CONF_GPS_TOP_LEFT).count(",") != 1:
+            if user_input.get(CONF_MAP_GPS_TOP_LEFT).count(",") != 1:
                 errors["base"] = "coordinates_invalid"
-            if user_input.get(CONF_GPS_BOTTOM_RIGHT).count(",") != 1:
+            if user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).count(",") != 1:
                 errors["base"] = "coordinates_invalid"
             if image_marker_path and not os.path.isfile(image_marker_path):
                 errors["base"] = "path_invalid"
@@ -649,24 +657,25 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options.update(
                     {
                         CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
-                        CONF_IMG_PATH_MAP: image_map_path,
-                        CONF_IMG_PATH_MARKER: image_marker_path,
+                        CONF_MAP_IMAGE_PATH: image_map_path,
+                        CONF_MAP_MARKER_PATH: image_marker_path,
+                        CONF_MAP_HISTORY_ENABLE: user_input.get(CONF_MAP_HISTORY_ENABLE, True),
                         CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
-                        CONF_DRAW_LINES: user_input.get(CONF_DRAW_LINES, False),
+                        CONF_MAP_DRAW_LINES: user_input.get(CONF_MAP_DRAW_LINES, False),
                     }
                 )
-                if user_input.get(CONF_GPS_TOP_LEFT):
-                    gps_top_left = user_input.get(CONF_GPS_TOP_LEFT)
-                    self._options[CONF_GPS_TOP_LEFT] = [
+                if user_input.get(CONF_MAP_GPS_TOP_LEFT):
+                    gps_top_left = user_input.get(CONF_MAP_GPS_TOP_LEFT)
+                    self._options[CONF_MAP_GPS_TOP_LEFT] = [
                         float(x.strip())
-                        for x in user_input.get(CONF_GPS_TOP_LEFT).split(",")
+                        for x in user_input.get(CONF_MAP_GPS_TOP_LEFT).split(",")
                         if x
                     ]
-                if user_input.get(CONF_GPS_BOTTOM_RIGHT):
-                    gps_bottom_right = user_input.get(CONF_GPS_BOTTOM_RIGHT)
-                    self._options[CONF_GPS_BOTTOM_RIGHT] = [
+                if user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT):
+                    gps_bottom_right = user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT)
+                    self._options[CONF_MAP_GPS_BOTTOM_RIGHT] = [
                         float(x.strip())
-                        for x in user_input.get(CONF_GPS_BOTTOM_RIGHT).split(",")
+                        for x in user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
                 LOGGER.debug(self._options)
@@ -683,15 +692,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         default=(user_input or self._options).get(CONF_CAMERA_ENABLE, False),
                     ): selector.BooleanSelector(),
                     vol.Required(
-                        CONF_IMG_PATH_MAP,
-                        default=(user_input or self._options).get(CONF_IMG_PATH_MAP, ""),
+                        CONF_MAP_IMAGE_PATH,
+                        default=(user_input or self._options).get(CONF_MAP_IMAGE_PATH, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
                     vol.Required(
-                        CONF_GPS_TOP_LEFT,
+                        CONF_MAP_GPS_TOP_LEFT,
                         default=gps_top_left,
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
@@ -699,7 +708,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                     ),
                     vol.Required(
-                        CONF_GPS_BOTTOM_RIGHT,
+                        CONF_MAP_GPS_BOTTOM_RIGHT,
                         default=gps_bottom_right,
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
@@ -707,15 +716,19 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                     ),
                     vol.Optional(
-                        CONF_IMG_PATH_MARKER,
+                        CONF_MAP_MARKER_PATH,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_IMG_PATH_MARKER, ""),
+                            "suggested_value": (user_input or self._options).get(CONF_MAP_MARKER_PATH, ""),
                         },
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
+                    vol.Optional(
+                        CONF_MAP_HISTORY_ENABLE,
+                        default=(user_input or self._options).get(CONF_MAP_HISTORY_ENABLE, True),
+                    ): selector.BooleanSelector(),
                     vol.Required(
                         CONF_MAP_POINTS,
                         default=(user_input or self._options).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
@@ -727,8 +740,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         )
                     ),
                     vol.Optional(
-                        CONF_DRAW_LINES,
-                        default=(user_input or self._options).get(CONF_DRAW_LINES, False),
+                        CONF_MAP_DRAW_LINES,
+                        default=(user_input or self._options).get(CONF_MAP_DRAW_LINES, False),
                     ): selector.BooleanSelector(),
                 }
             ),
