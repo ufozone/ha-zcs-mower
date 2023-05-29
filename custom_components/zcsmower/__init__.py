@@ -13,12 +13,13 @@ from .const import (
     API_APP_TOKEN,
     CONF_CLIENT_KEY,
     CONF_CAMERA_ENABLE,
-    CONF_IMG_PATH_MAP,
-    CONF_IMG_PATH_MARKER,
-    CONF_GPS_TOP_LEFT,
-    CONF_GPS_BOTTOM_RIGHT,
+    CONF_MAP_HISTORY_ENABLE,
+    CONF_MAP_IMAGE_PATH,
+    CONF_MAP_MARKER_PATH,
+    CONF_MAP_GPS_TOP_LEFT,
+    CONF_MAP_GPS_BOTTOM_RIGHT,
     CONF_MAP_POINTS,
-    CONF_DRAW_LINES,
+    CONF_MAP_DRAW_LINES,
     CONF_MOWERS,
     MAP_POINTS_DEFAULT,
 )
@@ -73,7 +74,7 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Migrate old entry."""
-    LOGGER.debug("Migrating from version %s", config_entry.version)
+    LOGGER.info("Migrating from version %s", config_entry.version)
 
     if config_entry.version < 3:
         config_entry.version = 3
@@ -84,10 +85,10 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             options={
                 CONF_CLIENT_KEY: config_entry.data.get(CONF_CLIENT_KEY, ""),
                 CONF_CAMERA_ENABLE: False,
-                CONF_IMG_PATH_MAP: "",
-                CONF_IMG_PATH_MARKER: "",
-                CONF_GPS_TOP_LEFT: "",
-                CONF_GPS_BOTTOM_RIGHT: "",
+                CONF_MAP_IMAGE_PATH: "",
+                CONF_MAP_MARKER_PATH: "",
+                CONF_MAP_GPS_TOP_LEFT: "",
+                CONF_MAP_GPS_BOTTOM_RIGHT: "",
                 CONF_MOWERS: config_entry.data.get(CONF_MOWERS, {}),
             },
         )
@@ -96,8 +97,8 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         _options = dict(config_entry.options)
         _options.update(
             {
-                CONF_DRAW_LINES: True,
-                CONF_MAP_POINTS: config_entry.data.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+                CONF_MAP_POINTS: config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+                CONF_MAP_DRAW_LINES: True,
             }
         )
         hass.config_entries.async_update_entry(
@@ -105,6 +106,25 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             title=str(config_entry.title),
             data={},
             options=_options,
+        )
+    if config_entry.version < 5:
+        config_entry.version = 5
+        hass.config_entries.async_update_entry(
+            config_entry,
+            title=str(config_entry.title),
+            data={},
+            options={
+                CONF_CLIENT_KEY: config_entry.options.get(CONF_CLIENT_KEY, ""),
+                CONF_CAMERA_ENABLE: config_entry.options.get(CONF_CAMERA_ENABLE, False),
+                CONF_MAP_IMAGE_PATH: config_entry.options.get("img_path_map", ""),
+                CONF_MAP_MARKER_PATH: config_entry.options.get("img_path_marker", ""),
+                CONF_MAP_GPS_TOP_LEFT: config_entry.options.get("gps_top_left", ""),
+                CONF_MAP_GPS_BOTTOM_RIGHT: config_entry.options.get("gps_bottom_right", ""),
+                CONF_MAP_HISTORY_ENABLE: config_entry.options.get(CONF_MAP_HISTORY_ENABLE, True),
+                CONF_MAP_POINTS: config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+                CONF_MAP_DRAW_LINES: config_entry.options.get("draw_lines", True),
+                CONF_MOWERS: config_entry.options.get(CONF_MOWERS, {}),
+            },
         )
 
     LOGGER.info("Migration to version %s successful", config_entry.version)
