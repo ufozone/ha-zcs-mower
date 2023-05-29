@@ -35,19 +35,6 @@ PLATFORMS = [
     Platform.VACUUM,
 ]
 
-API_BASE_URI = "https://api-de.devicewise.com/api"
-API_APP_TOKEN = "DJMYYngGNEit40vA"
-API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
-API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
-API_ACK_TIMEOUT = 30
-
-UPDATE_INTERVAL_DEFAULT = 300
-UPDATE_INTERVAL_WORKING = 60
-
-LOCATION_HISTORY_DAYS = 7
-LOCATION_HISTORY_ITEMS = 200
-MAP_POINTS_DEFAULT = 100
-
 CONF_CLIENT_KEY = "client_key"
 CONF_CAMERA_ENABLE = "camera_enable"
 CONF_MAP_HISTORY_ENABLE = "map_history_enable"
@@ -154,6 +141,22 @@ SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
     }
 )
 
+API_BASE_URI = "https://api-de.devicewise.com/api"
+API_APP_TOKEN = "DJMYYngGNEit40vA"
+API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
+API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
+API_ACK_TIMEOUT = 30
+
+UPDATE_INTERVAL_DEFAULT = 300
+UPDATE_INTERVAL_WORKING = 60
+
+LOCATION_HISTORY_DAYS = 7
+LOCATION_HISTORY_ITEMS = 200
+
+MAP_POINTS_DEFAULT = 100
+
+ROBOT_WAKE_UP_INTERVAL = 300
+ROBOT_WORKING_STATES = [2, 6, 7, 8, 11]
 ROBOT_MODELS = {
     "AM015D": "Fifteen Deluxe", # ?
     "AM020D": "Twenty Deluxe", # ?
@@ -237,7 +240,6 @@ ROBOT_MODELS = {
     #"WI400D": "", # DB:70
     #"WI450D": "", # DB:61
 }
-
 ROBOT_STATES = [
     {
         "name" : "unknown",
@@ -300,9 +302,6 @@ ROBOT_STATES = [
         "color": "#E61EDC",
     },
 ]
-ROBOT_WAKE_UP_INTERVAL = 300
-ROBOT_WORKING_STATES = [2, 6, 7, 8, 11]
-
 ROBOT_ERRORS = {
     0: "bus_error",
     1: "sync_error",

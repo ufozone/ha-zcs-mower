@@ -347,7 +347,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 self.hass.async_create_task(
                     self.async_trace_position(imei)
                 )
-            # Set new state to last stateus
+            # Set new state to last state
             mower[ATTR_LAST_STATE] = mower.get(ATTR_STATE)
 
         self.data[imei] = mower
