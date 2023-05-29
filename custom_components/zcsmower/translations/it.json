@@ -23,12 +23,13 @@
         "title": "Configurare la telecamera della mappa",
         "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
         "data": {
-          "img_path_map": "Percorso dell'immagine della mappa",
-          "img_path_marker": "Percorso dell'immagine della posizione della falciatrice",
-          "gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
-          "gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
+          "map_image_path": "Percorso dell'immagine della mappa",
+          "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
+          "map_gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
+          "map_gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
+          "map_history_enable": "La cronologia della posizione deve essere visualizzata sulla mappa?",
           "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?",
-          "draw_lines": "Si devono tracciare linee tra i punti del sito?"
+          "map_draw_lines": "Si devono tracciare linee tra i punti del sito?"
         }
       },
       "mower": {
@@ -98,12 +99,13 @@
         "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
         "data": {
           "camera_enable": "Attivare la telecamera della mappa?",
-          "img_path_map": "Percorso dell'immagine della mappa",
-          "img_path_marker": "Percorso dell'immagine della posizione della falciatrice",
-          "gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
-          "gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
+          "map_image_path": "Percorso dell'immagine della mappa",
+          "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
+          "map_gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
+          "map_gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
+          "map_history_enable": "La cronologia della posizione deve essere visualizzata sulla mappa?",
           "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?",
-          "draw_lines": "Si devono tracciare linee tra i punti del sito?"
+          "map_draw_lines": "Si devono tracciare linee tra i punti del sito?"
         }
       },
       "settings": {
