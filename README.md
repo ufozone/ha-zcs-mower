@@ -53,7 +53,9 @@ Installation using Home Assistant Community Store (HACS) is recommended.
 
 Start setup:
 
-* Click this button: [![my_button](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=zcsmower)
+* Click this button:
+
+    [![my_button](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=zcsmower)
 
 * Or use the "Add Integration" in Home Assistant, Settings, Devices & Services and select "ZCS Lawn Mower Robot".
 
