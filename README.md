@@ -151,6 +151,10 @@ Get IMEI from your lawn mower(s):
 
 * charge_now
 
+* border_cut
+
+* trace_position
+
 ### Camera
 
 * map
