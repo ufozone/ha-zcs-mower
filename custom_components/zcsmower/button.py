@@ -30,6 +30,12 @@ ENTITY_DESCRIPTIONS = (
         device_class=ButtonDeviceClass.UPDATE,
     ),
     ButtonEntityDescription(
+        key="border_cut",
+        icon="mdi:scissors-cutting",
+        translation_key="border_cut",
+        device_class=ButtonDeviceClass.UPDATE,
+    ),
+    ButtonEntityDescription(
         key="trace_position",
         icon="mdi:map-marker",
         translation_key="trace_position",
