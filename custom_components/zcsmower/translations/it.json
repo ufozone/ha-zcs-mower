@@ -11,11 +11,12 @@
     },
     "step": {
       "user": {
-        "title": "Autenticazione",
+        "title": "Allestimento del garage",
         "description": "Immettere il nome dell'officina e la chiave cliente, che si trova nell'app mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "name": "Nome del garage",
           "client_key": "Chiave cliente",
+          "trace_position_enable": "Abilitare il tracciamento periodico della posizione?",
           "camera_enable": "Abilita la telecamera della mappa"
         }
       },
@@ -67,7 +68,7 @@
           "change": "Cambiare il tosaerba",
           "delete": "Rimuovere il tosaerba",
           "camera": "Impostazioni della telecamera a mappa",
-          "settings": "Impostazioni di autenticazione"
+          "settings": "Impostazioni del garage"
         }
       },
       "add": {
@@ -109,10 +110,11 @@
         }
       },
       "settings": {
-        "title": "Autenticazione",
+        "title": "Configurare il garage",
         "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
-          "client_key": "Chiave cliente"
+          "client_key": "Chiave cliente",
+          "trace_position_enable": "Abilitare il tracciamento periodico della posizione?"
         }
       }
     }

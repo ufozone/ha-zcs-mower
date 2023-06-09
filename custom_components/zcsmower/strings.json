@@ -11,11 +11,12 @@
     },
     "step": {
       "user": {
-        "title": "Authentication",
+        "title": "Set up garage",
         "description": "Enter your garage name and client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "name": "Garage Name",
           "client_key": "Client Key",
+          "trace_position_enable": "Enable periodical position tracing?",
           "camera_enable": "Enable map camera?"
         }
       },
@@ -67,7 +68,7 @@
           "change": "Change Lawn Mower",
           "delete": "Remove Lawn Mower",
           "camera": "Map Cam Settings",
-          "settings": "Authentication Settings"
+          "settings": "Garage Settings"
         }
       },
       "add": {
@@ -109,10 +110,11 @@
         }
       },
       "settings": {
-        "title": "Authentication",
+        "title": "Configure garage",
         "description": "Enter your client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
-          "client_key": "Client Key"
+          "client_key": "Client Key",
+          "trace_position_enable": "Enable periodical position tracing?"
         }
       }
     }

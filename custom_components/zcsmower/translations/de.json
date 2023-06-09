@@ -11,11 +11,12 @@
     },
     "step": {
       "user": {
-        "title": "Authentifizierung",
+        "title": "Garage einrichten",
         "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "name": "Garagenname",
           "client_key": "Kundenschlüssel",
+          "trace_position_enable": "Periodische Positionsverfolgung aktivieren?",
           "camera_enable": "Kartenkamera aktivieren?"
         }
       },
@@ -67,7 +68,7 @@
           "change": "Rasenmähroboter bearbeiten",
           "delete": "Rasenmähroboter löschen",
           "camera": "Einstellungen der Kartenkamera",
-          "settings": "Einstellungen zur Authentifizierung"
+          "settings": "Einstellungen der Garage"
         }
       },
       "add": {
@@ -109,10 +110,11 @@
         }
       },
       "settings": {
-        "title": "Authentifizierung",
+        "title": "Konfigurieren der Garage",
         "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
-          "client_key": "Kundenschlüssel"
+          "client_key": "Kundenschlüssel",
+          "trace_position_enable": "Periodische Positionsverfolgung aktivieren?"
         }
       }
     }
