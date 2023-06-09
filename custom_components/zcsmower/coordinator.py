@@ -20,6 +20,8 @@ from homeassistant.const import (
     ATTR_MODEL,
     ATTR_SW_VERSION,
 )
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
@@ -37,12 +39,17 @@ from .const import (
     DOMAIN,
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,
+    API_BASE_URI,
+    API_APP_TOKEN,
     API_DATETIME_FORMAT_DEFAULT,
     API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
     UPDATE_INTERVAL_DEFAULT,
     UPDATE_INTERVAL_WORKING,
     LOCATION_HISTORY_ITEMS,
+    CONF_CLIENT_KEY,
+    CONF_TRACE_POSITION_ENABLE,
+    CONF_MOWERS,
     ATTR_IMEI,
     ATTR_SERIAL,
     ATTR_WORKING,
@@ -71,9 +78,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(
         self,
-        mowers: dict,
         hass: HomeAssistant,
-        client: ZcsMowerApiClient,
+        config_entry: ConfigEntry,
         update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL_DEFAULT),
     ) -> None:
         """Initialize."""
@@ -83,8 +89,17 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             name=DOMAIN,
             update_interval=update_interval,
         )
-        self.mowers = mowers
-        self.client = client
+        self.config_entry = config_entry
+        self.client = ZcsMowerApiClient(
+            session=async_get_clientsession(hass),
+            options={
+                "endpoint": API_BASE_URI,
+                "app_id": config_entry.options[CONF_CLIENT_KEY],
+                "app_token": API_APP_TOKEN,
+                "thing_key": config_entry.options[CONF_CLIENT_KEY]
+            }
+        )
+        self.mowers = dict(config_entry.options.get(CONF_MOWERS, []))
 
         self.data = {}
         for _imei, _name in self.mowers.items():
@@ -333,9 +348,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         mower[ATTR_LAST_PULL] = self._get_datetime_now()
 
         # Lawn mower is working
-        if (
-            mower.get(ATTR_STATE) in ROBOT_WORKING_STATES
-        ):
+        if mower.get(ATTR_STATE) in ROBOT_WORKING_STATES:
             # Send a wake_up command every ROBOT_WAKE_UP_INTERVAL seconds and
             if (
                 mower.get(ATTR_LAST_WAKE_UP) is None
@@ -346,14 +359,25 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 )
             # Send a trace_position command every ROBOT_TRACE_POSITION_INTERVAL seconds
             if (
-                mower.get(ATTR_LAST_TRACE_POSITION) is None
-                or (self._get_datetime_now() - mower.get(ATTR_LAST_TRACE_POSITION)).total_seconds() > ROBOT_TRACE_POSITION_INTERVAL
+                self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
+                and (
+                    mower.get(ATTR_LAST_TRACE_POSITION) is None
+                    or (self._get_datetime_now() - mower.get(ATTR_LAST_TRACE_POSITION)).total_seconds() > ROBOT_TRACE_POSITION_INTERVAL
+                )
             ):
                 self.hass.async_create_task(
                     self.async_trace_position(imei)
                 )
         # State changed
         if mower.get(ATTR_STATE) != mower.get(ATTR_LAST_STATE):
+            # If lawn mower is now working send trace_position command
+            if (
+                not self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
+                and mower.get(ATTR_STATE) in ROBOT_WORKING_STATES
+            ):
+                self.hass.async_create_task(
+                    self.async_trace_position(imei)
+                )
             # Set new state to last state
             mower[ATTR_LAST_STATE] = mower.get(ATTR_STATE)
 
