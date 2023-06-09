@@ -21,7 +21,7 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 
 ## Installation
 
-Requires Home Assistant 2023.5.0 or newer.
+Requires Home Assistant 2023.6.0 or newer.
 
 ### Installation through HACS
 
