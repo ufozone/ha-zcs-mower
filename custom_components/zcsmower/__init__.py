@@ -3,14 +3,11 @@ from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
     LOGGER,
     DOMAIN,
     PLATFORMS,
-    API_BASE_URI,
-    API_APP_TOKEN,
     CONF_CLIENT_KEY,
     CONF_CAMERA_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
@@ -24,7 +21,6 @@ from .const import (
     MAP_POINTS_DEFAULT,
 )
 from .services import async_setup_services
-from .api import ZcsMowerApiClient
 from .coordinator import ZcsMowerDataUpdateCoordinator
 
 
@@ -41,17 +37,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = ZcsMowerDataUpdateCoordinator(
-        mowers=entry.options[CONF_MOWERS],
         hass=hass,
-        client=ZcsMowerApiClient(
-            session=async_get_clientsession(hass),
-            options={
-                "endpoint": API_BASE_URI,
-                "app_id": entry.options[CONF_CLIENT_KEY],
-                "app_token": API_APP_TOKEN,
-                "thing_key": entry.options[CONF_CLIENT_KEY]
-            }
-        ),
+        config_entry=entry,
     )
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
