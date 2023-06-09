@@ -55,10 +55,12 @@ from .const import (
     ATTR_LAST_PULL,
     ATTR_LAST_STATE,
     ATTR_LAST_WAKE_UP,
+    ATTR_LAST_TRACE_POSITION,
     ROBOT_MODELS,
     ROBOT_STATES,
     ROBOT_WORKING_STATES,
     ROBOT_WAKE_UP_INTERVAL,
+    ROBOT_TRACE_POSITION_INTERVAL,
     ROBOT_ERRORS,
 )
 
@@ -106,6 +108,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_LAST_PULL: None,
                 ATTR_LAST_STATE: None,
                 ATTR_LAST_WAKE_UP: None,
+                ATTR_LAST_TRACE_POSITION: None,
             }
         self._loop = asyncio.get_event_loop()
         self._scheduled_update_listeners: asyncio.TimerHandle | None = None
@@ -157,7 +160,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             # Set suggested update_interval
             if suggested_update_interval != self.update_interval:
                 self.update_interval = suggested_update_interval
-                LOGGER.info("Update update_interval, because lawn mower(s) changed state from not working to working or vice versa.")
+                LOGGER.info("Update update_interval, because lawn mower(s) changed state from idle to working or vice versa.")
             return self.data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
@@ -329,24 +332,28 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             mower[ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
         mower[ATTR_LAST_PULL] = self._get_datetime_now()
 
-        # If lawn mower is working send a wake_up command every ROBOT_WAKE_UP_INTERVAL seconds
+        # Lawn mower is working
         if (
             mower.get(ATTR_STATE) in ROBOT_WORKING_STATES
-            and (
+        ):
+            # Send a wake_up command every ROBOT_WAKE_UP_INTERVAL seconds and
+            if (
                 mower.get(ATTR_LAST_WAKE_UP) is None
                 or (self._get_datetime_now() - mower.get(ATTR_LAST_WAKE_UP)).total_seconds() > ROBOT_WAKE_UP_INTERVAL
-            )
-        ):
-            self.hass.async_create_task(
-                self.async_wake_up(imei)
-            )
-        # State changed
-        if mower.get(ATTR_STATE) != mower.get(ATTR_LAST_STATE):
-            # If lawn mower is now working send trace_position command
-            if mower.get(ATTR_STATE) in ROBOT_WORKING_STATES:
+            ):
+                self.hass.async_create_task(
+                    self.async_wake_up(imei)
+                )
+            # Send a trace_position command every ROBOT_TRACE_POSITION_INTERVAL seconds
+            if (
+                mower.get(ATTR_LAST_TRACE_POSITION) is None
+                or (self._get_datetime_now() - mower.get(ATTR_LAST_TRACE_POSITION)).total_seconds() > ROBOT_TRACE_POSITION_INTERVAL
+            ):
                 self.hass.async_create_task(
                     self.async_trace_position(imei)
                 )
+        # State changed
+        if mower.get(ATTR_STATE) != mower.get(ATTR_LAST_STATE):
             # Set new state to last state
             mower[ATTR_LAST_STATE] = mower.get(ATTR_STATE)
 
@@ -600,6 +607,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Send command trace_position to lawn nower."""
         LOGGER.debug(f"trace_position: {imei}")
         try:
+            self.data[imei][ATTR_LAST_TRACE_POSITION] = self._get_datetime_now()
             await self.async_prepare_for_command(imei)
             return await self.client.execute(
                 "method.exec",
