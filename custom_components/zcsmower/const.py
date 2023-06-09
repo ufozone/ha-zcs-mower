@@ -36,6 +36,7 @@ PLATFORMS = [
 ]
 
 CONF_CLIENT_KEY = "client_key"
+CONF_TRACE_POSITION_ENABLE = "trace_position_enable"
 CONF_CAMERA_ENABLE = "camera_enable"
 CONF_MAP_HISTORY_ENABLE = "map_history_enable"
 CONF_MAP_IMAGE_PATH = "map_image_path"
