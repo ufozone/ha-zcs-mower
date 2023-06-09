@@ -159,7 +159,13 @@ MAP_POINTS_DEFAULT = 100
 
 ROBOT_WAKE_UP_INTERVAL = 120
 ROBOT_TRACE_POSITION_INTERVAL = 300
-ROBOT_WORKING_STATES = [2, 6, 7, 8, 11]
+ROBOT_WORKING_STATES = [
+    "work",
+    "gotostation",
+    "gotoarea",
+    "bordercut",
+    "work_standby",
+]
 ROBOT_MODELS = {
     "AM015D": "L15 Deluxe",
     "AM020D": "Twenty Deluxe", # ?
