@@ -229,7 +229,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self,
     ) -> bool:
         """Count the working lawn mowers."""
-        count_helper = [v['working'] for k, v in self.data.items() if v.get('working')]
+        count_helper = [v[ATTR_WORKING] for k, v in self.data.items() if v.get(ATTR_WORKING)]
         return len(count_helper) > 0
 
     async def async_fetch_all_mowers(
@@ -347,8 +347,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             mower[ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
         mower[ATTR_LAST_PULL] = self._get_datetime_now()
 
-        # Lawn mower is working
-        if mower.get(ATTR_STATE) in ROBOT_WORKING_STATES:
+        # If lawn mower is working
+        if mower.get(ATTR_WORKING, False):
             # Send a wake_up command every ROBOT_WAKE_UP_INTERVAL seconds and
             if (
                 mower.get(ATTR_LAST_WAKE_UP) is None
@@ -357,7 +357,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 self.hass.async_create_task(
                     self.async_wake_up(imei)
                 )
-            # Send a trace_position command every ROBOT_TRACE_POSITION_INTERVAL seconds
+            # If periodical position tracing is enabled
+            # send a trace_position command every ROBOT_TRACE_POSITION_INTERVAL seconds
             if (
                 self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
                 and (
@@ -370,10 +371,11 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 )
         # State changed
         if mower.get(ATTR_STATE) != mower.get(ATTR_LAST_STATE):
-            # If lawn mower is now working send trace_position command
+            # If lawn mower is now working and periodical position tracing is disabled
+            # send a trace_position command
             if (
-                not self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
-                and mower.get(ATTR_STATE) in ROBOT_WORKING_STATES
+                mower.get(ATTR_WORKING, False)
+                and not self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
             ):
                 self.hass.async_create_task(
                     self.async_trace_position(imei)
