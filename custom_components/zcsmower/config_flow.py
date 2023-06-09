@@ -38,6 +38,7 @@ from .const import (
     LOCATION_HISTORY_ITEMS,
     MAP_POINTS_DEFAULT,
     CONF_CLIENT_KEY,
+    CONF_TRACE_POSITION_ENABLE,
     CONF_CAMERA_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -136,6 +137,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._title = user_input.get(CONF_NAME, "")
                 self._options = {
                     CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
+                    CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                     CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
@@ -172,6 +174,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
+                    vol.Optional(
+                        CONF_TRACE_POSITION_ENABLE,
+                    ): selector.BooleanSelector(),
                     vol.Optional(
                         CONF_CAMERA_ENABLE,
                     ): selector.BooleanSelector(),
@@ -778,6 +783,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options.update(
                     {
                         CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
+                        CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                     }
                 )
                 LOGGER.debug(self._options)
@@ -797,6 +803,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
+                    vol.Optional(
+                        CONF_TRACE_POSITION_ENABLE,
+                        default=(user_input or self._options).get(CONF_TRACE_POSITION_ENABLE, False),
+                    ): selector.BooleanSelector(),
                 }
             ),
             errors=errors,
