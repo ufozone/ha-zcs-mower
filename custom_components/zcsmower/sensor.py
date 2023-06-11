@@ -45,9 +45,8 @@ async def async_setup_entry(
                 coordinator=coordinator,
                 entity_description=entity_description,
                 imei=imei,
-                name=mower.get(ATTR_NAME, imei),
             )
-            for imei, mower in coordinator.mowers.items()
+            for imei in coordinator.mowers.keys()
             for entity_description in ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
@@ -64,7 +63,6 @@ class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
         coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: SensorEntityDescription,
         imei: str,
-        name: str,
     ) -> None:
         """Initialize the sensor class."""
         super().__init__(
@@ -72,7 +70,6 @@ class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
             config_entry=config_entry,
             coordinator=coordinator,
             imei=imei,
-            name=name,
             entity_type="sensor",
             entity_key=entity_description.key,
         )

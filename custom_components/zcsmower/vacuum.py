@@ -63,9 +63,8 @@ async def async_setup_entry(
                 coordinator=coordinator,
                 entity_description=entity_description,
                 imei=imei,
-                name=mower.get(ATTR_NAME, imei),
             )
-            for imei, mower in coordinator.mowers.items()
+            for imei in coordinator.mowers.keys()
             for entity_description in ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
@@ -82,7 +81,6 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
         coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: VacuumEntityDescription,
         imei: str,
-        name: str,
     ) -> None:
         """Initialize the vacuum class."""
         super().__init__(
@@ -90,7 +88,6 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
             config_entry=config_entry,
             coordinator=coordinator,
             imei=imei,
-            name=name,
             entity_type="vacuum",
             entity_key=entity_description.key,
         )

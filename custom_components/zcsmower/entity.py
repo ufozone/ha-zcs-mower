@@ -41,15 +41,17 @@ class ZcsMowerEntity(CoordinatorEntity):
         config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
         imei: str,
-        name: str,
         entity_type: str,
         entity_key: str,
     ) -> None:
         """Initialize."""
         super().__init__(coordinator)
 
+        self.hass = hass
+        self.config_entry = config_entry
+
         self._imei = imei
-        self._name = name
+        self._name = self._get_attribute(ATTR_NAME, imei)
         self._entity_type = entity_type
         self._entity_key = entity_key
         if entity_key:
@@ -58,8 +60,6 @@ class ZcsMowerEntity(CoordinatorEntity):
             self._unique_id = slugify(f"mower_{imei}")
         self._additional_extra_state_attributes = {}
 
-        self.hass = hass
-        self.config_entry = config_entry
         self.entity_id = f"{entity_type}.{self._unique_id}"
 
     def _get_attribute(

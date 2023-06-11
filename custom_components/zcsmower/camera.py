@@ -80,9 +80,8 @@ async def async_setup_entry(
                 coordinator=coordinator,
                 entity_description=entity_description,
                 imei=imei,
-                name=mower.get(ATTR_NAME, imei),
             )
-            for imei, mower in coordinator.mowers.items()
+            for imei in coordinator.mowers.keys()
             for entity_description in ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
@@ -104,7 +103,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: CameraEntityDescription,
         imei: str,
-        name: str,
     ) -> None:
         """Initialize the camera class."""
         Camera.__init__(self)
@@ -113,7 +111,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
             config_entry=config_entry,
             coordinator=coordinator,
             imei=imei,
-            name=name,
             entity_type="camera",
             entity_key=entity_description.key,
         )
