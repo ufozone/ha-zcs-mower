@@ -116,6 +116,10 @@ class ZcsMowerEntity(CoordinatorEntity):
         )
         return _extra_state_attributes
 
+    async def async_update(self) -> None:
+        """Peform async_update."""
+        self._update_handler()
+
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
