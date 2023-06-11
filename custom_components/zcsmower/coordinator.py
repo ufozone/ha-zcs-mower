@@ -72,6 +72,7 @@ from .const import (
     ROBOT_INFINITY_WAKE_UP_INTERVAL,
     ROBOT_INFINITY_TRACE_POSITION_INTERVAL,
     ROBOT_ERRORS,
+    INFINITY_PLAN_STATES,
 )
 
 
@@ -109,7 +110,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             self.data[_imei] = {
                 ATTR_IMEI: _imei,
                 ATTR_NAME: _mower.get(ATTR_NAME, _imei),
-                ATTR_INFINITY: False,
+                ATTR_INFINITY: None,
                 ATTR_STATE: None,
                 ATTR_ICON: None,
                 ATTR_WORKING: False,
@@ -334,7 +335,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     )
             # Get Infinity+ status from lawn mower
             if "infinity_plan_status" in data["alarms"]:
-                mower[ATTR_INFINITY] = (data["alarms"]["infinity_plan_status"]["state"] == 1)
+                infinity_plan_status = data["alarms"]["infinity_plan_status"]
+                _state = infinity_plan_status["state"] if infinity_plan_status["state"] < len(ROBOT_STATES) else None
+                mower[ATTR_INFINITY] = INFINITY_PLAN_STATES[_state]["name"]
         if "attrs" in data:
             # In some cases, robot_serial is not available
             if "robot_serial" in data["attrs"]:
@@ -359,7 +362,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         # If lawn mower is working
         if mower.get(ATTR_WORKING, False):
             # Send a wake_up command every WAKE_UP_INTERVAL seconds and
-            _wake_up_interval = ROBOT_INFINITY_WAKE_UP_INTERVAL if mower.get(ATTR_INFINITY, False) else ROBOT_DEFAULT_WAKE_UP_INTERVAL
+            _wake_up_interval = ROBOT_INFINITY_WAKE_UP_INTERVAL if (mower.get(ATTR_INFINITY) == "active") else ROBOT_DEFAULT_WAKE_UP_INTERVAL
             if (
                 mower.get(ATTR_LAST_WAKE_UP) is None
                 or (self._get_datetime_now() - mower.get(ATTR_LAST_WAKE_UP)).total_seconds() > _wake_up_interval
@@ -369,7 +372,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 )
             # If periodical position tracing is enabled
             # send a trace_position command every TRACE_POSITION_INTERVAL seconds
-            _trace_position_interval = ROBOT_INFINITY_TRACE_POSITION_INTERVAL if mower.get(ATTR_INFINITY, False) else ROBOT_DEFAULT_TRACE_POSITION_INTERVAL
+            _trace_position_interval = ROBOT_INFINITY_TRACE_POSITION_INTERVAL if (mower.get(ATTR_INFINITY) == "active") else ROBOT_DEFAULT_TRACE_POSITION_INTERVAL
             if (
                 self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
                 and (
