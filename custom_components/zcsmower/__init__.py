@@ -3,6 +3,9 @@ from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import (
+    ATTR_NAME,
+)
 
 from .const import (
     LOGGER,
@@ -79,6 +82,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                 CONF_MOWERS: config_entry.data.get(CONF_MOWERS, {}),
             },
         )
+
     if config_entry.version < 4:
         config_entry.version = 4
         _options = dict(config_entry.options)
@@ -94,6 +98,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             data={},
             options=_options,
         )
+
     if config_entry.version < 5:
         config_entry.version = 5
         hass.config_entries.async_update_entry(
@@ -112,6 +117,26 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                 CONF_MAP_DRAW_LINES: config_entry.options.get("draw_lines", True),
                 CONF_MOWERS: config_entry.options.get(CONF_MOWERS, {}),
             },
+        )
+
+    if config_entry.version < 6:
+        config_entry.version = 6
+        _mowers = dict(config_entry.options.get(CONF_MOWERS, []))
+        for _imei, _name in _mowers.items():
+            _mowers[_imei] = {
+                ATTR_NAME: _name,
+            }
+        _options = dict(config_entry.options)
+        _options.update(
+            {
+                CONF_MOWERS: _mowers,
+            }
+        )
+        hass.config_entries.async_update_entry(
+            config_entry,
+            title=str(config_entry.title),
+            data={},
+            options=_options,
         )
 
     LOGGER.info("Migration to version %s successful", config_entry.version)
