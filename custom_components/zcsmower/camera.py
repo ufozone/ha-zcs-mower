@@ -125,11 +125,11 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
         self._attr_entity_registry_enabled_default = self.config_entry.options.get(CONF_CAMERA_ENABLE, False)
         if self._attr_entity_registry_enabled_default:
-            LOGGER.debug("Map camera enabled")
+            LOGGER.info("Map camera enabled")
             self.gps_top_left = self.config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)
             self.gps_bottom_right = self.config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)
         else:
-            LOGGER.debug("Map camera disabled")
+            LOGGER.info("Map camera disabled")
             latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
             longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
             if latitude and longitude:
@@ -161,7 +161,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 LOGGER.warning("No valid map camera path configured")
         else:
             map_image = self._create_empty_map_image("Map camera is disabled.")
-            LOGGER.warning("Map camera is disabled")
 
         try:
             if self.gps_top_left is not None and self.gps_bottom_right is not None:
