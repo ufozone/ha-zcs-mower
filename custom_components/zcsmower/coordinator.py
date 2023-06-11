@@ -308,28 +308,33 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if mower is None:
             return None
         # Start refreshing mower in coordinator from fetched API data
-        if "alarms" in data and "robot_state" in data["alarms"]:
-            robot_state = data["alarms"]["robot_state"]
-            _state = robot_state["state"] if robot_state["state"] < len(ROBOT_STATES) else 0
-            mower[ATTR_STATE] = ROBOT_STATES[_state]["name"]
-            mower[ATTR_ICON] = ROBOT_STATES[_state]["icon"]
-            mower[ATTR_WORKING] = _state in list(ROBOT_WORKING_STATES)
-            mower[ATTR_AVAILABLE] = _state > 0
-            # msg not always available
-            if "msg" in robot_state:
-                mower[ATTR_ERROR] = ROBOT_ERRORS.get(int(robot_state["msg"]), None)
-            # latitude and longitude not always available
-            if "lat" in robot_state and "lng" in robot_state:
-                latitude = float(robot_state["lat"])
-                longitude = float(robot_state["lng"])
-                mower[ATTR_LOCATION] = {
-                    ATTR_LATITUDE: latitude,
-                    ATTR_LONGITUDE: longitude,
-                }
-                self.add_location_history(
-                    imei=imei,
-                    location=(latitude, longitude),
-                )
+        if "alarms" in data:
+            # Get robot state, error code and location
+            if "robot_state" in data["alarms"]:
+                robot_state = data["alarms"]["robot_state"]
+                _state = robot_state["state"] if robot_state["state"] < len(ROBOT_STATES) else 0
+                mower[ATTR_STATE] = ROBOT_STATES[_state]["name"]
+                mower[ATTR_ICON] = ROBOT_STATES[_state]["icon"]
+                mower[ATTR_WORKING] = _state in list(ROBOT_WORKING_STATES)
+                mower[ATTR_AVAILABLE] = _state > 0
+                # msg not always available
+                if "msg" in robot_state:
+                    mower[ATTR_ERROR] = ROBOT_ERRORS.get(int(robot_state["msg"]), None)
+                # latitude and longitude not always available
+                if "lat" in robot_state and "lng" in robot_state:
+                    latitude = float(robot_state["lat"])
+                    longitude = float(robot_state["lng"])
+                    mower[ATTR_LOCATION] = {
+                        ATTR_LATITUDE: latitude,
+                        ATTR_LONGITUDE: longitude,
+                    }
+                    self.add_location_history(
+                        imei=imei,
+                        location=(latitude, longitude),
+                    )
+            # Get Infinity+ status from lawn mower
+            if "infinity_plan_status" in data["alarms"]:
+                mower[ATTR_INFINITY] = (data["alarms"]["infinity_plan_status"]["state"] == 1)
         if "attrs" in data:
             # In some cases, robot_serial is not available
             if "robot_serial" in data["attrs"]:

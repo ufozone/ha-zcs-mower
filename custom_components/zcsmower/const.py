@@ -561,3 +561,47 @@ ROBOT_ERRORS = {
     5006: "unexpected_shutdown_done",
     5008: "unexpected_shutdown_error",
 }
+ATOMIZER_STATES = [
+    {
+        "name": "UNKNOWN",
+        "color": "#000000"
+    },
+    {
+        "name": "EMPTY",
+        "color": "#CCCC00"
+    },
+    {
+        "name": "WORK",
+        "color": "#007700"
+    },
+    {
+        "name": "PAUSE",
+        "color": "#0000FF"
+    },
+    {
+        "name": "FAIL",
+        "color": "#FF0000"
+    }
+]
+INFINITY_PLAN_STATES = [
+    {
+        "name": "unknown",
+        "color": "#000000"
+    },
+    {
+        "name": "active",
+        "color": "#2BB800"
+    },
+    {
+        "name": "expired",
+        "color": "#F50000"
+    },
+    {
+        "name": "deactivated",
+        "color": "#C208F0"
+    },
+    {
+        "name": "pending",
+        "color": "#FFE100"
+    }
+]
