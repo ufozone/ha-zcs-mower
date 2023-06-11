@@ -317,7 +317,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             if not errors:
                 # Input is valid, set data.
                 self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
-                    ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI])
+                    ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                 }
                 LOGGER.debug(self._options)
                 # If user ticked the box show this form again so
@@ -430,7 +430,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             if not errors:
                 # Input is valid, set data
                 self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
-                    ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI])
+                    ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                 }
                 LOGGER.debug(self._options)
                 return self.async_create_entry(

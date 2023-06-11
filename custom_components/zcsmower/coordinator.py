@@ -51,6 +51,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_MOWERS,
     ATTR_IMEI,
+    ATTR_INFINITY,
     ATTR_SERIAL,
     ATTR_WORKING,
     ATTR_ERROR,
@@ -66,8 +67,10 @@ from .const import (
     ROBOT_MODELS,
     ROBOT_STATES,
     ROBOT_WORKING_STATES,
-    ROBOT_WAKE_UP_INTERVAL,
-    ROBOT_TRACE_POSITION_INTERVAL,
+    ROBOT_DEFAULT_WAKE_UP_INTERVAL,
+    ROBOT_DEFAULT_TRACE_POSITION_INTERVAL,
+    ROBOT_INFINITY_WAKE_UP_INTERVAL,
+    ROBOT_INFINITY_TRACE_POSITION_INTERVAL,
     ROBOT_ERRORS,
 )
 
@@ -106,6 +109,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             self.data[_imei] = {
                 ATTR_IMEI: _imei,
                 ATTR_NAME: _mower.get(ATTR_NAME, _imei),
+                ATTR_INFINITY: False,
                 ATTR_STATE: None,
                 ATTR_ICON: None,
                 ATTR_WORKING: False,
@@ -349,21 +353,23 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
         # If lawn mower is working
         if mower.get(ATTR_WORKING, False):
-            # Send a wake_up command every ROBOT_WAKE_UP_INTERVAL seconds and
+            # Send a wake_up command every WAKE_UP_INTERVAL seconds and
+            _wake_up_interval = ROBOT_INFINITY_WAKE_UP_INTERVAL if mower.get(ATTR_INFINITY, False) else ROBOT_DEFAULT_WAKE_UP_INTERVAL
             if (
                 mower.get(ATTR_LAST_WAKE_UP) is None
-                or (self._get_datetime_now() - mower.get(ATTR_LAST_WAKE_UP)).total_seconds() > ROBOT_WAKE_UP_INTERVAL
+                or (self._get_datetime_now() - mower.get(ATTR_LAST_WAKE_UP)).total_seconds() > _wake_up_interval
             ):
                 self.hass.async_create_task(
                     self.async_wake_up(imei)
                 )
             # If periodical position tracing is enabled
-            # send a trace_position command every ROBOT_TRACE_POSITION_INTERVAL seconds
+            # send a trace_position command every TRACE_POSITION_INTERVAL seconds
+            _trace_position_interval = ROBOT_INFINITY_TRACE_POSITION_INTERVAL if mower.get(ATTR_INFINITY, False) else ROBOT_DEFAULT_TRACE_POSITION_INTERVAL
             if (
                 self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
                 and (
                     mower.get(ATTR_LAST_TRACE_POSITION) is None
-                    or (self._get_datetime_now() - mower.get(ATTR_LAST_TRACE_POSITION)).total_seconds() > ROBOT_TRACE_POSITION_INTERVAL
+                    or (self._get_datetime_now() - mower.get(ATTR_LAST_TRACE_POSITION)).total_seconds() > _trace_position_interval
                 )
             ):
                 self.hass.async_create_task(
