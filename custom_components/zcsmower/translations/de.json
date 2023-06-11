@@ -573,6 +573,30 @@
           }
         }
       },
+      "border_cut": {
+        "name": "Randmähen",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Zuletzt kommuniziert"
+          },
+          "last_seen": {
+            "name": "Zuletzt gesehen"
+          },
+          "last_pull": {
+            "name": "Zuletzt abgerufen"
+          }
+        }
+      },
       "trace_position": {
         "name": "Position verfolgen",
         "state_attributes": {

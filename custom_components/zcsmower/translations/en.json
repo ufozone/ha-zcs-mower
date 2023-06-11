@@ -573,6 +573,30 @@
           }
         }
       },
+      "border_cut": {
+        "name": "Border cut",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "Connected",
+              "false": "Disconnected"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      },
       "trace_position": {
         "name": "Trace position",
         "state_attributes": {
