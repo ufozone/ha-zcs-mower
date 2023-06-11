@@ -101,7 +101,7 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 5
+    VERSION = 6
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     _title: str | None
@@ -316,10 +316,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
             if not errors:
                 # Input is valid, set data.
-                self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = user_input.get(
-                    ATTR_NAME,
-                    user_input[ATTR_IMEI],
-                )
+                self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
+                    ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI])
+                }
                 LOGGER.debug(self._options)
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
@@ -373,7 +372,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     """Handles options flow for the component."""
 
-    VERSION = 5
+    VERSION = 6
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
@@ -406,8 +405,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             if user_input[ATTR_IMEI] in self._options[CONF_MOWERS]:
                 errors["base"] = "imei_exists"
             elif (
-                user_input[ATTR_NAME]
-                and user_input[ATTR_NAME] in self._options[CONF_MOWERS].values()
+                user_input.get(ATTR_NAME, "")
+                and any(m.get(ATTR_NAME, "") == user_input.get(ATTR_NAME) for m in self._options[CONF_MOWERS].values())
             ):
                 errors["base"] = "name_exists"
             else:
@@ -430,10 +429,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
 
             if not errors:
                 # Input is valid, set data
-                self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = user_input.get(
-                    ATTR_NAME,
-                    user_input[ATTR_IMEI],
-                )
+                self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
+                    ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI])
+                }
                 LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
@@ -482,9 +480,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     options=[
                         selector.SelectOptionDict(
                             value=imei,
-                            label=f"{name} ({imei})",
+                            label=f"{mower.get(ATTR_NAME)} ({imei})",
                         )
-                        for imei, name in self._options[CONF_MOWERS].items()
+                        for imei, mower in self._options[CONF_MOWERS].items()
                     ],
                     mode=selector.SelectSelectorMode.DROPDOWN,
                     translation_key=ATTR_IMEI,
@@ -499,12 +497,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 last_step = True
                 mower_imei = user_input[ATTR_IMEI]
                 if ATTR_NAME not in user_input:
-                    mower_name = self._options[CONF_MOWERS][mower_imei]
+                    mower_name = self._options[CONF_MOWERS][mower_imei].get(ATTR_NAME)
                 else:
-                    mower_name = user_input[ATTR_NAME]
+                    mower_name = user_input.get(ATTR_NAME)
                     if (
                         mower_name != self._options[CONF_MOWERS][mower_imei]
-                        and mower_name in self._options[CONF_MOWERS].values()
+                        and any(m.get(ATTR_NAME, "") == mower_name for m in self._options[CONF_MOWERS].values())
                     ):
                         errors["base"] = "name_exists"
 
@@ -532,8 +530,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             device.id,
                             name=mower_name,
                         )
-                        self._options[CONF_MOWERS][mower_imei] = mower_name
-
+                        self._options[CONF_MOWERS][mower_imei] = {
+                            ATTR_NAME: mower_name,
+                        }
                         # Input is valid, set data
                         LOGGER.debug(self._options)
                         return self.async_create_entry(
@@ -611,9 +610,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             options=[
                                 selector.SelectOptionDict(
                                     value=imei,
-                                    label=f"{name} ({imei})",
+                                    label=f"{mower.get(ATTR_NAME)} ({imei})",
                                 )
-                                for imei, name in self._options[CONF_MOWERS].items()
+                                for imei, mower in self._options[CONF_MOWERS].items()
                             ],
                             mode=selector.SelectSelectorMode.DROPDOWN,
                             translation_key=ATTR_IMEI,

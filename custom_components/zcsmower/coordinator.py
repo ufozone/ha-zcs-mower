@@ -102,10 +102,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self.mowers = dict(config_entry.options.get(CONF_MOWERS, []))
 
         self.data = {}
-        for _imei, _name in self.mowers.items():
+        for _imei, _mower in self.mowers.items():
             self.data[_imei] = {
-                ATTR_NAME: _name,
                 ATTR_IMEI: _imei,
+                ATTR_NAME: _mower.get(ATTR_NAME, _imei),
                 ATTR_STATE: None,
                 ATTR_ICON: None,
                 ATTR_WORKING: False,
