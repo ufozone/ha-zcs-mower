@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
-    ATTR_NAME,
     ATTR_STATE,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -46,7 +45,7 @@ async def async_setup_entry(
                 entity_description=entity_description,
                 imei=imei,
             )
-            for imei in coordinator.mowers.keys()
+            for imei in coordinator.mowers
             for entity_description in ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
