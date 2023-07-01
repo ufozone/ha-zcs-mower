@@ -166,7 +166,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            """Update all mowers."""
+            # Update all mowers.
             await self.async_fetch_all_mowers()
 
             LOGGER.debug("_async_update_data")
@@ -261,10 +261,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "attrs",
                     "createdOn",
                     "storage",
-                    "varBillingPlanCode"
+                    "varBillingPlanCode",
                 ],
                 "hideFields": True,
-                "keys": mower_imeis
+                "keys": mower_imeis,
             },
         )
         response = await self.client.get_response()
@@ -313,7 +313,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             # Get robot state, error code and location
             if "robot_state" in data["alarms"]:
                 robot_state = data["alarms"]["robot_state"]
-                _state = robot_state["state"] if robot_state["state"] < len(ROBOT_STATES) else 0
+                _state = (
+                    robot_state["state"] if robot_state["state"] < len(ROBOT_STATES) else 0
+                )
                 mower[ATTR_STATE] = ROBOT_STATES[_state]["name"]
                 mower[ATTR_ICON] = ROBOT_STATES[_state]["icon"]
                 mower[ATTR_WORKING] = _state in list(ROBOT_WORKING_STATES)
@@ -448,7 +450,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         imei: str,
     ) -> bool:
         """Send command wake_up to lawn nower."""
-        LOGGER.debug(f"wake_up: {imei}")
+        LOGGER.debug("wake_up: %s", imei)
         try:
             self.data[imei][ATTR_LAST_WAKE_UP] = self._get_datetime_now()
             return await self.client.execute(
@@ -469,7 +471,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         profile: int,
     ) -> bool:
         """Send command set_profile to lawn nower."""
-        LOGGER.debug(f"set_profile: {imei}")
+        LOGGER.debug("set_profile: %s", imei)
         try:
             await self.async_prepare_for_command(imei)
             return await self.client.execute(
@@ -492,7 +494,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         imei: str,
     ) -> bool:
         """Send command work_now to lawn nower."""
-        LOGGER.debug(f"work_now: {imei}")
+        LOGGER.debug("work_now: %s", imei)
         try:
             await self.async_prepare_for_command(imei)
             return await self.client.execute(
@@ -514,7 +516,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         area: int | None = None,
     ) -> bool:
         """Prepare command work_for."""
-        LOGGER.debug(f"work_for: {imei}")
+        LOGGER.debug("work_for: %s", imei)
         _target = self._get_datetime_from_duration(duration)
         LOGGER.debug(_target)
         await self.async_work_until(
@@ -532,7 +534,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         area: int | None = None,
     ) -> bool:
         """Send command work_until to lawn nower."""
-        LOGGER.debug(f"work_until: {imei}")
+        LOGGER.debug("work_until: %s", imei)
         _params = {
             "hh": hours,
             "mm": minutes,
@@ -561,7 +563,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         imei: str,
     ) -> bool:
         """Send command border_cut to lawn nower."""
-        LOGGER.debug(f"border_cut: {imei}")
+        LOGGER.debug("border_cut: %s", imei)
         try:
             await self.async_prepare_for_command(imei)
             return await self.client.execute(
@@ -581,7 +583,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         imei: str,
     ) -> bool:
         """Send command charge_now to lawn nower."""
-        LOGGER.debug(f"charge_now: {imei}")
+        LOGGER.debug("charge_now: %s", imei)
         try:
             await self.async_prepare_for_command(imei)
             return await self.client.execute(
@@ -602,7 +604,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         duration: int,
     ) -> bool:
         """Prepare command charge_until."""
-        LOGGER.debug(f"charge_for: {imei}")
+        LOGGER.debug("charge_for: %s", imei)
         _target = self._get_datetime_from_duration(duration)
         LOGGER.debug(_target)
         await self.async_charge_until(
@@ -620,7 +622,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         weekday: int,
     ) -> bool:
         """Send command charge_until to lawn nower."""
-        LOGGER.debug(f"charge_until: {imei}")
+        LOGGER.debug("charge_until: %s", imei)
         try:
             await self.async_prepare_for_command(imei)
             return await self.client.execute(
@@ -645,7 +647,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         imei: str,
     ) -> bool:
         """Send command trace_position to lawn nower."""
-        LOGGER.debug(f"trace_position: {imei}")
+        LOGGER.debug("trace_position: %s", imei)
         try:
             self.data[imei][ATTR_LAST_TRACE_POSITION] = self._get_datetime_now()
             await self.async_prepare_for_command(imei)
@@ -672,7 +674,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         index: int | None = None,
     ) -> bool:
         """Send command keep_out to lawn nower."""
-        LOGGER.debug(f"keep_out: {imei}")
+        LOGGER.debug("keep_out: %s", imei)
         _params = {
             "latitude": latitude,
             "longitude": longitude,
@@ -706,6 +708,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         params: dict[str, any] | list[any] | None = None,
     ) -> bool:
         """Send custom command to lawn nower."""
+        LOGGER.debug("custom_command: %s", imei)
+        LOGGER.debug(command)
+        LOGGER.debug(params)
         try:
             await self.async_prepare_for_command(imei)
             return await self.client.execute(
