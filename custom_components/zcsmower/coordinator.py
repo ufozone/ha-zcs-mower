@@ -361,20 +361,13 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             mower[ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
         mower[ATTR_LAST_PULL] = self._get_datetime_now()
 
-        # If lawn mower is working
+        # Lawn mower is working
         if mower.get(ATTR_WORKING, False):
-            # Send a wake_up command every WAKE_UP_INTERVAL seconds and
-            _wake_up_interval = ROBOT_INFINITY_WAKE_UP_INTERVAL if (mower.get(ATTR_INFINITY) == "active") else ROBOT_DEFAULT_WAKE_UP_INTERVAL
-            if (
-                mower.get(ATTR_LAST_WAKE_UP) is None
-                or (self._get_datetime_now() - mower.get(ATTR_LAST_WAKE_UP)).total_seconds() > _wake_up_interval
-            ):
-                self.hass.async_create_task(
-                    self.async_wake_up(imei)
-                )
-            # If periodical position tracing is enabled
-            # send a trace_position command every TRACE_POSITION_INTERVAL seconds
             _trace_position_interval = ROBOT_INFINITY_TRACE_POSITION_INTERVAL if (mower.get(ATTR_INFINITY) == "active") else ROBOT_DEFAULT_TRACE_POSITION_INTERVAL
+            _wake_up_interval = ROBOT_INFINITY_WAKE_UP_INTERVAL if (mower.get(ATTR_INFINITY) == "active") else ROBOT_DEFAULT_WAKE_UP_INTERVAL
+
+            # If periodical position tracing is enabled
+            # Send a trace_position command every TRACE_POSITION_INTERVAL seconds
             if (
                 self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
                 and (
@@ -384,6 +377,14 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             ):
                 self.hass.async_create_task(
                     self.async_trace_position(imei)
+                )
+            # Or send a wake_up command every WAKE_UP_INTERVAL seconds
+            elif (
+                mower.get(ATTR_LAST_WAKE_UP) is None
+                or (self._get_datetime_now() - mower.get(ATTR_LAST_WAKE_UP)).total_seconds() > _wake_up_interval
+            ):
+                self.hass.async_create_task(
+                    self.async_wake_up(imei)
                 )
         # State changed
         if mower.get(ATTR_STATE) != mower.get(ATTR_LAST_STATE):
@@ -410,6 +411,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             # Use connection state from last fetch if last pull was not longer than 10 seconds ago
             mower = self.get_mower_attributes(imei)
             last_pull = mower.get(ATTR_LAST_PULL, None)
+            last_wake_up = mower.get(ATTR_LAST_WAKE_UP, None)
+
             if (
                 last_pull is not None
                 and (self._get_datetime_now() - last_pull).total_seconds() < 10
@@ -423,8 +426,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 return True
 
             # Send wake up command if last attempt was more than 60 seconds ago
-            if (mower.get(ATTR_LAST_WAKE_UP) is None
-                or (self._get_datetime_now() - mower.get(ATTR_LAST_WAKE_UP)).total_seconds() > 60
+            if (
+                last_wake_up is None
+                or (self._get_datetime_now() - last_wake_up).total_seconds() > 60
             ):
                 await self.async_wake_up(imei)
 
