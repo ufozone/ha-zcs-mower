@@ -108,7 +108,15 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
                 f"component.{self.platform.platform_name}.entity"
                 f".sensor.state.state.{_status}"
             )
-        _attr_status: str = self.platform.entity_translations.get(_name_translation_key, _status)
+        # HA > 2023.6.3
+        if hasattr(self.platform, "platform_translations"):
+            _attr_status: str = self.platform.platform_translations.get(_name_translation_key, _status)
+        # HA <= 2023.6.3
+        elif hasattr(self.platform, "entity_translations"):
+            _attr_status: str = self.platform.entity_translations.get(_name_translation_key, _status)
+        # HA < 2023.4.0
+        else:
+            _attr_status = _status
         self._additional_extra_state_attributes = {
             ATTR_STATUS: _attr_status,
         }
