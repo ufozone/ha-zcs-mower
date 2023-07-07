@@ -6,6 +6,9 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     ATTR_NAME,
 )
+from homeassistant.helpers import (
+    config_validation as cv,
+)
 
 from .const import (
     LOGGER,
@@ -26,6 +29,7 @@ from .const import (
 from .services import async_setup_services
 from .coordinator import ZcsMowerDataUpdateCoordinator
 
+CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up ZCS Lawn Mower Robot component."""
