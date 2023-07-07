@@ -73,6 +73,8 @@ async def async_setup_entry(
 class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
     """Representation of a ZCS Lawn Mower Robot vacuum."""
 
+    _attr_name = None
+
     def __init__(
         self,
         hass: HomeAssistant,
