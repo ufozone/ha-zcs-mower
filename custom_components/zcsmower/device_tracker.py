@@ -64,6 +64,8 @@ async def async_setup_entry(
 class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
     """Representation of a ZCS Lawn Mower Robot sensor."""
 
+    _attr_name = None
+
     def __init__(
         self,
         hass: HomeAssistant,
