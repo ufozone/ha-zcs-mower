@@ -49,6 +49,10 @@ from .const import (
     LOCATION_HISTORY_ITEMS,
     CONF_CLIENT_KEY,
     CONF_TRACE_POSITION_ENABLE,
+    CONF_TRACE_POSITION_INTERVAL_DEFAULT,
+    CONF_TRACE_POSITION_INTERVAL_INFINITY,
+    CONF_WAKE_UP_INTERVAL_DEFAULT,
+    CONF_WAKE_UP_INTERVAL_INFINITY,
     CONF_MOWERS,
     ATTR_IMEI,
     ATTR_INFINITY,
@@ -363,8 +367,14 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
         # Lawn mower is working
         if mower.get(ATTR_WORKING, False):
-            _trace_position_interval = ROBOT_TRACE_POSITION_INTERVAL_INFINITY if (mower.get(ATTR_INFINITY) == "active") else ROBOT_TRACE_POSITION_INTERVAL_DEFAULT
-            _wake_up_interval = ROBOT_WAKE_UP_INTERVAL_INFINITY if (mower.get(ATTR_INFINITY) == "active") else ROBOT_WAKE_UP_INTERVAL_DEFAULT
+            # Get inifity intervals, if Infinity+ is active
+            if mower.get(ATTR_INFINITY) == "active":
+                _trace_position_interval = self.config_entry.options.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY)
+                _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY)
+            # Get default intervals, if Infinity+ is not active
+            else:
+                _trace_position_interval = self.config_entry.options.get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT)
+                _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT)
 
             # If periodical position tracing is enabled
             # Send a trace_position command every TRACE_POSITION_INTERVAL seconds

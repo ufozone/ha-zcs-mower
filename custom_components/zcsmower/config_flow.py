@@ -35,6 +35,10 @@ from .const import (
     DOMAIN,
     CONF_CLIENT_KEY,
     CONF_TRACE_POSITION_ENABLE,
+    CONF_TRACE_POSITION_INTERVAL_DEFAULT,
+    CONF_TRACE_POSITION_INTERVAL_INFINITY,
+    CONF_WAKE_UP_INTERVAL_DEFAULT,
+    CONF_WAKE_UP_INTERVAL_INFINITY,
     CONF_CAMERA_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -142,6 +146,10 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._options = {
                     CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
                     CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
+                    CONF_TRACE_POSITION_INTERVAL_DEFAULT: int(ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
+                    CONF_TRACE_POSITION_INTERVAL_INFINITY: int(ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
+                    CONF_WAKE_UP_INTERVAL_DEFAULT: int(ROBOT_WAKE_UP_INTERVAL_DEFAULT),
+                    CONF_WAKE_UP_INTERVAL_INFINITY: int(ROBOT_WAKE_UP_INTERVAL_INFINITY),
                     CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
@@ -787,6 +795,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     {
                         CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
                         CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
+                        CONF_TRACE_POSITION_INTERVAL_DEFAULT: user_input.get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
+                        CONF_TRACE_POSITION_INTERVAL_INFINITY: user_input.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
+                        CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
+                        CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
                     }
                 )
                 LOGGER.debug(self._options)
@@ -810,6 +822,22 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_TRACE_POSITION_ENABLE,
                         default=(user_input or self._options).get(CONF_TRACE_POSITION_ENABLE, False),
                     ): selector.BooleanSelector(),
+                    vol.Required(
+                        CONF_TRACE_POSITION_INTERVAL_DEFAULT,
+                        default=(user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=300, max=7200)),
+                    vol.Required(
+                        CONF_TRACE_POSITION_INTERVAL_INFINITY,
+                        default=(user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=300, max=7200)),
+                    vol.Required(
+                        CONF_WAKE_UP_INTERVAL_DEFAULT,
+                        default=(user_input or self._options).get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=300, max=7200)),
+                    vol.Required(
+                        CONF_WAKE_UP_INTERVAL_INFINITY,
+                        default=(user_input or self._options).get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=300, max=7200)),
                 }
             ),
             errors=errors,
