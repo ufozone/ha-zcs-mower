@@ -68,7 +68,7 @@
           "change": "Change Lawn Mower",
           "delete": "Remove Lawn Mower",
           "camera": "Map Cam Settings",
-          "settings": "Garage Settings"
+          "settings": "General Settings"
         }
       },
       "add": {
@@ -114,7 +114,11 @@
         "description": "Enter your client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Client Key",
-          "trace_position_enable": "Enable periodical position tracing?"
+          "trace_position_enable": "Enable periodical position tracing?",
+          "trace_position_interval_default": "Default: Every how many seconds should the position tracing be started?",
+          "trace_position_interval_infinity": "Infinity+: Every how many seconds should the position tracing be started?",
+          "wake_up_interval_default": "Default: Every how many seconds should the robotic lawnmower wake up?",
+          "wake_up_interval_infinity": "Infinity+: Every how many seconds should the robotic lawnmower wake up?"
         }
       }
     }
