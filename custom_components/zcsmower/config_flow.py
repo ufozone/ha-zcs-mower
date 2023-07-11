@@ -822,22 +822,58 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_TRACE_POSITION_ENABLE,
                         default=(user_input or self._options).get(CONF_TRACE_POSITION_ENABLE, False),
                     ): selector.BooleanSelector(),
-                    vol.Required(
+                    vol.Optional(
                         CONF_TRACE_POSITION_INTERVAL_DEFAULT,
                         default=(user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
-                    ): vol.All(vol.Coerce(int), vol.Range(min=300, max=7200)),
-                    vol.Required(
+                        description={
+                            "suggested_value": ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=300,
+                            max=7200,
+                            mode=selector.NumberSelectorMode.BOX,
+                        )
+                    ),
+                    vol.Optional(
                         CONF_TRACE_POSITION_INTERVAL_INFINITY,
                         default=(user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
-                    ): vol.All(vol.Coerce(int), vol.Range(min=300, max=7200)),
-                    vol.Required(
+                        description={
+                            "suggested_value": ROBOT_TRACE_POSITION_INTERVAL_INFINITY,
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=300,
+                            max=7200,
+                            mode=selector.NumberSelectorMode.BOX,
+                        )
+                    ),
+                    vol.Optional(
                         CONF_WAKE_UP_INTERVAL_DEFAULT,
                         default=(user_input or self._options).get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
-                    ): vol.All(vol.Coerce(int), vol.Range(min=300, max=7200)),
-                    vol.Required(
+                        description={
+                            "suggested_value": ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=300,
+                            max=7200,
+                            mode=selector.NumberSelectorMode.BOX,
+                        )
+                    ),
+                    vol.Optional(
                         CONF_WAKE_UP_INTERVAL_INFINITY,
                         default=(user_input or self._options).get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
-                    ): vol.All(vol.Coerce(int), vol.Range(min=300, max=7200)),
+                        description={
+                            "suggested_value": ROBOT_WAKE_UP_INTERVAL_INFINITY,
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=300,
+                            max=7200,
+                            mode=selector.NumberSelectorMode.BOX,
+                        )
+                    ),
                 }
             ),
             errors=errors,
