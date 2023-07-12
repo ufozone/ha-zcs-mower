@@ -23,7 +23,6 @@ from homeassistant.helpers.entity import Entity
 from .const import (
     LOGGER,
     DOMAIN,
-    ATTR_ERROR,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
