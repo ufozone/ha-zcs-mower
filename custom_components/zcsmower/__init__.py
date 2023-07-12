@@ -15,6 +15,11 @@ from .const import (
     DOMAIN,
     PLATFORMS,
     CONF_CLIENT_KEY,
+    CONF_TRACE_POSITION_ENABLE,
+    CONF_TRACE_POSITION_INTERVAL_DEFAULT,
+    CONF_TRACE_POSITION_INTERVAL_INFINITY,
+    CONF_WAKE_UP_INTERVAL_DEFAULT,
+    CONF_WAKE_UP_INTERVAL_INFINITY,
     CONF_CAMERA_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -25,6 +30,10 @@ from .const import (
     CONF_MAP_DRAW_LINES,
     CONF_MOWERS,
     MAP_POINTS_DEFAULT,
+    ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
+    ROBOT_TRACE_POSITION_INTERVAL_INFINITY,
+    ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+    ROBOT_WAKE_UP_INTERVAL_INFINITY,
 )
 from .services import async_setup_services
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -136,6 +145,24 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         _options.update(
             {
                 CONF_MOWERS: _mowers,
+            }
+        )
+        hass.config_entries.async_update_entry(
+            config_entry,
+            title=str(config_entry.title),
+            data={},
+            options=_options,
+        )
+
+    if config_entry.version < 7:
+        config_entry.version = 7
+        _options = dict(config_entry.options)
+        _options.update(
+            {
+                CONF_TRACE_POSITION_INTERVAL_DEFAULT: config_entry.options.get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
+                CONF_TRACE_POSITION_INTERVAL_INFINITY: config_entry.options.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
+                CONF_WAKE_UP_INTERVAL_DEFAULT: config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
+                CONF_WAKE_UP_INTERVAL_INFINITY: config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
             }
         )
         hass.config_entries.async_update_entry(

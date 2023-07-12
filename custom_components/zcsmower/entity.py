@@ -75,7 +75,7 @@ class ZcsMowerEntity(CoordinatorEntity):
     def _get_localized_status(
         self,
     ) -> str:
-        """Get status of the current mower."""
+        """Get localized status of the current mower."""
         assert self.platform
         if self._get_attribute(ATTR_STATE) == "fail":
             _status = self._get_attribute(ATTR_ERROR, "unknown")

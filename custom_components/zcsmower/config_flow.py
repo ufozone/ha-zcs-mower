@@ -109,7 +109,7 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 6
+    VERSION = 7
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     _title: str | None
@@ -384,7 +384,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     """Handles options flow for the component."""
 
-    VERSION = 6
+    VERSION = 7
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
