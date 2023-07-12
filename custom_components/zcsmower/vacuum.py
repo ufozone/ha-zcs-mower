@@ -97,30 +97,8 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        assert self.platform
-        if self._get_attribute(ATTR_STATE) == "fail":
-            _status = self._get_attribute(ATTR_ERROR, "unknown")
-            _name_translation_key = (
-                f"component.{self.platform.platform_name}.entity"
-                f".sensor.error.state.{_status}"
-            )
-        else:
-            _status = self._get_attribute(ATTR_STATE, "unknown")
-            _name_translation_key = (
-                f"component.{self.platform.platform_name}.entity"
-                f".sensor.state.state.{_status}"
-            )
-        # HA > 2023.6.3
-        if hasattr(self.platform, "platform_translations"):
-            _attr_status: str = self.platform.platform_translations.get(_name_translation_key, _status)
-        # HA <= 2023.6.3
-        elif hasattr(self.platform, "entity_translations"):
-            _attr_status: str = self.platform.entity_translations.get(_name_translation_key, _status)
-        # HA < 2023.4.0
-        else:
-            _attr_status = _status
         self._additional_extra_state_attributes = {
-            ATTR_STATUS: _attr_status,
+            ATTR_STATUS: self._get_localized_status(),
         }
 
     @property
@@ -142,14 +120,7 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
     def error(self) -> str | None:
         """Define an error message if the vacuum is in STATE_ERROR."""
         if self._get_attribute(ATTR_STATE) == "fail":
-            assert self.platform
-            _error = self._get_attribute(ATTR_ERROR, "unknown")
-            _name_translation_key = (
-                f"component.{self.platform.platform_name}.entity"
-                f".sensor.error.state.{_error}"
-            )
-            _error_reason: str = self.platform.entity_translations.get(_name_translation_key, _error)
-            return _error_reason
+            return self._get_localized_status()
         return None
 
     async def async_start(self) -> None:

@@ -7,6 +7,7 @@ from homeassistant.core import (
 )
 from homeassistant.const import (
     ATTR_NAME,
+    ATTR_STATE,
     ATTR_IDENTIFIERS,
     ATTR_MANUFACTURER,
     ATTR_MODEL,
@@ -20,6 +21,7 @@ from .const import (
     DOMAIN,
     ATTRIBUTION,
     ATTR_IMEI,
+    ATTR_ERROR,
     ATTR_AVAILABLE,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
@@ -69,6 +71,34 @@ class ZcsMowerEntity(CoordinatorEntity):
     ) -> any:
         """Get attribute of the current mower."""
         return self.coordinator.data.get(self._imei, {}).get(attr, default_value)
+
+    def _get_localized_status(
+        self,
+    ) -> str:
+        """Get status of the current mower."""
+        assert self.platform
+        if self._get_attribute(ATTR_STATE) == "fail":
+            _status = self._get_attribute(ATTR_ERROR, "unknown")
+            _name_translation_key = (
+                f"component.{self.platform.platform_name}.entity"
+                f".sensor.error.state.{_status}"
+            )
+        else:
+            _status = self._get_attribute(ATTR_STATE, "unknown")
+            _name_translation_key = (
+                f"component.{self.platform.platform_name}.entity"
+                f".sensor.state.state.{_status}"
+            )
+        # HA > 2023.6.3
+        if hasattr(self.platform, "platform_translations"):
+            _localized_status: str = self.platform.platform_translations.get(_name_translation_key, _status)
+        # HA <= 2023.6.3
+        elif hasattr(self.platform, "entity_translations"):
+            _localized_status: str = self.platform.entity_translations.get(_name_translation_key, _status)
+        # HA < 2023.4.0
+        else:
+            _localized_status = _status
+        return _localized_status
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
