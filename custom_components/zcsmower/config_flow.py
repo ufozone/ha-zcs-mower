@@ -824,9 +824,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ): selector.BooleanSelector(),
                     vol.Optional(
                         CONF_TRACE_POSITION_INTERVAL_DEFAULT,
-                        default=(user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
+                        default=ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
                         description={
-                            "suggested_value": ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
+                            "suggested_value": (user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -837,9 +837,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_TRACE_POSITION_INTERVAL_INFINITY,
-                        default=(user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
+                        default=ROBOT_TRACE_POSITION_INTERVAL_INFINITY,
                         description={
-                            "suggested_value": ROBOT_TRACE_POSITION_INTERVAL_INFINITY,
+                            "suggested_value": (user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -850,9 +850,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_WAKE_UP_INTERVAL_DEFAULT,
-                        default=(user_input or self._options).get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
+                        default=ROBOT_WAKE_UP_INTERVAL_DEFAULT,
                         description={
-                            "suggested_value": ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+                            "suggested_value": (user_input or self._options).get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -863,9 +863,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_WAKE_UP_INTERVAL_INFINITY,
-                        default=(user_input or self._options).get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                        default=ROBOT_WAKE_UP_INTERVAL_INFINITY,
                         description={
-                            "suggested_value": ROBOT_WAKE_UP_INTERVAL_INFINITY,
+                            "suggested_value": (user_input or self._options).get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
