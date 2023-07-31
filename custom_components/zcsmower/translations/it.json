@@ -16,7 +16,7 @@
         "data": {
           "name": "Nome del garage",
           "client_key": "Chiave cliente",
-          "trace_position_enable": "Abilitare il tracciamento periodico della posizione?",
+          "trace_position_enable": "Abilitare il tracciamento della posizione?",
           "camera_enable": "Abilita la telecamera della mappa"
         }
       },
@@ -114,7 +114,7 @@
         "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Chiave cliente",
-          "trace_position_enable": "Abilitare il tracciamento periodico della posizione?",
+          "trace_position_enable": "Abilitare il tracciamento della posizione?",
           "trace_position_interval_default": "Default: Ogni quanti secondi deve essere riavviato il tracciamento della posizione?",
           "trace_position_interval_infinity": "Infinity+: Ogni quanti secondi deve essere riavviato il tracciamento della posizione?",
           "wake_up_interval_default": "Default: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",

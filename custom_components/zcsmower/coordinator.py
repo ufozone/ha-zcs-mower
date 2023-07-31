@@ -369,27 +369,13 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if mower.get(ATTR_WORKING, False):
             # Get inifity intervals, if Infinity+ is active
             if mower.get(ATTR_INFINITY) == "active":
-                _trace_position_interval = self.config_entry.options.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY)
                 _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY)
             # Get default intervals, if Infinity+ is not active
             else:
-                _trace_position_interval = self.config_entry.options.get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT)
                 _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT)
 
-            # If periodical position tracing is enabled
-            # Send a trace_position command every TRACE_POSITION_INTERVAL seconds
+            # Send a wake_up command every WAKE_UP_INTERVAL seconds
             if (
-                self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
-                and (
-                    mower.get(ATTR_LAST_TRACE_POSITION) is None
-                    or (self._get_datetime_now() - mower.get(ATTR_LAST_TRACE_POSITION)).total_seconds() > _trace_position_interval
-                )
-            ):
-                self.hass.async_create_task(
-                    self.async_trace_position(imei)
-                )
-            # Or send a wake_up command every WAKE_UP_INTERVAL seconds
-            elif (
                 mower.get(ATTR_LAST_WAKE_UP) is None
                 or (self._get_datetime_now() - mower.get(ATTR_LAST_WAKE_UP)).total_seconds() > _wake_up_interval
             ):
@@ -398,11 +384,12 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 )
         # State changed
         if mower.get(ATTR_STATE) != mower.get(ATTR_LAST_STATE):
-            # If lawn mower is now working and periodical position tracing is disabled
+            # If lawn mower is now working
+            # and position tracing is active
             # send a trace_position command
             if (
                 mower.get(ATTR_WORKING, False)
-                and not self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
+                and self.config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False)
             ):
                 self.hass.async_create_task(
                     self.async_trace_position(imei)

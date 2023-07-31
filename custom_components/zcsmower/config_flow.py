@@ -823,32 +823,6 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         default=(user_input or self._options).get(CONF_TRACE_POSITION_ENABLE, False),
                     ): selector.BooleanSelector(),
                     vol.Optional(
-                        CONF_TRACE_POSITION_INTERVAL_DEFAULT,
-                        default=ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
-                        description={
-                            "suggested_value": (user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
-                        },
-                    ): selector.NumberSelector(
-                        selector.NumberSelectorConfig(
-                            min=300,
-                            max=7200,
-                            mode=selector.NumberSelectorMode.BOX,
-                        )
-                    ),
-                    vol.Optional(
-                        CONF_TRACE_POSITION_INTERVAL_INFINITY,
-                        default=ROBOT_TRACE_POSITION_INTERVAL_INFINITY,
-                        description={
-                            "suggested_value": (user_input or self._options).get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
-                        },
-                    ): selector.NumberSelector(
-                        selector.NumberSelectorConfig(
-                            min=300,
-                            max=7200,
-                            mode=selector.NumberSelectorMode.BOX,
-                        )
-                    ),
-                    vol.Optional(
                         CONF_WAKE_UP_INTERVAL_DEFAULT,
                         default=ROBOT_WAKE_UP_INTERVAL_DEFAULT,
                         description={
@@ -857,7 +831,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             min=300,
-                            max=7200,
+                            max=21600,
                             mode=selector.NumberSelectorMode.BOX,
                         )
                     ),
@@ -870,7 +844,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             min=300,
-                            max=7200,
+                            max=21600,
                             mode=selector.NumberSelectorMode.BOX,
                         )
                     ),

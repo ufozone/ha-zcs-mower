@@ -16,7 +16,7 @@
         "data": {
           "name": "Garagenname",
           "client_key": "Kundenschlüssel",
-          "trace_position_enable": "Periodische Positionsverfolgung aktivieren?",
+          "trace_position_enable": "Positionsverfolgung aktivieren?",
           "camera_enable": "Kartenkamera aktivieren?"
         }
       },
@@ -114,7 +114,7 @@
         "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Kundenschlüssel",
-          "trace_position_enable": "Periodische Positionsverfolgung aktivieren?",
+          "trace_position_enable": "Positionsverfolgung aktivieren?",
           "trace_position_interval_default": "Standard: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
           "trace_position_interval_infinity": "Infinity+: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
           "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher-Roboter erneut aufwachen?",
