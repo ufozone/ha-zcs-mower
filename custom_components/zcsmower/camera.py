@@ -314,7 +314,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         """Create empty map image."""
         map_image = Image.new("RGB", (600, 400), color=(255, 255, 255))
         img_draw = ImageDraw.Draw(map_image)
-        w, h = img_draw.textsize(text.upper())
+        _, _, w, h = img_draw.textbbox((0,0), text.upper())
         img_draw.text(((map_image.size[0] - w) / 2, (map_image.size[1] - h) / 2), text.upper(), fill=(0, 0, 0))
         return map_image
 
