@@ -10,8 +10,10 @@ from homeassistant.const import (
     ATTR_LONGITUDE,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.device_tracker import SOURCE_TYPE_GPS
-from homeassistant.components.device_tracker.config_entry import TrackerEntity
+from homeassistant.components.device_tracker import (
+    SourceType,
+    TrackerEntity,
+)
 from homeassistant.components.recorder import (
     get_instance,
     history,
@@ -129,9 +131,9 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         return location if location else None
 
     @property
-    def source_type(self):
+    def source_type(self) -> SourceType:
         """Return the source type, eg gps or router, of the device."""
-        return SOURCE_TYPE_GPS
+        return SourceType.GPS
 
     @property
     def device_class(self):
