@@ -114,11 +114,13 @@
         "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Kundenschlüssel",
+          "uptade_interval_idling": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn alle Rasenmäher im Leerlauf sind?",
+          "uptade_interval_working": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn ein oder mehrere Rasenmäher in Betrieb sind?",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
           "trace_position_interval_default": "Standard: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
           "trace_position_interval_infinity": "Infinity+: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
-          "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher-Roboter erneut aufwachen?",
-          "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher-Roboter erneut aufwachen?"
+          "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
+          "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
         }
       }
     }
