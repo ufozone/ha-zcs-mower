@@ -36,13 +36,13 @@ PLATFORMS = [
 ]
 
 CONF_CLIENT_KEY = "client_key"
+CONF_UPDATE_INTERVAL_IDLING = "uptade_interval_idling"
+CONF_UPDATE_INTERVAL_WORKING = "uptade_interval_working"
 CONF_TRACE_POSITION_ENABLE = "trace_position_enable"
 CONF_TRACE_POSITION_INTERVAL_DEFAULT = "trace_position_interval_default"
 CONF_TRACE_POSITION_INTERVAL_INFINITY = "trace_position_interval_infinity"
 CONF_WAKE_UP_INTERVAL_DEFAULT = "wake_up_interval_default"
 CONF_WAKE_UP_INTERVAL_INFINITY = "wake_up_interval_infinity"
-CONF_UPDATE_INTERVAL_IDLING = "uptade_interval_idling"
-CONF_UPDATE_INTERVAL_WORKING = "uptade_interval_working"
 CONF_CAMERA_ENABLE = "camera_enable"
 CONF_MAP_HISTORY_ENABLE = "map_history_enable"
 CONF_MAP_IMAGE_PATH = "map_image_path"
