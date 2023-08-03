@@ -48,6 +48,8 @@ from .const import (
     UPDATE_INTERVAL_WORKING,
     LOCATION_HISTORY_ITEMS,
     CONF_CLIENT_KEY,
+    CONF_UPDATE_INTERVAL_IDLING,
+    CONF_UPDATE_INTERVAL_WORKING,
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
@@ -84,23 +86,22 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL_IDLING),
     ) -> None:
         """Initialize."""
         super().__init__(
             hass=hass,
             logger=LOGGER,
             name=DOMAIN,
-            update_interval=update_interval,
+            update_interval=timedelta(seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)),
         )
         self.config_entry = config_entry
         self.client = ZcsMowerApiClient(
             session=async_get_clientsession(hass),
             options={
                 "endpoint": API_BASE_URI,
-                "app_id": config_entry.options[CONF_CLIENT_KEY],
+                "app_id": config_entry.options.get(CONF_CLIENT_KEY, ""),
                 "app_token": API_APP_TOKEN,
-                "thing_key": config_entry.options[CONF_CLIENT_KEY]
+                "thing_key": config_entry.options.get(CONF_CLIENT_KEY, ""),
             }
         )
         self.mowers = dict(config_entry.options.get(CONF_MOWERS, []))
@@ -174,13 +175,13 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
             # If one or more lawn mower(s) working, increase update_interval
             if self.has_working_mowers():
-                suggested_update_interval = timedelta(seconds=UPDATE_INTERVAL_WORKING)
+                suggested_update_interval = timedelta(seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING))
             else:
-                suggested_update_interval = timedelta(seconds=UPDATE_INTERVAL_IDLING)
+                suggested_update_interval = timedelta(seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING))
             # Set suggested update_interval
             if suggested_update_interval != self.update_interval:
                 self.update_interval = suggested_update_interval
-                LOGGER.info("Update update_interval, because lawn mower(s) changed state from idle to working or vice versa.")
+                LOGGER.info("Update update_interval to %s seconds, because lawn mower(s) changed state from idle to working or vice versa.", suggested_update_interval.total_seconds())
             return self.data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception

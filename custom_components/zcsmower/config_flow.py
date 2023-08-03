@@ -798,6 +798,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options.update(
                     {
                         CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
+                        CONF_UPDATE_INTERVAL_IDLING: user_input.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
+                        CONF_UPDATE_INTERVAL_WORKING: user_input.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING),
                         CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                         CONF_TRACE_POSITION_INTERVAL_DEFAULT: user_input.get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
                         CONF_TRACE_POSITION_INTERVAL_INFINITY: user_input.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
