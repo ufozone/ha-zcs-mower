@@ -34,6 +34,8 @@ from .const import (
     LOGGER,
     DOMAIN,
     CONF_CLIENT_KEY,
+    CONF_UPDATE_INTERVAL_IDLING,
+    CONF_UPDATE_INTERVAL_WORKING,
     CONF_TRACE_POSITION_ENABLE,
     CONF_TRACE_POSITION_INTERVAL_DEFAULT,
     CONF_TRACE_POSITION_INTERVAL_INFINITY,
@@ -51,6 +53,8 @@ from .const import (
     ATTR_IMEI,
     API_BASE_URI,
     API_APP_TOKEN,
+    UPDATE_INTERVAL_IDLING,
+    UPDATE_INTERVAL_WORKING,
     LOCATION_HISTORY_ITEMS,
     MAP_POINTS_DEFAULT,
     ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
@@ -145,6 +149,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._title = user_input.get(CONF_NAME, "")
                 self._options = {
                     CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
+                    CONF_UPDATE_INTERVAL_IDLING: int(UPDATE_INTERVAL_IDLING),
+                    CONF_UPDATE_INTERVAL_WORKING: int(UPDATE_INTERVAL_WORKING),
                     CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                     CONF_TRACE_POSITION_INTERVAL_DEFAULT: int(ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
                     CONF_TRACE_POSITION_INTERVAL_INFINITY: int(ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
@@ -288,9 +294,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                         default=(user_input or {}).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
                             min=1,
                             max=LOCATION_HISTORY_ITEMS,
-                            mode=selector.NumberSelectorMode.BOX,
                         )
                     ),
                     vol.Optional(
@@ -750,9 +756,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         default=(user_input or self._options).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
                             min=1,
                             max=LOCATION_HISTORY_ITEMS,
-                            mode=selector.NumberSelectorMode.BOX,
                         )
                     ),
                     vol.Optional(
@@ -810,6 +816,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             step_id="settings",
             data_schema=vol.Schema(
                 {
+                    # Client key
                     vol.Required(
                         CONF_CLIENT_KEY,
                         default=(user_input or self._options).get(CONF_CLIENT_KEY, ""),
@@ -818,10 +825,42 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
+                    # Update interval, if all lawn mowers idling
+                    vol.Optional(
+                        CONF_UPDATE_INTERVAL_IDLING,
+                        default=UPDATE_INTERVAL_IDLING,
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.SLIDER,
+                            min=120,
+                            max=900,
+                            step=60,
+                        )
+                    ),
+                    # Update interval, if one or more lawn mowers working
+                    vol.Optional(
+                        CONF_UPDATE_INTERVAL_WORKING,
+                        default=UPDATE_INTERVAL_WORKING,
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING),
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.SLIDER,
+                            min=30,
+                            max=300,
+                            step=30,
+                        )
+                    ),
+                    # Trace position
                     vol.Optional(
                         CONF_TRACE_POSITION_ENABLE,
                         default=(user_input or self._options).get(CONF_TRACE_POSITION_ENABLE, False),
                     ): selector.BooleanSelector(),
+                    # Wake up interval (Standard plan)
                     vol.Optional(
                         CONF_WAKE_UP_INTERVAL_DEFAULT,
                         default=ROBOT_WAKE_UP_INTERVAL_DEFAULT,
@@ -830,11 +869,13 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
                             min=300,
                             max=21600,
-                            mode=selector.NumberSelectorMode.BOX,
+                            step=300,
                         )
                     ),
+                    # Wake up interval (Infinity+ plan)
                     vol.Optional(
                         CONF_WAKE_UP_INTERVAL_INFINITY,
                         default=ROBOT_WAKE_UP_INTERVAL_INFINITY,
@@ -843,9 +884,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
                             min=300,
                             max=21600,
-                            mode=selector.NumberSelectorMode.BOX,
+                            step=300,
                         )
                     ),
                 }
