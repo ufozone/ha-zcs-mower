@@ -41,6 +41,8 @@ CONF_TRACE_POSITION_INTERVAL_DEFAULT = "trace_position_interval_default"
 CONF_TRACE_POSITION_INTERVAL_INFINITY = "trace_position_interval_infinity"
 CONF_WAKE_UP_INTERVAL_DEFAULT = "wake_up_interval_default"
 CONF_WAKE_UP_INTERVAL_INFINITY = "wake_up_interval_infinity"
+CONF_UPDATE_INTERVAL_IDLING = "uptade_interval_idling"
+CONF_UPDATE_INTERVAL_WORKING = "uptade_interval_working"
 CONF_CAMERA_ENABLE = "camera_enable"
 CONF_MAP_HISTORY_ENABLE = "map_history_enable"
 CONF_MAP_IMAGE_PATH = "map_image_path"
@@ -154,7 +156,7 @@ API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
 
-UPDATE_INTERVAL_DEFAULT = 300
+UPDATE_INTERVAL_IDLING = 300
 UPDATE_INTERVAL_WORKING = 60
 
 LOCATION_HISTORY_DAYS = 7

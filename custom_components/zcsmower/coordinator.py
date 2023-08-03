@@ -44,7 +44,7 @@ from .const import (
     API_DATETIME_FORMAT_DEFAULT,
     API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
-    UPDATE_INTERVAL_DEFAULT,
+    UPDATE_INTERVAL_IDLING,
     UPDATE_INTERVAL_WORKING,
     LOCATION_HISTORY_ITEMS,
     CONF_CLIENT_KEY,
@@ -84,7 +84,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL_DEFAULT),
+        update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL_IDLING),
     ) -> None:
         """Initialize."""
         super().__init__(
@@ -176,7 +176,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             if self.has_working_mowers():
                 suggested_update_interval = timedelta(seconds=UPDATE_INTERVAL_WORKING)
             else:
-                suggested_update_interval = timedelta(seconds=UPDATE_INTERVAL_DEFAULT)
+                suggested_update_interval = timedelta(seconds=UPDATE_INTERVAL_IDLING)
             # Set suggested update_interval
             if suggested_update_interval != self.update_interval:
                 self.update_interval = suggested_update_interval
