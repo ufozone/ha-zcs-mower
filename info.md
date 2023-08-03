@@ -168,6 +168,11 @@ Get IMEI from your lawn mower(s):
 
 * location
 
+    ```
+    attributes: 
+    latitude, longitude, source_type (GPS)
+    ```
+
 ### Number
 
 * work_for
