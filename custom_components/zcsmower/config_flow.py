@@ -799,6 +799,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             except Exception as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection_failed"
+            if user_input.get(CONF_STANDBY_TIME_START) == user_input.get(CONF_STANDBY_TIME_STOP):
+                errors["base"] = "standby_time_invalid"
 
             if not errors:
                 # Input is valid, set data
@@ -896,8 +898,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
                             min=600,
-                            max=3600,
-                            step=60,
+                            max=86400,
+                            step=600,
                         )
                     ),
                     # Trace position
