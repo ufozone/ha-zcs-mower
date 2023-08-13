@@ -16,13 +16,15 @@ from .const import (
     PLATFORMS,
     CONF_CLIENT_KEY,
     CONF_UPDATE_INTERVAL_WORKING,
-    CONF_UPDATE_INTERVAL_IDLING,
     CONF_UPDATE_INTERVAL_STANDBY,
+    CONF_UPDATE_INTERVAL_IDLING,
     CONF_TRACE_POSITION_ENABLE,
     CONF_TRACE_POSITION_INTERVAL_DEFAULT,
     CONF_TRACE_POSITION_INTERVAL_INFINITY,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
+    CONF_STANDBY_TIME_START,
+    CONF_STANDBY_TIME_STOP,
     CONF_CAMERA_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -33,8 +35,10 @@ from .const import (
     CONF_MAP_DRAW_LINES,
     CONF_MOWERS,
     UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_IDLING,
     UPDATE_INTERVAL_STANDBY,
+    UPDATE_INTERVAL_IDLING,
+    STANDBY_TIME_START_DEFAULT,
+    STANDBY_TIME_STOP_DEFAULT,
     MAP_POINTS_DEFAULT,
     ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
     ROBOT_TRACE_POSITION_INTERVAL_INFINITY,
@@ -179,16 +183,21 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             options=_options,
         )
 
-    if config_entry.version < 8:
-        config_entry.version = 8
+    if config_entry.version < 9:
+        config_entry.version = 9
         _options = dict(config_entry.options)
         _options.update(
             {
-                CONF_UPDATE_INTERVAL_WORKING: config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING),
-                CONF_UPDATE_INTERVAL_IDLING: config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
-                CONF_UPDATE_INTERVAL_STANDBY: config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY),
+                CONF_UPDATE_INTERVAL_WORKING: config_entry.options.get("uptade_interval_working", UPDATE_INTERVAL_WORKING),
+                CONF_UPDATE_INTERVAL_STANDBY: config_entry.options.get("uptade_interval_idling", UPDATE_INTERVAL_STANDBY),
+                CONF_UPDATE_INTERVAL_IDLING: UPDATE_INTERVAL_IDLING,
+                CONF_STANDBY_TIME_START: STANDBY_TIME_START_DEFAULT,
+                CONF_STANDBY_TIME_STOP: STANDBY_TIME_STOP_DEFAULT,
             }
         )
+        _options.pop("uptade_interval_working")
+        _options.pop("uptade_interval_idling")
+
         hass.config_entries.async_update_entry(
             config_entry,
             title=str(config_entry.title),
