@@ -215,8 +215,8 @@ ROBOT_MODELS = {
     "TH029D": "DX2.9", # ?
     "TH029L": "LX2.9", # ?
     "TH032D": "DZ2", # ?
-    "TH035B": "DZ3", # ?
-    "TH035D": "LZ3", # ?
+    "TH035B": "BZ3", # ?
+    "TH035D": "DZ3", # ?
     "TH040B": "BX4", # ???
     "TH040L": "LX4", # ???
     "TH043L": "LX6", # ???
@@ -238,7 +238,8 @@ ROBOT_MODELS = {
     "WI025L": "I180 S", # ???
     "WI029D": "I250", # ???
     "WI029L": "I350 S", # ???
-    #"WI032D": "", # DB:12
+    "WI032D": "Premium C80", # ?
+    "WI035B": "Premium C120",
     "WI035D": "Premium C180 S", # ???
     "WI040B": "K Premium Medium", # ???
     "WI040L": "K S Premium Medium", # ???
