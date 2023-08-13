@@ -51,6 +51,8 @@
       "communication_failed": "Non è stato possibile eseguire l'azione.",
       "connection_failed": "Impossibile connettersi al server.",
       "standby_time_invalid": "Gli orari di inizio e fine del tempo di standby non devono coincidere.",
+      "update_interval_working_invalid": "L'intervallo di aggiornamento per il funzionamento non può essere maggiore di quello per lo standby.",
+      "update_interval_standby_invalid": "L'intervallo di aggiornamento pronto non può essere maggiore di inattivo.",
       "imei_invalid": "L'IMEI fornito non è valido.",
       "imei_exists": "Un tosaerba con questo IMEI esiste già.",
       "name_exists": "Un tosaerba con questo nome esiste già.",

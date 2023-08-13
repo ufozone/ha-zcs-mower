@@ -51,6 +51,8 @@
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
       "connection_failed": "Es kann keine Verbindung zum Server hergestellt werden.",
       "standby_time_invalid": "Die Start- und Enduhrzeiten der Bereitschaftszeit dürfen nicht identisch sein.",
+      "update_interval_working_invalid": "Das Aktualisierungsintervall für Betrieb kann nicht größer sein als für Bereitschaft.",
+      "update_interval_standby_invalid": "Das Aktualisierungsintervall für Bereitschaft kann nicht größer sein als für Leerlauf.",
       "imei_invalid": "Die angegebene IMEI ist nicht gültig.",
       "imei_exists": "Ein Roboter mit der IMEI existiert bereits.",
       "name_exists": "Ein Roboter mit dem Namen existiert bereits.",

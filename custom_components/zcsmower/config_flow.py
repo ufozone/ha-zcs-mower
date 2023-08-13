@@ -793,8 +793,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             except Exception as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection_failed"
+            # Standby time start and stop are equal
             if user_input.get(CONF_STANDBY_TIME_START) == user_input.get(CONF_STANDBY_TIME_STOP):
                 errors["base"] = "standby_time_invalid"
+            # Update interval for working is bigger than in standby time
+            if user_input.get(CONF_UPDATE_INTERVAL_WORKING) > user_input.get(CONF_UPDATE_INTERVAL_STANDBY):
+                errors["base"] = "update_interval_working_invalid"
+            # Update interval in standby time is bigger than for idling
+            if user_input.get(CONF_UPDATE_INTERVAL_STANDBY) > user_input.get(CONF_UPDATE_INTERVAL_IDLING):
+                errors["base"] = "update_interval_standby_invalid"
 
             if not errors:
                 # Input is valid, set data
