@@ -115,15 +115,15 @@
         "data": {
           "client_key": "Client Key",
           "update_interval_working": "Every how many seconds should the data be updated when one or more lawn mowers are working?",
-          "update_interval_standby": "Every how many seconds should the data be updated when all lawn mowers are on standby?",
+          "update_interval_standby": "Every how many seconds should the data be updated when all lawn mowers are on standby time?",
           "update_interval_idling": "Every how many seconds should the data be updated when all lawn mowers are idle?",
           "trace_position_enable": "Enable position tracing?",
           "trace_position_interval_default": "Default: Every how many seconds should the position tracing be started?",
           "trace_position_interval_infinity": "Infinity+: Every how many seconds should the position tracing be started?",
           "wake_up_interval_default": "Default: Every how many seconds should the lawn mower wake up?",
           "wake_up_interval_infinity": "Infinity+: Every how many seconds should the lawn mower wake up?",
-          "standby_time_start": "At what time does the daily standby period start?",
-          "standby_time_stop": "At what time does the daily standby period end?"
+          "standby_time_start": "At what time does the daily standby time start?",
+          "standby_time_stop": "At what time does the daily standby time end?"
         }
       }
     }
