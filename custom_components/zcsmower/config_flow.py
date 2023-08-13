@@ -34,6 +34,8 @@ from .const import (
     LOGGER,
     DOMAIN,
     CONF_CLIENT_KEY,
+    CONF_STANDBY_TIME_START,
+    CONF_STANDBY_TIME_STOP,
     CONF_UPDATE_INTERVAL_WORKING,
     CONF_UPDATE_INTERVAL_STANDBY,
     CONF_UPDATE_INTERVAL_IDLING,
@@ -42,8 +44,6 @@ from .const import (
     CONF_TRACE_POSITION_INTERVAL_INFINITY,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
-    CONF_STANDBY_TIME_START,
-    CONF_STANDBY_TIME_STOP,
     CONF_CAMERA_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -56,11 +56,11 @@ from .const import (
     ATTR_IMEI,
     API_BASE_URI,
     API_APP_TOKEN,
+    STANDBY_TIME_START_DEFAULT,
+    STANDBY_TIME_STOP_DEFAULT,
     UPDATE_INTERVAL_WORKING,
     UPDATE_INTERVAL_STANDBY,
     UPDATE_INTERVAL_IDLING,
-    STANDBY_TIME_START_DEFAULT,
-    STANDBY_TIME_STOP_DEFAULT,
     LOCATION_HISTORY_ITEMS,
     MAP_POINTS_DEFAULT,
     ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
@@ -805,6 +805,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options.update(
                     {
                         CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
+                        CONF_STANDBY_TIME_START: user_input.get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
+                        CONF_STANDBY_TIME_STOP: user_input.get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
                         CONF_UPDATE_INTERVAL_WORKING: user_input.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING),
                         CONF_UPDATE_INTERVAL_STANDBY: user_input.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY),
                         CONF_UPDATE_INTERVAL_IDLING: user_input.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
@@ -813,8 +815,6 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_TRACE_POSITION_INTERVAL_INFINITY: user_input.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
                         CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
                         CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
-                        CONF_STANDBY_TIME_START: user_input.get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
-                        CONF_STANDBY_TIME_STOP: user_input.get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
                     }
                 )
                 LOGGER.debug(self._options)
@@ -834,6 +834,26 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
+                    ),
+                    # Stand by time starts
+                    vol.Optional(
+                        CONF_STANDBY_TIME_START,
+                        default=STANDBY_TIME_START_DEFAULT,
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
+                        },
+                    ): selector.TimeSelector(
+                        selector.TimeSelectorConfig(),
+                    ),
+                    # Stand by time stops
+                    vol.Optional(
+                        CONF_STANDBY_TIME_STOP,
+                        default=STANDBY_TIME_STOP_DEFAULT,
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
+                        },
+                    ): selector.TimeSelector(
+                        selector.TimeSelectorConfig(),
                     ),
                     # Update interval, if one or more lawn mowers working
                     vol.Optional(
@@ -914,26 +934,6 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             max=21600,
                             step=300,
                         )
-                    ),
-                    # Stand by time starts
-                    vol.Optional(
-                        CONF_STANDBY_TIME_START,
-                        default=STANDBY_TIME_START_DEFAULT,
-                        description={
-                            "suggested_value": (user_input or self._options).get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
-                        },
-                    ): selector.TimeSelector(
-                        selector.TimeSelectorConfig(),
-                    ),
-                    # Stand by time stops
-                    vol.Optional(
-                        CONF_STANDBY_TIME_STOP,
-                        default=STANDBY_TIME_STOP_DEFAULT,
-                        description={
-                            "suggested_value": (user_input or self._options).get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
-                        },
-                    ): selector.TimeSelector(
-                        selector.TimeSelectorConfig(),
                     ),
                 }
             ),
