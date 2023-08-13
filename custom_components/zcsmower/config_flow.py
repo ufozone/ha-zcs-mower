@@ -34,13 +34,16 @@ from .const import (
     LOGGER,
     DOMAIN,
     CONF_CLIENT_KEY,
-    CONF_UPDATE_INTERVAL_IDLING,
     CONF_UPDATE_INTERVAL_WORKING,
+    CONF_UPDATE_INTERVAL_STANDBY,
+    CONF_UPDATE_INTERVAL_IDLING,
     CONF_TRACE_POSITION_ENABLE,
     CONF_TRACE_POSITION_INTERVAL_DEFAULT,
     CONF_TRACE_POSITION_INTERVAL_INFINITY,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
+    CONF_STANDBY_TIME_START,
+    CONF_STANDBY_TIME_STOP,
     CONF_CAMERA_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -53,8 +56,11 @@ from .const import (
     ATTR_IMEI,
     API_BASE_URI,
     API_APP_TOKEN,
-    UPDATE_INTERVAL_IDLING,
     UPDATE_INTERVAL_WORKING,
+    UPDATE_INTERVAL_STANDBY,
+    UPDATE_INTERVAL_IDLING,
+    STANDBY_TIME_START_DEFAULT,
+    STANDBY_TIME_STOP_DEFAULT,
     LOCATION_HISTORY_ITEMS,
     MAP_POINTS_DEFAULT,
     ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
@@ -113,7 +119,7 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 8
+    VERSION = 9
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     _title: str | None
@@ -149,8 +155,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._title = user_input.get(CONF_NAME, "")
                 self._options = {
                     CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
-                    CONF_UPDATE_INTERVAL_IDLING: int(UPDATE_INTERVAL_IDLING),
                     CONF_UPDATE_INTERVAL_WORKING: int(UPDATE_INTERVAL_WORKING),
+                    CONF_UPDATE_INTERVAL_STANDBY: int(UPDATE_INTERVAL_STANDBY),
+                    CONF_UPDATE_INTERVAL_IDLING: int(UPDATE_INTERVAL_IDLING),
                     CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                     CONF_TRACE_POSITION_INTERVAL_DEFAULT: int(ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
                     CONF_TRACE_POSITION_INTERVAL_INFINITY: int(ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
@@ -798,8 +805,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options.update(
                     {
                         CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
-                        CONF_UPDATE_INTERVAL_IDLING: user_input.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
                         CONF_UPDATE_INTERVAL_WORKING: user_input.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING),
+                        CONF_UPDATE_INTERVAL_STANDBY: user_input.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY),
+                        CONF_UPDATE_INTERVAL_IDLING: user_input.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
                         CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                         CONF_TRACE_POSITION_INTERVAL_DEFAULT: user_input.get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
                         CONF_TRACE_POSITION_INTERVAL_INFINITY: user_input.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
@@ -825,21 +833,6 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
-                    # Update interval, if all lawn mowers idling
-                    vol.Optional(
-                        CONF_UPDATE_INTERVAL_IDLING,
-                        default=UPDATE_INTERVAL_IDLING,
-                        description={
-                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
-                        },
-                    ): selector.NumberSelector(
-                        selector.NumberSelectorConfig(
-                            mode=selector.NumberSelectorMode.BOX,
-                            min=120,
-                            max=900,
-                            step=60,
-                        )
-                    ),
                     # Update interval, if one or more lawn mowers working
                     vol.Optional(
                         CONF_UPDATE_INTERVAL_WORKING,
@@ -853,6 +846,36 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             min=30,
                             max=300,
                             step=30,
+                        )
+                    ),
+                    # Update interval, if all lawn mowers on standby
+                    vol.Optional(
+                        CONF_UPDATE_INTERVAL_STANDBY,
+                        default=UPDATE_INTERVAL_STANDBY,
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY),
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
+                            min=120,
+                            max=3600,
+                            step=60,
+                        )
+                    ),
+                    # Update interval, if all lawn mowers idling
+                    vol.Optional(
+                        CONF_UPDATE_INTERVAL_IDLING,
+                        default=UPDATE_INTERVAL_IDLING,
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
+                            min=600,
+                            max=3600,
+                            step=60,
                         )
                     ),
                     # Trace position
@@ -889,6 +912,26 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             max=21600,
                             step=300,
                         )
+                    ),
+                    # Stand by time starts
+                    vol.Optional(
+                        CONF_STANDBY_TIME_START,
+                        default=STANDBY_TIME_START_DEFAULT,
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
+                        },
+                    ): selector.TimeSelector(
+                        selector.TimeSelectorConfig(),
+                    ),
+                    # Stand by time stops
+                    vol.Optional(
+                        CONF_STANDBY_TIME_STOP,
+                        default=STANDBY_TIME_STOP_DEFAULT,
+                        description={
+                            "suggested_value": (user_input or self._options).get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
+                        },
+                    ): selector.TimeSelector(
+                        selector.TimeSelectorConfig(),
                     ),
                 }
             ),

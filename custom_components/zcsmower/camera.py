@@ -34,7 +34,7 @@ from .const import (
     LOGGER,
     DOMAIN,
     UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_IDLING,
+    UPDATE_INTERVAL_STANDBY,
     MAP_POINTS_DEFAULT,
     CONF_CAMERA_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -407,4 +407,4 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         if self._get_attribute(ATTR_WORKING, False):
             self._attr_frame_interval = UPDATE_INTERVAL_WORKING
         else:
-            self._attr_frame_interval = UPDATE_INTERVAL_IDLING
+            self._attr_frame_interval = UPDATE_INTERVAL_STANDBY

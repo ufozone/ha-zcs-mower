@@ -39,8 +39,8 @@ from .const import (
     DOMAIN,
     CONF_CLIENT_KEY,
     CONF_UPDATE_INTERVAL_WORKING,
-    CONF_UPDATE_INTERVAL_IDLING,
     CONF_UPDATE_INTERVAL_STANDBY,
+    CONF_UPDATE_INTERVAL_IDLING,
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
@@ -65,8 +65,8 @@ from .const import (
     API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
     UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_IDLING,
     UPDATE_INTERVAL_STANDBY,
+    UPDATE_INTERVAL_IDLING,
     LOCATION_HISTORY_ITEMS,
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,
@@ -94,7 +94,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             hass=hass,
             logger=LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)),
+            update_interval=timedelta(seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)),
         )
         self.config_entry = config_entry
         self.client = ZcsMowerApiClient(
@@ -179,7 +179,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             if self.has_working_mowers():
                 suggested_update_interval = timedelta(seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING))
             else:
-                suggested_update_interval = timedelta(seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING))
+                suggested_update_interval = timedelta(seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY))
             # Set suggested update_interval
             if suggested_update_interval != self.update_interval:
                 self.update_interval = suggested_update_interval
