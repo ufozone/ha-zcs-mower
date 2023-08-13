@@ -33,8 +33,8 @@ from homeassistant.helpers.entity import Entity
 from .const import (
     LOGGER,
     DOMAIN,
-    UPDATE_INTERVAL_IDLING,
     UPDATE_INTERVAL_WORKING,
+    UPDATE_INTERVAL_IDLING,
     MAP_POINTS_DEFAULT,
     CONF_CAMERA_ENABLE,
     CONF_MAP_IMAGE_PATH,

@@ -19,7 +19,6 @@ from homeassistant.util import slugify
 
 from .const import (
     DOMAIN,
-    ATTRIBUTION,
     ATTR_IMEI,
     ATTR_ERROR,
     ATTR_AVAILABLE,
@@ -27,6 +26,7 @@ from .const import (
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
     ATTR_LAST_PULL,
+    ATTRIBUTION,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 

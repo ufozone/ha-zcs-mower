@@ -15,16 +15,6 @@ from homeassistant.helpers import config_validation as cv
 LOGGER = getLogger(__package__)
 
 DOMAIN = "zcsmower"
-MANUFACTURER_DEFAULT = "Zucchetti Centro Sistemi"
-MANUFACTURER_MAP = {
-    "AM": "Ambrogio Robot",
-    "KB": "Kubota",
-    "ST": "STIGA",
-    "TH": "TECHline",
-    "WI": "Herkules Wiper",
-}
-ATTRIBUTION = "Data gently provided by Telit IoT Platform"
-
 PLATFORMS = [
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
@@ -36,8 +26,9 @@ PLATFORMS = [
 ]
 
 CONF_CLIENT_KEY = "client_key"
-CONF_UPDATE_INTERVAL_IDLING = "uptade_interval_idling"
 CONF_UPDATE_INTERVAL_WORKING = "uptade_interval_working"
+CONF_UPDATE_INTERVAL_IDLING = "uptade_interval_idling"
+CONF_UPDATE_INTERVAL_STANDBY = "uptade_interval_standby"
 CONF_TRACE_POSITION_ENABLE = "trace_position_enable"
 CONF_TRACE_POSITION_INTERVAL_DEFAULT = "trace_position_interval_default"
 CONF_TRACE_POSITION_INTERVAL_INFINITY = "trace_position_interval_infinity"
@@ -149,6 +140,7 @@ SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
         vol.Optional("index"): vol.Coerce(int),
     }
 )
+ATTRIBUTION = "Data gently provided by Telit IoT Platform"
 
 API_BASE_URI = "https://api-de.devicewise.com/api"
 API_APP_TOKEN = "DJMYYngGNEit40vA"
@@ -156,13 +148,23 @@ API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
 
-UPDATE_INTERVAL_IDLING = 900
 UPDATE_INTERVAL_WORKING = 180
+UPDATE_INTERVAL_IDLING = 900
+UPDATE_INTERVAL_STANDBY = 1800
 
 LOCATION_HISTORY_DAYS = 7
 LOCATION_HISTORY_ITEMS = 200
 
 MAP_POINTS_DEFAULT = 100
+
+MANUFACTURER_DEFAULT = "Zucchetti Centro Sistemi"
+MANUFACTURER_MAP = {
+    "AM": "Ambrogio Robot",
+    "KB": "Kubota",
+    "ST": "STIGA",
+    "TH": "TECHline",
+    "WI": "Herkules Wiper",
+}
 
 ROBOT_TRACE_POSITION_INTERVAL_DEFAULT = 3600
 ROBOT_TRACE_POSITION_INTERVAL_INFINITY = 600

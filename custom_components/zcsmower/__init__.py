@@ -15,8 +15,9 @@ from .const import (
     DOMAIN,
     PLATFORMS,
     CONF_CLIENT_KEY,
-    CONF_UPDATE_INTERVAL_IDLING,
     CONF_UPDATE_INTERVAL_WORKING,
+    CONF_UPDATE_INTERVAL_IDLING,
+    CONF_UPDATE_INTERVAL_STANDBY,
     CONF_TRACE_POSITION_ENABLE,
     CONF_TRACE_POSITION_INTERVAL_DEFAULT,
     CONF_TRACE_POSITION_INTERVAL_INFINITY,
@@ -31,8 +32,9 @@ from .const import (
     CONF_MAP_POINTS,
     CONF_MAP_DRAW_LINES,
     CONF_MOWERS,
-    UPDATE_INTERVAL_IDLING,
     UPDATE_INTERVAL_WORKING,
+    UPDATE_INTERVAL_IDLING,
+    UPDATE_INTERVAL_STANDBY,
     MAP_POINTS_DEFAULT,
     ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
     ROBOT_TRACE_POSITION_INTERVAL_INFINITY,
@@ -182,8 +184,9 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         _options = dict(config_entry.options)
         _options.update(
             {
-                CONF_UPDATE_INTERVAL_IDLING: config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
                 CONF_UPDATE_INTERVAL_WORKING: config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING),
+                CONF_UPDATE_INTERVAL_IDLING: config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
+                CONF_UPDATE_INTERVAL_STANDBY: config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY),
             }
         )
         hass.config_entries.async_update_entry(
