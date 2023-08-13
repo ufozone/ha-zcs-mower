@@ -121,7 +121,9 @@
           "trace_position_interval_default": "Default: Every how many seconds should the position tracing be started?",
           "trace_position_interval_infinity": "Infinity+: Every how many seconds should the position tracing be started?",
           "wake_up_interval_default": "Default: Every how many seconds should the lawn mower wake up?",
-          "wake_up_interval_infinity": "Infinity+: Every how many seconds should the lawn mower wake up?"
+          "wake_up_interval_infinity": "Infinity+: Every how many seconds should the lawn mower wake up?",
+          "standby_time_start": "At what time does the daily standby period start?",
+          "standby_time_stop": "At what time does the daily standby period end?"
         }
       }
     }

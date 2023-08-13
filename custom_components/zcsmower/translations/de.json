@@ -121,7 +121,9 @@
           "trace_position_interval_default": "Standard: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
           "trace_position_interval_infinity": "Infinity+: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
           "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
-          "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
+          "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
+          "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",
+          "standby_time_stop": "Um wie viel Uhr endet die tägliche Bereitschaftszeit?"
         }
       }
     }
