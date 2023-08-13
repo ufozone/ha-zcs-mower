@@ -171,7 +171,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                     map_point_count = min(map_point_max, location_history_items)
                     map_point_first = location_history_items - map_point_count
 
-                    # at first draw lines between location points, if lines should show
+                    # At first draw lines between location points, if lines should show
                     draw_lines = self.config_entry.options.get(CONF_MAP_DRAW_LINES, True)
                     if draw_lines:
                         for i in range(location_history_items - 1, map_point_first, -1):
@@ -192,7 +192,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                                     width=1
                                 )
 
-                    # at second draw location points
+                    # At second draw location points
                     marker_radius = 4
                     map_point_items = location_history_items -1 if latitude and longitude else location_history_items
                     for i in range(map_point_first, map_point_items):

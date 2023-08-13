@@ -287,7 +287,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)
             )
             time_to_standby = (dt_util.as_local(self.standby_time_start) - now).seconds
-            # time until start of standby time is shorter than default update interval
+            # Time until start of standby time is shorter than default update interval
             if time_to_standby < suggested_update_interval.seconds:
                 suggested_update_interval = timedelta(
                     seconds=time_to_standby

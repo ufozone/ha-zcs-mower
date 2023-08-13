@@ -836,7 +836,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             type=selector.TextSelectorType.TEXT
                         ),
                     ),
-                    # Stand by time starts
+                    # Standby time starts
                     vol.Optional(
                         CONF_STANDBY_TIME_START,
                         default=STANDBY_TIME_START_DEFAULT,
@@ -846,7 +846,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ): selector.TimeSelector(
                         selector.TimeSelectorConfig(),
                     ),
-                    # Stand by time stops
+                    # Standby time stops
                     vol.Optional(
                         CONF_STANDBY_TIME_STOP,
                         default=STANDBY_TIME_STOP_DEFAULT,
