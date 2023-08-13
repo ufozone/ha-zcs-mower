@@ -813,6 +813,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_TRACE_POSITION_INTERVAL_INFINITY: user_input.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
                         CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
                         CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                        CONF_STANDBY_TIME_START: user_input.get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
+                        CONF_STANDBY_TIME_STOP: user_input.get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
                     }
                 )
                 LOGGER.debug(self._options)
