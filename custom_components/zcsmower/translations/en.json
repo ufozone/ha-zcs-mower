@@ -114,8 +114,9 @@
         "description": "Enter your client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Client Key",
-          "uptade_interval_idling": "Every how many seconds should the data be updated when all lawn mowers are idle?",
-          "uptade_interval_working": "Every how many seconds should the data be updated when one or more lawn mowers are working?",
+          "update_interval_working": "Every how many seconds should the data be updated when one or more lawn mowers are working?",
+          "update_interval_standby": "Every how many seconds should the data be updated when all lawn mowers are on standby?",
+          "update_interval_idling": "Every how many seconds should the data be updated when all lawn mowers are idle?",
           "trace_position_enable": "Enable position tracing?",
           "trace_position_interval_default": "Default: Every how many seconds should the position tracing be started?",
           "trace_position_interval_infinity": "Infinity+: Every how many seconds should the position tracing be started?",

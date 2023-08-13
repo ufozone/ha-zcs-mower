@@ -114,8 +114,9 @@
         "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Chiave cliente",
-          "uptade_interval_idling": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono inattivi?",
-          "uptade_interval_working": "Ogni quanti secondi devono essere aggiornati i dati quando uno o più tosaerba sono in funzione?",
+          "update_interval_working": "Ogni quanti secondi devono essere aggiornati i dati quando uno o più tosaerba sono in funzione?",
+          "update_interval_standby": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono in standby?",
+          "update_interval_idling": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono inattivi?",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
           "trace_position_interval_default": "Default: Ogni quanti secondi deve essere riavviato il tracciamento della posizione?",
           "trace_position_interval_infinity": "Infinity+: Ogni quanti secondi deve essere riavviato il tracciamento della posizione?",
