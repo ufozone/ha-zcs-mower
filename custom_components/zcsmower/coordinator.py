@@ -255,7 +255,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         time: datetime | None = None,
     ) -> bool:
-        """Return true if current time is in the standby time range"""
+        """Return true if current time is in the standby time range."""
         _standby_time_start = dt_util.as_local(self.standby_time_start)
         _standby_time_stop = dt_util.as_local(self.standby_time_stop)
         if time is None:
@@ -268,6 +268,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     def set_update_interval(
         self,
     ) -> bool:
+        """Set calculated update interval."""
         now = self._get_datetime_now()
 
         # If one or more lawn mower(s) working, increase update_interval
