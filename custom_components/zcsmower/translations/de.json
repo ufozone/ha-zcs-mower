@@ -50,6 +50,7 @@
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
       "connection_failed": "Es kann keine Verbindung zum Server hergestellt werden.",
+      "standby_time_invalid": "Die Start- und Enduhrzeiten der Bereitschaftszeit dürfen nicht identisch sein.",
       "imei_invalid": "Die angegebene IMEI ist nicht gültig.",
       "imei_exists": "Ein Roboter mit der IMEI existiert bereits.",
       "name_exists": "Ein Roboter mit dem Namen existiert bereits.",
@@ -114,6 +115,8 @@
         "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Kundenschlüssel",
+          "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",
+          "standby_time_stop": "Um wie viel Uhr endet die tägliche Bereitschaftszeit?",
           "update_interval_working": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn ein oder mehrere Rasenmäher in Betrieb sind?",
           "update_interval_standby": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn alle Rasenmäher in Bereitschaft sind?",
           "update_interval_idling": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn alle Rasenmäher im Leerlauf sind?",
@@ -121,9 +124,7 @@
           "trace_position_interval_default": "Standard: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
           "trace_position_interval_infinity": "Infinity+: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
           "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
-          "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
-          "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",
-          "standby_time_stop": "Um wie viel Uhr endet die tägliche Bereitschaftszeit?"
+          "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
         }
       }
     }

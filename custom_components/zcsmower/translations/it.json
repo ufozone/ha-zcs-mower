@@ -50,6 +50,7 @@
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
       "connection_failed": "Impossibile connettersi al server.",
+      "standby_time_invalid": "Gli orari di inizio e fine del tempo di standby non devono coincidere.",
       "imei_invalid": "L'IMEI fornito non è valido.",
       "imei_exists": "Un tosaerba con questo IMEI esiste già.",
       "name_exists": "Un tosaerba con questo nome esiste già.",
@@ -114,6 +115,8 @@
         "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "client_key": "Chiave cliente",
+          "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
+          "standby_time_stop": "A che ora termina il periodo di standby giornaliero?",
           "update_interval_working": "Ogni quanti secondi devono essere aggiornati i dati quando uno o più tosaerba sono in funzione?",
           "update_interval_standby": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono in standby?",
           "update_interval_idling": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono inattivi?",
@@ -121,9 +124,7 @@
           "trace_position_interval_default": "Default: Ogni quanti secondi deve essere riavviato il tracciamento della posizione?",
           "trace_position_interval_infinity": "Infinity+: Ogni quanti secondi deve essere riavviato il tracciamento della posizione?",
           "wake_up_interval_default": "Default: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
-          "wake_up_interval_infinity": "Infinity+: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
-          "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
-          "standby_time_stop": "A che ora termina il periodo di standby giornaliero?"
+          "wake_up_interval_infinity": "Infinity+: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?"
         }
       }
     }
