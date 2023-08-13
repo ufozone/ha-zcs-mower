@@ -32,8 +32,6 @@ CONF_UPDATE_INTERVAL_WORKING = "update_interval_working"
 CONF_UPDATE_INTERVAL_STANDBY = "update_interval_standby"
 CONF_UPDATE_INTERVAL_IDLING = "update_interval_idling"
 CONF_TRACE_POSITION_ENABLE = "trace_position_enable"
-CONF_TRACE_POSITION_INTERVAL_DEFAULT = "trace_position_interval_default"
-CONF_TRACE_POSITION_INTERVAL_INFINITY = "trace_position_interval_infinity"
 CONF_WAKE_UP_INTERVAL_DEFAULT = "wake_up_interval_default"
 CONF_WAKE_UP_INTERVAL_INFINITY = "wake_up_interval_infinity"
 CONF_CAMERA_ENABLE = "camera_enable"
@@ -171,8 +169,6 @@ MANUFACTURER_MAP = {
     "WI": "Herkules Wiper",
 }
 
-ROBOT_TRACE_POSITION_INTERVAL_DEFAULT = 3600
-ROBOT_TRACE_POSITION_INTERVAL_INFINITY = 600
 ROBOT_WAKE_UP_INTERVAL_DEFAULT = 1800
 ROBOT_WAKE_UP_INTERVAL_INFINITY = 300
 ROBOT_MODELS = {

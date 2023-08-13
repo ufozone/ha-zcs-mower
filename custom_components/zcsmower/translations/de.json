@@ -121,8 +121,6 @@
           "update_interval_standby": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn alle Rasenmäher in Bereitschaft sind?",
           "update_interval_idling": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn alle Rasenmäher im Leerlauf sind?",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
-          "trace_position_interval_default": "Standard: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
-          "trace_position_interval_infinity": "Infinity+: Alle wie viele Sekunden soll die Positionsbestimmung neugestartet werden?",
           "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
           "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
         }

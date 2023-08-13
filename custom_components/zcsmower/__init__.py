@@ -21,8 +21,6 @@ from .const import (
     CONF_UPDATE_INTERVAL_STANDBY,
     CONF_UPDATE_INTERVAL_IDLING,
     CONF_TRACE_POSITION_ENABLE,
-    CONF_TRACE_POSITION_INTERVAL_DEFAULT,
-    CONF_TRACE_POSITION_INTERVAL_INFINITY,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
     CONF_CAMERA_ENABLE,
@@ -40,8 +38,6 @@ from .const import (
     UPDATE_INTERVAL_STANDBY,
     UPDATE_INTERVAL_IDLING,
     MAP_POINTS_DEFAULT,
-    ROBOT_TRACE_POSITION_INTERVAL_DEFAULT,
-    ROBOT_TRACE_POSITION_INTERVAL_INFINITY,
     ROBOT_WAKE_UP_INTERVAL_DEFAULT,
     ROBOT_WAKE_UP_INTERVAL_INFINITY,
 )
@@ -170,8 +166,6 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         _options.update(
             {
                 CONF_TRACE_POSITION_ENABLE: config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False),
-                CONF_TRACE_POSITION_INTERVAL_DEFAULT: config_entry.options.get(CONF_TRACE_POSITION_INTERVAL_DEFAULT, ROBOT_TRACE_POSITION_INTERVAL_DEFAULT),
-                CONF_TRACE_POSITION_INTERVAL_INFINITY: config_entry.options.get(CONF_TRACE_POSITION_INTERVAL_INFINITY, ROBOT_TRACE_POSITION_INTERVAL_INFINITY),
                 CONF_WAKE_UP_INTERVAL_DEFAULT: config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
                 CONF_WAKE_UP_INTERVAL_INFINITY: config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
             }
@@ -195,6 +189,8 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                 CONF_UPDATE_INTERVAL_IDLING: UPDATE_INTERVAL_IDLING,
             }
         )
+        _options.pop("trace_position_interval_default")
+        _options.pop("trace_position_interval_infinity")
         _options.pop("uptade_interval_working")
         _options.pop("uptade_interval_idling")
 

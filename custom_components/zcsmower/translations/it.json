@@ -121,8 +121,6 @@
           "update_interval_standby": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono in standby?",
           "update_interval_idling": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono inattivi?",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
-          "trace_position_interval_default": "Default: Ogni quanti secondi deve essere riavviato il tracciamento della posizione?",
-          "trace_position_interval_infinity": "Infinity+: Ogni quanti secondi deve essere riavviato il tracciamento della posizione?",
           "wake_up_interval_default": "Default: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
           "wake_up_interval_infinity": "Infinity+: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?"
         }
