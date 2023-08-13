@@ -38,6 +38,8 @@ from .const import (
     LOGGER,
     DOMAIN,
     CONF_CLIENT_KEY,
+    CONF_STANDBY_TIME_START,
+    CONF_STANDBY_TIME_STOP,
     CONF_UPDATE_INTERVAL_WORKING,
     CONF_UPDATE_INTERVAL_STANDBY,
     CONF_UPDATE_INTERVAL_IDLING,
@@ -64,6 +66,8 @@ from .const import (
     API_DATETIME_FORMAT_DEFAULT,
     API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
+    STANDBY_TIME_START_DEFAULT,
+    STANDBY_TIME_STOP_DEFAULT,
     UPDATE_INTERVAL_WORKING,
     UPDATE_INTERVAL_STANDBY,
     UPDATE_INTERVAL_IDLING,
@@ -94,7 +98,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             hass=hass,
             logger=LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)),
+            update_interval=timedelta(
+                seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)
+            ),
         )
         self.config_entry = config_entry
         self.client = ZcsMowerApiClient(
@@ -133,6 +139,17 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_LAST_WAKE_UP: None,
                 ATTR_LAST_TRACE_POSITION: None,
             }
+
+        self.standby_time_start = datetime.strptime(
+            config_entry.options.get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
+            "%H:%M:%S"
+        )
+        self.standby_time_stop = datetime.strptime(
+            config_entry.options.get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
+            "%H:%M:%S"
+        )
+        self.set_update_interval()
+
         self._loop = asyncio.get_event_loop()
         self._scheduled_update_listeners: asyncio.TimerHandle | None = None
 
@@ -175,15 +192,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug("_async_update_data")
             LOGGER.debug(self.data)
 
-            # If one or more lawn mower(s) working, increase update_interval
-            if self.has_working_mowers():
-                suggested_update_interval = timedelta(seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING))
-            else:
-                suggested_update_interval = timedelta(seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY))
-            # Set suggested update_interval
-            if suggested_update_interval != self.update_interval:
-                self.update_interval = suggested_update_interval
-                LOGGER.info("Update update_interval to %s seconds, because lawn mower(s) changed state from idle to working or vice versa.", suggested_update_interval.total_seconds())
+            # Set update interval
+            self.set_update_interval()
+
             return self.data
         except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
@@ -239,6 +250,54 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Count the working lawn mowers."""
         count_helper = [v[ATTR_WORKING] for k, v in self.data.items() if v.get(ATTR_WORKING)]
         return len(count_helper) > 0
+
+    def is_standby_time(
+        self,
+        time: datetime | None = None,
+    ) -> bool:
+        """Return true if current time is in the standby time range"""
+        _standby_time_start = dt_util.as_local(self.standby_time_start)
+        _standby_time_stop = dt_util.as_local(self.standby_time_stop)
+        if time is None:
+            time = self._get_datetime_now()
+        if _standby_time_start <= _standby_time_stop:
+            return _standby_time_start.time() <= time.time() <= _standby_time_stop.time()
+        else:
+            return _standby_time_start.time() <= time.time() or time.time() <= _standby_time_stop.time()
+
+    def set_update_interval(
+        self,
+    ) -> bool:
+        now = self._get_datetime_now()
+
+        # If one or more lawn mower(s) working, increase update_interval
+        if self.has_working_mowers():
+            suggested_update_interval = timedelta(
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING)
+            )
+        # Current time is in standby time
+        elif self.is_standby_time(now):
+            suggested_update_interval = timedelta(
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)
+            )
+        # Current time is out of standby time
+        else:
+            suggested_update_interval = timedelta(
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)
+            )
+            time_to_standby = (dt_util.as_local(self.standby_time_start) - now).seconds
+            # time until start of standby time is shorter than default update interval
+            if time_to_standby < suggested_update_interval.seconds:
+                suggested_update_interval = timedelta(
+                    seconds=time_to_standby
+                )
+
+        # Set suggested update_interval
+        if suggested_update_interval != self.update_interval:
+            self.update_interval = suggested_update_interval
+            LOGGER.info("Set update_interval to %s seconds.", suggested_update_interval.total_seconds())
+            return True
+        return False
 
     async def async_fetch_all_mowers(
         self,
