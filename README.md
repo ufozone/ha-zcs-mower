@@ -29,13 +29,15 @@ Installation using Home Assistant Community Store (HACS) is recommended.
 
 1. If HACS is not installed, follow HACS installation and configuration at https://hacs.xyz/.
 
-2. Visit the HACS _Integrations_ pane and add `https://github.com/ufozone/ha-zcs-mower.git` as an `Integration` by following [these instructions](https://hacs.xyz/docs/faq/custom_repositories/).
+2. Click the button below or visit the HACS _Integrations_ pane and search for "ZCS Lawn Mower Robot".
 
-3. In HACS, search under integrations for "ZCS Lawn Mower Robot" and install.
+    [![my_button](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ufozone&repository=ha-zcs-mower&category=integration)
+
+3. Install the integration.
 
 4. Restart Home Assistant!
 
-4. Make sure that you refresh your browser window too.
+5. Make sure that you refresh your browser window too.
 
 ### Manual installation
 
