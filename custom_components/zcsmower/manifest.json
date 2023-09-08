@@ -8,7 +8,9 @@
     "@ufozone"
   ],
   "config_flow": true,
-  "dependencies": [],
+  "dependencies": [
+    "lawn_mower"
+  ],
   "documentation": "https://github.com/ufozone/ha-zcs-mower",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
@@ -17,5 +19,5 @@
     "numpy>=1.21.6",
     "pillow>=9.5.0"
   ],
-  "version": "0.9.8"
+  "version": "1.0.0"
 }
