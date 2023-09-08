@@ -3,4 +3,4 @@ colorlog==6.7.0
 ruff==0.0.287
 pydocstyle==6.3.0
 isort==5.12.0
-homeassistant==2023.6.0
+homeassistant==2023.9.0
