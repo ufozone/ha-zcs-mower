@@ -21,7 +21,7 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogi
 
 ## Installation
 
-Requires Home Assistant 2023.6.0 or newer.
+Requires Home Assistant 2023.9.0 or newer.
 
 ### Installation through HACS
 
@@ -175,7 +175,24 @@ Get IMEI from your lawn mower(s):
     latitude, longitude, source_type (GPS)
     ```
 
+### Lawn Mower
+
+* mower
+  | Values      | Description       | Lawn mower state(s)                   |
+  |-------------|-------------------|---------------------------------------|
+  | mowing      | Mowing            | Go to area, Go to station, Border cut |
+  | docked      | Docked            | Charge                                |
+  | paused      | Paused            | Pause, Work standby                   |
+  | error       | Error             | Error, No signal, Expired, Renewed    |
+
+    ```
+    attributes: 
+    status
+    ```
+
 ### Number
+
+_These entities are disabled by default. You have to activate it if you want to use it._
 
 * work_for
 
@@ -184,29 +201,32 @@ Get IMEI from your lawn mower(s):
 ### Sensor
 
 * state
-  | Values      | Description   |
-  |-------------|---------------|
-  | unknown     | Unknown       |
-  | charging    | Charging      |
-  | working     | Working       |
-  | stop        | Stop          |
-  | error       | Error         |
-  | nosignal    | No signal     |
-  | gotostation | Go to station |
-  | gotoarea    | Go to area    |
-  | bordercut   | Border cut    |
+  | Values       | Description   |
+  |--------------|---------------|
+  | unknown      | Unknown       |
+  | charge       | Charge        |
+  | work         | Work          |
+  | pause        | Pause         |
+  | fail         | Error         |
+  | nosignal     | No signal     |
+  | gotostation  | Go to station |
+  | gotoarea     | Go to area    |
+  | bordercut    | Border cut    |
+  | expired      | Expired       |
+  | renewed      | Renewed       |
+  | work_standby | Work standby  |
 
 ### Vacuum
 
 * mower
-  | Values      | Description       |
-  |-------------|-------------------|
-  | cleaning    | Mowing            |
-  | docked      | Docked            |
-  | paused      | Paused            |
-  | idle        | Idle              |
-  | returning   | Returning to dock |
-  | error       | Error             |
+  | Values      | Description       | Lawn mower state(s)                |
+  |-------------|-------------------|------------------------------------|
+  | cleaning    | Mowing            | Work, Go to area, Border cut       |
+  | docked      | Docked            | Charge                             |
+  | paused      | Paused            | Pause                              |
+  | returning   | Returning to dock | Go to station                      |
+  | idle        | Idle              | Work standby                       |
+  | error       | Error             | Error, No signal, Expired, Renewed |
 
     ```
     attributes: 
