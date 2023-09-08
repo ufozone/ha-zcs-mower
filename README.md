@@ -43,9 +43,9 @@ Installation using Home Assistant Community Store (HACS) is recommended.
 
 1. Download the `zcsmower.zip` file from the repository [release section](https://github.com/ufozone/ha-zcs-mower/releases).
 
-2. Extract and copy the content into the path `/config/custom_components/zcsmower` of your HA installation.
-
    Do **not** download directly from the `main` branch.
+
+2. Extract and copy the content into the path `/config/custom_components/zcsmower` of your HA installation.
 
 3. Restart Home Assistant!
 
