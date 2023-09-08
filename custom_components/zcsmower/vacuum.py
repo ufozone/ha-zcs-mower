@@ -73,6 +73,7 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
     """Representation of a ZCS Lawn Mower Robot vacuum."""
 
     _attr_name = None
+    _attr_entity_registry_enabled_default = False
 
     def __init__(
         self,
