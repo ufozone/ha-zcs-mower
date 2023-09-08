@@ -20,6 +20,7 @@ PLATFORMS = [
     Platform.BUTTON,
     Platform.CAMERA,
     Platform.DEVICE_TRACKER,
+    Platform.LAWN_MOWER,
     Platform.NUMBER,
     Platform.SENSOR,
     Platform.VACUUM,
@@ -59,6 +60,7 @@ ATTR_LAST_PULL = "last_pull"
 ATTR_LAST_STATE = "last_state"
 ATTR_LAST_WAKE_UP = "last_wake_up"
 ATTR_LAST_TRACE_POSITION = "last_trace_position"
+ATTR_STATUS = "status"
 
 SERVICE_SET_PROFILE = "set_profile"
 SERVICE_SET_PROFILE_SCHEMA = vol.Schema(
