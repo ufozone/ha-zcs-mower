@@ -70,8 +70,6 @@ async def async_setup_entry(
 class ZcsMowerButtonEntity(ZcsMowerEntity, ButtonEntity):
     """Representation of a ZCS Lawn Mower Robot button."""
 
-    _attr_entity_registry_enabled_default = False
-
     def __init__(
         self,
         hass: HomeAssistant,
