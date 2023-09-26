@@ -178,12 +178,12 @@ Get IMEI from your lawn mower(s):
 ### Lawn Mower
 
 * mower
-  | Values      | Description       | Lawn mower state(s)                   |
-  |-------------|-------------------|---------------------------------------|
-  | mowing      | Mowing            | Go to area, Go to station, Border cut |
-  | docked      | Docked            | Charge                                |
-  | paused      | Paused            | Pause, Work standby                   |
-  | error       | Error             | Error, No signal, Expired, Renewed    |
+  | Values      | Description       | Lawn mower state(s)                         |
+  |-------------|-------------------|---------------------------------------------|
+  | mowing      | Mowing            | Work, Go to area, Go to station, Border cut |
+  | docked      | Docked            | Charge                                      |
+  | paused      | Paused            | Pause, Work standby                         |
+  | error       | Error             | Error, No signal, Expired, Renewed          |
 
     ```
     attributes: 
