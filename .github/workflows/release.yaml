@@ -31,3 +31,4 @@ jobs:
         uses: softprops/action-gh-release@v0.1.15
         with:
           files: ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/${{ steps.information.outputs.name }}.zip
+          tag_name: ${{ github.event.release.tag_name }}
