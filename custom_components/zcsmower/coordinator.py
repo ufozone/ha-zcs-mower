@@ -505,6 +505,18 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as exception:
             LOGGER.exception(exception)
 
+    async def async_update_now(
+        self,
+        imei: str,
+    ) -> bool:
+        """Fetch data for mower from API."""
+        LOGGER.debug("update_now: %s", imei)
+        try:
+            return await self.async_fetch_single_mower(imei)
+        except Exception as exception:
+            LOGGER.exception(exception)
+        return False
+
     async def async_wake_up(
         self,
         imei: str,
