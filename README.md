@@ -149,6 +149,8 @@ Get IMEI from your lawn mower(s):
 
 ### Button
 
+* update_now
+
 * work_now
 
 * charge_now
@@ -218,6 +220,8 @@ _These entities are disabled by default. You have to activate it if you want to 
 
 ### Vacuum
 
+_This entity is disabled by default. You have to activate it if you want to use it._
+
 * mower
   | Values      | Description       | Lawn mower state(s)                |
   |-------------|-------------------|------------------------------------|
@@ -235,42 +239,46 @@ _These entities are disabled by default. You have to activate it if you want to 
 
 ### Services
 
+* update_now:
+
+    Fetch data for lawn mower from API now.
+
 * set_profile:
 
     Configure the profile for auto-mode.
-  
+
 * work_now:
 
     Command the lawn mower to mow now.
-  
+
 * work_for:
 
     Command the lawn mower to mow for a certain duration.
-  
+
 * work_until:
 
     Command the lawn mower to mow until a certain time.
-  
+
 * border_cut:
 
     Command the lawn mower to cut the border.
-  
+
 * charge_now:
 
     Command the lawn mower to charge now.
-  
+
 * charge_for:
 
     Command the lawn mower to charge for a certain duration.
-  
+
 * charge_until:
 
     Command the lawn mower to charge until a certain time.
-  
+
 * trace_position:
 
     Command the lawn mower to report its current position.
-  
+
 * keep_out:
 
     Commands the lawn mower to keep out of a location (no-go area).
