@@ -18,6 +18,8 @@ from homeassistant.helpers.service import (
 
 from .const import (
     DOMAIN,
+    SERVICE_UPDATE_NOW,
+    SERVICE_UPDATE_NOW_SCHEMA,
     SERVICE_SET_PROFILE,
     SERVICE_SET_PROFILE_SCHEMA,
     SERVICE_WORK_NOW,
@@ -70,7 +72,9 @@ async def async_setup_services(hass: HomeAssistant) -> None:
                 continue
             targets[identifiers[1]] = hass.data[DOMAIN][config_entry_id]
 
-        if service == SERVICE_SET_PROFILE:
+        if service == SERVICE_UPDATE_NOW:
+            await _async_update_now(hass, targets, data)
+        elif service == SERVICE_SET_PROFILE:
             await _async_set_profile(hass, targets, data)
         elif service == SERVICE_WORK_NOW:
             await _async_work_now(hass, targets, data)
@@ -91,6 +95,12 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         elif service == SERVICE_KEEP_OUT:
             await _async_keep_out(hass, targets, data)
 
+    hass.services.async_register(
+        domain=DOMAIN,
+        service=SERVICE_UPDATE_NOW,
+        service_func=async_handle_service,
+        schema=SERVICE_UPDATE_NOW_SCHEMA
+    )
     hass.services.async_register(
         domain=DOMAIN,
         service=SERVICE_SET_PROFILE,
@@ -151,6 +161,19 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         service_func=async_handle_service,
         schema=SERVICE_KEEP_OUT_SCHEMA
     )
+
+async def _async_update_now(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_update_now(
+                imei,
+            )
+        )
 
 async def _async_set_profile(
     hass: HomeAssistant,

@@ -62,6 +62,12 @@ ATTR_LAST_WAKE_UP = "last_wake_up"
 ATTR_LAST_TRACE_POSITION = "last_trace_position"
 ATTR_STATUS = "status"
 
+SERVICE_UPDATE_NOW = "update_now"
+SERVICE_UPDATE_NOW_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
+    }
+)
 SERVICE_SET_PROFILE = "set_profile"
 SERVICE_SET_PROFILE_SCHEMA = vol.Schema(
     {

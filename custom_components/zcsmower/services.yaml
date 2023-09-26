@@ -1,3 +1,19 @@
+update_now:
+  name: "Updating now"
+  description: "Fetch data for lawn mower from API now."
+  fields:
+    device_id:
+      name: "Device(s)"
+      description: "Device(s) on which the command is to be executed."
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+
 set_profile:
   name: "Setting profile"
   description: "Configure the profile for auto-mode."
