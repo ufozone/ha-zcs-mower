@@ -18,6 +18,12 @@ from .entity import ZcsMowerEntity
 
 ENTITY_DESCRIPTIONS = (
     ButtonEntityDescription(
+        key="update_now",
+        icon="mdi:update",
+        translation_key="update_now",
+        device_class=ButtonDeviceClass.UPDATE,
+    ),
+    ButtonEntityDescription(
         key="work_now",
         icon="mdi:state-machine",
         translation_key="work_now",
