@@ -67,6 +67,8 @@ Start setup:
 
 Get client key from lawn mower mobile app:
 
+   **Note:** Android recommended, because in iPhone app all characters are displayed in capital letters.
+
 1. Open the app on your mobile device.
 
    In the best case, you create a new account (via the mobile app) and connect it to your lawn mower(s). Then there should be no problems when you use the HA integration and the mobile app at the same time.
@@ -135,7 +137,7 @@ Get IMEI from your lawn mower(s):
 
     ```
     attributes: 
-    imei, connected, last_communication, last_seen, last_poll
+    imei, serial, connected, last_communication, last_seen, last_poll
     ```
 
 ### Binary Sensor
@@ -241,7 +243,7 @@ _This entity is disabled by default. You have to activate it if you want to use 
 
 * update_now:
 
-    Fetch data for lawn mower from API now.
+    Fetch data for lawn mower immediately from API.
 
 * set_profile:
 
