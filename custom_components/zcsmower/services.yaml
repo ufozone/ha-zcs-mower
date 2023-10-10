@@ -1,10 +1,6 @@
 update_now:
-  name: "Updating now"
-  description: "Fetch data for lawn mower from API now."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -15,12 +11,8 @@ update_now:
             domain: "device_tracker"
 
 set_profile:
-  name: "Setting profile"
-  description: "Configure the profile for auto-mode."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -30,8 +22,6 @@ set_profile:
           entity:
             domain: "device_tracker"
     profile:
-      name: "Profile"
-      description: "Select the profile you want to use."
       required: true
       example: 1
       default: 1
@@ -42,12 +32,8 @@ set_profile:
           mode: box
 
 work_now:
-  name: "Mowing now"
-  description: "Command the lawn mower to mow now."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -58,12 +44,8 @@ work_now:
             domain: "device_tracker"
 
 work_for:
-  name: "Mowing for a certain duration"
-  description: "Command the lawn mower to mow for a certain duration."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -73,8 +55,6 @@ work_for:
           entity:
             domain: "device_tracker"
     duration:
-      name: "Duration"
-      description: "Duration in which the lawn mower should run, in minutes."
       required: true
       example: 30
       default: 60
@@ -85,8 +65,6 @@ work_for:
           step: 1
           mode: slider
     area:
-      name: "Zone"
-      description: "Zone where the lawn mower should start."
       example: 1
       default: 1
       selector:
@@ -96,12 +74,8 @@ work_for:
           mode: box
 
 work_until:
-  name: "Mowing until a certain time"
-  description: "Command the lawn mower to mow until a certain time."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -111,8 +85,6 @@ work_until:
           entity:
             domain: "device_tracker"
     hours:
-      name: "Hours"
-      description: "Time until which lawn mower should drive in locale time and 24h format."
       required: true
       example: 12
       default: 12
@@ -123,8 +95,6 @@ work_until:
           step: 1
           mode: slider
     minutes:
-      name: "Minutes"
-      description: "Time until which lawn mower should drive in locale time and 24h format."
       required: true
       example: 30
       default: 0
@@ -135,8 +105,6 @@ work_until:
           step: 1
           mode: slider
     area:
-      name: "Zone"
-      description: "Zone where the lawn mower should start."
       example: 1
       default: 1
       selector:
@@ -146,12 +114,8 @@ work_until:
           mode: box
 
 border_cut:
-  name: "Border cutting"
-  description: "Command the lawn mower to cut the border."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -162,12 +126,8 @@ border_cut:
             domain: "device_tracker"
 
 charge_now:
-  name: "Charging now"
-  description: "Command the lawn mower to charge now."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -178,12 +138,8 @@ charge_now:
             domain: "device_tracker"
 
 charge_for:
-  name: "Charging for a certain duration"
-  description: "Command the lawn mower to charge for a certain duration."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -193,8 +149,6 @@ charge_for:
           entity:
             domain: "device_tracker"
     duration:
-      name: "Duration"
-      description: "Duration in which the mower should charge, in minutes."
       required: true
       example: 30
       default: 60
@@ -206,12 +160,8 @@ charge_for:
           mode: slider
 
 charge_until:
-  name: "Charging until a certain time"
-  description: "Command the lawn mower to charge until a certain time."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -221,8 +171,6 @@ charge_until:
           entity:
             domain: "device_tracker"
     hours:
-      name: "Hours"
-      description: "Time until which lawn mower should charge in locale time and 24h format."
       required: true
       example: 12
       default: 12
@@ -233,8 +181,6 @@ charge_until:
           step: 1
           mode: slider
     minutes:
-      name: "Minutes"
-      description: "Time until which lawn mower should charge in locale time and 24h format."
       required: true
       example: 30
       default: 0
@@ -245,36 +191,24 @@ charge_until:
           step: 1
           mode: slider
     weekday:
-      name: "Day of week"
-      description: "Numeric representation of the day of the week is 1 (for Monday) through 7 (for Sunday)."
       required: true
       example: "1"
       default: "0"
       selector:
         select:
+          translation_key: "weekday"
           options:
-          - label: "Monday"
-            value: "1"
-          - label: "Tuesday"
-            value: "2"
-          - label: "Wednesday"
-            value: "3"
-          - label: "Thursday"
-            value: "4"
-          - label: "Friday"
-            value: "5"
-          - label: "Saturday"
-            value: "6"
-          - label: "Sunday"
-            value: "7"
+            - "1"
+            - "2"
+            - "3"
+            - "4"
+            - "5"
+            - "6"
+            - "7"
 
 trace_position:
-  name: "Tracing position"
-  description: "Command the lawn mower to report its current position."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -285,12 +219,8 @@ trace_position:
             domain: "device_tracker"
 
 keep_out:
-  name: "Keep out of a location (no-go area)"
-  description: "Commands the lawn mower to keep out of a location."
   fields:
     device_id:
-      name: "Device(s)"
-      description: "Device(s) on which the command is to be executed."
       required: true
       selector:
         device:
@@ -300,8 +230,6 @@ keep_out:
           entity:
             domain: "device_tracker"
     location:
-      name: "Location"
-      description: "Location from which the lawn mower should keep out."
       required: true
       example: 1
       default: 1
@@ -309,8 +237,6 @@ keep_out:
         location:
           radius: true
     hours:
-      name: "Hours"
-      description: "Time until which lawn mower should keep out in locale time and 24h format."
       example: 12
       default: 12
       selector:
@@ -320,8 +246,6 @@ keep_out:
           step: 1
           mode: slider
     minutes:
-      name: "Minutes"
-      description: "Time until which lawn mower should keep out in locale time and 24h format."
       example: 30
       default: 0
       selector:
@@ -331,8 +255,6 @@ keep_out:
           step: 1
           mode: slider
     index:
-      name: "Index"
-      description: "Index is needed when the lawn mower is to keep out of multiple locations at the same time. Different index values per no-go area."
       example: 1
       default: 1
       selector:

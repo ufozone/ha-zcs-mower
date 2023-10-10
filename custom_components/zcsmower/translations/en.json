@@ -129,6 +129,187 @@
       }
     }
   },
+  "selector": {
+    "weekday": {
+      "options": {
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday",
+        "7": "Sunday"
+      }
+    }
+  },
+  "services": {
+    "update_now": {
+      "name": "Updating now",
+      "description": "Fetch data for lawn mower from API now.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    },
+    "set_profile": {
+      "name": "Setting profile",
+      "description": "Configure the profile for auto-mode.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        },
+        "profile": {
+          "name": "Profile",
+          "description": "Select the profile you want to use."
+        }
+      }
+    },
+    "work_now": {
+      "name": "Mowing now",
+      "description": "Command the lawn mower to mow now.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    },
+    "work_for": {
+      "name": "Mowing for a certain duration",
+      "description": "Command the lawn mower to mow for a certain duration.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Duration in which the lawn mower should run, in minutes."
+        },
+        "area": {
+          "name": "Zone",
+          "description": "Zone where the lawn mower should start."
+        }
+      }
+    },
+    "work_until": {
+      "name": "Mowing until a certain time",
+      "description": "Command the lawn mower to mow until a certain time.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        },
+        "hours": {
+          "name": "Hours",
+          "description": "Time until which lawn mower should drive in locale time and 24h format."
+        },
+        "minutes": {
+          "name": "Minutes",
+          "description": "Time until which lawn mower should drive in locale time and 24h format."
+        },
+        "area": {
+          "name": "Zone",
+          "description": "Zone where the lawn mower should start."
+        }
+      }
+    },
+    "border_cut": {
+      "name": "Border cutting",
+      "description": "Command the lawn mower to cut the border.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    },
+    "charge_now": {
+      "name": "Charging now",
+      "description": "Command the lawn mower to charge now.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    },
+    "charge_for": {
+      "name": "Charging for a certain duration",
+      "description": "Command the lawn mower to charge for a certain duration.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Duration in which the lawn mower should charge, in minutes."
+        }
+      }
+    },
+    "charge_until": {
+      "name": "Charging until a certain time",
+      "description": "Command the lawn mower to charge until a certain time.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        },
+        "hours": {
+          "name": "Hours",
+          "description": "Time until which lawn mower should charge in locale time and 24h format."
+        },
+        "minutes": {
+          "name": "Minutes",
+          "description": "Time until which lawn mower should charge in locale time and 24h format."
+        },
+        "weekday": {
+          "name": "Day of week",
+          "description": "Numeric representation of the day of the week is 1 (for Monday) through 7 (for Sunday)."
+        }
+      }
+    },
+    "trace_position": {
+      "name": "Tracing position",
+      "description": "Command the lawn mower to report its current position.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    },
+    "keep_out": {
+      "name": "Keep out of a location (no-go area)",
+      "description": "Commands the lawn mower to keep out of a location.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        },
+        "location": {
+          "name": "Location",
+          "description": "Location from which the lawn mower should keep out."
+        },
+        "hours": {
+          "name": "Hours",
+          "description": "Time until which lawn mower should keep out in locale time and 24h format."
+        },
+        "minutes": {
+          "name": "Minutes",
+          "description": "Time until which lawn mower should keep out in locale time and 24h format."
+        },
+        "index": {
+          "name": "Index",
+          "description": "Index is needed when the lawn mower is to keep out of multiple locations at the same time. Different index values per no-go area."
+        }
+      }
+    }
+  },
   "entity": {
     "binary_sensor": {
       "error": {

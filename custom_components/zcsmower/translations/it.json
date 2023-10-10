@@ -129,6 +129,187 @@
       }
     }
   },
+  "selector": {
+    "weekday": {
+      "options": {
+        "1": "Lunedì",
+        "2": "Martedì",
+        "3": "Mercoledì",
+        "4": "Giovedì",
+        "5": "Venerdì",
+        "6": "Sabato",
+        "7": "Domenica"
+      }
+    }
+  },
+  "services": {
+    "update_now": {
+      "name": "Aggiornamento immediato",
+      "description": "Recuperare ora i dati per il tosaerba dall'API.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        }
+      }
+    },
+    "set_profile": {
+      "name": "Impostazione del profilo",
+      "description": "Configurare il profilo per la modalità automatica.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        },
+        "profile": {
+          "name": "Profilo",
+          "description": "Selezionare il profilo da utilizzare."
+        }
+      }
+    },
+    "work_now": {
+      "name": "Falciare ora",
+      "description": "Comandate al tosaerba di falciare ora.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        }
+      }
+    },
+    "work_for": {
+      "name": "Falciatura per una certa durata",
+      "description": "Comandate al tosaerba di falciare per una certa durata.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        },
+        "duration": {
+          "name": "Durata",
+          "description": "Durata del funzionamento del tosaerba, in minuti."
+        },
+        "area": {
+          "name": "Zona",
+          "description": "Zona in cui il tosaerba deve partire."
+        }
+      }
+    },
+    "work_until": {
+      "name": "Falciatura fino a una certa ora",
+      "description": "Comandate al tosaerba di falciare fino a una certa ora.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        },
+        "hours": {
+          "name": "Orario",
+          "description": "Ora fino alla quale il tosaerba deve guidare, in formato locale e 24 ore."
+        },
+        "minutes": {
+          "name": "Minuti",
+          "description": "Ora fino alla quale il tosaerba deve guidare, in formato locale e 24 ore."
+        },
+        "area": {
+          "name": "Zona",
+          "description": "Zona in cui il tosaerba deve partire."
+        }
+      }
+    },
+    "border_cut": {
+      "name": "Taglio del bordo",
+      "description": "Comandare il tosaerba per tagliare il bordo.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        }
+      }
+    },
+    "charge_now": {
+      "name": "Carica ora",
+      "description": "Comandate al tosaerba di caricarsi ora.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        }
+      }
+    },
+    "charge_for": {
+      "name": "Carica per una certa durata",
+      "description": "Comandare al tosaerba di caricarsi per una certa durata.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        },
+        "duration": {
+          "name": "Durata",
+          "description": "Durata della carica del tosaerba, in minuti."
+        }
+      }
+    },
+    "charge_until": {
+      "name": "Carica fino a una certa ora",
+      "description": "Comandare al tosaerba di caricarsi fino a una certa ora.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        },
+        "hours": {
+          "name": "Orario",
+          "description": "Ora fino alla quale il tosaerba deve essere caricato, in formato locale e 24 ore."
+        },
+        "minutes": {
+          "name": "Minuti",
+          "description": "Ora fino alla quale il tosaerba deve essere caricato, in formato locale e 24 ore."
+        },
+        "weekday": {
+          "name": "Giorno feriale",
+          "description": "La rappresentazione numerica del giorno della settimana va da 1 (per il lunedì) a 7 (per la domenica)."
+        }
+      }
+    },
+    "trace_position": {
+      "name": "Posizione di tracciamento",
+      "description": "Comandare al tosaerba di comunicare la sua posizione attuale.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        }
+      }
+    },
+    "keep_out": {
+      "name": "Tenersi lontani da un luogo (no-go area)",
+      "description": "Comanda al tosaerba di tenersi lontano da un luogo.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        },
+        "location": {
+          "name": "Posizione",
+          "description": "Posizione da cui il tosaerba deve tenersi lontano."
+        },
+        "hours": {
+          "name": "Orario",
+          "description": "Ora fino alla quale il tosaerba deve rimanere fuori, in formato locale e 24 ore."
+        },
+        "minutes": {
+          "name": "Minuti",
+          "description": "Ora fino alla quale il tosaerba deve rimanere fuori, in formato locale e 24 ore."
+        },
+        "index": {
+          "name": "Indice",
+          "description": "L'indice è necessario quando il tosaerba deve tenersi lontano da più aree contemporaneamente. Diversi valori dell'indice per ogni area vietata."
+        }
+      }
+    }
+  },
   "entity": {
     "binary_sensor": {
       "error": {

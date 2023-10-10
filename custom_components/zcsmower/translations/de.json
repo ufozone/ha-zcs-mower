@@ -129,6 +129,187 @@
       }
     }
   },
+  "selector": {
+    "weekday": {
+      "options": {
+        "1": "Montag",
+        "2": "Dienstag",
+        "3": "Mittwoch",
+        "4": "Donnerstag",
+        "5": "Freitag",
+        "6": "Samstag",
+        "7": "Sonntag"
+      }
+    }
+  },
+  "services": {
+    "update_now": {
+      "name": "Jetzt aktualisieren",
+      "description": "Hole jetzt die Daten für den Rasenmäher aus der API.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    },
+    "set_profile": {
+      "name": "Profil einstellen",
+      "description": "Konfiguriere das Profil für den Automodus.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        },
+        "profile": {
+          "name": "Profil",
+          "description": "Wähle das Profil, das verwendet werden soll."
+        }
+      }
+    },
+    "work_now": {
+      "name": "Jetzt mähen",
+      "description": "Befiehlt dem Rasenmäher, jetzt zu mähen.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    },
+    "work_for": {
+      "name": "Mähen für eine bestimmte Dauer",
+      "description": "Befiehlt dem Rasenmäher, eine bestimmte Zeit lang zu mähen.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        },
+        "duration": {
+          "name": "Dauer",
+          "description": "Dauer, in der der Rasenmäher laufen soll, in Minuten."
+        },
+        "area": {
+          "name": "Zone",
+          "description": "Zone, in der der Rasenmäher starten soll."
+        }
+      }
+    },
+    "work_until": {
+      "name": "Mähen bis zu einer bestimmten Uhrzeit",
+      "description": "Befiehlt dem Rasenmäher, bis zu einer bestimmten Uhrzeit zu mähen.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        },
+        "hours": {
+          "name": "Stunden",
+          "description": "Zeit, bis zu der der Rasenmäher fahren soll, in Ortszeit und 24-Stunden-Format."
+        },
+        "minutes": {
+          "name": "Minuten",
+          "description": "Zeit, bis zu der der Rasenmäher fahren soll, in Ortszeit und 24-Stunden-Format."
+        },
+        "area": {
+          "name": "Zone",
+          "description": "Zone, in der der Rasenmäher starten soll."
+        }
+      }
+    },
+    "border_cut": {
+      "name": "Schneiden des Randes",
+      "description": "Befiehlt dem Rasenmäher, die Grenze zu mähen.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    },
+    "charge_now": {
+      "name": "Jetzt aufladen",
+      "description": "Befiehlt dem Rasenmäher, jetzt zu laden.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    },
+    "charge_for": {
+      "name": "Aufladen für eine bestimmte Dauer",
+      "description": "Befiehlt dem Rasenmäher, für eine bestimmte Dauer zu laden.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        },
+        "duration": {
+          "name": "Dauer",
+          "description": "Dauer, in der der Rasenmäher aufgeladen werden soll, in Minuten."
+        }
+      }
+    },
+    "charge_until": {
+      "name": "Aufladen bis zu einer bestimmten Zeit",
+      "description": "Befiehlt dem Rasenmäher, bis zu einer bestimmten Zeit zu laden.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        },
+        "hours": {
+          "name": "Stunden",
+          "description": "Zeit, bis zu der der Rasenmäher geladen werden soll, in Ortszeit und im 24-Stunden-Format."
+        },
+        "minutes": {
+          "name": "Minuten",
+          "description": "Zeit, bis zu der der Rasenmäher geladen werden soll, in Ortszeit und im 24-Stunden-Format."
+        },
+        "weekday": {
+          "name": "Wochentag",
+          "description": "Die numerische Darstellung des Wochentags ist 1 (für Montag) bis 7 (für Sonntag)."
+        }
+      }
+    },
+    "trace_position": {
+      "name": "Position verfolgen",
+      "description": "Befiehlt dem Rasenmäher, seine aktuelle Position zu melden.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    },
+    "keep_out": {
+      "name": "Von einem Ort fernhalten (No-Go-Area)",
+      "description": "Befiehlt dem Rasenmäher, sich von einem bestimmten Ort fernzuhalten.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        },
+        "location": {
+          "name": "Ort",
+          "description": "Ort, von dem sich der Rasenmäher fernhalten sollte."
+        },
+        "hours": {
+          "name": "Stunden",
+          "description": "Zeit, bis zu der der Rasenmäher draußen bleiben soll, in Ortszeit und 24-Stunden-Format."
+        },
+        "minutes": {
+          "name": "Minuten",
+          "description": "Zeit, bis zu der der Rasenmäher draußen bleiben soll, in Ortszeit und 24-Stunden-Format."
+        },
+        "index": {
+          "name": "Index",
+          "description": "Der Index wird benötigt, wenn der Rasenmäher mehrere Orte gleichzeitig nicht anfahren soll. Unterschiedliche Indexwerte pro No-Go-Area."
+        }
+      }
+    }
+  },
   "entity": {
     "binary_sensor": {
       "error": {
