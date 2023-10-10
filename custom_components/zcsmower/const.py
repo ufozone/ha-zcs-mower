@@ -181,7 +181,7 @@ ROBOT_WAKE_UP_INTERVAL_DEFAULT = 1800
 ROBOT_WAKE_UP_INTERVAL_INFINITY = 300
 ROBOT_MODELS = {
     "AM015D": "L15 Deluxe",
-    "AM020D": "Twenty Deluxe", # ?
+    "AM020D": "Twenty Deluxe",
     "AM020L": "Twenty Elite",
     "AM020P": "Twenty Elite S+", # ?
     "AM020R": "Twenty ZR",
@@ -189,25 +189,26 @@ ROBOT_MODELS = {
     "AM025L": "Twenty 25 Elite",
     "AM029D": "Twenty 29 Deluxe",
     "AM029L": "Twenty 29 Elite",
-    "AM032D": "L32 Deluxe", # ?
+    "AM032D": "L32 Deluxe",
     "AM035B": "L35 Basic",
     "AM035D": "L35 Deluxe",
     "AM040B": "4.0 Basic",
     "AM040L": "4.0 Elite",
     "AM043L": "4.36 Elite",
+    "AM060D": "L60 Deluxe",
     "AM060L": "L60 Elite",
     "AM060P": "L60 Elite S+", # ?
-    "AM085L": "L85 Elite", # ?
+    "AM085L": "L85 Elite",
     "AM095L": "Quad Elite 4WD",
-    "AM250D": "L250 Deluxe", # ?
+    "AM250D": "L250 Deluxe",
     "AM250L": "L250i Elite",
-    "AM250P": "L250i Elite S+",# ?
-    "AM350L": "L350i Elite", # ?
-    "AM400B": "L400 Basic", # ???
-    "AM400D": "L400 Deluxe", # ???
+    "AM250P": "L250i Elite S+",
+    "AM350L": "L350i Elite",
+    "AM400B": "L400 Basic", # ?
+    "AM400D": "L400 Deluxe", # ?
     "AM400L": "L400 Elite", # ?
-    "AM450B": "L400i Basic",
-    "AM450D": "L400i Deluxe",
+    "AM450B": "L400i Basic", # ?
+    "AM450D": "L400i Deluxe", # ?
     "KB250L": "KR 250", # ?
     "KB250P": "KR 250", # ?
     "KB350L": "KR 350", # ?
@@ -217,54 +218,58 @@ ROBOT_MODELS = {
     #"OW250P": "", # DB:60
     #"ST250D": "", # DB:17
     "ST250L": "AutoClip 530 SG",
-    #"TH015D": "", # DB:30
-    "TH020D": "D1", # ?
-    "TH020L": "LX2", # ?
+    "TH015D": "D1",
+    "TH020D": "DX2",
+    "TH020L": "LX2",
     "TH020P": "SX2", # ?
     "TH025D": "DX2.5", # ?
     "TH025L": "LX2.5", # ?
     "TH029D": "DX2.9", # ?
     "TH029L": "LX2.9", # ?
-    "TH032D": "DZ2", # ?
-    "TH035B": "BZ3", # ?
-    "TH035D": "DZ3", # ?
-    "TH040B": "BX4", # ???
-    "TH040L": "LX4", # ???
-    "TH043L": "LX6", # ???
+    "TH032D": "DZ2",
+    "TH035B": "BZ3",
+    "TH035D": "DZ3",
+    "TH040B": "BX4",
+    "TH040L": "LX4",
+    "TH043L": "LX6",
+    "TH060D": "D6",
+    "TH060L": "L6",
+    "TH085L": "L8",
     "TH095L": "LQ 4WD", # ???
-    "TH250D": "D25 i", # ???
-    "TH250L": "L25 i", # ?
-    "TH250P": "S25 i", # ?
-    #"TH350L": "", # DB:270
-    "TH400B": "B40", # ???
-    "TH400D": "D40", # ???
-    "TH450B": "B40 i", # ?
-    "TH450D": "D40 i", # ?
-    "WI015D": "IKE 6", # ?
-    "WI020D": "I70", # ???
-    "WI020L": "I100 S", # ???
+    "TH250D": "D25",
+    "TH250L": "L25i",
+    "TH250P": "S25i",
+    "TH350L": "L35i",
+    "TH400B": "B40", # ?
+    "TH400D": "D40", # ?
+    "TH450B": "B40i", # ?
+    "TH450D": "D40i", # ?
+    "WI015D": "IKE",
+    "WI020D": "I70",
+    "WI020L": "I100 S",
     "WI020P": "I130 S", # ???
     "WI020R": "I100 R", # ???
     "WI025D": "I140", # ???
     "WI025L": "I180 S", # ???
     "WI029D": "I250", # ???
     "WI029L": "I350 S", # ???
-    "WI032D": "Premium C80", # ?
+    "WI032D": "Premium C80", # Cassiopea: X 10
     "WI035B": "Premium C120",
-    "WI035D": "Premium C180 S", # ???
-    "WI040B": "K Premium Medium", # ???
-    "WI040L": "K S Premium Medium", # ???
+    "WI035D": "Premium C180 S",
+    "WI040B": "K Premium Medium",
+    "WI040L": "K S Premium Medium",
     "WI043L": "KXL S Ultra Premium",
+    "WI085L": "J XH",
     "WI095L": "Q350 SR", # ?
-    "WI250D": "F28", # ???
-    "WI250L": "F35 S", # ???
-    "WI250P": "F50 S", # ???
-    "WI251L": "P70 S", # ???
-    #"WI350L": "", # DB:493
-    "WI400B": "YARD 101", # ???
-    "WI400D": "YARD 2000", # ???
-    "WI450B": "YARD 101 S", # ???
-    "WI450D": "YARD 2000 S", # ???
+    "WI250D": "F28",
+    "WI250L": "F35 S",
+    "WI250P": "F50 S",
+    #"WI251L": "P70 S", # ???
+    "WI350L": "P70 S",
+    "WI400B": "YARD 101", # ?
+    "WI400D": "YARD 201", # ?
+    "WI450B": "YARD 101S", # ?
+    "WI450D": "YARD 201S", # ?
 }
 ROBOT_STATES = [
     {
