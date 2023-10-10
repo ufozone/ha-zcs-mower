@@ -11,6 +11,7 @@ from homeassistant.const import (
     ATTR_IDENTIFIERS,
     ATTR_MANUFACTURER,
     ATTR_MODEL,
+    ATTR_SUGGESTED_AREA,
     ATTR_SW_VERSION,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -20,6 +21,7 @@ from homeassistant.util import slugify
 from .const import (
     DOMAIN,
     ATTR_IMEI,
+    ATTR_SERIAL,
     ATTR_ERROR,
     ATTR_AVAILABLE,
     ATTR_CONNECTED,
@@ -128,6 +130,7 @@ class ZcsMowerEntity(CoordinatorEntity):
             ATTR_NAME: self._name,
             ATTR_MANUFACTURER: self._get_attribute(ATTR_MANUFACTURER),
             ATTR_MODEL: self._get_attribute(ATTR_MODEL),
+            ATTR_SUGGESTED_AREA: "Garden",
             ATTR_SW_VERSION: self._get_attribute(ATTR_SW_VERSION),
         }
 
@@ -138,6 +141,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         _extra_state_attributes.update(
             {
                 ATTR_IMEI: self._imei,
+                ATTR_SERIAL: self._get_attribute(ATTR_SERIAL),
                 ATTR_CONNECTED: self._get_attribute(ATTR_CONNECTED),
                 ATTR_LAST_COMM: self._get_attribute(ATTR_LAST_COMM),
                 ATTR_LAST_SEEN: self._get_attribute(ATTR_LAST_SEEN),

@@ -137,6 +137,9 @@
           "imei": {
             "name": "IMEI"
           },
+          "serial": {
+            "name": "Serial Number"
+          },
           "connected": {
             "name": "Connection State",
             "state": {
@@ -179,6 +182,9 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
+          },
+          "serial": {
+            "name": "Serial Number"
           },
           "connected": {
             "name": "Connection State",
@@ -458,6 +464,9 @@
           "imei": {
             "name": "IMEI"
           },
+          "serial": {
+            "name": "Serial Number"
+          },
           "connected": {
             "name": "Connection State",
             "state": {
@@ -483,6 +492,9 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
+          },
+          "serial": {
+            "name": "Serial Number"
           },
           "connected": {
             "name": "Connection State",
@@ -512,6 +524,9 @@
           "imei": {
             "name": "IMEI"
           },
+          "serial": {
+            "name": "Serial Number"
+          },
           "connected": {
             "name": "Connection State",
             "state": {
@@ -540,6 +555,9 @@
           "imei": {
             "name": "IMEI"
           },
+          "serial": {
+            "name": "Serial Number"
+          },
           "connected": {
             "name": "Connection State",
             "state": {
@@ -566,6 +584,9 @@
           "imei": {
             "name": "IMEI"
           },
+          "serial": {
+            "name": "Serial Number"
+          },
           "connected": {
             "name": "Connection State",
             "state": {
@@ -589,6 +610,9 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
+          },
+          "serial": {
+            "name": "Serial Number"
           },
           "connected": {
             "name": "Connection State",
@@ -614,6 +638,9 @@
           "imei": {
             "name": "IMEI"
           },
+          "serial": {
+            "name": "Serial Number"
+          },
           "connected": {
             "name": "Connection State",
             "state": {
@@ -638,6 +665,9 @@
           "imei": {
             "name": "IMEI"
           },
+          "serial": {
+            "name": "Serial Number"
+          },
           "connected": {
             "name": "Connection State",
             "state": {
@@ -661,6 +691,9 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
+          },
+          "serial": {
+            "name": "Serial Number"
           },
           "connected": {
             "name": "Connection State",
@@ -688,6 +721,9 @@
           "imei": {
             "name": "IMEI"
           },
+          "serial": {
+            "name": "Serial Number"
+          },
           "connected": {
             "name": "Connection State",
             "state": {
@@ -711,6 +747,9 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
+          },
+          "serial": {
+            "name": "Serial Number"
           },
           "connected": {
             "name": "Connection State",
