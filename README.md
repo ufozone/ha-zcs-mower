@@ -17,7 +17,7 @@ Latest -
 [![lint-badge]][lint-workflow]
 [![issues][issues-shield]][issues-link]
 
-ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. Ambrogio, Techline, Wiper, Kubota, Stiga and Wolf robotic lawn mowers with Connect module are supported.
+ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. All Ambrogio, Techline, Wiper and some Kubota, Stiga and Wolf robotic lawn mowers with Connect module are supported.
 
 ## Installation
 
