@@ -118,8 +118,10 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 9
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
-    _title: str | None
-    _options: dict[str, any] | None
+    def __init__(self) -> None:
+        """Initialize the ZCS Lawn Mower flow."""
+        self._title: str | None = None
+        self._options: dict[str, any] | None = None
 
     async def async_step_user(
         self,
