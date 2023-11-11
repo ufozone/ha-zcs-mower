@@ -55,70 +55,37 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = coordinator = ZcsMowerDataUpdateCoordinator(
+    hass.data[DOMAIN][config_entry.entry_id] = coordinator = ZcsMowerDataUpdateCoordinator(
         hass=hass,
-        config_entry=entry,
+        config_entry=config_entry,
     )
     await coordinator.async_config_entry_first_refresh()
 
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+    await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
+    config_entry.async_on_unload(config_entry.add_update_listener(async_reload_entry))
 
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
+    if unload_ok := await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS):
         # Remove config entry from domain.
-        hass.data[DOMAIN].pop(entry.entry_id)
+        hass.data[DOMAIN].pop(config_entry.entry_id)
     return unload_ok
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def async_reload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
     """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    await async_unload_entry(hass, config_entry)
+    await async_setup_entry(hass, config_entry)
 
 async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Migrate old entry."""
     LOGGER.info("Migrating from version %s", config_entry.version)
-
-    if config_entry.version < 3:
-        config_entry.version = 3
-        hass.config_entries.async_update_entry(
-            config_entry,
-            title=str(config_entry.title),
-            data={},
-            options={
-                CONF_CLIENT_KEY: config_entry.data.get(CONF_CLIENT_KEY, ""),
-                CONF_CAMERA_ENABLE: False,
-                CONF_MAP_IMAGE_PATH: "",
-                CONF_MAP_MARKER_PATH: "",
-                CONF_MAP_GPS_TOP_LEFT: "",
-                CONF_MAP_GPS_BOTTOM_RIGHT: "",
-                CONF_MOWERS: config_entry.data.get(CONF_MOWERS, {}),
-            },
-        )
-
-    if config_entry.version < 4:
-        config_entry.version = 4
-        _options = dict(config_entry.options)
-        _options.update(
-            {
-                CONF_MAP_POINTS: config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
-                CONF_MAP_DRAW_LINES: True,
-            }
-        )
-        hass.config_entries.async_update_entry(
-            config_entry,
-            title=str(config_entry.title),
-            data={},
-            options=_options,
-        )
 
     if config_entry.version < 5:
         config_entry.version = 5
@@ -160,28 +127,14 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             options=_options,
         )
 
-    if config_entry.version < 7:
-        config_entry.version = 7
+    if config_entry.version < 9:
+        config_entry.version = 9
         _options = dict(config_entry.options)
         _options.update(
             {
                 CONF_TRACE_POSITION_ENABLE: config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False),
                 CONF_WAKE_UP_INTERVAL_DEFAULT: config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
                 CONF_WAKE_UP_INTERVAL_INFINITY: config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
-            }
-        )
-        hass.config_entries.async_update_entry(
-            config_entry,
-            title=str(config_entry.title),
-            data={},
-            options=_options,
-        )
-
-    if config_entry.version < 9:
-        config_entry.version = 9
-        _options = dict(config_entry.options)
-        _options.update(
-            {
                 CONF_STANDBY_TIME_START: STANDBY_TIME_START_DEFAULT,
                 CONF_STANDBY_TIME_STOP: STANDBY_TIME_STOP_DEFAULT,
                 CONF_UPDATE_INTERVAL_WORKING: config_entry.options.get("uptade_interval_working", UPDATE_INTERVAL_WORKING),
