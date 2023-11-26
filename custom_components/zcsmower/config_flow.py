@@ -17,6 +17,7 @@ from homeassistant.config_entries import (
 from homeassistant.const import (
     CONF_NAME,
     ATTR_NAME,
+    UnitOfTime,
 )
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import (
@@ -871,6 +872,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             min=30,
                             max=300,
                             step=30,
+                            unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
                     # Update interval, if all lawn mowers on standby
@@ -886,6 +888,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             min=120,
                             max=3600,
                             step=60,
+                            unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
                     # Update interval, if all lawn mowers idling
@@ -901,6 +904,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             min=600,
                             max=86400,
                             step=600,
+                            unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
                     # Trace position
@@ -921,6 +925,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             min=300,
                             max=21600,
                             step=300,
+                            unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
                     # Wake up interval (Infinity+ plan)
@@ -936,6 +941,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             min=300,
                             max=21600,
                             step=300,
+                            unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
                 }
