@@ -187,11 +187,11 @@
         },
         "duration": {
           "name": "Dauer",
-          "description": "Dauer, in der der Rasenmäher laufen soll, in Minuten."
+          "description": "Dauer, in welcher der Rasenmäher laufen soll, in Minuten."
         },
         "area": {
           "name": "Zone",
-          "description": "Zone, in der der Rasenmäher starten soll."
+          "description": "Zone, in welcher der Rasenmäher starten soll."
         }
       }
     },
@@ -205,15 +205,15 @@
         },
         "hours": {
           "name": "Stunden",
-          "description": "Zeit, bis zu der der Rasenmäher fahren soll, in Ortszeit und 24-Stunden-Format."
+          "description": "Zeit, bis zu welcher der Rasenmäher fahren soll, in Ortszeit und 24-Stunden-Format."
         },
         "minutes": {
           "name": "Minuten",
-          "description": "Zeit, bis zu der der Rasenmäher fahren soll, in Ortszeit und 24-Stunden-Format."
+          "description": "Zeit, bis zu welcher der Rasenmäher fahren soll, in Ortszeit und 24-Stunden-Format."
         },
         "area": {
           "name": "Zone",
-          "description": "Zone, in der der Rasenmäher starten soll."
+          "description": "Zone, in welcher der Rasenmäher starten soll."
         }
       }
     },
@@ -247,7 +247,7 @@
         },
         "duration": {
           "name": "Dauer",
-          "description": "Dauer, in der der Rasenmäher aufgeladen werden soll, in Minuten."
+          "description": "Dauer, in welcher der Rasenmäher aufgeladen werden soll, in Minuten."
         }
       }
     },
@@ -261,11 +261,11 @@
         },
         "hours": {
           "name": "Stunden",
-          "description": "Zeit, bis zu der der Rasenmäher geladen werden soll, in Ortszeit und im 24-Stunden-Format."
+          "description": "Zeit, bis zu welcher der Rasenmäher geladen werden soll, in Ortszeit und im 24-Stunden-Format."
         },
         "minutes": {
           "name": "Minuten",
-          "description": "Zeit, bis zu der der Rasenmäher geladen werden soll, in Ortszeit und im 24-Stunden-Format."
+          "description": "Zeit, bis zu welcher der Rasenmäher geladen werden soll, in Ortszeit und im 24-Stunden-Format."
         },
         "weekday": {
           "name": "Wochentag",
@@ -297,11 +297,11 @@
         },
         "hours": {
           "name": "Stunden",
-          "description": "Zeit, bis zu der der Rasenmäher draußen bleiben soll, in Ortszeit und 24-Stunden-Format."
+          "description": "Zeit, bis zu welcher der Rasenmäher draußen bleiben soll, in Ortszeit und 24-Stunden-Format."
         },
         "minutes": {
           "name": "Minuten",
-          "description": "Zeit, bis zu der der Rasenmäher draußen bleiben soll, in Ortszeit und 24-Stunden-Format."
+          "description": "Zeit, bis zu welcher der Rasenmäher draußen bleiben soll, in Ortszeit und 24-Stunden-Format."
         },
         "index": {
           "name": "Index",
