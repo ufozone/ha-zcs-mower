@@ -26,7 +26,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.camera import (
     Camera,
     CameraEntityDescription,
-    SUPPORT_ON_OFF,
+    CameraEntityFeature,
 )
 from homeassistant.helpers.entity import Entity
 
@@ -374,7 +374,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
     @property
     def supported_features(self) -> int:
         """Show supported features."""
-        return SUPPORT_ON_OFF
+        return CameraEntityFeature.ON_OFF
 
     @property
     def is_streaming(self) -> bool:
