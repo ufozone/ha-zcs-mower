@@ -8,10 +8,8 @@ from homeassistant.core import (
 from homeassistant.const import (
     ATTR_NAME,
     ATTR_STATE,
-    ATTR_IDENTIFIERS,
     ATTR_MANUFACTURER,
     ATTR_MODEL,
-    ATTR_SUGGESTED_AREA,
     ATTR_SW_VERSION,
 )
 from homeassistant.config_entries import ConfigEntry
