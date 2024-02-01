@@ -15,7 +15,7 @@ from homeassistant.components.vacuum import (
     STATE_RETURNING,
     STATE_ERROR,
     StateVacuumEntity,
-    VacuumEntityDescription,
+    StateVacuumEntityDescription,
     VacuumEntityFeature,
 )
 from homeassistant.helpers.entity import Entity
@@ -38,7 +38,7 @@ ROBOT_SUPPORTED_FEATURES = (
     | VacuumEntityFeature.MAP
 )
 ENTITY_DESCRIPTIONS = (
-    VacuumEntityDescription(
+    StateVacuumEntityDescription(
         key="",
         icon="mdi:robot-mower",
         translation_key="mower",
@@ -80,7 +80,7 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
         hass: HomeAssistant,
         config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
-        entity_description: VacuumEntityDescription,
+        entity_description: StateVacuumEntityDescription,
         imei: str,
     ) -> None:
         """Initialize the vacuum class."""
