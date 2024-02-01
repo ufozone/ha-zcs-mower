@@ -318,9 +318,6 @@
           "imei": {
             "name": "IMEI"
           },
-          "serial": {
-            "name": "Seriennummer"
-          },
           "connected": {
             "name": "Verbindungsstatus",
             "state": {
@@ -363,9 +360,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "serial": {
-            "name": "Seriennummer"
           },
           "connected": {
             "name": "Verbindungsstatus",
@@ -645,9 +639,6 @@
           "imei": {
             "name": "IMEI"
           },
-          "serial": {
-            "name": "Seriennummer"
-          },
           "connected": {
             "name": "Verbindungsstatus",
             "state": {
@@ -673,9 +664,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "serial": {
-            "name": "Seriennummer"
           },
           "connected": {
             "name": "Verbindungsstatus",
@@ -705,9 +693,6 @@
           "imei": {
             "name": "IMEI"
           },
-          "serial": {
-            "name": "Seriennummer"
-          },
           "connected": {
             "name": "Verbindungsstatus",
             "state": {
@@ -736,9 +721,6 @@
           "imei": {
             "name": "IMEI"
           },
-          "serial": {
-            "name": "Seriennummer"
-          },
           "connected": {
             "name": "Verbindungsstatus",
             "state": {
@@ -765,9 +747,6 @@
           "imei": {
             "name": "IMEI"
           },
-          "serial": {
-            "name": "Seriennummer"
-          },
           "connected": {
             "name": "Verbindungsstatus",
             "state": {
@@ -791,9 +770,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "serial": {
-            "name": "Seriennummer"
           },
           "connected": {
             "name": "Verbindungsstatus",
@@ -819,9 +795,6 @@
           "imei": {
             "name": "IMEI"
           },
-          "serial": {
-            "name": "Seriennummer"
-          },
           "connected": {
             "name": "Verbindungsstatus",
             "state": {
@@ -846,9 +819,6 @@
           "imei": {
             "name": "IMEI"
           },
-          "serial": {
-            "name": "Seriennummer"
-          },
           "connected": {
             "name": "Verbindungsstatus",
             "state": {
@@ -872,9 +842,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "serial": {
-            "name": "Seriennummer"
           },
           "connected": {
             "name": "Verbindungsstatus",
@@ -902,9 +869,6 @@
           "imei": {
             "name": "IMEI"
           },
-          "serial": {
-            "name": "Seriennummer"
-          },
           "connected": {
             "name": "Verbindungsstatus",
             "state": {
@@ -928,9 +892,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "serial": {
-            "name": "Seriennummer"
           },
           "connected": {
             "name": "Verbindungsstatus",

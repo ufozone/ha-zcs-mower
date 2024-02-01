@@ -49,7 +49,7 @@ from .const import (
     CONF_MOWERS,
     ATTR_IMEI,
     ATTR_INFINITY,
-    ATTR_SERIAL,
+    ATTR_SERIAL_NUMBER,
     ATTR_WORKING,
     ATTR_ERROR,
     ATTR_LOCATION_HISTORY,
@@ -127,7 +127,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_ERROR: None,
                 ATTR_LOCATION: {},
                 ATTR_LOCATION_HISTORY: None,
-                ATTR_SERIAL: None,
+                ATTR_SERIAL_NUMBER: None,
                 ATTR_MANUFACTURER: MANUFACTURER_DEFAULT,
                 ATTR_MODEL: None,
                 ATTR_SW_VERSION: None,
@@ -406,11 +406,11 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if "attrs" in data:
             # In some cases, robot_serial is not available
             if "robot_serial" in data["attrs"]:
-                mower[ATTR_SERIAL] = data["attrs"]["robot_serial"]["value"]
-                if len(mower[ATTR_SERIAL]) > 5:
-                    if mower[ATTR_SERIAL][0:2] in MANUFACTURER_MAP:
-                        mower[ATTR_MANUFACTURER] = MANUFACTURER_MAP[mower[ATTR_SERIAL][0:2]]
-                    mower[ATTR_MODEL] = mower[ATTR_SERIAL][0:6]
+                mower[ATTR_SERIAL_NUMBER] = data["attrs"]["robot_serial"]["value"]
+                if len(mower[ATTR_SERIAL_NUMBER]) > 5:
+                    if mower[ATTR_SERIAL_NUMBER][0:2] in MANUFACTURER_MAP:
+                        mower[ATTR_MANUFACTURER] = MANUFACTURER_MAP[mower[ATTR_SERIAL_NUMBER][0:2]]
+                    mower[ATTR_MODEL] = mower[ATTR_SERIAL_NUMBER][0:6]
                     if mower[ATTR_MODEL] in ROBOT_MODELS:
                         mower[ATTR_MODEL] = ROBOT_MODELS[mower[ATTR_MODEL]]
             # In some cases, program_version is not available

@@ -15,13 +15,14 @@ from homeassistant.const import (
     ATTR_SW_VERSION,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
 from .const import (
     DOMAIN,
     ATTR_IMEI,
-    ATTR_SERIAL,
+    ATTR_SERIAL_NUMBER,
     ATTR_ERROR,
     ATTR_AVAILABLE,
     ATTR_CONNECTED,
@@ -65,6 +66,20 @@ class ZcsMowerEntity(CoordinatorEntity):
         self._additional_extra_state_attributes = {}
 
         self.entity_id = f"{entity_type}.{self._unique_id}"
+        self._attr_device_info = DeviceInfo(
+            identifiers={
+                (DOMAIN, self._imei)
+            },
+            #connections={
+            #    ("gsm", self._imei)
+            #},
+            name=self._name,
+            model=self._get_attribute(ATTR_MODEL),
+            manufacturer=self._get_attribute(ATTR_MANUFACTURER),
+            sw_version=self._get_attribute(ATTR_SW_VERSION),
+            serial_number=self._get_attribute(ATTR_SERIAL_NUMBER),
+            suggested_area="Garden",
+        )
 
     def _get_attribute(
         self,
@@ -121,27 +136,12 @@ class ZcsMowerEntity(CoordinatorEntity):
         return self._get_attribute(ATTR_AVAILABLE, False)
 
     @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            ATTR_IDENTIFIERS: {
-                (DOMAIN, self._imei)
-            },
-            ATTR_NAME: self._name,
-            ATTR_MANUFACTURER: self._get_attribute(ATTR_MANUFACTURER),
-            ATTR_MODEL: self._get_attribute(ATTR_MODEL),
-            ATTR_SUGGESTED_AREA: "Garden",
-            ATTR_SW_VERSION: self._get_attribute(ATTR_SW_VERSION),
-        }
-
-    @property
     def extra_state_attributes(self) -> dict[str, any]:
         """Return extra attributes."""
         _extra_state_attributes = self._additional_extra_state_attributes
         _extra_state_attributes.update(
             {
                 ATTR_IMEI: self._imei,
-                ATTR_SERIAL: self._get_attribute(ATTR_SERIAL),
                 ATTR_CONNECTED: self._get_attribute(ATTR_CONNECTED),
                 ATTR_LAST_COMM: self._get_attribute(ATTR_LAST_COMM),
                 ATTR_LAST_SEEN: self._get_attribute(ATTR_LAST_SEEN),

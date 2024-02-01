@@ -47,7 +47,7 @@ CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
 ATTR_INFINITY = "infinity"
-ATTR_SERIAL = "serial"
+ATTR_SERIAL_NUMBER = "serial_number"
 ATTR_WORKING = "working"
 ATTR_ERROR = "error"
 ATTR_CALIBRATION = "calibration_points"

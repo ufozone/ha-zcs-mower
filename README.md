@@ -137,7 +137,7 @@ Get IMEI from your lawn mower(s):
 
     ```
     attributes: 
-    imei, serial, connected, last_communication, last_seen, last_poll
+    imei, connected, last_communication, last_seen, last_poll
     ```
 
 ### Binary Sensor
