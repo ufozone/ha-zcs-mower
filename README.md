@@ -21,7 +21,7 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. All Amb
 
 ## Installation
 
-Requires Home Assistant 2023.9.0 or newer.
+Requires Home Assistant 2023.11.0 or newer.
 
 ### Installation through HACS
 
