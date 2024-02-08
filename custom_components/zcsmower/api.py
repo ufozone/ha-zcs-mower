@@ -4,7 +4,6 @@ https://github.com/deviceWISE/sample_tr50_python
 """
 from __future__ import annotations
 
-import asyncio
 import socket
 
 import aiohttp
@@ -127,6 +126,7 @@ class ZcsMowerApiClient:
 
         Returns:
             bool: Success or failure to post.
+
         """
         self._error = []
         self._status = True
@@ -225,6 +225,7 @@ class ZcsMowerApiClient:
 
         Returns:
             bool: Successor failure to post.
+
         """
         if command == "api.authenticate":
             parameters = {
