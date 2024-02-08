@@ -190,7 +190,7 @@ class ZcsMowerApiClient:
                     raise ZcsMowerApiCommunicationError(
                         f"Communication failed: {self._error}"
                     )
-        except asyncio.TimeoutError as exception:
+        except TimeoutError as exception:
             raise ZcsMowerApiCommunicationError(
                 "Timeout error fetching information",
             ) from exception

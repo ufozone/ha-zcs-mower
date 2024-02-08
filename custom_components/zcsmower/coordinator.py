@@ -499,7 +499,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 attempt = attempt + 1
                 # Wait 5 seconds before next attempt
                 await asyncio.sleep(5)
-            raise asyncio.TimeoutError(
+            raise TimeoutError(
                 f"The lawn mower with IMEI {imei} was not available after a long wait"
             )
         except Exception as exception:
