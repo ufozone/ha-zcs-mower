@@ -332,7 +332,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           },
           "reason": {
             "name": "Ragione"
@@ -375,7 +378,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       },
@@ -653,7 +659,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       }
@@ -679,7 +688,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           },
           "calibration_points": {
             "name": "Calibration points"
@@ -707,7 +719,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       }
@@ -735,7 +750,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       }
@@ -761,7 +779,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       },
@@ -785,7 +806,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       },
@@ -809,7 +833,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       },
@@ -833,7 +860,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       },
@@ -857,7 +887,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       }
@@ -883,7 +916,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       },
@@ -907,7 +943,10 @@
             "name": "Ultimo visto"
           },
           "last_pull": {
-            "name": "Ultimo tiro"
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
           }
         }
       }

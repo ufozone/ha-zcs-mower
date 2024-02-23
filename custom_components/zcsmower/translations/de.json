@@ -326,13 +326,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           },
           "reason": {
             "name": "Grund"
@@ -369,13 +372,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       },
@@ -647,13 +653,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       }
@@ -673,13 +682,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           },
           "calibration_points": {
             "name": "Kalibrierungspunkte"
@@ -701,13 +713,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       }
@@ -729,13 +744,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       }
@@ -755,13 +773,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       },
@@ -779,13 +800,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       },
@@ -803,13 +827,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       },
@@ -827,13 +854,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       },
@@ -851,13 +881,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       }
@@ -877,13 +910,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       },
@@ -901,13 +937,16 @@
             }
           },
           "last_communication": {
-            "name": "Zuletzt kommuniziert"
+            "name": "Letzte Kommunikation"
           },
           "last_seen": {
-            "name": "Zuletzt gesehen"
+            "name": "Letzte Sichtung"
           },
           "last_pull": {
-            "name": "Zuletzt abgerufen"
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
           }
         }
       }

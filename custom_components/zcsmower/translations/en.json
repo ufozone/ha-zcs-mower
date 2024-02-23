@@ -334,6 +334,9 @@
           "last_pull": {
             "name": "Last pull"
           },
+          "next_pull": {
+            "name": "Next pull"
+          },
           "reason": {
             "name": "Reason"
           }
@@ -376,6 +379,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       },
@@ -654,6 +660,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       }
@@ -680,6 +689,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           },
           "calibration_points": {
             "name": "Calibration points"
@@ -708,6 +720,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       }
@@ -736,6 +751,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       }
@@ -762,6 +780,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       },
@@ -786,6 +807,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       },
@@ -810,6 +834,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       },
@@ -834,6 +861,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       },
@@ -858,6 +888,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       }
@@ -884,6 +917,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       },
@@ -908,6 +944,9 @@
           },
           "last_pull": {
             "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
           }
         }
       }
