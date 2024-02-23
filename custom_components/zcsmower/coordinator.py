@@ -279,12 +279,12 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             suggested_update_interval = timedelta(
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING)
             )
-        # Current time is in standby time
+        # If current time is in standby time, decrease update_interval
         elif self.is_standby_time(now):
             suggested_update_interval = timedelta(
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)
             )
-        # Current time is out of standby time
+        # If current time is out of standby time, calculate update_interval
         else:
             suggested_update_interval = timedelta(
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)
@@ -293,16 +293,13 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
             # Time until start of standby time is shorter than default update_interval for idle time
             if time_to_standby < suggested_update_interval.seconds:
+                # If time to standby is shorter than update_interval for working time
+                if (time_to_standby < (interval_working := self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING))):
+                    time_to_standby = interval_working
+
                 suggested_update_interval = timedelta(
                     seconds=time_to_standby
                 )
-
-        # Calculated suggested update_interval is shorter than five seconds
-        if (suggested_update_interval.total_seconds() < 5):
-            # Fallback: Set update interval to seconds for working time
-            suggested_update_interval = timedelta(
-                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING)
-            )
 
         # Set suggested update_interval
         if suggested_update_interval != self.update_interval:
