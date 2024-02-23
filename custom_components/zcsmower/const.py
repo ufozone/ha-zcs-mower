@@ -60,6 +60,7 @@ ATTR_LAST_PULL = "last_pull"
 ATTR_LAST_STATE = "last_state"
 ATTR_LAST_WAKE_UP = "last_wake_up"
 ATTR_LAST_TRACE_POSITION = "last_trace_position"
+ATTR_NEXT_PULL = "next_pull"
 ATTR_STATUS = "status"
 
 SERVICE_UPDATE_NOW = "update_now"

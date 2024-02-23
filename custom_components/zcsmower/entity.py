@@ -27,6 +27,7 @@ from .const import (
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
     ATTR_LAST_PULL,
+    ATTR_NEXT_PULL,
     ATTRIBUTION,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -144,6 +145,7 @@ class ZcsMowerEntity(CoordinatorEntity):
                 ATTR_LAST_COMM: self._get_attribute(ATTR_LAST_COMM),
                 ATTR_LAST_SEEN: self._get_attribute(ATTR_LAST_SEEN),
                 ATTR_LAST_PULL: self._get_attribute(ATTR_LAST_PULL),
+                ATTR_NEXT_PULL: self._get_attribute(ATTR_NEXT_PULL),
             }
         )
         return _extra_state_attributes

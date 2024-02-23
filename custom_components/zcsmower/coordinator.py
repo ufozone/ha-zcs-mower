@@ -61,6 +61,7 @@ from .const import (
     ATTR_LAST_STATE,
     ATTR_LAST_WAKE_UP,
     ATTR_LAST_TRACE_POSITION,
+    ATTR_NEXT_PULL,
     API_BASE_URI,
     API_APP_TOKEN,
     API_DATETIME_FORMAT_DEFAULT,
@@ -138,6 +139,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_LAST_STATE: None,
                 ATTR_LAST_WAKE_UP: None,
                 ATTR_LAST_TRACE_POSITION: None,
+                ATTR_NEXT_PULL: None,
             }
 
         self.standby_time_start = datetime.strptime(
@@ -148,6 +150,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             config_entry.options.get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
             "%H:%M:%S"
         )
+        self.next_pull = None
         self.set_update_interval()
 
         self._loop = asyncio.get_event_loop()
@@ -186,14 +189,14 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
+            # Set update interval
+            self.set_update_interval()
+
             # Update all mowers.
             await self.async_fetch_all_mowers()
 
             LOGGER.debug("_async_update_data")
             LOGGER.debug(self.data)
-
-            # Set update interval
-            self.set_update_interval()
 
             return self.data
         except ZcsMowerApiAuthenticationError as exception:
@@ -287,11 +290,19 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)
             )
             time_to_standby = (dt_util.as_local(self.standby_time_start) - now).seconds
-            # Time until start of standby time is shorter than default update interval
+
+            # Time until start of standby time is shorter than default update_interval for idle time
             if time_to_standby < suggested_update_interval.seconds:
                 suggested_update_interval = timedelta(
                     seconds=time_to_standby
                 )
+
+        # Calculated suggested update_interval is shorter than five seconds
+        if (suggested_update_interval.total_seconds() < 5):
+            # Fallback: Set update interval to seconds for working time
+            suggested_update_interval = timedelta(
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING)
+            )
 
         # Set suggested update_interval
         if suggested_update_interval != self.update_interval:
@@ -423,6 +434,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if "lastSeen" in data:
             mower[ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
         mower[ATTR_LAST_PULL] = self._get_datetime_now()
+        mower[ATTR_NEXT_PULL] = self.next_pull
 
         # Lawn mower is working
         if mower.get(ATTR_WORKING, False):
