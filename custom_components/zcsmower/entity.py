@@ -1,6 +1,10 @@
 """ZCS Lawn Mower Robot entity."""
 from __future__ import annotations
 
+from datetime import (
+    datetime,
+)
+
 from homeassistant.core import (
     callback,
     HomeAssistant,
@@ -88,6 +92,12 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Get attribute of the current mower."""
         return self.coordinator.data.get(self._imei, {}).get(attr, default_value)
 
+    def _get_next_pull(
+        self,
+    ) -> datetime | None:
+        """Get attribute of the current mower."""
+        return self.coordinator.next_pull
+
     def _get_localized_status(
         self,
     ) -> str:
@@ -145,7 +155,7 @@ class ZcsMowerEntity(CoordinatorEntity):
                 ATTR_LAST_COMM: self._get_attribute(ATTR_LAST_COMM),
                 ATTR_LAST_SEEN: self._get_attribute(ATTR_LAST_SEEN),
                 ATTR_LAST_PULL: self._get_attribute(ATTR_LAST_PULL),
-                ATTR_NEXT_PULL: self._get_attribute(ATTR_NEXT_PULL),
+                ATTR_NEXT_PULL: self._get_next_pull(),
             }
         )
         return _extra_state_attributes

@@ -61,7 +61,6 @@ from .const import (
     ATTR_LAST_STATE,
     ATTR_LAST_WAKE_UP,
     ATTR_LAST_TRACE_POSITION,
-    ATTR_NEXT_PULL,
     API_BASE_URI,
     API_APP_TOKEN,
     API_DATETIME_FORMAT_DEFAULT,
@@ -139,7 +138,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_LAST_STATE: None,
                 ATTR_LAST_WAKE_UP: None,
                 ATTR_LAST_TRACE_POSITION: None,
-                ATTR_NEXT_PULL: None,
             }
 
         self.standby_time_start = datetime.strptime(
@@ -151,7 +149,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             "%H:%M:%S"
         )
         self.next_pull = None
-        self.set_update_interval()
 
         self._loop = asyncio.get_event_loop()
         self._scheduled_update_listeners: asyncio.TimerHandle | None = None
@@ -189,14 +186,14 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            # Set update interval
-            self.set_update_interval()
-
             # Update all mowers.
             await self.async_fetch_all_mowers()
 
             LOGGER.debug("_async_update_data")
             LOGGER.debug(self.data)
+
+            # Set update interval
+            self.set_update_interval()
 
             return self.data
         except ZcsMowerApiAuthenticationError as exception:
@@ -276,30 +273,38 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
         # If one or more lawn mower(s) working, increase update_interval
         if self.has_working_mowers():
+            LOGGER.debug("Set update_interval: Working")
             suggested_update_interval = timedelta(
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING)
             )
         # If current time is in standby time, decrease update_interval
         elif self.is_standby_time(now):
+            LOGGER.debug("Set update_interval: Standby")
             suggested_update_interval = timedelta(
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)
             )
         # If current time is out of standby time, calculate update_interval
         else:
+            LOGGER.debug("Set update_interval: Idle")
             suggested_update_interval = timedelta(
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)
             )
             time_to_standby = (dt_util.as_local(self.standby_time_start) - now).seconds
 
-            # Time until start of standby time is shorter than default update_interval for idle time
+            # Time until start of standby time is shorter than update_interval for idle time
             if time_to_standby < suggested_update_interval.seconds:
+                LOGGER.debug("Set update_interval: Time until start of standby time is shorter than update_interval for idle time")
                 # If time to standby is shorter than update_interval for working time
                 if (time_to_standby < (interval_working := self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING))):
+                    LOGGER.debug("Set update_interval: Time to standby is shorter than update_interval for working time")
                     time_to_standby = interval_working
 
                 suggested_update_interval = timedelta(
                     seconds=time_to_standby
                 )
+
+        # Set next_pull
+        self.next_pull = now + suggested_update_interval
 
         # Set suggested update_interval
         if suggested_update_interval != self.update_interval:
@@ -431,7 +436,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if "lastSeen" in data:
             mower[ATTR_LAST_SEEN] = self._convert_datetime_from_api(data["lastSeen"])
         mower[ATTR_LAST_PULL] = self._get_datetime_now()
-        mower[ATTR_NEXT_PULL] = self.next_pull
 
         # Lawn mower is working
         if mower.get(ATTR_WORKING, False):
