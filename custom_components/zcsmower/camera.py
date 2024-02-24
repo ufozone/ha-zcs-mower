@@ -131,11 +131,10 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
             if latitude_current and longitude_current:
                 earth_radius = 6371008  # meters
                 offset = 100  # meters
-                pi = 3.14159265359
-                top_left_latitude = latitude_current - (offset / earth_radius) * (180 / pi)
-                top_left_longitude = longitude_current - (offset / earth_radius) * (180 / pi) / math.cos(latitude_current * pi / 180)
-                bottom_right_latitude = latitude_current + (offset / earth_radius) * (180 / pi)
-                bottom_right_longitude = longitude_current + (offset / earth_radius) * (180 / pi) / math.cos(latitude_current * pi / 180)
+                top_left_latitude = latitude_current - (offset / earth_radius) * (180 / math.pi)
+                top_left_longitude = longitude_current - (offset / earth_radius) * (180 / math.pi) / math.cos(latitude_current * math.pi / 180)
+                bottom_right_latitude = latitude_current + (offset / earth_radius) * (180 / math.pi)
+                bottom_right_longitude = longitude_current + (offset / earth_radius) * (180 / math.pi) / math.cos(latitude_current * math.pi / 180)
                 self.gps_top_left = (top_left_latitude, top_left_longitude)
                 self.gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
 
