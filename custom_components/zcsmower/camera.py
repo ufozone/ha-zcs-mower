@@ -336,7 +336,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         return map_image
 
     def _image_to_bytes(self) -> None:
-        """Saves generated image in variable."""
+        """Save generated image in variable."""
         img_byte_arr = io.BytesIO()
         self._image.save(
             img_byte_arr,
