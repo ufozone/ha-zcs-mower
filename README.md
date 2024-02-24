@@ -247,49 +247,87 @@ _This entity is disabled by default. You have to activate it if you want to use 
 
 ### Services
 
-* update_now:
+* `zcsmower.update_now`:
 
     Fetch data for lawn mower immediately from API.
 
-* set_profile:
+* `zcsmower.set_profile`:
 
     Configure the profile for auto-mode.
 
-* work_now:
+* `zcsmower.work_now`:
 
     Command the lawn mower to mow now.
 
-* work_for:
+* `zcsmower.work_for`:
 
     Command the lawn mower to mow for a certain duration.
 
-* work_until:
+* `zcsmower.work_until`:
 
     Command the lawn mower to mow until a certain time.
 
-* border_cut:
+* `zcsmower.border_cut`:
 
     Command the lawn mower to cut the border.
 
-* charge_now:
+* `zcsmower.charge_now`:
 
     Command the lawn mower to charge now.
 
-* charge_for:
+* `zcsmower.charge_for`:
 
     Command the lawn mower to charge for a certain duration.
 
-* charge_until:
+* `zcsmower.charge_until`:
 
     Command the lawn mower to charge until a certain time.
 
-* trace_position:
+* `zcsmower.trace_position`:
 
     Command the lawn mower to report its current position.
 
-* keep_out:
+* `zcsmower.keep_out`:
 
     Commands the lawn mower to keep out of a location (no-go area).
+
+* `zcsmower.custom_command`:
+
+    Send a custom command to the mower, like a command for a new feature, which is not implemented yet by this integration.
+
+## Usage
+
+* `vacuum.start`:
+
+    The lawn mower stats to mow, within the specified schedule.
+
+* `vacuum.stop`:
+
+    The lawn mower returns to the base and parks there until the next schedule starts.
+
+* `vacuum.return_to_base`:
+
+    Same as `vacuum.stop`.
+
+* `button.charge_now`:
+
+    Override schedule to charge lawn mower now.
+
+* `button.work_now`:
+
+    Override schedule to mow now.
+
+* `button.border_cut`:
+
+    Override schedule to cut the border now.
+
+* `number.charge_for`:
+
+    Override schedule to charge lawn mower for specified number of minutes.
+
+* `number.work_for`:
+
+    Override schedule to mow for specified number of minutes.
 
 ## Debugging
 
