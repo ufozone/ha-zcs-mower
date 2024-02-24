@@ -126,16 +126,16 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
             self.gps_bottom_right = self.config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)
         else:
             LOGGER.info("Map camera disabled")
-            latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
-            longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
-            if latitude and longitude:
+            latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
+            longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
+            if latitude_current and longitude_current:
                 earth_radius = 6371008  # meters
                 offset = 100  # meters
-                pi = 3.14159
-                top_left_latitude = latitude - (offset / earth_radius) * (180 / pi)
-                top_left_longitude = longitude - (offset / earth_radius) * (180 / pi) / math.cos(latitude * pi / 180)
-                bottom_right_latitude = latitude + (offset / earth_radius) * (180 / pi)
-                bottom_right_longitude = longitude + (offset / earth_radius) * (180 / pi) / math.cos(latitude * pi / 180)
+                pi = 3.14159265359
+                top_left_latitude = latitude_current - (offset / earth_radius) * (180 / pi)
+                top_left_longitude = longitude_current - (offset / earth_radius) * (180 / pi) / math.cos(latitude_current * pi / 180)
+                bottom_right_latitude = latitude_current + (offset / earth_radius) * (180 / pi)
+                bottom_right_longitude = longitude_current + (offset / earth_radius) * (180 / pi) / math.cos(latitude_current * pi / 180)
                 self.gps_top_left = (top_left_latitude, top_left_longitude)
                 self.gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
 
@@ -161,8 +161,8 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         try:
             if self.gps_top_left is not None and self.gps_bottom_right is not None:
                 img_draw = ImageDraw.Draw(map_image, "RGBA")
-                latitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
-                longitude = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
+                latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
+                longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
                 history_enable = self.config_entry.options.get(CONF_MAP_HISTORY_ENABLE, True)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
                 if history_enable and location_history is not None:
@@ -194,7 +194,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
                     # At second draw location points
                     marker_radius = 4
-                    map_point_items = location_history_items -1 if latitude and longitude else location_history_items
+                    map_point_items = location_history_items -1 if latitude_current and longitude_current else location_history_items
                     for i in range(map_point_first, map_point_items):
                         point = location_history[i]
                         scaled_loc = self._scale_to_image(
@@ -211,7 +211,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                             width=3
                         )
 
-                if latitude and longitude:
+                if latitude_current and longitude_current:
                     map_marker_path = self.config_entry.options.get(CONF_MAP_MARKER_PATH, None)
                     if not map_marker_path or not os.path.isfile(map_marker_path):
                         map_marker_path = f"{os.path.dirname(__file__)}/resources/marker.png"
@@ -219,8 +219,8 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                     map_marker_size = self._calculate_image_size(map_marker, (32, 32))
                     map_marker = map_marker.resize(map_marker_size)
 
-                    location = (latitude, longitude)
-                    x1, y1 = self._scale_to_image(location, map_image.size)
+                    location_current = (latitude_current, longitude_current)
+                    x1, y1 = self._scale_to_image(location_current, map_image.size)
                     img_w, img_h = map_marker.size
                     # TODO: sometimes we get ValueError: bad transparency mask
                     try:
