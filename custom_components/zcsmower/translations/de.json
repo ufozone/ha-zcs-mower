@@ -308,6 +308,24 @@
           "description": "Der Index wird benötigt, wenn der Rasenmäher mehrere Orte gleichzeitig nicht anfahren soll. Unterschiedliche Indexwerte pro No-Go-Area."
         }
       }
+    },
+    "custom_command": {
+      "name": "Individueller Befehl",
+      "description": "Sendet einen individuellen Befehl an den Rasenmäher, z. B. einen Befehl für eine neue Funktion, die von dieser Integration noch nicht implementiert ist.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        },
+        "command": {
+          "name": "Befehl",
+          "description": "Name des Befehls."
+        },
+        "params": {
+          "name": "Parameter",
+          "description": "Eingabe beliebiger Daten im YAML-Format."
+        }
+      }
     }
   },
   "entity": {

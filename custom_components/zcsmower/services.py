@@ -40,6 +40,8 @@ from .const import (
     SERVICE_TRACE_POSITION_SCHEMA,
     SERVICE_KEEP_OUT,
     SERVICE_KEEP_OUT_SCHEMA,
+    SERVICE_CUSTOM_COMMAND,
+    SERVICE_CUSTOM_COMMAND_SCHEMA,
 )
 
 
@@ -94,6 +96,8 @@ async def async_setup_services(hass: HomeAssistant) -> None:
             await _async_trace_position(hass, targets, data)
         elif service == SERVICE_KEEP_OUT:
             await _async_keep_out(hass, targets, data)
+        elif service == SERVICE_CUSTOM_COMMAND:
+            await _async_custom_command(hass, targets, data)
 
     hass.services.async_register(
         domain=DOMAIN,
@@ -160,6 +164,12 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         service=SERVICE_KEEP_OUT,
         service_func=async_handle_service,
         schema=SERVICE_KEEP_OUT_SCHEMA
+    )
+    hass.services.async_register(
+        domain=DOMAIN,
+        service=SERVICE_CUSTOM_COMMAND,
+        service_func=async_handle_service,
+        schema=SERVICE_CUSTOM_COMMAND_SCHEMA
     )
 
 async def _async_update_now(
@@ -318,5 +328,20 @@ async def _async_keep_out(
                 data.get("hours", None),
                 data.get("minutes", None),
                 data.get("index", None),
+            )
+        )
+
+async def _async_custom_command(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_custom_command(
+                imei,
+                data.get("command"),
+                data.get("params", None),
             )
         )

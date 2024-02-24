@@ -149,6 +149,15 @@ SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
         vol.Optional("index"): vol.Coerce(int),
     }
 )
+SERVICE_CUSTOM_COMMAND = "custom_command"
+SERVICE_CUSTOM_COMMAND_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
+        vol.Required("command"): str,
+        vol.Optional("params"): vol.Coerce(dict),
+    }
+)
+
 ATTRIBUTION = "Data gently provided by Telit IoT Platform"
 
 API_BASE_URI = "https://api-de.devicewise.com/api"

@@ -308,6 +308,24 @@
           "description": "Index is needed when the lawn mower is to keep out of multiple locations at the same time. Different index values per no-go area."
         }
       }
+    },
+    "custom_command": {
+      "name": "Custom command",
+      "description": "Send a custom command to the lawn mower, like a command for a new feature, which is not implemented yet by this integration.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        },
+        "command": {
+          "name": "Command",
+          "description": "Name of the command."
+        },
+        "params": {
+          "name": "Parameters",
+          "description": "Input arbitrary data in YAML form."
+        }
+      }
     }
   },
   "entity": {

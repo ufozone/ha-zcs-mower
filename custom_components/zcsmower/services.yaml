@@ -262,3 +262,25 @@ keep_out:
       selector:
         number:
           mode: box
+
+custom_command:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+    command:
+      required: true
+      example: "set_profile"
+      selector:
+        text:
+    params:
+      required: false
+      example: "profile: 3"
+      selector:
+        object:

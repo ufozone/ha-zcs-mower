@@ -308,6 +308,24 @@
           "description": "L'indice è necessario quando il tosaerba deve tenersi lontano da più aree contemporaneamente. Diversi valori dell'indice per ogni area vietata."
         }
       }
+    },
+    "custom_command": {
+      "name": "Comando customizzato",
+      "description": "Inviare un comando custom al tosaerba, ad esempio un comando per una nuova funzione non ancora implementata da questa integrazione.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        },
+        "command": {
+          "name": "Comando",
+          "description": "Nome del comando."
+        },
+        "params": {
+          "name": "Parametri",
+          "description": "Immissione di dati arbitrari in forma YAML."
+        }
+      }
     }
   },
   "entity": {
