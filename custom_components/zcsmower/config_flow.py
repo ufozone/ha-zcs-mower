@@ -116,7 +116,7 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 9
+    VERSION = 10
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     def __init__(self) -> None:
@@ -163,8 +163,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
-                    CONF_MAP_GPS_TOP_LEFT: "",
-                    CONF_MAP_GPS_BOTTOM_RIGHT: "",
+                    CONF_MAP_GPS_TOP_LEFT: None,
+                    CONF_MAP_GPS_BOTTOM_RIGHT: None,
                     CONF_MAP_HISTORY_ENABLE: True,
                     CONF_MAP_DRAW_LINES: True,
                     CONF_MAP_POINTS: int(MAP_POINTS_DEFAULT),
@@ -655,12 +655,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
         """Manage the ZCS Lawn Mower Robot map cam settings."""
         errors: dict[str, str] = {}
         gps_top_left = self._options.get(CONF_MAP_GPS_TOP_LEFT, "")
-        if gps_top_left != "":
+        if gps_top_left is not None:
             gps_top_left = ",".join(
                 [str(x) for x in gps_top_left]
             )
         gps_bottom_right = self._options.get(CONF_MAP_GPS_BOTTOM_RIGHT, "")
-        if gps_bottom_right != "":
+        if gps_bottom_right is not None:
             gps_bottom_right = ",".join(
                 [str(x) for x in gps_bottom_right]
             )
@@ -689,14 +689,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     }
                 )
                 if user_input.get(CONF_MAP_GPS_TOP_LEFT):
-                    gps_top_left = user_input.get(CONF_MAP_GPS_TOP_LEFT)
                     self._options[CONF_MAP_GPS_TOP_LEFT] = [
                         float(x.strip())
                         for x in user_input.get(CONF_MAP_GPS_TOP_LEFT).split(",")
                         if x
                     ]
                 if user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT):
-                    gps_bottom_right = user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT)
                     self._options[CONF_MAP_GPS_BOTTOM_RIGHT] = [
                         float(x.strip())
                         for x in user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).split(",")
@@ -707,6 +705,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     title="",
                     data=self._options,
                 )
+            else:
+                gps_top_left = user_input.get(CONF_MAP_GPS_TOP_LEFT)
+                gps_bottom_right = user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT)
+
         return self.async_show_form(
             step_id="camera",
             data_schema=vol.Schema(

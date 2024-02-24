@@ -154,5 +154,28 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             options=_options,
         )
 
+    if config_entry.version < 10:
+        config_entry.version = 10
+
+        if (gps_top_left := config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)) == "":
+            gps_top_left = None
+
+        if (gps_bottom_right := config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)) == "":
+            gps_bottom_right = None
+
+        _options = dict(config_entry.options)
+        _options.update(
+            {
+                CONF_MAP_GPS_TOP_LEFT: gps_top_left,
+                CONF_MAP_GPS_BOTTOM_RIGHT: gps_bottom_right,
+            }
+        )
+        hass.config_entries.async_update_entry(
+            config_entry,
+            title=str(config_entry.title),
+            data={},
+            options=_options,
+        )
+
     LOGGER.info("Migration to version %s successful", config_entry.version)
     return True
