@@ -17,11 +17,11 @@
           "name": "Nome del garage",
           "client_key": "Chiave cliente",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
-          "camera_enable": "Abilita la telecamera della mappa"
+          "map_enable": "Abilitare la mappa"
         }
       },
-      "camera": {
-        "title": "Configurare la telecamera della mappa",
+      "map": {
+        "title": "Configurare la mappa",
         "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
         "data": {
           "map_image_path": "Percorso dell'immagine della mappa",
@@ -70,7 +70,7 @@
           "add": "Aggiungi un tosaerba",
           "change": "Cambiare il tosaerba",
           "delete": "Rimuovere il tosaerba",
-          "camera": "Impostazioni della telecamera a mappa",
+          "map": "Impostazioni la mappa",
           "settings": "Impostazioni generali"
         }
       },
@@ -98,11 +98,11 @@
           "confirm": "Confermare l'eliminazione"
         }
       },
-      "camera": {
-        "title": "Configurare la telecamera della mappa",
+      "map": {
+        "title": "Configurare la mappa",
         "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
         "data": {
-          "camera_enable": "Attivare la telecamera della mappa?",
+          "map_enable": "Abilitare la mappa?",
           "map_image_path": "Percorso dell'immagine della mappa",
           "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
           "map_gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",

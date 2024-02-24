@@ -17,11 +17,11 @@
           "name": "Garagenname",
           "client_key": "Kundenschlüssel",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
-          "camera_enable": "Kartenkamera aktivieren?"
+          "map_enable": "Karte aktivieren?"
         }
       },
-      "camera": {
-        "title": "Konfigurieren der Kartenkamera",
+      "map": {
+        "title": "Konfigurieren der Karte",
         "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad.",
         "data": {
           "map_image_path": "Pfad zum Kartenbild",
@@ -70,7 +70,7 @@
           "add": "Rasenmähroboter hinzufügen",
           "change": "Rasenmähroboter bearbeiten",
           "delete": "Rasenmähroboter löschen",
-          "camera": "Einstellungen der Kartenkamera",
+          "map": "Einstellungen der Karte",
           "settings": "Allgemeine Einstellungen"
         }
       },
@@ -98,11 +98,11 @@
           "confirm": "Löschung bestätigen"
         }
       },
-      "camera": {
-        "title": "Konfigurieren der Kartenkamera",
+      "map": {
+        "title": "Konfigurieren der Karte",
         "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad.",
         "data": {
-          "camera_enable": "Kartenkamera aktivieren?",
+          "map_enable": "Karte aktivieren?",
           "map_image_path": "Pfad zum Kartenbild",
           "map_marker_path": "Pfad zum Bild des Mäherstandorts",
           "map_gps_top_left": "GPS-Koordinaten der oberen linken Bildecke (Längengrad, Breitengrad)",

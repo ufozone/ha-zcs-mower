@@ -23,7 +23,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
-    CONF_CAMERA_ENABLE,
+    CONF_MAP_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
     CONF_MAP_MARKER_PATH,
@@ -95,7 +95,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             data={},
             options={
                 CONF_CLIENT_KEY: config_entry.options.get(CONF_CLIENT_KEY, ""),
-                CONF_CAMERA_ENABLE: config_entry.options.get(CONF_CAMERA_ENABLE, False),
+                CONF_MAP_ENABLE: config_entry.options.get(CONF_MAP_ENABLE, False),
                 CONF_MAP_IMAGE_PATH: config_entry.options.get("img_path_map", ""),
                 CONF_MAP_MARKER_PATH: config_entry.options.get("img_path_marker", ""),
                 CONF_MAP_GPS_TOP_LEFT: config_entry.options.get("gps_top_left", ""),
@@ -166,10 +166,13 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         _options = dict(config_entry.options)
         _options.update(
             {
+                CONF_MAP_ENABLE: config_entry.options.get("camera_enable", CONF_MAP_ENABLE),
                 CONF_MAP_GPS_TOP_LEFT: gps_top_left,
                 CONF_MAP_GPS_BOTTOM_RIGHT: gps_bottom_right,
             }
         )
+        _options.pop("camera_enable")
+
         hass.config_entries.async_update_entry(
             config_entry,
             title=str(config_entry.title),

@@ -43,7 +43,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
-    CONF_CAMERA_ENABLE,
+    CONF_MAP_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
     CONF_MAP_MARKER_PATH,
@@ -160,7 +160,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                     CONF_WAKE_UP_INTERVAL_DEFAULT: int(ROBOT_WAKE_UP_INTERVAL_DEFAULT),
                     CONF_WAKE_UP_INTERVAL_INFINITY: int(ROBOT_WAKE_UP_INTERVAL_INFINITY),
-                    CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
+                    CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
                     CONF_MAP_GPS_TOP_LEFT: None,
@@ -172,9 +172,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 }
                 LOGGER.debug(self._options)
                 # Return the form of the next step
-                # If user ticked the box go to camera step
-                if user_input.get(CONF_CAMERA_ENABLE, False):
-                    return await self.async_step_camera()
+                # If user ticked the box go to map step
+                if user_input.get(CONF_MAP_ENABLE, False):
+                    return await self.async_step_map()
                 return await self.async_step_mower()
         return self.async_show_form(
             step_id="user",
@@ -200,18 +200,18 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                         CONF_TRACE_POSITION_ENABLE,
                     ): selector.BooleanSelector(),
                     vol.Optional(
-                        CONF_CAMERA_ENABLE,
+                        CONF_MAP_ENABLE,
                     ): selector.BooleanSelector(),
                 }
             ),
             errors=errors,
         )
 
-    async def async_step_camera(
+    async def async_step_map(
         self,
         user_input: dict[str, any] | None = None,
     ) -> FlowResult:
-        """Second step in config flow to configure camera."""
+        """Second step in config flow to configure map."""
         errors: dict[str, str] = {}
         if user_input is not None:
             image_map_path = user_input.get(CONF_MAP_IMAGE_PATH, "").strip()
@@ -252,7 +252,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 # Return the form of the next step
                 return await self.async_step_mower()
         return self.async_show_form(
-            step_id="camera",
+            step_id="map",
             data_schema=vol.Schema(
                 {
                     vol.Required(
@@ -410,7 +410,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 "add",
                 "change",
                 "delete",
-                "camera",
+                "map",
                 "settings",
             ],
         )
@@ -648,7 +648,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             errors=errors,
         )
 
-    async def async_step_camera(
+    async def async_step_map(
         self,
         user_input: dict | None = None
     ) -> FlowResult:
@@ -680,7 +680,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 # Input is valid, set data
                 self._options.update(
                     {
-                        CONF_CAMERA_ENABLE: user_input.get(CONF_CAMERA_ENABLE, False),
+                        CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                         CONF_MAP_IMAGE_PATH: image_map_path,
                         CONF_MAP_MARKER_PATH: image_marker_path,
                         CONF_MAP_HISTORY_ENABLE: user_input.get(CONF_MAP_HISTORY_ENABLE, True),
@@ -710,12 +710,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 gps_bottom_right = user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT)
 
         return self.async_show_form(
-            step_id="camera",
+            step_id="map",
             data_schema=vol.Schema(
                 {
                     vol.Optional(
-                        CONF_CAMERA_ENABLE,
-                        default=(user_input or self._options).get(CONF_CAMERA_ENABLE, False),
+                        CONF_MAP_ENABLE,
+                        default=(user_input or self._options).get(CONF_MAP_ENABLE, False),
                     ): selector.BooleanSelector(),
                     vol.Required(
                         CONF_MAP_IMAGE_PATH,

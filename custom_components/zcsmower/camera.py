@@ -36,7 +36,7 @@ from .const import (
     UPDATE_INTERVAL_WORKING,
     UPDATE_INTERVAL_STANDBY,
     MAP_POINTS_DEFAULT,
-    CONF_CAMERA_ENABLE,
+    CONF_MAP_ENABLE,
     CONF_MAP_IMAGE_PATH,
     CONF_MAP_MARKER_PATH,
     CONF_MAP_GPS_TOP_LEFT,
@@ -119,13 +119,13 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         self.gps_top_left = None
         self.gps_bottom_right = None
 
-        self._attr_entity_registry_enabled_default = self.config_entry.options.get(CONF_CAMERA_ENABLE, False)
+        self._attr_entity_registry_enabled_default = self.config_entry.options.get(CONF_MAP_ENABLE, False)
         if self._attr_entity_registry_enabled_default:
-            LOGGER.info("Map camera enabled")
+            LOGGER.info("Map enabled")
             self.gps_top_left = self.config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)
             self.gps_bottom_right = self.config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)
         else:
-            LOGGER.info("Map camera disabled")
+            LOGGER.info("Map disabled")
             latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
             longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
             if latitude_current and longitude_current:
@@ -138,13 +138,13 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 self.gps_top_left = (top_left_latitude, top_left_longitude)
                 self.gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
 
-        self._image = self._create_empty_map_image("Map camera initialization.")
+        self._image = self._create_empty_map_image("Map initialization.")
         self._image_bytes = None
         self._image_to_bytes()
         self._generate_image()
 
     def _generate_image(self) -> None:
-        if self.config_entry.options.get(CONF_CAMERA_ENABLE, False):
+        if self.config_entry.options.get(CONF_MAP_ENABLE, False):
             map_image_path = self.config_entry.options.get(CONF_MAP_IMAGE_PATH, None)
             if map_image_path and os.path.isfile(map_image_path):
                 map_image = Image.open(map_image_path, "r")
@@ -155,7 +155,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 map_image = self._create_empty_map_image("No valid path configured to a map image.")
                 LOGGER.warning("No valid map image path configured")
         else:
-            map_image = self._create_empty_map_image("Map camera is disabled.")
+            map_image = self._create_empty_map_image("Map is disabled.")
 
         try:
             if self.gps_top_left is not None and self.gps_bottom_right is not None:

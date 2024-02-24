@@ -17,11 +17,11 @@
           "name": "Garage Name",
           "client_key": "Client Key",
           "trace_position_enable": "Enable position tracing?",
-          "camera_enable": "Enable map camera"
+          "map_enable": "Enable map"
         }
       },
-      "camera": {
-        "title": "Configure map camera",
+      "map": {
+        "title": "Configure map",
         "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude.",
         "data": {
           "map_image_path": "Path to the map image",
@@ -70,7 +70,7 @@
           "add": "Add Lawn Mower",
           "change": "Change Lawn Mower",
           "delete": "Remove Lawn Mower",
-          "camera": "Map Cam Settings",
+          "map": "Map Settings",
           "settings": "General Settings"
         }
       },
@@ -98,11 +98,11 @@
           "confirm": "Confirm deletion"
         }
       },
-      "camera": {
-        "title": "Configure map camera",
+      "map": {
+        "title": "Configure map",
         "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude.",
         "data": {
-          "camera_enable": "Enable map camera?",
+          "map_enable": "Enable map?",
           "map_image_path": "Path to the map image",
           "map_marker_path": "Path to the mower location image",
           "map_gps_top_left": "GPS coordinates of the top left image corner (latitude, longitude)",
