@@ -11,7 +11,10 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import (
+    Entity,
+    EntityCategory,
+)
 
 from .const import (
     DOMAIN,
@@ -24,6 +27,7 @@ ENTITY_DESCRIPTIONS = (
         key="error",
         translation_key="error",
         device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
 )
 

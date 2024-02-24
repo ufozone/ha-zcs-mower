@@ -8,7 +8,10 @@ from homeassistant.components.button import (
     ButtonEntity,
     ButtonEntityDescription,
 )
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import (
+    Entity,
+    EntityCategory,
+)
 
 from .const import (
     DOMAIN,
@@ -22,6 +25,7 @@ ENTITY_DESCRIPTIONS = (
         icon="mdi:update",
         translation_key="update_now",
         device_class=ButtonDeviceClass.UPDATE,
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
     ButtonEntityDescription(
         key="work_now",

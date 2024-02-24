@@ -28,7 +28,10 @@ from homeassistant.components.camera import (
     CameraEntityDescription,
     CameraEntityFeature,
 )
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import (
+    Entity,
+    EntityCategory,
+)
 
 from .const import (
     LOGGER,
@@ -56,6 +59,7 @@ ENTITY_DESCRIPTIONS = (
         key="map",
         icon="mdi:map",
         translation_key="map",
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
 )
 
