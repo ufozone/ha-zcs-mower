@@ -153,8 +153,8 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 map_image_size = self._calculate_image_size(map_image, (600, 600))
                 map_image = map_image.resize(map_image_size)
             else:
-                map_image = self._create_empty_map_image("No valid path configured to a map cutout.")
-                LOGGER.warning("No valid map camera path configured")
+                map_image = self._create_empty_map_image("No valid path configured to a map image.")
+                LOGGER.warning("No valid map image path configured")
         else:
             map_image = self._create_empty_map_image("Map camera is disabled.")
 
@@ -163,9 +163,21 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 img_draw = ImageDraw.Draw(map_image, "RGBA")
                 latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
                 longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
+                if latitude_current and longitude_current:
+                    location_current = (latitude_current, longitude_current)
+                else:
+                    location_current = None
+
+                # Get location history
                 history_enable = self.config_entry.options.get(CONF_MAP_HISTORY_ENABLE, True)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
                 if history_enable and location_history is not None:
+                    # If current location is not last item in location history, append to it
+                    if location_current and location_current not in location_history[-1:]:
+                        LOGGER.debug("Map: Current location is not last item in location history")
+                        location_history.append(location_current)
+
+                    # Calculate map points
                     location_history_items = len(location_history)
                     map_point_max = int(self.config_entry.options.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT))
                     map_point_count = min(map_point_max, location_history_items)
@@ -211,7 +223,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                             width=3
                         )
 
-                if latitude_current and longitude_current:
+                if location_current:
                     map_marker_path = self.config_entry.options.get(CONF_MAP_MARKER_PATH, None)
                     if not map_marker_path or not os.path.isfile(map_marker_path):
                         map_marker_path = f"{os.path.dirname(__file__)}/resources/marker.png"
@@ -219,7 +231,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                     map_marker_size = self._calculate_image_size(map_marker, (32, 32))
                     map_marker = map_marker.resize(map_marker_size)
 
-                    location_current = (latitude_current, longitude_current)
                     x1, y1 = self._scale_to_image(location_current, map_image.size)
                     img_w, img_h = map_marker.size
                     # TODO: sometimes we get ValueError: bad transparency mask
