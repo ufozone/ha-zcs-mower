@@ -17,7 +17,13 @@ Latest -
 [![lint-badge]][lint-workflow]
 [![issues][issues-shield]][issues-link]
 
-ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. All Ambrogio, Techline, Wiper and some Kubota, Stiga and Wolf robotic lawn mowers with Connect module are supported.
+ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. All Ambrogio, Techline, Wiper and some Kubota, Stiga and Wolf robotic lawn mowers with Connect module are supported. This integration does not support Bluetooth connectivity with lawn mowers.
+
+## Examples of use
+
+With configured map, the lawn mower can be displayed on a [Lovelace Vacuum Map card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card):
+
+![Lovelace Card](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/lovelace-card.jpg?raw=true)
 
 ## Installation
 
@@ -85,7 +91,7 @@ Get client key from lawn mower mobile app:
 
 5. Type this information into the config flow dialog.
 
-### Map Camera
+### Map
 
 The camera entity will plot the current coordinates and location history of the lawn mower on a user provided image. To configure the entity you need to upload your desired map image and determine the coordinates of the top left corner and the bottom right corner of your selected image.
 

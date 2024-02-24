@@ -21,7 +21,7 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. All Amb
 
 ## Examples of use
 
-With the camera entity configured, the lawn mower can be displayed on a [Lovelace Vacuum Map card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card):
+With configured map, the lawn mower can be displayed on a [Lovelace Vacuum Map card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card):
 
 ![Lovelace Card](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/lovelace-card.jpg?raw=true)
 
@@ -91,7 +91,7 @@ Get client key from lawn mower mobile app:
 
 5. Type this information into the config flow dialog.
 
-### Map Camera
+### Map
 
 The camera entity will plot the current coordinates and location history of the lawn mower on a user provided image. To configure the entity you need to upload your desired map image and determine the coordinates of the top left corner and the bottom right corner of your selected image.
 
