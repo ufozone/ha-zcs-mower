@@ -21,7 +21,7 @@ ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. All Amb
 
 ## Examples of use
 
-With configured map, the lawn mower can be displayed on a [Lovelace Vacuum Map card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card):
+With configured map and activated vacuum entity, the lawn mower can be displayed on a [Lovelace Vacuum Map card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card):
 
 ![Lovelace Card](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/lovelace-card.jpg?raw=true)
 

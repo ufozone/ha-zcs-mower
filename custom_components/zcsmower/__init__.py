@@ -160,7 +160,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         if (gps_top_left := config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)) == "":
             gps_top_left = None
 
-        if (gps_bottom_right := config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)) == "":
+        if (gps_bottom_right := config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)) == "":
             gps_bottom_right = None
 
         _options = dict(config_entry.options)
