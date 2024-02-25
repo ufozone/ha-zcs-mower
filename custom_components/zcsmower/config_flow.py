@@ -17,6 +17,7 @@ from homeassistant.config_entries import (
 from homeassistant.const import (
     CONF_NAME,
     ATTR_NAME,
+    DEGREE,
     UnitOfTime,
 )
 from homeassistant.data_entry_flow import FlowResult
@@ -288,9 +289,10 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=-359.99,
-                            max=359.99,
+                            min=-360,
+                            max=360,
                             step=0.01,
+                            unit_of_measurement=DEGREE,
                         )
                     ),
                     vol.Optional(
@@ -762,9 +764,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=-359.99,
-                            max=359.99,
+                            min=-360,
+                            max=360,
                             step=0.01,
+                            unit_of_measurement=DEGREE,
                         )
                     ),
                     vol.Optional(
