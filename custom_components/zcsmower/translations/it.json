@@ -28,6 +28,7 @@
           "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
           "map_gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
           "map_gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
+          "map_rotation": "Rotazione in gradi, l'immagine è ruotata rispetto al nord vero",
           "map_history_enable": "La cronologia della posizione deve essere visualizzata sulla mappa?",
           "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?",
           "map_draw_lines": "Si devono tracciare linee tra i punti del sito?"
@@ -107,6 +108,7 @@
           "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
           "map_gps_top_left": "Coordinate GPS dell'angolo superiore sinistro dell'immagine (latitudine, longitudine)",
           "map_gps_bottom_right": "Coordinate GPS dell'angolo in basso a destra dell'immagine (latitudine, longitudine)",
+          "map_rotation": "Rotazione in gradi, l'immagine è ruotata rispetto al nord vero",
           "map_history_enable": "La cronologia della posizione deve essere visualizzata sulla mappa?",
           "map_points": "Qual è il numero massimo di punti di localizzazione da visualizzare sulla mappa?",
           "map_draw_lines": "Si devono tracciare linee tra i punti del sito?"
