@@ -20,6 +20,7 @@ PLATFORMS = [
     Platform.BUTTON,
     Platform.CAMERA,
     Platform.DEVICE_TRACKER,
+    Platform.IMAGE,
     Platform.LAWN_MOWER,
     Platform.NUMBER,
     Platform.SENSOR,
