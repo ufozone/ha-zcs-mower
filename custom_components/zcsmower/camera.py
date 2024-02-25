@@ -120,11 +120,11 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         self.content_type = "image/png"
         self.entity_description = entity_description
 
+        self.map_enabled = self.config_entry.options.get(CONF_MAP_ENABLE, False)
         self.gps_top_left = None
         self.gps_bottom_right = None
 
-        self._attr_entity_registry_enabled_default = self.config_entry.options.get(CONF_MAP_ENABLE, False)
-        if self._attr_entity_registry_enabled_default:
+        if self.map_enabled:
             LOGGER.info("Map enabled")
             self.gps_top_left = self.config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)
             self.gps_bottom_right = self.config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)
@@ -150,7 +150,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         self._generate_image()
 
     def _generate_image(self) -> None:
-        if self.config_entry.options.get(CONF_MAP_ENABLE, False):
+        if self.map_enabled:
             map_image_path = self.config_entry.options.get(CONF_MAP_IMAGE_PATH, None)
             if map_image_path and os.path.isfile(map_image_path):
                 map_image = Image.open(map_image_path, "r")
@@ -348,7 +348,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        if self._attr_entity_registry_enabled_default:
+        if self.map_enabled:
             calibration_points = []
             for point in [
                 self.gps_top_left,
