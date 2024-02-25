@@ -27,7 +27,7 @@ With configured map and activated vacuum entity, the lawn mower can be displayed
 
 ## Installation
 
-Requires Home Assistant 2023.11.0 or newer.
+Requires Home Assistant 2024.2.0 or newer.
 
 ### Installation through HACS
 
@@ -93,9 +93,9 @@ Get client key from lawn mower mobile app:
 
 ### Map
 
-The camera entity will plot the current coordinates and location history of the lawn mower on a user provided image. To configure the entity you need to upload your desired map image and determine the coordinates of the top left corner and the bottom right corner of your selected image.
+The image entity will plot the current coordinates and location history of the lawn mower on a user provided image. To configure the entity you need to upload your desired map image and determine the coordinates of the top left corner and the bottom right corner of your selected image.
 
-The camera entity is configured via the setup and options flow on the integration. 
+The image entity is configured via the setup and options flow on the integration. 
 
 You can then provide the path to the image you would like to use for the map and marker. 
 
@@ -139,7 +139,7 @@ Get IMEI from your lawn mower(s):
 
 ### General
 
-* all entities
+* All entities
 
     ```
     attributes: 
@@ -169,6 +169,8 @@ Get IMEI from your lawn mower(s):
 
 ### Camera
 
+_This entity is deprecated and is disabled by default. Do not activate it as it will be removed in version 1.2.1. Use the [image](#image) entity instead._
+
 * map
 
     ```
@@ -183,6 +185,15 @@ Get IMEI from your lawn mower(s):
     ```
     attributes: 
     latitude, longitude, source_type (GPS)
+    ```
+
+### Image
+
+* map
+
+    ```
+    attributes: 
+    calibration_points
     ```
 
 ### Lawn Mower

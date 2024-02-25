@@ -14,8 +14,8 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/ufozone/ha-zcs-mower/issues",
   "requirements": [
-    "numpy>=1.21.6",
-    "pillow>=9.5.0"
+    "numpy==1.26.0",
+    "Pillow>=10.2.0"
   ],
   "version": "1.2.0"
 }

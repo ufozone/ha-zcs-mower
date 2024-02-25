@@ -1,4 +1,4 @@
-"""ZCS Lawn Mower Robot camera platform."""
+"""ZCS Lawn Mower Robot image platform."""
 from __future__ import annotations
 
 import io
@@ -16,28 +16,24 @@ from homeassistant.core import (
     HomeAssistant,
 )
 from homeassistant.const import (
-    ATTR_MANUFACTURER,
-    ATTR_MODEL,
     ATTR_LOCATION,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.camera import (
-    Camera,
-    CameraEntityDescription,
-    CameraEntityFeature,
+from homeassistant.components.image import (
+    ImageEntity,
+    ImageEntityDescription,
 )
 from homeassistant.helpers.entity import (
     Entity,
     EntityCategory,
 )
+import homeassistant.util.dt as dt_util
 
 from .const import (
     LOGGER,
     DOMAIN,
-    UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_STANDBY,
     MAP_POINTS_DEFAULT,
     CONF_MAP_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -47,7 +43,6 @@ from .const import (
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_POINTS,
     CONF_MAP_DRAW_LINES,
-    ATTR_WORKING,
     ATTR_LOCATION_HISTORY,
     ATTR_CALIBRATION,
 )
@@ -55,7 +50,7 @@ from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 ENTITY_DESCRIPTIONS = (
-    CameraEntityDescription(
+    ImageEntityDescription(
         key="map",
         icon="mdi:map",
         translation_key="map",
@@ -73,11 +68,11 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: Entity,
 ) -> None:
-    """Do setup cameras from a config entry created in the integrations UI."""
+    """Do setup images from a config entry created in the integrations UI."""
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         [
-            ZcsMowerCameraEntity(
+            ZcsMowerImageEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -91,30 +86,28 @@ async def async_setup_entry(
     )
 
 
-class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
-    """Representation of a ZCS Lawn Mower Robot camera."""
+class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
+    """Representation of a ZCS Lawn Mower Robot image."""
 
     _attr_entity_registry_enabled_default = False
-    _attr_frame_interval: float = UPDATE_INTERVAL_WORKING
     _attr_name = "Map"
-    _attr_should_poll = True
 
     def __init__(
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
-        entity_description: CameraEntityDescription,
+        entity_description: ImageEntityDescription,
         imei: str,
     ) -> None:
-        """Initialize the camera class."""
-        Camera.__init__(self)
+        """Initialize the image class."""
+        ImageEntity.__init__(self, hass)
         super().__init__(
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
             imei=imei,
-            entity_type="camera",
+            entity_type="image",
             entity_key=entity_description.key,
         )
         self.content_type = "image/png"
@@ -124,6 +117,9 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         self.gps_top_left = None
         self.gps_bottom_right = None
 
+        self.last_location_history = None
+
+        self._attr_entity_registry_enabled_default = self.map_enabled
         if self.map_enabled:
             LOGGER.info("Map enabled")
             self.gps_top_left = self.config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)
@@ -141,8 +137,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 bottom_right_longitude = longitude_current + (offset / earth_radius) * (180 / math.pi) / math.cos(latitude_current * math.pi / 180)
                 self.gps_top_left = (top_left_latitude, top_left_longitude)
                 self.gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
-
-        LOGGER.warning(f"The 'camera.{self._unique_id}' entity is deprecated, use the 'image.{self._unique_id}' entity instead")
 
         self._image = self._create_empty_map_image("Map initialization.")
         self._image_bytes = None
@@ -167,8 +161,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         try:
             if self.gps_top_left is not None and self.gps_bottom_right is not None:
                 img_draw = ImageDraw.Draw(map_image, "RGBA")
-                img_draw.text((20, 20), f"The 'camera.{self._unique_id}' entity is deprecated,", fill=(255, 0, 0))
-                img_draw.text((20, 40), f"use the 'image.{self._unique_id}' entity instead", fill=(255, 0, 0))
                 latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
                 longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
                 if latitude_current and longitude_current:
@@ -179,7 +171,14 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 # Get location history
                 history_enable = self.config_entry.options.get(CONF_MAP_HISTORY_ENABLE, True)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
+
+                # If history has not change, bort generation
+                if self.last_location_history == location_history:
+                    return None
+
                 if history_enable and location_history is not None:
+                    self.last_location_history = location_history
+
                     # If current location is not last item in location history, append to it
                     if location_current and location_current not in location_history[-1:]:
                         LOGGER.debug("Map: Current location is not last item in location history")
@@ -252,6 +251,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
             map_image = self._create_empty_map_image("Could not generate the map. Check error log for details.")
             LOGGER.exception(exception)
 
+        self._attr_image_last_updated = dt_util.utcnow()
         self._image = map_image
         self._image_to_bytes()
 
@@ -377,44 +377,11 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 ATTR_CALIBRATION: calibration_points,
             }
 
-    def camera_image(
+    def image(
         self, width: int | None = None, height: int | None = None
     ) -> bytes | None:
-        """Return the camera image."""
+        """Return the image."""
         return self._image_bytes
-
-    @property
-    def brand(self) -> str | None:
-        """Return the lawn mower brand."""
-        return self._get_attribute(ATTR_MANUFACTURER)
-
-    @property
-    def model(self) -> str:
-        """Return the lawn mower model."""
-        return self._get_attribute(ATTR_MODEL)
-
-    @property
-    def supported_features(self) -> int:
-        """Show supported features."""
-        return CameraEntityFeature.ON_OFF
-
-    @property
-    def is_streaming(self) -> bool:
-        """Return true if the lawn mower is working."""
-        return self._get_attribute(ATTR_WORKING, False)
-
-    @property
-    def should_poll(self) -> bool:
-        """Return polling enabled."""
-        return self._attr_should_poll
-
-    def turn_off(self) -> None:
-        """Disable polling for map image."""
-        self._attr_should_poll = False
-
-    def turn_on(self) -> None:
-        """Enable polling for map image."""
-        self._attr_should_poll = True
 
     async def async_update(self) -> None:
         """Handle map image update."""
@@ -425,8 +392,3 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         """Handle updated data from the coordinator and set frame interval according to working status."""
         super()._handle_coordinator_update()
         self._generate_image()
-
-        if self._get_attribute(ATTR_WORKING, False):
-            self._attr_frame_interval = UPDATE_INTERVAL_WORKING
-        else:
-            self._attr_frame_interval = UPDATE_INTERVAL_STANDBY
