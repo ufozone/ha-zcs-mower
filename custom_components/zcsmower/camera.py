@@ -151,6 +151,10 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
         LOGGER.warning(f"The 'camera.{self._unique_id}' entity is deprecated, use the 'image.{self._unique_id}' entity instead")
 
+        self._image_scale = None
+        self._image_center_px = None
+        self._image_center_gps = None
+
         self._image = self._create_empty_map_image("Map initialization.")
         self._image_bytes = None
         self._image_to_bytes()
@@ -307,43 +311,52 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
 
         return tuple(point)
 
+    def _find_image_scale(
+        self,
+        size: ImgDimensions,
+    ):
+        """Find the scale ration in m/px and centers of image."""
+        # Length of hypotenuse in meters
+        len_meter = geodesic(self.map_gps_top_left, self.map_gps_bottom_right).meters
+
+        # Length of hypotenuse in pixels
+        len_px = int(math.dist((0, 0), size))
+
+        # Scale in pixels/meter
+        self._image_scale = len_px / len_meter
+
+        # Center of image in pixels
+        self._image_center_px = int((0 + size[0]) / 2), int(
+            (0 + size[1]) / 2
+        )
+        # Center of image in lat/long
+        self._image_center_gps = (
+            (self.map_gps_top_left[0] + self.map_gps_bottom_right[0]) / 2,
+            (self.map_gps_top_left[1] + self.map_gps_bottom_right[1]) / 2,
+        )
+
     def _scale_to_image(
         self,
         location: GpsPoint,
         size: ImgDimensions
     ) -> ImgPoint:
         """Convert from latitude and longitude to the image pixels."""
-        # Center of image in pixels
-        _c_img_px = int((0 + size[0]) / 2), int(
-            (0 + size[1]) / 2
-        )
-        # Center of image in lat/long
-        _c_img_wgs84 = (
-            (self.map_gps_top_left[0] + self.map_gps_bottom_right[0]) / 2,
-            (self.map_gps_top_left[1] + self.map_gps_bottom_right[1]) / 2,
-        )
-        # Length of hypotenuse in meters
-        len_wgs84_m = geodesic(self.map_gps_top_left, self.map_gps_bottom_right).meters
+        # If image scale is not calculated, do it
+        if self._image_scale is None:
+            self._find_image_scale(size)
 
-        # Length of hypotenuse in pixels
-        len_px = int(math.dist((0, 0), size))
-
-        # Scale in pixels/meter
-        _px_meter = len_px / len_wgs84_m
-
-        # Start calculating
-        bearing_res = distance(_c_img_wgs84, location).geod.Inverse(
-            _c_img_wgs84[0], _c_img_wgs84[1], location[0], location[1]
+        bearing_res = distance(self._image_center_gps, location).geod.Inverse(
+            self._image_center_gps[0], self._image_center_gps[1], location[0], location[1]
         )
         c_bearing_deg = bearing_res.get("azi1")
         c_plt_pnt_m = bearing_res.get("s12") * 1000
         c_bearing = math.radians(c_bearing_deg - 90 + self.map_rotation)
 
-        new_pnt_px = (
-            _c_img_px[0] + (c_plt_pnt_m * _px_meter * math.cos(c_bearing)),
-            _c_img_px[1] + (c_plt_pnt_m * _px_meter * math.sin(c_bearing)),
+        point_px = (
+            self._image_center_px[0] + (c_plt_pnt_m * self._image_scale * math.cos(c_bearing)),
+            self._image_center_px[1] + (c_plt_pnt_m * self._image_scale * math.sin(c_bearing)),
         )
-        return int(new_pnt_px[0]), int(new_pnt_px[1])
+        return int(point_px[0]), int(point_px[1])
 
     def _calculate_image_size(
         self,
