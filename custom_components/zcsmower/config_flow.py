@@ -49,6 +49,7 @@ from .const import (
     CONF_MAP_MARKER_PATH,
     CONF_MAP_GPS_TOP_LEFT,
     CONF_MAP_GPS_BOTTOM_RIGHT,
+    CONF_MAP_ROTATION,
     CONF_MAP_DRAW_LINES,
     CONF_MAP_POINTS,
     CONF_MOWERS,
@@ -165,6 +166,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_MAP_MARKER_PATH: "",
                     CONF_MAP_GPS_TOP_LEFT: None,
                     CONF_MAP_GPS_BOTTOM_RIGHT: None,
+                    CONF_MAP_ROTATION: 0.0,
                     CONF_MAP_HISTORY_ENABLE: True,
                     CONF_MAP_DRAW_LINES: True,
                     CONF_MAP_POINTS: int(MAP_POINTS_DEFAULT),
@@ -231,6 +233,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     {
                         CONF_MAP_IMAGE_PATH: image_map_path,
                         CONF_MAP_MARKER_PATH: image_marker_path,
+                        CONF_MAP_ROTATION: float(user_input.get(CONF_MAP_ROTATION, 0.0)),
                         CONF_MAP_HISTORY_ENABLE: user_input.get(CONF_MAP_HISTORY_ENABLE, True),
                         CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
                         CONF_MAP_DRAW_LINES: user_input.get(CONF_MAP_DRAW_LINES, False),
@@ -278,6 +281,17 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
+                    ),
+                    vol.Required(
+                        CONF_MAP_ROTATION,
+                        default=(user_input or {}).get(CONF_MAP_ROTATION, 0.0),
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
+                            min=-359.99,
+                            max=359.99,
+                            step=0.01,
+                        )
                     ),
                     vol.Optional(
                         CONF_MAP_MARKER_PATH,
@@ -683,6 +697,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                         CONF_MAP_IMAGE_PATH: image_map_path,
                         CONF_MAP_MARKER_PATH: image_marker_path,
+                        CONF_MAP_ROTATION: float(user_input.get(CONF_MAP_ROTATION, 0.0)),
                         CONF_MAP_HISTORY_ENABLE: user_input.get(CONF_MAP_HISTORY_ENABLE, True),
                         CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
                         CONF_MAP_DRAW_LINES: user_input.get(CONF_MAP_DRAW_LINES, False),
@@ -740,6 +755,17 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
                         ),
+                    ),
+                    vol.Required(
+                        CONF_MAP_ROTATION,
+                        default=(user_input or self._options).get(CONF_MAP_ROTATION, 0.0),
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
+                            min=-359.99,
+                            max=359.99,
+                            step=0.01,
+                        )
                     ),
                     vol.Optional(
                         CONF_MAP_MARKER_PATH,

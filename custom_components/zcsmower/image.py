@@ -6,6 +6,10 @@ import os
 import math
 import numpy as np
 
+from geopy.distance import (
+    distance,
+    geodesic,
+)
 from PIL import (
     Image,
     ImageDraw,
@@ -40,6 +44,7 @@ from .const import (
     CONF_MAP_MARKER_PATH,
     CONF_MAP_GPS_TOP_LEFT,
     CONF_MAP_GPS_BOTTOM_RIGHT,
+    CONF_MAP_ROTATION,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_POINTS,
     CONF_MAP_DRAW_LINES,
@@ -114,16 +119,18 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         self.entity_description = entity_description
 
         self.map_enabled = self.config_entry.options.get(CONF_MAP_ENABLE, False)
-        self.gps_top_left = None
-        self.gps_bottom_right = None
+        self.map_gps_top_left = None
+        self.map_gps_bottom_right = None
+        self.map_rotation = 0
 
         self.last_location_history = None
 
         self._attr_entity_registry_enabled_default = self.map_enabled
         if self.map_enabled:
             LOGGER.info("Map enabled")
-            self.gps_top_left = self.config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)
-            self.gps_bottom_right = self.config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)
+            self.map_gps_top_left = self.config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)
+            self.map_gps_bottom_right = self.config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)
+            self.map_rotation = self.config_entry.options.get(CONF_MAP_ROTATION, 0.0)
         else:
             LOGGER.info("Map disabled")
             latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
@@ -135,8 +142,12 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
                 top_left_longitude = longitude_current - (offset / earth_radius) * (180 / math.pi) / math.cos(latitude_current * math.pi / 180)
                 bottom_right_latitude = latitude_current + (offset / earth_radius) * (180 / math.pi)
                 bottom_right_longitude = longitude_current + (offset / earth_radius) * (180 / math.pi) / math.cos(latitude_current * math.pi / 180)
-                self.gps_top_left = (top_left_latitude, top_left_longitude)
-                self.gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
+                self.map_gps_top_left = (top_left_latitude, top_left_longitude)
+                self.map_gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
+
+        self._image_scale = None
+        self._image_center_px = None
+        self._image_center_gps = None
 
         self._image = self._create_empty_map_image("Map initialization.")
         self._image_bytes = None
@@ -159,7 +170,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
             map_image = self._create_empty_map_image("Map is disabled.")
 
         try:
-            if self.gps_top_left is not None and self.gps_bottom_right is not None:
+            if self.map_gps_top_left is not None and self.map_gps_bottom_right is not None:
                 img_draw = ImageDraw.Draw(map_image, "RGBA")
                 latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
                 longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
@@ -300,21 +311,52 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
 
         return tuple(point)
 
+    def _find_image_scale(
+        self,
+        size: ImgDimensions,
+    ):
+        """Find the scale ration in m/px and centers of image."""
+        # Length of hypotenuse in meters
+        len_meter = geodesic(self.map_gps_top_left, self.map_gps_bottom_right).meters
+
+        # Length of hypotenuse in pixels
+        len_px = int(math.dist((0, 0), size))
+
+        # Scale in pixels/meter
+        self._image_scale = len_px / len_meter
+
+        # Center of image in pixels
+        self._image_center_px = int((0 + size[0]) / 2), int(
+            (0 + size[1]) / 2
+        )
+        # Center of image in lat/long
+        self._image_center_gps = (
+            (self.map_gps_top_left[0] + self.map_gps_bottom_right[0]) / 2,
+            (self.map_gps_top_left[1] + self.map_gps_bottom_right[1]) / 2,
+        )
+
     def _scale_to_image(
         self,
         location: GpsPoint,
         size: ImgDimensions
     ) -> ImgPoint:
         """Convert from latitude and longitude to the image pixels."""
-        y_gps = (self.gps_bottom_right[0], self.gps_top_left[0])
-        y_img = (0, size[1])
-        y = ((location[0] - y_gps[0]) * (y_img[1] - y_img[0]) / (y_gps[1] - y_gps[0])) + y_img[0]
+        # If image scale is not calculated, do it
+        if self._image_scale is None:
+            self._find_image_scale(size)
 
-        x_gps = (self.gps_top_left[1], self.gps_bottom_right[1])
-        x_img = (0, size[0])
-        x = ((location[1] - x_gps[0]) * (x_img[1] - x_img[0]) / (x_gps[1] - x_gps[0])) + x_img[0]
+        bearing_res = distance(self._image_center_gps, location).geod.Inverse(
+            self._image_center_gps[0], self._image_center_gps[1], location[0], location[1]
+        )
+        bearing_center_deg = bearing_res.get("azi1")
+        plot_point_center_meter = bearing_res.get("s12") * 1000
+        bearing_center = math.radians(bearing_center_deg - 90 + self.map_rotation)
 
-        return (int(x), size[1] - int(y))
+        point_px = (
+            self._image_center_px[0] + (plot_point_center_meter * self._image_scale * math.cos(bearing_center)),
+            self._image_center_px[1] + (plot_point_center_meter * self._image_scale * math.sin(bearing_center)),
+        )
+        return int(point_px[0]), int(point_px[1])
 
     def _calculate_image_size(
         self,
@@ -355,8 +397,8 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         if self.map_enabled:
             calibration_points = []
             for point in [
-                self.gps_top_left,
-                self.gps_bottom_right,
+                self.map_gps_top_left,
+                self.map_gps_bottom_right,
             ]:
                 img_point = self._scale_to_image(
                     (point[0], point[1]), (self._image.size[0], self._image.size[1])
