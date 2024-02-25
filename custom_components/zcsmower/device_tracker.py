@@ -119,6 +119,11 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         )
 
     @property
+    def location_accuracy(self):
+        """Return the gps accuracy of the device."""
+        return 10
+
+    @property
     def latitude(self) -> float | None:
         """Return latitude value of the device."""
         location = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
