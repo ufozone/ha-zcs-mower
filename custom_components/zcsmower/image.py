@@ -348,13 +348,13 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         bearing_res = distance(self._image_center_gps, location).geod.Inverse(
             self._image_center_gps[0], self._image_center_gps[1], location[0], location[1]
         )
-        c_bearing_deg = bearing_res.get("azi1")
-        c_plt_pnt_m = bearing_res.get("s12") * 1000
-        c_bearing = math.radians(c_bearing_deg - 90 + self.map_rotation)
+        bearing_center_deg = bearing_res.get("azi1")
+        plot_point_center_meter = bearing_res.get("s12") * 1000
+        bearing_center = math.radians(bearing_center_deg - 90 + self.map_rotation)
 
         point_px = (
-            self._image_center_px[0] + (c_plt_pnt_m * self._image_scale * math.cos(c_bearing)),
-            self._image_center_px[1] + (c_plt_pnt_m * self._image_scale * math.sin(c_bearing)),
+            self._image_center_px[0] + (plot_point_center_meter * self._image_scale * math.cos(bearing_center)),
+            self._image_center_px[1] + (plot_point_center_meter * self._image_scale * math.sin(bearing_center)),
         )
         return int(point_px[0]), int(point_px[1])
 
