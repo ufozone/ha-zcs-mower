@@ -143,6 +143,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         self._generate_image()
 
     def _generate_image(self) -> None:
+        """Generate image."""
         if self.config_entry.options.get(CONF_MAP_ENABLE, False):
             map_image_path = self.config_entry.options.get(CONF_MAP_IMAGE_PATH, None)
             if map_image_path and os.path.isfile(map_image_path):
@@ -267,6 +268,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         point_1: ImgPoint,
         point_2: ImgPoint,
     ) -> list[ImgPoint]:
+        """Find points on line between two points."""
         dash_length = 10
         line_length = math.sqrt(
             (point_2[0] - point_1[0]) ** 2 + (point_2[1] - point_1[1]) ** 2
@@ -288,6 +290,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         terminal_pt: ImgPoint,
         distance: int,
     ) -> ImgPoint:
+        """Get point on vector."""
         v = np.array(initial_pt, dtype=float)
         u = np.array(terminal_pt, dtype=float)
         n = v - u
@@ -298,17 +301,17 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
 
     def _scale_to_image(
         self,
-        lat_lon: GpsPoint,
+        location: GpsPoint,
         size: ImgDimensions
     ) -> ImgPoint:
         """Convert from latitude and longitude to the image pixels."""
-        old = (self.gps_bottom_right[0], self.gps_top_left[0])
-        new = (0, size[1])
-        y = ((lat_lon[0] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
+        y_gps = (self.gps_bottom_right[0], self.gps_top_left[0])
+        y_img = (0, size[1])
+        y = ((location[0] - y_gps[0]) * (y_img[1] - y_img[0]) / (y_gps[1] - y_gps[0])) + y_img[0]
 
-        old = (self.gps_top_left[1], self.gps_bottom_right[1])
-        new = (0, size[0])
-        x = ((lat_lon[1] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
+        x_gps = (self.gps_top_left[1], self.gps_bottom_right[1])
+        x_img = (0, size[0])
+        x = ((location[1] - x_gps[0]) * (x_img[1] - x_img[0]) / (x_gps[1] - x_gps[0])) + x_img[0]
 
         return (int(x), size[1] - int(y))
 
@@ -336,6 +339,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         return map_image
 
     def _image_to_bytes(self) -> None:
+        """Save generated image in variable."""
         img_byte_arr = io.BytesIO()
         self._image.save(
             img_byte_arr,

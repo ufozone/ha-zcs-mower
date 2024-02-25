@@ -142,6 +142,8 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 self.gps_top_left = (top_left_latitude, top_left_longitude)
                 self.gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
 
+        LOGGER.warning(f"The 'camera.{self._unique_id}' entity is deprecated, use the 'image.{self._unique_id}' entity instead")
+
         self._image = self._create_empty_map_image("Map initialization.")
         self._image_bytes = None
         self._image_to_bytes()
@@ -164,6 +166,8 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         try:
             if self.gps_top_left is not None and self.gps_bottom_right is not None:
                 img_draw = ImageDraw.Draw(map_image, "RGBA")
+                img_draw.text((20, 20), f"The 'camera.{self._unique_id}' entity is deprecated,", fill=(255, 0, 0))
+                img_draw.text((20, 40), f"use the 'image.{self._unique_id}' entity instead", fill=(255, 0, 0))
                 latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
                 longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
                 if latitude_current and longitude_current:
