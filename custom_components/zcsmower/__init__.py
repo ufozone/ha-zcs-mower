@@ -29,6 +29,7 @@ from .const import (
     CONF_MAP_MARKER_PATH,
     CONF_MAP_GPS_TOP_LEFT,
     CONF_MAP_GPS_BOTTOM_RIGHT,
+    CONF_MAP_ROTATION,
     CONF_MAP_POINTS,
     CONF_MAP_DRAW_LINES,
     CONF_MOWERS,
@@ -169,6 +170,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                 CONF_MAP_ENABLE: config_entry.options.get("camera_enable", CONF_MAP_ENABLE),
                 CONF_MAP_GPS_TOP_LEFT: gps_top_left,
                 CONF_MAP_GPS_BOTTOM_RIGHT: gps_bottom_right,
+                CONF_MAP_ROTATION: 0.0,
             }
         )
         _options.pop("camera_enable")
