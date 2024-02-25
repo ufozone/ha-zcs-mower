@@ -1,6 +1,8 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
+import os
+
 from datetime import timedelta
 
 from homeassistant.core import HomeAssistant
@@ -25,7 +27,9 @@ from homeassistant.helpers.entity import (
 import homeassistant.util.dt as dt_util
 
 from .const import (
+    LOGGER,
     DOMAIN,
+    CONF_MAP_MARKER_PATH,
     LOCATION_HISTORY_DAYS,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -139,3 +143,14 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
     def device_class(self):
         """Return Device Class."""
         return None
+
+    @property
+    def entity_picture(self) -> str | None:
+        """Return the picture of the device."""
+        map_marker_path = self.config_entry.options.get(CONF_MAP_MARKER_PATH, None)
+        if not map_marker_path or not os.path.isfile(map_marker_path):
+            return None
+
+        # TODO: config attribute for using marker as entity picture
+        # "/local/l35.png"
+        return map_marker_path
