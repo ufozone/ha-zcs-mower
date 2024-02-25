@@ -5,4 +5,4 @@ pydocstyle==6.3.0
 isort==5.13.2
 numpy==1.26.0
 Pillow==10.2.0
-pytest-homeassistant-custom-component==0.13.99
+pytest-homeassistant-custom-component==0.13.102
