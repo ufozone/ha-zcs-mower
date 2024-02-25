@@ -13,8 +13,14 @@
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/ufozone/ha-zcs-mower/issues",
+  "loggers": [
+    "geopy",
+    "numpy",
+    "Pillow"
+  ],
   "requirements": [
-    "numpy==1.26.0",
+    "geopy>=2.3.0",
+    "numpy>=1.26.0",
     "Pillow>=10.2.0"
   ],
   "version": "1.2.0"
