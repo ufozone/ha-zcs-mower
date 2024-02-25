@@ -363,6 +363,319 @@
         }
       }
     },
+    "button": {
+      "update_now": {
+        "name": "Aktualisiere jetzt",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "work_now": {
+        "name": "Mähe jetzt",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "charge_now": {
+        "name": "Lade jetzt",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "border_cut": {
+        "name": "Randmähen",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "trace_position": {
+        "name": "Position verfolgen",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      }
+    },
+    "camera": {
+      "map": {
+        "name": "Karte",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          },
+          "calibration_points": {
+            "name": "Kalibrierungspunkte"
+          }
+        }
+      }
+    },
+    "device_tracker": {
+      "location": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      }
+    },
+    "image": {
+      "map": {
+        "name": "Karte",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          },
+          "calibration_points": {
+            "name": "Kalibrierungspunkte"
+          }
+        }
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      }
+    },
+    "number": {
+      "work_for": {
+        "name": "Arbeite für",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "charge_for": {
+        "name": "Lade für",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      }
+    },
     "sensor": {
       "state": {
         "name": "Status",
@@ -659,292 +972,11 @@
         }
       }
     },
-    "device_tracker": {
-      "location": {
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      }
-    },
-    "camera": {
-      "map": {
-        "name": "Karte",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          },
-          "calibration_points": {
-            "name": "Kalibrierungspunkte"
-          }
-        }
-      }
-    },
-    "lawn_mower": {
-      "mower": {
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      }
-    },
     "vacuum": {
       "mower": {
         "state": {
           "cleaning": "Mähen"
         },
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      }
-    },
-    "button": {
-      "update_now": {
-        "name": "Aktualisiere jetzt",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "work_now": {
-        "name": "Mähe jetzt",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "charge_now": {
-        "name": "Lade jetzt",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "border_cut": {
-        "name": "Randmähen",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "trace_position": {
-        "name": "Position verfolgen",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      }
-    },
-    "number": {
-      "work_for": {
-        "name": "Arbeite für",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "charge_for": {
-        "name": "Lade für",
         "state_attributes": {
           "imei": {
             "name": "IMEI"

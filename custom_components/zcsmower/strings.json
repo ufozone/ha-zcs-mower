@@ -363,6 +363,319 @@
         }
       }
     },
+    "button": {
+      "update_now": {
+        "name": "Update now",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "work_now": {
+        "name": "Work now",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "charge_now": {
+        "name": "Charge now",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "border_cut": {
+        "name": "Border cut",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "trace_position": {
+        "name": "Trace position",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      }
+    },
+    "camera": {
+      "map": {
+        "name": "Map",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          },
+          "calibration_points": {
+            "name": "Calibration points"
+          }
+        }
+      }
+    },
+    "device_tracker": {
+      "location": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      }
+    },
+    "image": {
+      "map": {
+        "name": "Map",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          },
+          "calibration_points": {
+            "name": "Calibration points"
+          }
+        }
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      }
+    },
+    "number": {
+      "work_for": {
+        "name": "Work for",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "charge_for": {
+        "name": "Charge for",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      }
+    },
     "sensor": {
       "state": {
         "name": "State",
@@ -659,292 +972,11 @@
         }
       }
     },
-    "device_tracker": {
-      "location": {
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      }
-    },
-    "camera": {
-      "map": {
-        "name": "Map",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          },
-          "calibration_points": {
-            "name": "Calibration points"
-          }
-        }
-      }
-    },
-    "lawn_mower": {
-      "mower": {
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      }
-    },
     "vacuum": {
       "mower": {
         "state": {
           "cleaning": "Mowing"
         },
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      }
-    },
-    "button": {
-      "update_now": {
-        "name": "Update now",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "work_now": {
-        "name": "Work now",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "charge_now": {
-        "name": "Charge now",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "border_cut": {
-        "name": "Border cut",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "trace_position": {
-        "name": "Trace position",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      }
-    },
-    "number": {
-      "work_for": {
-        "name": "Work for",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "charge_for": {
-        "name": "Charge for",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
