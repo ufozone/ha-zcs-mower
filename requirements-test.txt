@@ -3,7 +3,7 @@ colorlog==6.8.2
 ruff==0.2.2
 pydocstyle==6.3.0
 isort==5.13.2
-geopy==2.3.0
+geopy==2.4.1
 numpy==1.26.0
 Pillow==10.2.0
 pytest-homeassistant-custom-component==0.13.102
