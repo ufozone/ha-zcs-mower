@@ -1,4 +1,5 @@
 # ZCS Lawn Mower Robot
+
 [![License][license-shield]](LICENSE)
 ![Project Maintenance][maintenance-shield]
 [![GitHub Activity][commits-shield]][commits]
@@ -33,7 +34,7 @@ Requires Home Assistant 2024.2.0 or newer.
 
 Installation using Home Assistant Community Store (HACS) is recommended.
 
-1. If HACS is not installed, follow HACS installation and configuration at https://hacs.xyz/.
+1. If HACS is not installed, follow HACS installation and configuration at <https://hacs.xyz/>.
 
 2. Click the button below or visit the HACS _Integrations_ pane and search for "ZCS Lawn Mower Robot".
 
@@ -95,15 +96,15 @@ Get client key from lawn mower mobile app:
 
 The image entity will plot the current coordinates and location history of the lawn mower on a user provided image. To configure the entity you need to upload your desired map image and determine the coordinates of the top left corner and the bottom right corner of your selected image.
 
-The image entity is configured via the setup and options flow on the integration. 
+The image entity is configured via the setup and options flow on the integration.
 
-You can then provide the path to the image you would like to use for the map and marker. 
+You can then provide the path to the image you would like to use for the map and marker.
 
 Best practice:
 
 1. Create a new map on [Google My Maps](https://mymaps.google.com/).
 
-2. Take a snapshot of the desired area and save it. This has been tested with the PNG format, other formats may work. 
+2. Take a snapshot of the desired area and save it. This has been tested with the PNG format, other formats may work.
 
 3. Store the snapshot into your home assistant instance, e.g. `/config/www/mower/`.
 
@@ -141,7 +142,7 @@ Get IMEI from your lawn mower(s):
 
 * All entities
 
-    ```
+    ```text
     attributes: 
     imei, connected, last_communication, last_seen, last_poll, next_poll
     ```
@@ -150,7 +151,7 @@ Get IMEI from your lawn mower(s):
 
 * error
 
-    ```
+    ```text
     attributes: 
     reason
     ```
@@ -173,7 +174,7 @@ _This entity is deprecated and is disabled by default. Do not activate it as it 
 
 * map
 
-    ```
+    ```text
     attributes: 
     calibration_points
     ```
@@ -182,7 +183,7 @@ _This entity is deprecated and is disabled by default. Do not activate it as it 
 
 * location
 
-    ```
+    ```text
     attributes: 
     latitude, longitude, source_type (GPS)
     ```
@@ -191,7 +192,7 @@ _This entity is deprecated and is disabled by default. Do not activate it as it 
 
 * map
 
-    ```
+    ```text
     attributes: 
     calibration_points
     ```
@@ -206,7 +207,7 @@ _This entity is deprecated and is disabled by default. Do not activate it as it 
   | paused      | Paused            | Pause, Work standby                         |
   | error       | Error             | Error, No signal, Expired, Renewed          |
 
-    ```
+    ```text
     attributes: 
     status
     ```
@@ -251,7 +252,7 @@ _This entity is disabled by default. You have to activate it if you want to use 
   | idle        | Idle              | Work standby                       |
   | error       | Error             | Error, No signal, Expired, Renewed |
 
-    ```
+    ```text
     attributes: 
     status
     ```
@@ -346,7 +347,7 @@ To enable debug logging for this integration you can control this in your Home A
 
 Set the logging to debug with the following settings in case of problems:
 
-```
+```yaml
 logger:
   default: warn
   logs:
@@ -354,7 +355,6 @@ logger:
 ```
 
 After a restart detailed log entries will appear in `/config/home-assistant.log`.
-
 
 ***
 
