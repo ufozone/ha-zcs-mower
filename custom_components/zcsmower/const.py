@@ -18,7 +18,6 @@ DOMAIN = "zcsmower"
 PLATFORMS = [
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
-    Platform.CAMERA,
     Platform.DEVICE_TRACKER,
     Platform.IMAGE,
     Platform.LAWN_MOWER,
