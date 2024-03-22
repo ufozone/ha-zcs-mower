@@ -500,38 +500,6 @@
         }
       }
     },
-    "camera": {
-      "map": {
-        "name": "Map",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          },
-          "calibration_points": {
-            "name": "Calibration points"
-          }
-        }
-      }
-    },
     "device_tracker": {
       "location": {
         "state_attributes": {

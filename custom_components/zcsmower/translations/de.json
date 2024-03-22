@@ -500,38 +500,6 @@
         }
       }
     },
-    "camera": {
-      "map": {
-        "name": "Karte",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          },
-          "calibration_points": {
-            "name": "Kalibrierungspunkte"
-          }
-        }
-      }
-    },
     "device_tracker": {
       "location": {
         "state_attributes": {
