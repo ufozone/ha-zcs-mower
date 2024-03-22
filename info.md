@@ -8,15 +8,11 @@
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
-Stable -
-[![GitHub Release][stable-release-shield]][releases]
+[![GitHub Release][release-shield]][releases]
+[![issues][issues-shield]][issues-link]
 [![release-badge]][release-workflow]
-
-Latest -
-[![GitHub Release][latest-release-shield]][releases]
 [![validate-badge]][validate-workflow]
 [![lint-badge]][lint-workflow]
-[![issues][issues-shield]][issues-link]
 
 ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. All Ambrogio, Techline, Wiper and some Kubota, Stiga and Wolf robotic lawn mowers with Connect module are supported. This integration does not support Bluetooth connectivity with lawn mowers.
 
@@ -370,12 +366,11 @@ After a restart detailed log entries will appear in `/config/home-assistant.log`
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/
 
+[releases]: https://github.com/ufozone/ha-zcs-mower/releases
+[release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?style=flat
+
 [issues-shield]: https://img.shields.io/github/issues/ufozone/ha-zcs-mower?style=flat
 [issues-link]: https://github.com/ufozone/ha-zcs-mower/issues
-
-[releases]: https://github.com/ufozone/ha-zcs-mower/releases
-[stable-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?style=flat
-[latest-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?include_prereleases&style=flat
 
 [lint-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yaml/badge.svg
 [lint-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yaml
