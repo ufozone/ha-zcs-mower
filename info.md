@@ -164,17 +164,6 @@ Get IMEI from your lawn mower(s):
 
 * trace_position
 
-### Camera
-
-_This entity is deprecated and is disabled by default. Do not activate it as it will be removed in version 1.5. Use the [image](#image) entity instead._
-
-* map
-
-    ```text
-    attributes: 
-    calibration_points
-    ```
-
 ### Device Tracker
 
 * location
