@@ -166,7 +166,7 @@ Get IMEI from your lawn mower(s):
 
 ### Camera
 
-_This entity is deprecated and is disabled by default. Do not activate it as it will be removed in version 1.5. Use the [image](#image) entity instead._
+_This entity is deprecated and is disabled by default. Do not activate it as it will be removed in version 1.4. Use the [image](#image) entity instead._
 
 * map
 
