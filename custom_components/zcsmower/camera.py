@@ -131,12 +131,10 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         self.map_rotation = 0
 
         if self.map_enabled:
-            LOGGER.info("Map enabled")
             self.map_gps_top_left = self.config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)
             self.map_gps_bottom_right = self.config_entry.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, None)
             self.map_rotation = self.config_entry.options.get(CONF_MAP_ROTATION, 0.0)
         else:
-            LOGGER.info("Map disabled")
             latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
             longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
             if latitude_current and longitude_current:
@@ -171,7 +169,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 map_image = map_image.resize(map_image_size)
             else:
                 map_image = self._create_empty_map_image("No valid path configured to a map image.")
-                LOGGER.warning("No valid map image path configured")
         else:
             map_image = self._create_empty_map_image("Map is disabled.")
 
@@ -193,7 +190,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
                 if history_enable and location_history is not None:
                     # If current location is not last item in location history, append to it
                     if location_current and location_current not in location_history[-1:]:
-                        LOGGER.debug("Map: Current location is not last item in location history")
                         location_history.append(location_current)
 
                     # Calculate map points
