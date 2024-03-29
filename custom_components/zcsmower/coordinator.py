@@ -414,7 +414,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             # Get Infinity+ status from lawn mower
             if "infinity_plan_status" in data["alarms"]:
                 infinity_plan_status = data["alarms"]["infinity_plan_status"]
-                _state = infinity_plan_status["state"] if infinity_plan_status["state"] < len(ROBOT_STATES) else None
+                _state = infinity_plan_status["state"] if infinity_plan_status["state"] < len(INFINITY_PLAN_STATES) else 0
                 mower[ATTR_INFINITY] = INFINITY_PLAN_STATES[_state]["name"]
         if "attrs" in data:
             # In some cases, robot_serial is not available
