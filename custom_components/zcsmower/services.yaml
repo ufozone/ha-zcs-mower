@@ -156,7 +156,7 @@ charge_for:
       selector:
         number:
           min: 1
-          max: 1439
+          max: 10079
           step: 1
           mode: slider
           unit_of_measurement: minutes

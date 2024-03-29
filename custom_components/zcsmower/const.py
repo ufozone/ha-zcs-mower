@@ -117,7 +117,7 @@ SERVICE_CHARGE_FOR = "charge_for"
 SERVICE_CHARGE_FOR_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
-        vol.Required("duration"): vol.All(vol.Coerce(int), vol.Range(min=1, max=1439)),
+        vol.Required("duration"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10079)),
     }
 )
 SERVICE_CHARGE_UNTIL = "charge_until"
