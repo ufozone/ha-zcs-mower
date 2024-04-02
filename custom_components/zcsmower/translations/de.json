@@ -1,7 +1,7 @@
 {
   "config": {
     "error": {
-      "key_length": "Der angegebene Kundenschlüssel hat eine falsche Länge.",
+      "key_length": "Der angegebene Kundenschlüssel ist ungültig. Er ist zu kurz oder zu lang.",
       "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast ihn über die mobile App auf einem iPhone erhalten? Leider werden alle Buchstaben in Großbuchstaben angezeigt, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Wenn du die Möglichkeit hast, versuche es mit einem Android-Handy. Dort wird der Schlüssel richtig angezeigt.",
       "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
@@ -49,7 +49,7 @@
   },
   "options": {
     "error": {
-      "key_length": "Der angegebene Kundenschlüssel hat eine falsche Länge.",
+      "key_length": "Der angegebene Kundenschlüssel ist ungültig. Er ist zu kurz oder zu lang.",
       "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast ihn über die mobile App auf einem iPhone erhalten? Leider werden alle Buchstaben in Großbuchstaben angezeigt, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Wenn du die Möglichkeit hast, versuche es mit einem Android-Handy. Dort wird der Schlüssel richtig angezeigt.",
       "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
