@@ -72,7 +72,7 @@ The garage name can be chosen freely.
 
 Get client key from lawn mower mobile app:
 
-   **:warning: Pay attention** Android recommended, because in iPhone app all characters are displayed in capital letters.
+   **:warning: Pay attention** Android recommended, as all characters are incorrectly displayed in capital letters in the iPhone app.
 
 1. Open the app on your mobile device.
 
