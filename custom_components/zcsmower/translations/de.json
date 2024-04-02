@@ -1,6 +1,8 @@
 {
   "config": {
     "error": {
+      "key_length": "Der angegebene Kundenschlüssel hat eine falsche Länge.",
+      "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast ihn über die mobile App auf einem iPhone erhalten? Leider werden alle Buchstaben in Großbuchstaben angezeigt, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Wenn du die Möglichkeit hast, versuche es mit einem Android-Handy. Dort wird der Schlüssel richtig angezeigt.",
       "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
@@ -12,7 +14,7 @@
     "step": {
       "user": {
         "title": "Garage einrichten",
-        "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel ein. Den Garagennamen kannst du frei wählen und den Kundenschlüssel findest du in der mobilen App. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
           "name": "Garagenname",
           "client_key": "Kundenschlüssel",
@@ -22,7 +24,7 @@
       },
       "map": {
         "title": "Konfigurieren der Karte",
-        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad.",
+        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad. Mehr Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#Map).",
         "data": {
           "map_image_path": "Pfad zum Kartenbild",
           "map_marker_path": "Pfad zum Bild des Mäherstandorts",
@@ -47,6 +49,8 @@
   },
   "options": {
     "error": {
+      "key_length": "Der angegebene Kundenschlüssel hat eine falsche Länge.",
+      "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast ihn über die mobile App auf einem iPhone erhalten? Leider werden alle Buchstaben in Großbuchstaben angezeigt, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Wenn du die Möglichkeit hast, versuche es mit einem Android-Handy. Dort wird der Schlüssel richtig angezeigt.",
       "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
@@ -101,7 +105,7 @@
       },
       "map": {
         "title": "Konfigurieren der Karte",
-        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad.",
+        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad. Mehr Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#Map).",
         "data": {
           "map_enable": "Karte aktivieren?",
           "map_image_path": "Pfad zum Kartenbild",
@@ -116,7 +120,7 @@
       },
       "settings": {
         "title": "Konfigurieren der Garage",
-        "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
           "client_key": "Kundenschlüssel",
           "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",

@@ -1,6 +1,8 @@
 {
   "config": {
     "error": {
+      "key_length": "La chiave client indicata ha una lunghezza errata.",
+      "key_uppercase": "Probabilmente la chiave del client non è corretta. L'avete ottenuta dall'applicazione mobile su iPhone? Purtroppo tutte le lettere sono visualizzate in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. Se ne avete la possibilità, provate a utilizzare un telefono Android. La chiave viene visualizzata correttamente.",
       "key_invalid": "La chiave client fornita non è valida.",
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
@@ -12,17 +14,17 @@
     "step": {
       "user": {
         "title": "Allestimento del garage",
-        "description": "Immettere il nome dell'officina e la chiave cliente, che si trova nell'app mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Inserite il nome del garage e la chiave cliente. Il nome del garage può essere scelto liberamente, mentre la chiave cliente si trova nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
         "data": {
           "name": "Nome del garage",
           "client_key": "Chiave cliente",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
-          "map_enable": "Abilitare la mappa"
+          "map_enable": "Abilitare la mappa?"
         }
       },
       "map": {
         "title": "Configurare la mappa",
-        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#Map).",
         "data": {
           "map_image_path": "Percorso dell'immagine della mappa",
           "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
@@ -47,6 +49,8 @@
   },
   "options": {
     "error": {
+      "key_length": "La chiave client indicata ha una lunghezza errata.",
+      "key_uppercase": "Probabilmente la chiave del client non è corretta. L'avete ottenuta dall'applicazione mobile su iPhone? Purtroppo tutte le lettere sono visualizzate in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. Se ne avete la possibilità, provate a utilizzare un telefono Android. La chiave viene visualizzata correttamente.",
       "key_invalid": "La chiave client fornita non è valida.",
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
@@ -101,7 +105,7 @@
       },
       "map": {
         "title": "Configurare la mappa",
-        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#Map).",
         "data": {
           "map_enable": "Abilitare la mappa?",
           "map_image_path": "Percorso dell'immagine della mappa",
@@ -116,7 +120,7 @@
       },
       "settings": {
         "title": "Configurare il garage",
-        "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
           "client_key": "Chiave cliente",
           "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
