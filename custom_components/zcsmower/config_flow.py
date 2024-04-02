@@ -180,6 +180,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_MAP_POINTS: int(MAP_POINTS_DEFAULT),
                     CONF_MOWERS: {},
                 }
+                LOGGER.debug("Step user -> saved options:")
                 LOGGER.debug(self._options)
                 # Return the form of the next step
                 # If user ticked the box go to map step
@@ -260,6 +261,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                         for x in user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
+                LOGGER.debug("Step map -> saved options:")
                 LOGGER.debug(self._options)
                 # Return the form of the next step
                 return await self.async_step_mower()
@@ -365,6 +367,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                 }
+                LOGGER.debug("Step mower -> saved options:")
                 LOGGER.debug(self._options)
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
@@ -476,6 +479,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                 }
+                LOGGER.debug("Step add -> saved options:")
                 LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
@@ -578,6 +582,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             ATTR_NAME: mower_name,
                         }
                         # Input is valid, set data
+                        LOGGER.debug("Step change -> saved options:")
                         LOGGER.debug(self._options)
                         return self.async_create_entry(
                             title="",
@@ -637,6 +642,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
 
                 # Input is valid, set data
+                LOGGER.debug("Step delete -> saved options:")
                 LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
@@ -725,6 +731,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         for x in user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
+                LOGGER.debug("Step map -> saved options:")
                 LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
@@ -867,6 +874,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
                     }
                 )
+                LOGGER.debug("Step settings -> saved options:")
                 LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
