@@ -1,7 +1,9 @@
 {
   "config": {
     "error": {
-      "key_invalid": "The client key provided is not valid.",
+      "key_length": "The given client key has an incorrect length.",
+      "key_uppercase": "The  client key is probably incorrect. You got it from the mobile app on an iPhone? Unfortunately, all letters are displayed in capital letters, although the key consists of capital and small letters. If you have the opportunity, try using an Android phone. The key is displayed correctly there.",
+      "key_invalid": "The given client key is not valid.",
       "auth_failed": "Authorization failed.",
       "communication_failed": "Action could not be executed.",
       "connection_failed": "Unable to connect to the server.",
@@ -12,7 +14,7 @@
     "step": {
       "user": {
         "title": "Set up garage",
-        "description": "Enter your garage name and client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Enter your garage name and client key. The garage name can be chosen freely and the client key you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
           "name": "Garage Name",
           "client_key": "Client Key",
@@ -22,7 +24,7 @@
       },
       "map": {
         "title": "Configure map",
-        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude.",
+        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#Map).",
         "data": {
           "map_image_path": "Path to the map image",
           "map_marker_path": "Path to the mower location image",
@@ -47,7 +49,9 @@
   },
   "options": {
     "error": {
-      "key_invalid": "The client key provided is not valid.",
+      "key_length": "The given client key has an incorrect length.",
+      "key_uppercase": "The  client key is probably incorrect. You got it from the mobile app on an iPhone? Unfortunately, all letters are displayed in capital letters, although the key consists of capital and small letters. If you have the opportunity, try using an Android phone. The key is displayed correctly there.",
+      "key_invalid": "The given client key is not valid.",
       "auth_failed": "Authorization failed.",
       "communication_failed": "Action could not be executed.",
       "connection_failed": "Unable to connect to the server.",
@@ -101,7 +105,7 @@
       },
       "map": {
         "title": "Configure map",
-        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude.",
+        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#Map).",
         "data": {
           "map_enable": "Enable map?",
           "map_image_path": "Path to the map image",
@@ -116,7 +120,7 @@
       },
       "settings": {
         "title": "Configure garage",
-        "description": "Enter your client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Enter your client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
           "client_key": "Client Key",
           "standby_time_start": "At what time does the daily standby time start?",
