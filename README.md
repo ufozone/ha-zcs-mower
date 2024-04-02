@@ -68,13 +68,15 @@ Start setup:
 
 ### Authorization
 
+The garage name can be chosen freely.
+
 Get client key from lawn mower mobile app:
 
-   **Note:** Android recommended, because in iPhone app all characters are displayed in capital letters.
+   **:warning: Pay attention** Android recommended, because in the iPhone app all characters are incorrectly displayed in capital letters.
 
 1. Open the app on your mobile device.
 
-   In the best case, you create a new account (via the mobile app) and connect it to your lawn mower(s). Then there should be no problems when you use the HA integration and the mobile app at the same time.
+   :information_source: In the best case, you create a new account (via the mobile app) and connect it to your lawn mower(s). Then there should be no problems when you use the HA integration and the mobile app at the same time.
 
 2. Click on the `Setup` tab.
 
@@ -112,7 +114,7 @@ Best practice:
 
 6. Type the coordinates into the config flow dialog. To enter the coordinates, ensure that they are in signed degree format and separated by a comma for example: `45.0135543,7.6181209`
 
-    **Pay attention** to the correct order of latitude and longitude.
+    **:warning: Pay attention** to the correct order of latitude and longitude.
 
 7. (Optional) Get a image of your lawn mower with transparent background as a marker for the current position. Store the image into your home assistant instance, e.g. `/config/www/mower/` and type the full path into the config flow dialog.
 
