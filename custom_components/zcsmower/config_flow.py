@@ -845,10 +845,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 except ZcsMowerApiAuthenticationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "auth_failed"
-                except (ZcsMowerApiCommunicationError, ZcsMowerApiError) as exception:
+                except ZcsMowerApiCommunicationError as exception:
                     LOGGER.error(exception)
-                    errors["base"] = "connection_failed"
-                except Exception as exception:
+                    errors["base"] = "communication_failed"
+                except (Exception, ZcsMowerApiError) as exception:
                     LOGGER.exception(exception)
                     errors["base"] = "connection_failed"
 
