@@ -133,23 +133,30 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         """Invoke when a user initiates a flow via the user interface."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            try:
-                await validate_auth(
-                    client_key=user_input[CONF_CLIENT_KEY],
-                    hass=self.hass,
-                )
-            except ValueError as exception:
-                LOGGER.info(exception)
-                errors["base"] = "key_invalid"
-            except ZcsMowerApiAuthenticationError as exception:
-                LOGGER.error(exception)
-                errors["base"] = "auth_failed"
-            except ZcsMowerApiCommunicationError as exception:
-                LOGGER.error(exception)
-                errors["base"] = "communication_failed"
-            except (Exception, ZcsMowerApiError) as exception:
-                LOGGER.exception(exception)
-                errors["base"] = "connection_failed"
+            # Client key shorter or longer than 28 digits
+            if len(user_input.get(CONF_CLIENT_KEY)) != 28:
+                errors["base"] = "key_length"
+            # Client key only in capital letters
+            elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).upper():
+                errors["base"] = "key_uppercase"
+            else:
+                try:
+                    await validate_auth(
+                        client_key=user_input.get(CONF_CLIENT_KEY),
+                        hass=self.hass,
+                    )
+                except ValueError as exception:
+                    LOGGER.info(exception)
+                    errors["base"] = "key_invalid"
+                except ZcsMowerApiAuthenticationError as exception:
+                    LOGGER.error(exception)
+                    errors["base"] = "auth_failed"
+                except ZcsMowerApiCommunicationError as exception:
+                    LOGGER.error(exception)
+                    errors["base"] = "communication_failed"
+                except (Exception, ZcsMowerApiError) as exception:
+                    LOGGER.exception(exception)
+                    errors["base"] = "connection_failed"
 
             if not errors:
                 # Input is valid, set data and options
@@ -219,13 +226,14 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             image_map_path = user_input.get(CONF_MAP_IMAGE_PATH, "").strip()
             image_marker_path = user_input.get(CONF_MAP_MARKER_PATH, "").strip()
+
             if not os.path.isfile(image_map_path):
                 errors["base"] = "path_invalid"
-            if user_input.get(CONF_MAP_GPS_TOP_LEFT).count(",") != 1:
+            elif user_input.get(CONF_MAP_GPS_TOP_LEFT).count(",") != 1:
                 errors["base"] = "coordinates_invalid"
-            if user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).count(",") != 1:
+            elif user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).count(",") != 1:
                 errors["base"] = "coordinates_invalid"
-            if image_marker_path and not os.path.isfile(image_marker_path):
+            elif image_marker_path and not os.path.isfile(image_marker_path):
                 errors["base"] = "path_invalid"
 
             if not errors:
@@ -685,11 +693,11 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             image_marker_path = user_input.get(CONF_MAP_MARKER_PATH, "").strip()
             if not os.path.isfile(image_map_path):
                 errors["base"] = "path_invalid"
-            if user_input.get(CONF_MAP_GPS_TOP_LEFT).count(",") != 1:
+            elif user_input.get(CONF_MAP_GPS_TOP_LEFT).count(",") != 1:
                 errors["base"] = "coordinates_invalid"
-            if user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).count(",") != 1:
+            elif user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).count(",") != 1:
                 errors["base"] = "coordinates_invalid"
-            if image_marker_path and not os.path.isfile(image_marker_path):
+            elif image_marker_path and not os.path.isfile(image_marker_path):
                 errors["base"] = "path_invalid"
 
             if not errors:
@@ -810,32 +818,39 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
         """Manage the ZCS Lawn Mower Robot settings."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            try:
-                await validate_auth(
-                    client_key=user_input[CONF_CLIENT_KEY],
-                    hass=self.hass,
-                )
-            except ValueError as exception:
-                LOGGER.info(exception)
-                errors["base"] = "key_invalid"
-            except ZcsMowerApiAuthenticationError as exception:
-                LOGGER.error(exception)
-                errors["base"] = "auth_failed"
-            except (ZcsMowerApiCommunicationError, ZcsMowerApiError) as exception:
-                LOGGER.error(exception)
-                errors["base"] = "connection_failed"
-            except Exception as exception:
-                LOGGER.exception(exception)
-                errors["base"] = "connection_failed"
+            # Client key shorter or longer than 28 digits
+            if len(user_input.get(CONF_CLIENT_KEY)) != 28:
+                errors["base"] = "key_length"
+            # Client key only in capital letters
+            elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).upper():
+                errors["base"] = "key_uppercase"
             # Standby time start and stop are equal
-            if user_input.get(CONF_STANDBY_TIME_START) == user_input.get(CONF_STANDBY_TIME_STOP):
+            elif user_input.get(CONF_STANDBY_TIME_START) == user_input.get(CONF_STANDBY_TIME_STOP):
                 errors["base"] = "standby_time_invalid"
             # Update interval for working is bigger than in standby time
-            if user_input.get(CONF_UPDATE_INTERVAL_WORKING) > user_input.get(CONF_UPDATE_INTERVAL_STANDBY):
+            elif user_input.get(CONF_UPDATE_INTERVAL_WORKING) > user_input.get(CONF_UPDATE_INTERVAL_STANDBY):
                 errors["base"] = "update_interval_working_invalid"
             # Update interval in standby time is bigger than for idling
-            if user_input.get(CONF_UPDATE_INTERVAL_STANDBY) > user_input.get(CONF_UPDATE_INTERVAL_IDLING):
+            elif user_input.get(CONF_UPDATE_INTERVAL_STANDBY) > user_input.get(CONF_UPDATE_INTERVAL_IDLING):
                 errors["base"] = "update_interval_standby_invalid"
+            else:
+                try:
+                    await validate_auth(
+                        client_key=user_input.get(CONF_CLIENT_KEY),
+                        hass=self.hass,
+                    )
+                except ValueError as exception:
+                    LOGGER.info(exception)
+                    errors["base"] = "key_invalid"
+                except ZcsMowerApiAuthenticationError as exception:
+                    LOGGER.error(exception)
+                    errors["base"] = "auth_failed"
+                except (ZcsMowerApiCommunicationError, ZcsMowerApiError) as exception:
+                    LOGGER.error(exception)
+                    errors["base"] = "connection_failed"
+                except Exception as exception:
+                    LOGGER.exception(exception)
+                    errors["base"] = "connection_failed"
 
             if not errors:
                 # Input is valid, set data
