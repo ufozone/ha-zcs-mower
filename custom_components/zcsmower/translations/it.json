@@ -14,7 +14,7 @@
     "step": {
       "user": {
         "title": "Allestimento del garage",
-        "description": "Inserite il nome del garage e la chiave cliente. Il nome del garage può essere scelto liberamente, mentre la chiave cliente si trova nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Inserite il nome del garage e la chiave cliente. Il nome del garage può essere scelto liberamente, mentre la chiave cliente si trova nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
           "name": "Nome del garage",
           "client_key": "Chiave cliente",
