@@ -307,17 +307,17 @@ _This entity is disabled by default. You have to activate it if you want to use 
 
 ## Usage
 
-* `vacuum.start`:
+* `lawn_mower.start_mowing`, `vacuum.start`:
 
     The lawn mower stats to mow, within the specified schedule.
 
-* `vacuum.stop`:
+* `lawn_mower.dock`, `vacuum.return_to_base`:
 
     The lawn mower returns to the base and parks there until the next schedule starts.
 
-* `vacuum.return_to_base`:
+* `vacuum.stop`:
 
-    Same as `vacuum.stop`.
+    Same as `lawn_mower.dock` and `vacuum.return_to_base`.
 
 * `button.charge_now`:
 
