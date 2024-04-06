@@ -40,8 +40,8 @@ from homeassistant.helpers.entity import (
 from .const import (
     LOGGER,
     DOMAIN,
-    UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_STANDBY,
+    UPDATE_INTERVAL_WORKING_DEFAULT,
+    UPDATE_INTERVAL_STANDBY_DEFAULT,
     MAP_POINTS_DEFAULT,
     CONF_MAP_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -100,7 +100,7 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
     """Representation of a ZCS Lawn Mower Robot camera."""
 
     _attr_entity_registry_enabled_default = False
-    _attr_frame_interval: float = UPDATE_INTERVAL_WORKING
+    _attr_frame_interval: float = UPDATE_INTERVAL_WORKING_DEFAULT
     _attr_name = "Map"
     _attr_should_poll = True
 
@@ -465,6 +465,6 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         self._generate_image()
 
         if self._get_attribute(ATTR_WORKING, False):
-            self._attr_frame_interval = UPDATE_INTERVAL_WORKING
+            self._attr_frame_interval = UPDATE_INTERVAL_WORKING_DEFAULT
         else:
-            self._attr_frame_interval = UPDATE_INTERVAL_STANDBY
+            self._attr_frame_interval = UPDATE_INTERVAL_STANDBY_DEFAULT

@@ -59,10 +59,10 @@ from .const import (
     API_APP_TOKEN,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
-    UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_STANDBY,
-    UPDATE_INTERVAL_IDLING,
-    LOCATION_HISTORY_ITEMS,
+    UPDATE_INTERVAL_WORKING_DEFAULT,
+    UPDATE_INTERVAL_STANDBY_DEFAULT,
+    UPDATE_INTERVAL_IDLING_DEFAULT,
+    LOCATION_HISTORY_ITEMS_DEFAULT,
     MAP_POINTS_DEFAULT,
     ROBOT_WAKE_UP_INTERVAL_DEFAULT,
     ROBOT_WAKE_UP_INTERVAL_INFINITY,
@@ -163,9 +163,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._title = user_input.get(CONF_NAME, "")
                 self._options = {
                     CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
-                    CONF_UPDATE_INTERVAL_WORKING: int(UPDATE_INTERVAL_WORKING),
-                    CONF_UPDATE_INTERVAL_STANDBY: int(UPDATE_INTERVAL_STANDBY),
-                    CONF_UPDATE_INTERVAL_IDLING: int(UPDATE_INTERVAL_IDLING),
+                    CONF_UPDATE_INTERVAL_WORKING: int(UPDATE_INTERVAL_WORKING_DEFAULT),
+                    CONF_UPDATE_INTERVAL_STANDBY: int(UPDATE_INTERVAL_STANDBY_DEFAULT),
+                    CONF_UPDATE_INTERVAL_IDLING: int(UPDATE_INTERVAL_IDLING_DEFAULT),
                     CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                     CONF_WAKE_UP_INTERVAL_DEFAULT: int(ROBOT_WAKE_UP_INTERVAL_DEFAULT),
                     CONF_WAKE_UP_INTERVAL_INFINITY: int(ROBOT_WAKE_UP_INTERVAL_INFINITY),
@@ -326,7 +326,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
                             min=1,
-                            max=LOCATION_HISTORY_ITEMS,
+                            max=LOCATION_HISTORY_ITEMS_DEFAULT,
                         )
                     ),
                     vol.Optional(
@@ -806,7 +806,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
                             min=1,
-                            max=LOCATION_HISTORY_ITEMS,
+                            max=LOCATION_HISTORY_ITEMS_DEFAULT,
                         )
                     ),
                     vol.Optional(
@@ -866,9 +866,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
                         CONF_STANDBY_TIME_START: user_input.get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
                         CONF_STANDBY_TIME_STOP: user_input.get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
-                        CONF_UPDATE_INTERVAL_WORKING: user_input.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING),
-                        CONF_UPDATE_INTERVAL_STANDBY: user_input.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY),
-                        CONF_UPDATE_INTERVAL_IDLING: user_input.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
+                        CONF_UPDATE_INTERVAL_WORKING: user_input.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT),
+                        CONF_UPDATE_INTERVAL_STANDBY: user_input.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT),
+                        CONF_UPDATE_INTERVAL_IDLING: user_input.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING_DEFAULT),
                         CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                         CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
                         CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
@@ -916,9 +916,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     # Update interval, if one or more lawn mowers working
                     vol.Optional(
                         CONF_UPDATE_INTERVAL_WORKING,
-                        default=UPDATE_INTERVAL_WORKING,
+                        default=UPDATE_INTERVAL_WORKING_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING),
+                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -932,9 +932,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     # Update interval, if all lawn mowers on standby
                     vol.Optional(
                         CONF_UPDATE_INTERVAL_STANDBY,
-                        default=UPDATE_INTERVAL_STANDBY,
+                        default=UPDATE_INTERVAL_STANDBY_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY),
+                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -948,9 +948,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     # Update interval, if all lawn mowers idling
                     vol.Optional(
                         CONF_UPDATE_INTERVAL_IDLING,
-                        default=UPDATE_INTERVAL_IDLING,
+                        default=UPDATE_INTERVAL_IDLING_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING),
+                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING_DEFAULT),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(

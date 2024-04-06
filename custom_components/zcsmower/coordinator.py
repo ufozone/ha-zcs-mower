@@ -68,10 +68,10 @@ from .const import (
     API_ACK_TIMEOUT,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
-    UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_STANDBY,
-    UPDATE_INTERVAL_IDLING,
-    LOCATION_HISTORY_ITEMS,
+    UPDATE_INTERVAL_WORKING_DEFAULT,
+    UPDATE_INTERVAL_STANDBY_DEFAULT,
+    UPDATE_INTERVAL_IDLING_DEFAULT,
+    LOCATION_HISTORY_ITEMS_DEFAULT,
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,
     ROBOT_WAKE_UP_INTERVAL_DEFAULT,
@@ -99,7 +99,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             logger=LOGGER,
             name=DOMAIN,
             update_interval=timedelta(
-                seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)
+                seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT)
             ),
         )
         self.config_entry = config_entry
@@ -240,7 +240,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             return False
 
         location_history.append(location)
-        self.data[imei][ATTR_LOCATION_HISTORY] = location_history[-LOCATION_HISTORY_ITEMS:]
+        self.data[imei][ATTR_LOCATION_HISTORY] = location_history[-LOCATION_HISTORY_ITEMS_DEFAULT:]
 
         return True
 
@@ -275,19 +275,19 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if self.has_working_mowers():
             LOGGER.debug("Set update_interval: Working")
             suggested_update_interval = timedelta(
-                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING)
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT)
             )
         # If current time is in standby time, decrease update_interval
         elif self.is_standby_time(now):
             LOGGER.debug("Set update_interval: Standby")
             suggested_update_interval = timedelta(
-                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT)
             )
         # If current time is out of standby time, calculate update_interval
         else:
             LOGGER.debug("Set update_interval: Idle")
             suggested_update_interval = timedelta(
-                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING_DEFAULT)
             )
             time_to_standby = (dt_util.as_local(self.standby_time_start) - now).seconds
 
@@ -295,7 +295,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             if time_to_standby < suggested_update_interval.seconds:
                 LOGGER.debug("Set update_interval: Time until start of standby time is shorter than update_interval for idle time")
                 # If time to standby is shorter than update_interval for working time
-                if (time_to_standby < (interval_working := self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING))):
+                if (time_to_standby < (interval_working := self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT))):
                     LOGGER.debug("Set update_interval: Time to standby is shorter than update_interval for working time")
                     time_to_standby = interval_working
 

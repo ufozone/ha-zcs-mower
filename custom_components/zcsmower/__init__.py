@@ -35,9 +35,9 @@ from .const import (
     CONF_MOWERS,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
-    UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_STANDBY,
-    UPDATE_INTERVAL_IDLING,
+    UPDATE_INTERVAL_WORKING_DEFAULT,
+    UPDATE_INTERVAL_STANDBY_DEFAULT,
+    UPDATE_INTERVAL_IDLING_DEFAULT,
     MAP_POINTS_DEFAULT,
     ROBOT_WAKE_UP_INTERVAL_DEFAULT,
     ROBOT_WAKE_UP_INTERVAL_INFINITY,
@@ -138,9 +138,9 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                 CONF_WAKE_UP_INTERVAL_INFINITY: config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
                 CONF_STANDBY_TIME_START: STANDBY_TIME_START_DEFAULT,
                 CONF_STANDBY_TIME_STOP: STANDBY_TIME_STOP_DEFAULT,
-                CONF_UPDATE_INTERVAL_WORKING: config_entry.options.get("uptade_interval_working", UPDATE_INTERVAL_WORKING),
-                CONF_UPDATE_INTERVAL_STANDBY: config_entry.options.get("uptade_interval_idling", UPDATE_INTERVAL_STANDBY),
-                CONF_UPDATE_INTERVAL_IDLING: UPDATE_INTERVAL_IDLING,
+                CONF_UPDATE_INTERVAL_WORKING: config_entry.options.get("uptade_interval_working", UPDATE_INTERVAL_WORKING_DEFAULT),
+                CONF_UPDATE_INTERVAL_STANDBY: config_entry.options.get("uptade_interval_idling", UPDATE_INTERVAL_STANDBY_DEFAULT),
+                CONF_UPDATE_INTERVAL_IDLING: UPDATE_INTERVAL_IDLING_DEFAULT,
             }
         )
         _options.pop("trace_position_interval_default")

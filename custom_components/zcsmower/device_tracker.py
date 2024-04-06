@@ -28,7 +28,7 @@ import homeassistant.util.dt as dt_util
 
 from .const import (
     DOMAIN,
-    LOCATION_HISTORY_DAYS,
+    LOCATION_HISTORY_DAYS_DEFAULT,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -99,7 +99,7 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         # because the metadata_id_last_updated_ts index is in ascending order.
         history_list = history.state_changes_during_period(
             self.hass,
-            start_time=dt_util.now() - timedelta(days=LOCATION_HISTORY_DAYS),
+            start_time=dt_util.now() - timedelta(days=LOCATION_HISTORY_DAYS_DEFAULT),
             entity_id=self.entity_id,
             no_attributes=False,
             include_start_time_state=True,
