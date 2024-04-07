@@ -89,7 +89,12 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         )
         self.entity_description = entity_description
 
-        get_instance(hass).async_add_executor_job(
+    async def async_added_to_hass(self) -> None:
+        """Register callbacks."""
+        await super().async_added_to_hass()
+
+        # Load Recorder after loading entity
+        await get_instance(self.hass).async_add_executor_job(
             self._get_location_history,
         )
 
