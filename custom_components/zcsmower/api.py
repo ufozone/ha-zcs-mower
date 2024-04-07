@@ -102,7 +102,7 @@ class ZcsMowerApiClient:
             }
         )
         if result is True and self._response["data"]["success"] is True:
-            return self._response["data"]["params"]
+            return await self.get_response()
         else:
             raise ZcsMowerApiCommunicationError(
                 "Lawn mower not found. Please check the application configuration."
@@ -160,18 +160,18 @@ class ZcsMowerApiClient:
 
                 if "success" in self._response:
                     self._status = self._response["success"]
-                if "data" in self._response:
-                    if "success" in self._response["data"]:
-                        self._status = self._response["data"]["success"]
-                if "auth" in self._response:
-                    if "success" in self._response["auth"]:
-                        self._status = self._response["auth"]["success"]
+                elif "data" in self._response and "success" in self._response["data"]:
+                    self._status = self._response["data"]["success"]
+                elif "auth" in self._response and "success" in self._response["auth"]:
+                    self._status = self._response["auth"]["success"]
 
                 LOGGER.debug("API.response:")
                 LOGGER.debug(self._response)
 
+                # If _status is True
                 if self._status:
                     return self._status
+                # Else _status is False
                 else:
                     # If session is invalid, refresh authentication and execute command
                     # again possible loop, if authentication session is always invalid
@@ -179,7 +179,7 @@ class ZcsMowerApiClient:
                     for error in (
                         error
                         for error in self._error
-                        if "Authentication session is invalid" in error
+                        if "Authentication session is invalid: Error: Session " in error
                     ):
                         LOGGER.info(error)
                         refresh_auth = await self.auth()
@@ -187,9 +187,11 @@ class ZcsMowerApiClient:
                             data["auth"]["sessionId"] = self._session_id
                             return await self.post(data, headers)
 
-                    raise ZcsMowerApiCommunicationError(
-                        f"Communication failed: {self._error}"
-                    )
+                    raise ZcsMowerApiCommunicationError(self._error)
+        except ZcsMowerApiCommunicationError as exception:
+            raise ZcsMowerApiCommunicationError(
+                f"Communication failed: {exception}"
+            ) from exception
         except TimeoutError as exception:
             raise ZcsMowerApiCommunicationError(
                 "Timeout error fetching information",
