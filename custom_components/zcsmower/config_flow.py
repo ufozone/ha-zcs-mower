@@ -60,6 +60,7 @@ from .const import (
     ATTR_IMEI,
     API_BASE_URI,
     API_APP_TOKEN,
+    API_CLIENT_KEY_LENGTH,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
     UPDATE_INTERVAL_WORKING_DEFAULT,
@@ -80,9 +81,9 @@ from .api import (
 
 async def generate_client_key() -> str:
     """Generate client key."""
-    # get random client key with length 28 with letters and digits
+    # get random client key with letters and digits
     return "".join(
-        random.choice(string.ascii_letters + string.digits) for i in range(28)
+        random.choice(string.ascii_letters + string.digits) for i in range(API_CLIENT_KEY_LENGTH)
     )
 
 

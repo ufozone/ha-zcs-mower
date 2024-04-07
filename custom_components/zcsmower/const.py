@@ -165,6 +165,7 @@ ATTRIBUTION = "Data gently provided by Telit IoT Platform"
 
 API_BASE_URI = "https://api-de.devicewise.com/api"
 API_APP_TOKEN = "DJMYYngGNEit40vA"
+API_CLIENT_KEY_LENGTH = 28
 API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
