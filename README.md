@@ -309,7 +309,7 @@ _This entity is disabled by default. You have to activate it if you want to use 
 
 * `lawn_mower.start_mowing`, `vacuum.start`:
 
-    The lawn mower stats to mow, within the specified schedule.
+    The lawn mower starts to mow, within the specified schedule.
 
 * `lawn_mower.dock`, `vacuum.return_to_base`:
 
