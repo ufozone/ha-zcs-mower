@@ -48,6 +48,7 @@ from .const import (
     CONF_WAKE_UP_INTERVAL_INFINITY,
     CONF_MOWERS,
     ATTR_IMEI,
+    ATTR_DATA_THRESHOLD,
     ATTR_INFINITY,
     ATTR_SERIAL_NUMBER,
     ATTR_WORKING,
@@ -80,6 +81,7 @@ from .const import (
     ROBOT_STATES,
     ROBOT_STATES_WORKING,
     ROBOT_ERRORS,
+    DATA_THRESHOLD_STATES,
     INFINITY_PLAN_STATES,
 )
 
@@ -119,8 +121,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             self.data[_imei] = {
                 ATTR_IMEI: _imei,
                 ATTR_NAME: _mower.get(ATTR_NAME, _imei),
-                ATTR_INFINITY: None,
                 ATTR_STATE: None,
+                ATTR_DATA_THRESHOLD: None,
+                ATTR_INFINITY: None,
                 ATTR_ICON: None,
                 ATTR_WORKING: False,
                 ATTR_AVAILABLE: False,
@@ -411,6 +414,11 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                         imei=imei,
                         location=(latitude, longitude),
                     )
+            # Get data threshold status from lawn mower
+            if "data_th" in data["alarms"]:
+                data_th = data["alarms"]["data_th"]
+                _state = data_th["state"] if data_th["state"] < len(DATA_THRESHOLD_STATES) else 0
+                mower[ATTR_DATA_THRESHOLD] = DATA_THRESHOLD_STATES[_state]["name"]
             # Get Infinity+ status from lawn mower
             if "infinity_plan_status" in data["alarms"]:
                 infinity_plan_status = data["alarms"]["infinity_plan_status"]

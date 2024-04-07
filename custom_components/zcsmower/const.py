@@ -48,6 +48,7 @@ CONF_MAP_DRAW_LINES = "map_draw_lines"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
+ATTR_DATA_THRESHOLD = "data_threshold"
 ATTR_INFINITY = "infinity"
 ATTR_SERIAL_NUMBER = "serial_number"
 ATTR_WORKING = "working"
