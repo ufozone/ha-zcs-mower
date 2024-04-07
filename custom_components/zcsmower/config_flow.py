@@ -136,9 +136,12 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             # Client key shorter or longer than 28 digits
             if len(user_input.get(CONF_CLIENT_KEY)) != 28:
                 errors["base"] = "key_length"
-            # Client key only in capital letters
+            # Client key only in upper case
             elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).upper():
                 errors["base"] = "key_uppercase"
+            # Client key only in lower case
+            elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).lower():
+                errors["base"] = "key_lowercase"
             else:
                 try:
                     await validate_auth(
@@ -828,9 +831,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             # Client key shorter or longer than 28 digits
             if len(user_input.get(CONF_CLIENT_KEY)) != 28:
                 errors["base"] = "key_length"
-            # Client key only in capital letters
+            # Client key only in upper case
             elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).upper():
                 errors["base"] = "key_uppercase"
+            # Client key only in lower case
+            elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).lower():
+                errors["base"] = "key_lowercase"
             # Standby time start and stop are equal
             elif user_input.get(CONF_STANDBY_TIME_START) == user_input.get(CONF_STANDBY_TIME_STOP):
                 errors["base"] = "standby_time_invalid"
