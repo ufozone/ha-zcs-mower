@@ -2,7 +2,8 @@
   "config": {
     "error": {
       "key_length": "The given client key is not valid. It is too short or too long.",
-      "key_uppercase": "The  client key is probably incorrect. You got it from the mobile app on an iPhone? Unfortunately, all letters are displayed in capital letters, although the key consists of capital and small letters. If you have the opportunity, try using an Android phone. The key is displayed correctly there.",
+      "key_uppercase": "The client key is probably incorrect. You have entered all characters in upper case, although the key consists of upper and lower case letters. You got it from the mobile app on an iPhone? If you have the opportunity, try using an Android phone. The key is displayed correctly there.",
+      "key_lowercase": "The client key is probably incorrect. You have entered all characters in upper case, although the key consists of upper and lower case letters. Replace the last digit of the client key with any other letter or number and try again.",
       "key_invalid": "The given client key is not valid.",
       "auth_failed": "Authorization failed.",
       "communication_failed": "Action could not be executed.",
@@ -50,7 +51,8 @@
   "options": {
     "error": {
       "key_length": "The given client key is not valid. It is too short or too long.",
-      "key_uppercase": "The  client key is probably incorrect. You got it from the mobile app on an iPhone? Unfortunately, all letters are displayed in capital letters, although the key consists of capital and small letters. If you have the opportunity, try using an Android phone. The key is displayed correctly there.",
+      "key_uppercase": "The client key is probably incorrect. You have entered all characters in upper case, although the key consists of upper and lower case letters. You got it from the mobile app on an iPhone? If you have the opportunity, try using an Android phone. The key is displayed correctly there.",
+      "key_lowercase": "The client key is probably incorrect. You have entered all characters in upper case, although the key consists of upper and lower case letters. Replace the last digit of the client key with any other letter or number and try again.",
       "key_invalid": "The given client key is not valid.",
       "auth_failed": "Authorization failed.",
       "communication_failed": "Action could not be executed.",

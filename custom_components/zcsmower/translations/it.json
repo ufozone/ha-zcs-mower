@@ -2,7 +2,8 @@
   "config": {
     "error": {
       "key_length": "La chiave client fornita non è valida. È troppo corta o troppo lunga.",
-      "key_uppercase": "Probabilmente la chiave del client non è corretta. L'avete ottenuta dall'applicazione mobile su iPhone? Purtroppo tutte le lettere sono visualizzate in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. Se ne avete la possibilità, provate a utilizzare un telefono Android. La chiave viene visualizzata correttamente.",
+      "key_uppercase": "Probabilmente la chiave client non è corretta. Avete inserito tutti i caratteri in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. L'avete ottenuto dall'applicazione mobile su un iPhone? Se ne avete la possibilità, provate a utilizzare un telefono Android. La chiave viene visualizzata correttamente.",
+      "key_lowercase": "Probabilmente la chiave client non è corretta. Avete inserito tutti i caratteri in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. Sostituire l'ultima cifra della chiave client con un'altra lettera o numero e riprovare.",
       "key_invalid": "La chiave client fornita non è valida.",
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
@@ -50,7 +51,8 @@
   "options": {
     "error": {
       "key_length": "La chiave client fornita non è valida. È troppo corta o troppo lunga.",
-      "key_uppercase": "Probabilmente la chiave del client non è corretta. L'avete ottenuta dall'applicazione mobile su iPhone? Purtroppo tutte le lettere sono visualizzate in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. Se ne avete la possibilità, provate a utilizzare un telefono Android. La chiave viene visualizzata correttamente.",
+      "key_uppercase": "Probabilmente la chiave client non è corretta. Avete inserito tutti i caratteri in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. L'avete ottenuto dall'applicazione mobile su un iPhone? Se ne avete la possibilità, provate a utilizzare un telefono Android. La chiave viene visualizzata correttamente.",
+      "key_lowercase": "Probabilmente la chiave client non è corretta. Avete inserito tutti i caratteri in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. Sostituire l'ultima cifra della chiave client con un'altra lettera o numero e riprovare.",
       "key_invalid": "La chiave client fornita non è valida.",
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
