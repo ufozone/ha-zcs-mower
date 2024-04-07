@@ -376,6 +376,12 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     client_key=self._options[CONF_CLIENT_KEY],
                     hass=self.hass,
                 )
+                # TODO:
+                # Ermittel Clients
+                # Pruefe, ob ClientKey bereits enthalten ist
+                # Falls nicht, fuege ClientKey hinzu:
+                # attribute.publish
+                LOGGER.debug(mower)
             except ValueError as exception:
                 LOGGER.info(exception)
                 errors["base"] = "imei_invalid"
@@ -385,13 +391,6 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             except (Exception, ZcsMowerApiError) as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection_failed"
-
-            # TODO:
-            # Ermittel Clients
-            # Pruefe, ob ClientKey bereits enthalten ist
-            # Falls nicht, fuege ClientKey hinzu:
-            # attribute.publish
-            LOGGER.debug(mower)
 
             if not errors:
                 # Input is valid, set data.
@@ -489,6 +488,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         client_key=self._options[CONF_CLIENT_KEY],
                         hass=self.hass,
                     )
+                    # TODO:
+                    # Analog async_step_mower umsetzen
                 except ValueError as exception:
                     LOGGER.info(exception)
                     errors["base"] = "imei_invalid"
