@@ -84,7 +84,7 @@ class ZcsMowerApiClient:
             }
         )
         if result is True and self._response["data"]["success"] is True:
-            return self._response["data"]["params"]
+            return await self.get_response()
         else:
             raise ZcsMowerApiAuthenticationError(
                 "Authorization failed. Please check the application configuration."
@@ -176,12 +176,11 @@ class ZcsMowerApiClient:
                     # If session is invalid, refresh authentication and execute command
                     # again possible loop, if authentication session is always invalid
                     # after successful refresh
-                    for error in (
+                    if len([
                         error
                         for error in self._error
                         if "Authentication session is invalid: Error: Session " in error
-                    ):
-                        LOGGER.info(error)
+                    ]) > 0:
                         refresh_auth = await self.auth()
                         if refresh_auth:
                             data["auth"]["sessionId"] = self._session_id
