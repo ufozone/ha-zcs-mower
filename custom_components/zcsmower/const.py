@@ -344,6 +344,11 @@ ROBOT_STATES = [
         "icon": "mdi:power-standby",
         "color": "#E61EDC",
     },
+    {
+        "name": "hot_temperature",
+        "icon": "mdi:thermometer-alert",
+        "color": "#DB4B4B",
+    },
 ]
 ROBOT_STATES_WORKING = [2, 6, 7, 8, 11]
 ROBOT_ERRORS = {
@@ -596,27 +601,45 @@ ROBOT_ERRORS = {
     5006: "unexpected_shutdown_done",
     5008: "unexpected_shutdown_error",
 }
+DATA_THRESHOLD_STATES = [
+    {
+        "name": "0_LESS_THEN50_PERCENT",
+        "color": "#0AFA2A"
+    },
+    {
+        "name": "1_50_PERCENT",
+        "color": "#DCFC0F"
+    },
+    {
+        "name": "2_75_PERCENT",
+        "color": "#FA7E0A"
+    },
+    {
+        "name": "3_100_PERCENT",
+        "color": "#FA0D0D"
+    },
+]
 ATOMIZER_STATES = [
     {
-        "name": "UNKNOWN",
+        "name": "unknown",
         "color": "#000000"
     },
     {
-        "name": "EMPTY",
+        "name": "empty",
         "color": "#CCCC00"
     },
     {
-        "name": "WORK",
+        "name": "work",
         "color": "#007700"
     },
     {
-        "name": "PAUSE",
+        "name": "pause",
         "color": "#0000FF"
     },
     {
-        "name": "FAIL",
+        "name": "fail",
         "color": "#FF0000"
-    }
+    },
 ]
 INFINITY_PLAN_STATES = [
     {
@@ -638,5 +661,5 @@ INFINITY_PLAN_STATES = [
     {
         "name": "pending",
         "color": "#FFE100"
-    }
+    },
 ]
