@@ -1,7 +1,10 @@
 """Adds config flow for ZCS Lawn Mower Robot."""
+
 from __future__ import annotations
 
 import os
+import string
+import random
 
 from homeassistant.core import (
     callback,
@@ -89,12 +92,13 @@ async def validate_auth(client_key: str, hass: HomeAssistant) -> None:
             "endpoint": API_BASE_URI,
             "app_id": client_key,
             "app_token": API_APP_TOKEN,
-            "thing_key": client_key
-        }
+            "thing_key": client_key,
+        },
     )
     await client.check_api_client()
 
-async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
+
+async def validate_imei(imei: str, client_key: str, hass: HassJob) -> str:
     """Validate a lawn mower IMEI.
 
     Raises a ValueError if the IMEI is invalid.
@@ -108,12 +112,16 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> None:
             "endpoint": API_BASE_URI,
             "app_id": client_key,
             "app_token": API_APP_TOKEN,
-            "thing_key": client_key
-        }
+            "thing_key": client_key,
+        },
     )
-    await client.check_robot(
-        imei=imei
-    )
+    return await client.check_robot(imei=imei)
+
+async def generate_client_key() -> str:
+    """Generate client key."""
+    # get random client key with length 28 with letters and digits
+    return "".join(random.choice(string.ascii_letters + string.digits) for i in range(28))
+
 
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
@@ -133,45 +141,55 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         """Invoke when a user initiates a flow via the user interface."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            # Client key shorter or longer than 28 digits
-            if len(user_input.get(CONF_CLIENT_KEY)) != 28:
-                errors["base"] = "key_length"
-            # Client key only in upper case
-            elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).upper():
-                errors["base"] = "key_uppercase"
-            # Client key only in lower case
-            elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).lower():
-                errors["base"] = "key_lowercase"
-            else:
-                try:
-                    await validate_auth(
-                        client_key=user_input.get(CONF_CLIENT_KEY),
-                        hass=self.hass,
-                    )
-                except ValueError as exception:
-                    LOGGER.info(exception)
-                    errors["base"] = "key_invalid"
-                except ZcsMowerApiAuthenticationError as exception:
-                    LOGGER.error(exception)
-                    errors["base"] = "auth_failed"
-                except ZcsMowerApiCommunicationError as exception:
-                    LOGGER.error(exception)
-                    errors["base"] = "communication_failed"
-                except (Exception, ZcsMowerApiError) as exception:
-                    LOGGER.exception(exception)
-                    errors["base"] = "connection_failed"
+            client_key = "6LBcRKCf6U5uyVJpmr8eVJMmvHfc"
+            # TODO:
+            # do-while Schleife
+            # Generiere 28-Stellen ClientKey
+            # validate_auth return bool
+            # thing.update
+            # name = Home Assistant (Garage Name)
+
+            client_key_test = await generate_client_key()
+            LOGGER.debug(client_key_test)
+
+            #while True:
+            #    anweisungen ausfuehren
+            #    if bedingung:
+            #        break ## break-Anweisung
+
+            try:
+                await validate_auth(
+                    client_key=client_key,
+                    hass=self.hass,
+                )
+            except ValueError as exception:
+                LOGGER.info(exception)
+                errors["base"] = "key_invalid"
+            except ZcsMowerApiAuthenticationError as exception:
+                LOGGER.error(exception)
+                errors["base"] = "auth_failed"
+            except ZcsMowerApiCommunicationError as exception:
+                LOGGER.error(exception)
+                errors["base"] = "communication_failed"
+            except (Exception, ZcsMowerApiError) as exception:
+                LOGGER.exception(exception)
+                errors["base"] = "connection_failed"
 
             if not errors:
                 # Input is valid, set data and options
                 self._title = user_input.get(CONF_NAME, "")
                 self._options = {
-                    CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
+                    CONF_CLIENT_KEY: client_key,
                     CONF_UPDATE_INTERVAL_WORKING: int(UPDATE_INTERVAL_WORKING_DEFAULT),
                     CONF_UPDATE_INTERVAL_STANDBY: int(UPDATE_INTERVAL_STANDBY_DEFAULT),
                     CONF_UPDATE_INTERVAL_IDLING: int(UPDATE_INTERVAL_IDLING_DEFAULT),
-                    CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
+                    CONF_TRACE_POSITION_ENABLE: user_input.get(
+                        CONF_TRACE_POSITION_ENABLE, False
+                    ),
                     CONF_WAKE_UP_INTERVAL_DEFAULT: int(ROBOT_WAKE_UP_INTERVAL_DEFAULT),
-                    CONF_WAKE_UP_INTERVAL_INFINITY: int(ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                    CONF_WAKE_UP_INTERVAL_INFINITY: int(
+                        ROBOT_WAKE_UP_INTERVAL_INFINITY
+                    ),
                     CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
@@ -197,14 +215,6 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     vol.Required(
                         CONF_NAME,
                         default=(user_input or {}).get(CONF_NAME, ""),
-                    ): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.TEXT
-                        ),
-                    ),
-                    vol.Required(
-                        CONF_CLIENT_KEY,
-                        default=(user_input or {}).get(CONF_CLIENT_KEY, ""),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -246,9 +256,15 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     {
                         CONF_MAP_IMAGE_PATH: image_map_path,
                         CONF_MAP_MARKER_PATH: image_marker_path,
-                        CONF_MAP_ROTATION: float(user_input.get(CONF_MAP_ROTATION, 0.0)),
-                        CONF_MAP_HISTORY_ENABLE: user_input.get(CONF_MAP_HISTORY_ENABLE, True),
-                        CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
+                        CONF_MAP_ROTATION: float(
+                            user_input.get(CONF_MAP_ROTATION, 0.0)
+                        ),
+                        CONF_MAP_HISTORY_ENABLE: user_input.get(
+                            CONF_MAP_HISTORY_ENABLE, True
+                        ),
+                        CONF_MAP_POINTS: int(
+                            user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)
+                        ),
                         CONF_MAP_DRAW_LINES: user_input.get(CONF_MAP_DRAW_LINES, False),
                     }
                 )
@@ -311,7 +327,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     vol.Optional(
                         CONF_MAP_MARKER_PATH,
                         description={
-                            "suggested_value": (user_input or {}).get(CONF_MAP_MARKER_PATH, ""),
+                            "suggested_value": (user_input or {}).get(
+                                CONF_MAP_MARKER_PATH, ""
+                            ),
                         },
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
@@ -324,7 +342,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ): selector.BooleanSelector(),
                     vol.Required(
                         CONF_MAP_POINTS,
-                        default=(user_input or {}).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+                        default=(user_input or {}).get(
+                            CONF_MAP_POINTS, MAP_POINTS_DEFAULT
+                        ),
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
@@ -350,10 +370,10 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             # Validate the IMEI
             try:
-                await validate_imei(
+                mower = await validate_imei(
                     imei=user_input[ATTR_IMEI],
                     client_key=self._options[CONF_CLIENT_KEY],
-                    hass=self.hass
+                    hass=self.hass,
                 )
             except ValueError as exception:
                 LOGGER.info(exception)
@@ -364,6 +384,13 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             except (Exception, ZcsMowerApiError) as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection_failed"
+
+            # TODO:
+            # Ermittel Clients
+            # Pruefe, ob ClientKey bereits enthalten ist
+            # Falls nicht, fuege ClientKey hinzu:
+            # attribute.publish
+            LOGGER.debug(mower)
 
             if not errors:
                 # Input is valid, set data.
@@ -429,10 +456,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
         super().__init__(config_entry)
         self.base_path = os.path.dirname(__file__)
 
-    async def async_step_init(
-        self,
-        user_input: dict | None = None
-    ) -> FlowResult:
+    async def async_step_init(self, user_input: dict | None = None) -> FlowResult:
         """Show options menu for the ZCS Lawn Mower Robot component."""
         return self.async_show_menu(
             step_id="init",
@@ -445,18 +469,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             ],
         )
 
-    async def async_step_add(
-        self,
-        user_input: dict | None = None
-    ) -> FlowResult:
+    async def async_step_add(self, user_input: dict | None = None) -> FlowResult:
         """Add a lawn mower to the garage."""
         errors: dict[str, str] = {}
         if user_input is not None:
             if user_input[ATTR_IMEI] in self._options[CONF_MOWERS]:
                 errors["base"] = "imei_exists"
-            elif (
-                user_input.get(ATTR_NAME, "")
-                and any(m.get(ATTR_NAME, "") == user_input.get(ATTR_NAME) for m in self._options[CONF_MOWERS].values())
+            elif user_input.get(ATTR_NAME, "") and any(
+                m.get(ATTR_NAME, "") == user_input.get(ATTR_NAME)
+                for m in self._options[CONF_MOWERS].values()
             ):
                 errors["base"] = "name_exists"
             else:
@@ -515,10 +536,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             errors=errors,
         )
 
-    async def async_step_change(
-        self,
-        user_input: dict | None = None
-    ) -> FlowResult:
+    async def async_step_change(self, user_input: dict | None = None) -> FlowResult:
         """Change a lawn mower from the garage."""
         errors: dict[str, str] = {}
         last_step = False
@@ -551,15 +569,17 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     mower_name = self._options[CONF_MOWERS][mower_imei].get(ATTR_NAME)
                 else:
                     mower_name = user_input.get(ATTR_NAME)
-                    if (
-                        mower_name != self._options[CONF_MOWERS][mower_imei]
-                        and any(m.get(ATTR_NAME, "") == mower_name for m in self._options[CONF_MOWERS].values())
+                    if mower_name != self._options[CONF_MOWERS][mower_imei] and any(
+                        m.get(ATTR_NAME, "") == mower_name
+                        for m in self._options[CONF_MOWERS].values()
                     ):
                         errors["base"] = "name_exists"
 
                     if not errors:
                         device_registry = dr.async_get(self.hass)
-                        device = device_registry.async_get_device({(DOMAIN, mower_imei)})
+                        device = device_registry.async_get_device(
+                            {(DOMAIN, mower_imei)}
+                        )
                         if not device:
                             return self.async_abort(reason="device_error")
                         LOGGER.debug(device)
@@ -610,10 +630,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             last_step=last_step,
         )
 
-    async def async_step_delete(
-        self,
-        user_input: dict | None = None
-    ) -> FlowResult:
+    async def async_step_delete(self, user_input: dict | None = None) -> FlowResult:
         """Delete a lawn mower from the garage."""
         errors: dict[str, str] = {}
         if user_input is not None:
@@ -626,7 +643,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
 
             if not errors:
                 device_registry = dr.async_get(self.hass)
-                device = device_registry.async_get_device({(DOMAIN, user_input[ATTR_IMEI])})
+                device = device_registry.async_get_device(
+                    {(DOMAIN, user_input[ATTR_IMEI])}
+                )
                 if not device:
                     return self.async_abort(reason="device_error")
                 LOGGER.debug(device)
@@ -637,10 +656,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     device_id=device.id,
                     include_disabled_entities=False,
                 )
-                [
-                    entity_registry.async_remove(e.entity_id)
-                    for e in entries
-                ]
+                [entity_registry.async_remove(e.entity_id) for e in entries]
                 device_registry.async_remove_device(device.id)
                 self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
 
@@ -681,22 +697,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             errors=errors,
         )
 
-    async def async_step_map(
-        self,
-        user_input: dict | None = None
-    ) -> FlowResult:
+    async def async_step_map(self, user_input: dict | None = None) -> FlowResult:
         """Manage the ZCS Lawn Mower Robot map cam settings."""
         errors: dict[str, str] = {}
         gps_top_left = self._options.get(CONF_MAP_GPS_TOP_LEFT, "")
         if gps_top_left is not None:
-            gps_top_left = ",".join(
-                [str(x) for x in gps_top_left]
-            )
+            gps_top_left = ",".join([str(x) for x in gps_top_left])
         gps_bottom_right = self._options.get(CONF_MAP_GPS_BOTTOM_RIGHT, "")
         if gps_bottom_right is not None:
-            gps_bottom_right = ",".join(
-                [str(x) for x in gps_bottom_right]
-            )
+            gps_bottom_right = ",".join([str(x) for x in gps_bottom_right])
         if user_input is not None:
             image_map_path = user_input.get(CONF_MAP_IMAGE_PATH, "").strip()
             image_marker_path = user_input.get(CONF_MAP_MARKER_PATH, "").strip()
@@ -716,9 +725,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                         CONF_MAP_IMAGE_PATH: image_map_path,
                         CONF_MAP_MARKER_PATH: image_marker_path,
-                        CONF_MAP_ROTATION: float(user_input.get(CONF_MAP_ROTATION, 0.0)),
-                        CONF_MAP_HISTORY_ENABLE: user_input.get(CONF_MAP_HISTORY_ENABLE, True),
-                        CONF_MAP_POINTS: int(user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)),
+                        CONF_MAP_ROTATION: float(
+                            user_input.get(CONF_MAP_ROTATION, 0.0)
+                        ),
+                        CONF_MAP_HISTORY_ENABLE: user_input.get(
+                            CONF_MAP_HISTORY_ENABLE, True
+                        ),
+                        CONF_MAP_POINTS: int(
+                            user_input.get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT)
+                        ),
                         CONF_MAP_DRAW_LINES: user_input.get(CONF_MAP_DRAW_LINES, False),
                     }
                 )
@@ -750,11 +765,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 {
                     vol.Optional(
                         CONF_MAP_ENABLE,
-                        default=(user_input or self._options).get(CONF_MAP_ENABLE, False),
+                        default=(user_input or self._options).get(
+                            CONF_MAP_ENABLE, False
+                        ),
                     ): selector.BooleanSelector(),
                     vol.Required(
                         CONF_MAP_IMAGE_PATH,
-                        default=(user_input or self._options).get(CONF_MAP_IMAGE_PATH, ""),
+                        default=(user_input or self._options).get(
+                            CONF_MAP_IMAGE_PATH, ""
+                        ),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT
@@ -778,7 +797,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Required(
                         CONF_MAP_ROTATION,
-                        default=(user_input or self._options).get(CONF_MAP_ROTATION, 0.0),
+                        default=(user_input or self._options).get(
+                            CONF_MAP_ROTATION, 0.0
+                        ),
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
@@ -791,7 +812,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     vol.Optional(
                         CONF_MAP_MARKER_PATH,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_MAP_MARKER_PATH, ""),
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_MAP_MARKER_PATH, ""
+                            ),
                         },
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
@@ -800,11 +823,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_MAP_HISTORY_ENABLE,
-                        default=(user_input or self._options).get(CONF_MAP_HISTORY_ENABLE, True),
+                        default=(user_input or self._options).get(
+                            CONF_MAP_HISTORY_ENABLE, True
+                        ),
                     ): selector.BooleanSelector(),
                     vol.Required(
                         CONF_MAP_POINTS,
-                        default=(user_input or self._options).get(CONF_MAP_POINTS, MAP_POINTS_DEFAULT),
+                        default=(user_input or self._options).get(
+                            CONF_MAP_POINTS, MAP_POINTS_DEFAULT
+                        ),
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
@@ -814,17 +841,16 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_MAP_DRAW_LINES,
-                        default=(user_input or self._options).get(CONF_MAP_DRAW_LINES, False),
+                        default=(user_input or self._options).get(
+                            CONF_MAP_DRAW_LINES, False
+                        ),
                     ): selector.BooleanSelector(),
                 }
             ),
             errors=errors,
         )
 
-    async def async_step_settings(
-        self,
-        user_input: dict | None = None
-    ) -> FlowResult:
+    async def async_step_settings(self, user_input: dict | None = None) -> FlowResult:
         """Manage the ZCS Lawn Mower Robot settings."""
         errors: dict[str, str] = {}
         if user_input is not None:
@@ -832,19 +858,31 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             if len(user_input.get(CONF_CLIENT_KEY)) != 28:
                 errors["base"] = "key_length"
             # Client key only in upper case
-            elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).upper():
+            elif (
+                user_input.get(CONF_CLIENT_KEY)
+                == user_input.get(CONF_CLIENT_KEY).upper()
+            ):
                 errors["base"] = "key_uppercase"
             # Client key only in lower case
-            elif user_input.get(CONF_CLIENT_KEY) == user_input.get(CONF_CLIENT_KEY).lower():
+            elif (
+                user_input.get(CONF_CLIENT_KEY)
+                == user_input.get(CONF_CLIENT_KEY).lower()
+            ):
                 errors["base"] = "key_lowercase"
             # Standby time start and stop are equal
-            elif user_input.get(CONF_STANDBY_TIME_START) == user_input.get(CONF_STANDBY_TIME_STOP):
+            elif user_input.get(CONF_STANDBY_TIME_START) == user_input.get(
+                CONF_STANDBY_TIME_STOP
+            ):
                 errors["base"] = "standby_time_invalid"
             # Update interval for working is bigger than in standby time
-            elif user_input.get(CONF_UPDATE_INTERVAL_WORKING) > user_input.get(CONF_UPDATE_INTERVAL_STANDBY):
+            elif user_input.get(CONF_UPDATE_INTERVAL_WORKING) > user_input.get(
+                CONF_UPDATE_INTERVAL_STANDBY
+            ):
                 errors["base"] = "update_interval_working_invalid"
             # Update interval in standby time is bigger than for idling
-            elif user_input.get(CONF_UPDATE_INTERVAL_STANDBY) > user_input.get(CONF_UPDATE_INTERVAL_IDLING):
+            elif user_input.get(CONF_UPDATE_INTERVAL_STANDBY) > user_input.get(
+                CONF_UPDATE_INTERVAL_IDLING
+            ):
                 errors["base"] = "update_interval_standby_invalid"
             else:
                 try:
@@ -870,14 +908,34 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options.update(
                     {
                         CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
-                        CONF_STANDBY_TIME_START: user_input.get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
-                        CONF_STANDBY_TIME_STOP: user_input.get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
-                        CONF_UPDATE_INTERVAL_WORKING: user_input.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT),
-                        CONF_UPDATE_INTERVAL_STANDBY: user_input.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT),
-                        CONF_UPDATE_INTERVAL_IDLING: user_input.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING_DEFAULT),
-                        CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
-                        CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
-                        CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                        CONF_STANDBY_TIME_START: user_input.get(
+                            CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT
+                        ),
+                        CONF_STANDBY_TIME_STOP: user_input.get(
+                            CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT
+                        ),
+                        CONF_UPDATE_INTERVAL_WORKING: user_input.get(
+                            CONF_UPDATE_INTERVAL_WORKING,
+                            UPDATE_INTERVAL_WORKING_DEFAULT,
+                        ),
+                        CONF_UPDATE_INTERVAL_STANDBY: user_input.get(
+                            CONF_UPDATE_INTERVAL_STANDBY,
+                            UPDATE_INTERVAL_STANDBY_DEFAULT,
+                        ),
+                        CONF_UPDATE_INTERVAL_IDLING: user_input.get(
+                            CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING_DEFAULT
+                        ),
+                        CONF_TRACE_POSITION_ENABLE: user_input.get(
+                            CONF_TRACE_POSITION_ENABLE, False
+                        ),
+                        CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(
+                            CONF_WAKE_UP_INTERVAL_DEFAULT,
+                            ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+                        ),
+                        CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(
+                            CONF_WAKE_UP_INTERVAL_INFINITY,
+                            ROBOT_WAKE_UP_INTERVAL_INFINITY,
+                        ),
                     }
                 )
                 LOGGER.debug("Step settings -> saved options:")
@@ -904,7 +962,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_STANDBY_TIME_START,
                         default=STANDBY_TIME_START_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT
+                            ),
                         },
                     ): selector.TimeSelector(
                         selector.TimeSelectorConfig(),
@@ -914,7 +974,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_STANDBY_TIME_STOP,
                         default=STANDBY_TIME_STOP_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT),
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT
+                            ),
                         },
                     ): selector.TimeSelector(
                         selector.TimeSelectorConfig(),
@@ -924,7 +986,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_UPDATE_INTERVAL_WORKING,
                         default=UPDATE_INTERVAL_WORKING_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT),
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_UPDATE_INTERVAL_WORKING,
+                                UPDATE_INTERVAL_WORKING_DEFAULT,
+                            ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -940,7 +1005,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_UPDATE_INTERVAL_STANDBY,
                         default=UPDATE_INTERVAL_STANDBY_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT),
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_UPDATE_INTERVAL_STANDBY,
+                                UPDATE_INTERVAL_STANDBY_DEFAULT,
+                            ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -956,7 +1024,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_UPDATE_INTERVAL_IDLING,
                         default=UPDATE_INTERVAL_IDLING_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING_DEFAULT),
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_UPDATE_INTERVAL_IDLING,
+                                UPDATE_INTERVAL_IDLING_DEFAULT,
+                            ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -970,14 +1041,19 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     # Trace position
                     vol.Optional(
                         CONF_TRACE_POSITION_ENABLE,
-                        default=(user_input or self._options).get(CONF_TRACE_POSITION_ENABLE, False),
+                        default=(user_input or self._options).get(
+                            CONF_TRACE_POSITION_ENABLE, False
+                        ),
                     ): selector.BooleanSelector(),
                     # Wake up interval (Standard plan)
                     vol.Optional(
                         CONF_WAKE_UP_INTERVAL_DEFAULT,
                         default=ROBOT_WAKE_UP_INTERVAL_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_WAKE_UP_INTERVAL_DEFAULT,
+                                ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+                            ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
@@ -993,7 +1069,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_WAKE_UP_INTERVAL_INFINITY,
                         default=ROBOT_WAKE_UP_INTERVAL_INFINITY,
                         description={
-                            "suggested_value": (user_input or self._options).get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_WAKE_UP_INTERVAL_INFINITY,
+                                ROBOT_WAKE_UP_INTERVAL_INFINITY,
+                            ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
