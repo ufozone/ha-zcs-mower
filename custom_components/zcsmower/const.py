@@ -539,7 +539,7 @@ ROBOT_ERRORS = {
     193: "grass_radar_error_r",
     194: "grass_radar_error_cent",
     195: "bump_error_l",
-    196: "bump_error_r_",
+    196: "bump_error_r",
     256: "board_error",
     257: "config_error",
     258: "test_b_required",

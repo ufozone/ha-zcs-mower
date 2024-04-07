@@ -914,7 +914,7 @@
           "grass_radar_error_r": "Grass Radar Error R",
           "grass_radar_error_cent": "Grass Radar Error CENT",
           "bump_error_l": "Bump Error L",
-          "bump_error_r_": "Bump Error R ",
+          "bump_error_r": "Bump Error R",
           "board_error": "BOARD ERROR",
           "config_error": "CONFIG ERROR",
           "test_b_required": "TEST B REQUIRED",

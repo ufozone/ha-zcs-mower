@@ -914,7 +914,7 @@
           "grass_radar_error_r": "Fehler Radar-Grassensor RE",
           "grass_radar_error_cent": "Fehler Radar-Grassensor MI",
           "bump_error_l": "Hindernisfehler LI",
-          "bump_error_r_": "Hindernisfehler RE",
+          "bump_error_r": "Hindernisfehler RE",
           "board_error": "BOARD ERROR",
           "config_error": "CONFIG ERROR",
           "test_b_required": "TEST B ERFORDERLICH",

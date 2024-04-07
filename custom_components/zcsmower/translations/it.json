@@ -914,7 +914,7 @@
           "grass_radar_error_r": "Errore Radar Erba DX",
           "grass_radar_error_cent": "Errore Radar Erba CENTR",
           "bump_error_l": "Errore Urto SX",
-          "bump_error_r_": "Errore Urto DX",
+          "bump_error_r": "Errore Urto DX",
           "board_error": "BOARD ERROR",
           "config_error": "CONFIG ERROR",
           "test_b_required": "TEST B RICHIESTO",
