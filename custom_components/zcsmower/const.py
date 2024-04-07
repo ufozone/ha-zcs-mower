@@ -603,19 +603,19 @@ ROBOT_ERRORS = {
 }
 DATA_THRESHOLD_STATES = [
     {
-        "name": "0_less_then50_percent",
+        "name": "less_then_50_percent",
         "color": "#0AFA2A"
     },
     {
-        "name": "1_50_percent",
+        "name": "50_percent",
         "color": "#DCFC0F"
     },
     {
-        "name": "2_75_percent",
+        "name": "75_percent",
         "color": "#FA7E0A"
     },
     {
-        "name": "3_100_percent",
+        "name": "100_percent",
         "color": "#FA0D0D"
     },
 ]
