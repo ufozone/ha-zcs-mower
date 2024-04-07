@@ -22,6 +22,8 @@ With configured map and activated vacuum entity, the lawn mower can be displayed
 
 ![Lovelace Card](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/lovelace-card.jpg?raw=true)
 
+The spot cleaning points can be used to start the lawn mower in a specific area.
+
 ## Installation
 
 Requires Home Assistant 2024.2.0 or newer.
