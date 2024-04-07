@@ -313,7 +313,7 @@ _This entity is disabled by default. You have to activate it if you want to use 
 
 * `lawn_mower.dock`, `vacuum.return_to_base`:
 
-    The lawn mower returns to the base and parks there until the next schedule starts.
+    The lawn mower returns to the base and parks there until the next schedule start.
 
 * `vacuum.stop`:
 
