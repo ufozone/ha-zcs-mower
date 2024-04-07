@@ -2,8 +2,9 @@
   "config": {
     "error": {
       "key_length": "Der angegebene Kundenschlüssel ist ungültig. Er ist zu kurz oder zu lang.",
-      "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast ihn über die mobile App auf einem iPhone erhalten? Leider werden alle Buchstaben in Großbuchstaben angezeigt, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Wenn du die Möglichkeit hast, versuche es mit einem Android-Handy. Dort wird der Schlüssel richtig angezeigt.",
-      "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
+      "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast alle Zeichen in Großbuchstaben eingegeben, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Du hast ihn über die mobile App auf einem iPhone erhalten? Wenn du die Möglichkeit hastn, versuche es mit einem Android-Handy. Dort wird der Schlüssel korrekt angezeigt.",
+      "key_lowercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast alle Zeichen in Kleinbuchstaben eingegeben, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Ersetze die letzte Stelle des Kundenschlüssels durch einen anderen Buchstaben oder eine Zahl und versuche es erneut.",
+     "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
       "connection_failed": "Es kann keine Verbindung zum Server hergestellt werden.",
@@ -50,7 +51,8 @@
   "options": {
     "error": {
       "key_length": "Der angegebene Kundenschlüssel ist ungültig. Er ist zu kurz oder zu lang.",
-      "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast ihn über die mobile App auf einem iPhone erhalten? Leider werden alle Buchstaben in Großbuchstaben angezeigt, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Wenn du die Möglichkeit hast, versuche es mit einem Android-Handy. Dort wird der Schlüssel richtig angezeigt.",
+      "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast alle Zeichen in Großbuchstaben eingegeben, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Du hast ihn über die mobile App auf einem iPhone erhalten? Wenn du die Möglichkeit hastn, versuche es mit einem Android-Handy. Dort wird der Schlüssel korrekt angezeigt.",
+      "key_lowercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast alle Zeichen in Kleinbuchstaben eingegeben, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Ersetze die letzte Stelle des Kundenschlüssels durch einen anderen Buchstaben oder eine Zahl und versuche es erneut.",
       "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
