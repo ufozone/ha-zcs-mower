@@ -8,7 +8,6 @@ import random
 
 from homeassistant.core import (
     callback,
-    HomeAssistant,
     HassJob,
 )
 from homeassistant.config_entries import (
