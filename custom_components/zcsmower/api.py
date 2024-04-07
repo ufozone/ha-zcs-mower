@@ -73,23 +73,6 @@ class ZcsMowerApiClient:
         if "session_id" in options:
             self._session_id = options["session_id"]
 
-    async def check_api_client(
-        self,
-    ) -> any:
-        """Check given client key against the API."""
-        result = await self.execute(
-            "thing.find",
-            {
-                "key": self._thing_key
-            }
-        )
-        if result is True and self._response["data"]["success"] is True:
-            return await self.get_response()
-        else:
-            raise ZcsMowerApiAuthenticationError(
-                "Authorization failed. Please check the application configuration."
-            )
-
     async def check_robot(
         self,
         imei: str
