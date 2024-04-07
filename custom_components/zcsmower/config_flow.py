@@ -78,27 +78,33 @@ from .api import (
 )
 
 
-async def validate_auth(client_key: str, hass: HomeAssistant) -> None:
-    """Validate client key.
-
-    Raises a ValueError if the client key is invalid.
-    """
-    if len(client_key) != 28:
-        raise ValueError
-
-    client = ZcsMowerApiClient(
-        session=async_create_clientsession(hass),
-        options={
-            "endpoint": API_BASE_URI,
-            "app_id": client_key,
-            "app_token": API_APP_TOKEN,
-            "thing_key": client_key,
-        },
+async def generate_client_key() -> str:
+    """Generate client key."""
+    # get random client key with length 28 with letters and digits
+    return "".join(
+        random.choice(string.ascii_letters + string.digits) for i in range(28)
     )
-    await client.check_api_client()
 
 
-async def validate_imei(imei: str, client_key: str, hass: HassJob) -> str:
+async def get_client_key(client: ZcsMowerApiClient) -> str:
+    """Generate, validate and return client key."""
+    attempts = 0
+    while True:
+        attempts += 1
+        try:
+            client_key = await generate_client_key()
+            result = await client.app_auth(client_key, API_APP_TOKEN, client_key)
+        except ZcsMowerApiAuthenticationError:
+            result = False
+
+        # Login with generated client key is successfull or max attempts reached
+        if result or attempts > 10:
+            break
+
+    return client_key
+
+
+async def validate_imei(imei: str, client_key: str, hass: HassJob) -> dict:
     """Validate a lawn mower IMEI.
 
     Raises a ValueError if the IMEI is invalid.
@@ -116,11 +122,6 @@ async def validate_imei(imei: str, client_key: str, hass: HassJob) -> str:
         },
     )
     return await client.check_robot(imei=imei)
-
-async def generate_client_key() -> str:
-    """Generate client key."""
-    # get random client key with length 28 with letters and digits
-    return "".join(random.choice(string.ascii_letters + string.digits) for i in range(28))
 
 
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -141,30 +142,30 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         """Invoke when a user initiates a flow via the user interface."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            client_key = "6LBcRKCf6U5uyVJpmr8eVJMmvHfc"
-            # TODO:
-            # do-while Schleife
-            # Generiere 28-Stellen ClientKey
-            # validate_auth return bool
-            # thing.update
-            # name = Home Assistant (Garage Name)
-
-            client_key_test = await generate_client_key()
-            LOGGER.debug(client_key_test)
-
-            #while True:
-            #    anweisungen ausfuehren
-            #    if bedingung:
-            #        break ## break-Anweisung
-
+            # Garage Name
+            garage_name = user_input.get(CONF_NAME, "").strip()
             try:
-                await validate_auth(
-                    client_key=client_key,
-                    hass=self.hass,
+                client = ZcsMowerApiClient(
+                    session=async_create_clientsession(self.hass),
+                    options={
+                        "endpoint": API_BASE_URI,
+                    },
                 )
-            except ValueError as exception:
-                LOGGER.info(exception)
-                errors["base"] = "key_invalid"
+                client_key = await get_client_key(client)
+                await client.execute(
+                    "thing.find",
+                    {
+                        "key": client_key,
+                    },
+                )
+                await client.get_response()
+                await client.execute(
+                    "thing.update",
+                    {
+                        "key": client_key,
+                        "name": f"{garage_name} (Home Assistant)",
+                    },
+                )
             except ZcsMowerApiAuthenticationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "auth_failed"
@@ -177,7 +178,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
             if not errors:
                 # Input is valid, set data and options
-                self._title = user_input.get(CONF_NAME, "")
+                self._title = garage_name
                 self._options = {
                     CONF_CLIENT_KEY: client_key,
                     CONF_UPDATE_INTERVAL_WORKING: int(UPDATE_INTERVAL_WORKING_DEFAULT),
@@ -854,23 +855,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
         """Manage the ZCS Lawn Mower Robot settings."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            # Client key shorter or longer than 28 digits
-            if len(user_input.get(CONF_CLIENT_KEY)) != 28:
-                errors["base"] = "key_length"
-            # Client key only in upper case
-            elif (
-                user_input.get(CONF_CLIENT_KEY)
-                == user_input.get(CONF_CLIENT_KEY).upper()
-            ):
-                errors["base"] = "key_uppercase"
-            # Client key only in lower case
-            elif (
-                user_input.get(CONF_CLIENT_KEY)
-                == user_input.get(CONF_CLIENT_KEY).lower()
-            ):
-                errors["base"] = "key_lowercase"
             # Standby time start and stop are equal
-            elif user_input.get(CONF_STANDBY_TIME_START) == user_input.get(
+            if user_input.get(CONF_STANDBY_TIME_START) == user_input.get(
                 CONF_STANDBY_TIME_STOP
             ):
                 errors["base"] = "standby_time_invalid"
@@ -884,30 +870,11 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 CONF_UPDATE_INTERVAL_IDLING
             ):
                 errors["base"] = "update_interval_standby_invalid"
-            else:
-                try:
-                    await validate_auth(
-                        client_key=user_input.get(CONF_CLIENT_KEY),
-                        hass=self.hass,
-                    )
-                except ValueError as exception:
-                    LOGGER.info(exception)
-                    errors["base"] = "key_invalid"
-                except ZcsMowerApiAuthenticationError as exception:
-                    LOGGER.error(exception)
-                    errors["base"] = "auth_failed"
-                except ZcsMowerApiCommunicationError as exception:
-                    LOGGER.error(exception)
-                    errors["base"] = "communication_failed"
-                except (Exception, ZcsMowerApiError) as exception:
-                    LOGGER.exception(exception)
-                    errors["base"] = "connection_failed"
 
             if not errors:
                 # Input is valid, set data
                 self._options.update(
                     {
-                        CONF_CLIENT_KEY: user_input.get(CONF_CLIENT_KEY, "").strip(),
                         CONF_STANDBY_TIME_START: user_input.get(
                             CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT
                         ),
@@ -948,15 +915,6 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             step_id="settings",
             data_schema=vol.Schema(
                 {
-                    # Client key
-                    vol.Required(
-                        CONF_CLIENT_KEY,
-                        default=(user_input or self._options).get(CONF_CLIENT_KEY, ""),
-                    ): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.TEXT
-                        ),
-                    ),
                     # Standby time starts
                     vol.Optional(
                         CONF_STANDBY_TIME_START,
