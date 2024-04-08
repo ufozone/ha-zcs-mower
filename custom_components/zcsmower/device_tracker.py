@@ -113,7 +113,7 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
             imei=self._imei,
         )
         for state in history_list.get(self.entity_id, []):
-            if state.state not in [STATE_UNKNOWN, STATE_UNAVAILABLE, None]:
+            if state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE, None):
                 latitude = state.attributes.get(ATTR_LATITUDE, None)
                 longitude = state.attributes.get(ATTR_LONGITUDE, None)
                 if latitude and longitude:
