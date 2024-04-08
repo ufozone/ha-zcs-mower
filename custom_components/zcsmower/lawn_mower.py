@@ -92,11 +92,11 @@ class ZcsMowerLawnMowerEntity(ZcsMowerEntity, LawnMowerEntity):
     @property
     def state(self) -> str:
         """Return the state of the lawn mower."""
-        if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "gotostation", "bordercut"):
+        if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "gotostation", "bordercut", "mapping_started", "mapping_ended"):
             return LawnMowerActivity.MOWING
         if self._get_attribute(ATTR_STATE) == "charge":
             return LawnMowerActivity.DOCKED
-        if self._get_attribute(ATTR_STATE) in ("pause", "work_standby"):
+        if self._get_attribute(ATTR_STATE) in ("pause", "work_standby", "hot_temperature"):
             return LawnMowerActivity.PAUSED
         return LawnMowerActivity.ERROR
 
