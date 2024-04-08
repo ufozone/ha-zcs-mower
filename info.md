@@ -200,12 +200,12 @@ _This entity is deprecated and is disabled by default. Do not activate it as it 
 ### Lawn Mower
 
 * mower
-  | Values      | Description       | Lawn mower state(s)                         |
-  |-------------|-------------------|---------------------------------------------|
-  | mowing      | Mowing            | Work, Go to area, Go to station, Border cut |
-  | docked      | Docked            | Charge                                      |
-  | paused      | Paused            | Pause, Work standby                         |
-  | error       | Error             | Error, No signal, Expired, Renewed          |
+  | Values      | Description       | Lawn mower state(s)                                                         |
+  |-------------|-------------------|-----------------------------------------------------------------------------|
+  | mowing      | Mowing            | Work, Go to area, Go to station, Border cut, Mapping started, Mapping ended |
+  | docked      | Docked            | Charge                                                                      |
+  | paused      | Paused            | Pause, Work standby                                                         |
+  | error       | Error             | Error, No signal, Expired, Renewed, Hot temperature                         |
 
     ```text
     attributes: 
@@ -223,34 +223,37 @@ _These entities are disabled by default. You have to activate it if you want to 
 ### Sensor
 
 * state
-  | Values       | Description   |
-  |--------------|---------------|
-  | unknown      | Unknown       |
-  | charge       | Charge        |
-  | work         | Work          |
-  | pause        | Pause         |
-  | fail         | Error         |
-  | nosignal     | No signal     |
-  | gotostation  | Go to station |
-  | gotoarea     | Go to area    |
-  | bordercut    | Border cut    |
-  | expired      | Expired       |
-  | renewed      | Renewed       |
-  | work_standby | Work standby  |
+  | Values          | Description     |
+  |-----------------|-----------------|
+  | unknown         | Unknown         |
+  | charge          | Charge          |
+  | work            | Work            |
+  | pause           | Pause           |
+  | fail            | Error           |
+  | nosignal        | No signal       |
+  | gotostation     | Go to station   |
+  | gotoarea        | Go to area      |
+  | bordercut       | Border cut      |
+  | expired         | Expired         |
+  | renewed         | Renewed         |
+  | work_standby    | Work standby    |
+  | hot_temperature | Hot temperature |
+  | mapping_started | Mapping started |
+  | mapping_ended   | Mapping ended   |
 
 ### Vacuum
 
 _This entity is disabled by default. You have to activate it if you want to use it._
 
 * mower
-  | Values      | Description       | Lawn mower state(s)                |
-  |-------------|-------------------|------------------------------------|
-  | cleaning    | Mowing            | Work, Go to area, Border cut       |
-  | docked      | Docked            | Charge                             |
-  | paused      | Paused            | Pause                              |
-  | returning   | Returning to dock | Go to station                      |
-  | idle        | Idle              | Work standby                       |
-  | error       | Error             | Error, No signal, Expired, Renewed |
+  | Values      | Description       | Lawn mower state(s)                                 |
+  |-------------|-------------------|-----------------------------------------------------|
+  | cleaning    | Mowing            | Work, Go to area, Border cut, Mapping started       |
+  | docked      | Docked            | Charge                                              |
+  | paused      | Paused            | Pause                                               |
+  | returning   | Returning to dock | Go to station, Mapping ended                        |
+  | idle        | Idle              | Work standby                                        |
+  | error       | Error             | Error, No signal, Expired, Renewed, Hot temperature |
 
     ```text
     attributes: 

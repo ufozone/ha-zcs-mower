@@ -697,7 +697,10 @@
           "bordercut": "Border cut",
           "expired": "Expired",
           "renewed": "Renewed",
-          "work_standby": "Work standby"
+          "work_standby": "Work standby",
+          "hot_temperature": "Hot temperature",
+          "mapping_started": "Mapping started",
+          "mapping_ended": "Mapping ended"
         },
         "state_attributes": {
           "imei": {

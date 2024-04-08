@@ -697,7 +697,10 @@
           "bordercut": "Randmähen",
           "expired": "Abgelaufen",
           "renewed": "Erneuert",
-          "work_standby": "Arbeitsbereitschaft"
+          "work_standby": "Arbeitsbereitschaft",
+          "hot_temperature": "Hohe Temperatur",
+          "mapping_started": "Kartierung gestartet",
+          "mapping_ended": "Kartierung abgeschlossen"
         },
         "state_attributes": {
           "imei": {

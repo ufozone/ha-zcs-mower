@@ -350,6 +350,16 @@ ROBOT_STATES = [
         "icon": "mdi:thermometer-alert",
         "color": "#DB4B4B",
     },
+    {
+        "name": "mapping_started",
+        "icon": "mdi:map-marker-star",
+        "color": "#007A08",
+    },
+    {
+        "name": "mapping_ended",
+        "icon": "mdi:map-marker-check",
+        "color": "#D67070",
+    },
 ]
 ROBOT_STATES_WORKING = [2, 6, 7, 8, 11]
 ROBOT_ERRORS = {
