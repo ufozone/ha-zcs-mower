@@ -104,13 +104,13 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
     @property
     def state(self) -> str:
         """Return the state of the lawn mower."""
-        if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "bordercut"):
+        if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "bordercut", "mapping_started"):
             return STATE_CLEANING
         if self._get_attribute(ATTR_STATE) == "charge":
             return STATE_DOCKED
         if self._get_attribute(ATTR_STATE) == "pause":
             return STATE_PAUSED
-        if self._get_attribute(ATTR_STATE) == "gotostation":
+        if self._get_attribute(ATTR_STATE) in ("gotostation", "mapping_ended"):
             return STATE_RETURNING
         if self._get_attribute(ATTR_STATE) == "work_standby":
             return STATE_IDLE
