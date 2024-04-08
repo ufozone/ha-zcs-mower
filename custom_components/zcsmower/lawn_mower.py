@@ -96,7 +96,7 @@ class ZcsMowerLawnMowerEntity(ZcsMowerEntity, LawnMowerEntity):
             return LawnMowerActivity.MOWING
         if self._get_attribute(ATTR_STATE) == "charge":
             return LawnMowerActivity.DOCKED
-        if self._get_attribute(ATTR_STATE) in ("pause", "work_standby", "hot_temperature"):
+        if self._get_attribute(ATTR_STATE) in ("pause", "work_standby"):
             return LawnMowerActivity.PAUSED
         return LawnMowerActivity.ERROR
 

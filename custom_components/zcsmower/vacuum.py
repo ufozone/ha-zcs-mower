@@ -108,7 +108,7 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
             return STATE_CLEANING
         if self._get_attribute(ATTR_STATE) == "charge":
             return STATE_DOCKED
-        if self._get_attribute(ATTR_STATE) in ("pause", "hot_temperature"):
+        if self._get_attribute(ATTR_STATE) == "pause":
             return STATE_PAUSED
         if self._get_attribute(ATTR_STATE) in ("gotostation", "mapping_ended"):
             return STATE_RETURNING
