@@ -447,8 +447,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
         # Lawn mower is working
         if mower.get(ATTR_WORKING, False):
-            # Get inifity intervals, if Infinity+ is active
-            if mower.get(ATTR_INFINITY) == "active":
+            # Get inifity intervals, if Infinity+ is active or pending
+            if mower.get(ATTR_INFINITY) in ["active", "pending"]:
                 _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY)
             # Get default intervals, if Infinity+ is not active
             else:
