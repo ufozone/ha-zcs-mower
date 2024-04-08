@@ -392,10 +392,10 @@ class ZcsMowerCameraEntity(ZcsMowerEntity, Camera):
         """Update extra attributes."""
         if self.map_enabled:
             calibration_points = []
-            for point in [
+            for point in (
                 self.map_gps_top_left,
                 self.map_gps_bottom_right,
-            ]:
+            ):
                 img_point = self._scale_to_image(
                     (point[0], point[1]), (self._image.size[0], self._image.size[1])
                 )
