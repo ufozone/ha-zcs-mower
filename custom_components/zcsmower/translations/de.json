@@ -132,7 +132,7 @@
           "update_interval_idling": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn alle Rasenmäher im Leerlauf sind?",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
           "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
-          "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
+          "wake_up_interval_infinity": "+Infinity: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
         }
       }
     }
@@ -703,6 +703,16 @@
           "mapping_ended": "Kartierung abgeschlossen"
         },
         "state_attributes": {
+          "infinity_state": {
+            "name": "+Infinity Status",
+            "state": {
+              "true": "Aktiviert",
+              "false": "Deaktiviert"
+            }
+          },
+          "infinity_expiration": {
+            "name": "+Infinity Ablaufdatum"
+          },
           "imei": {
             "name": "IMEI"
           },

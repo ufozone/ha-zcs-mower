@@ -988,7 +988,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
-                    # Wake up interval (Infinity+ plan)
+                    # Wake up interval (+Infinity plan)
                     vol.Optional(
                         CONF_WAKE_UP_INTERVAL_INFINITY,
                         default=ROBOT_WAKE_UP_INTERVAL_INFINITY,
