@@ -50,6 +50,7 @@ from .const import (
     ATTR_IMEI,
     ATTR_DATA_THRESHOLD,
     ATTR_INFINITY_STATE,
+    ATTR_INFINITY_EXPIRATION,
     ATTR_SERIAL_NUMBER,
     ATTR_WORKING,
     ATTR_ERROR,
@@ -124,6 +125,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_STATE: None,
                 ATTR_DATA_THRESHOLD: None,
                 ATTR_INFINITY_STATE: None,
+                ATTR_INFINITY_EXPIRATION: None,
                 ATTR_ICON: None,
                 ATTR_WORKING: False,
                 ATTR_AVAILABLE: False,
@@ -425,6 +427,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 _state = infinity_plan_status["state"] if infinity_plan_status["state"] < len(INFINITY_PLAN_STATES) else 0
                 mower[ATTR_INFINITY_STATE] = INFINITY_PLAN_STATES[_state]["name"]
         if "attrs" in data:
+            # In most cases, infinity_expiration_date is not available
+            if "infinity_expiration_date" in data["attrs"]:
+                infinity_expiration_date = data["attrs"]["infinity_expiration_date"]
+                mower[ATTR_INFINITY_EXPIRATION] = self._convert_datetime_from_api(infinity_expiration_date["value"])
             # In some cases, robot_serial is not available
             if "robot_serial" in data["attrs"]:
                 mower[ATTR_SERIAL_NUMBER] = data["attrs"]["robot_serial"]["value"]
@@ -447,10 +453,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
         # Lawn mower is working
         if mower.get(ATTR_WORKING, False):
-            # Get inifity intervals, if Infinity+ is active or pending
-            if mower.get(ATTR_INFINITY_STATE) in ("active", "pending"):
+            # Get inifity interval, if Infinity+ is active or pending and valid
+            if mower.get(ATTR_INFINITY_STATE) in ("active", "pending") and mower.get(ATTR_INFINITY_EXPIRATION) > self._get_datetime_now():
                 _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY)
-            # Get default intervals, if Infinity+ is not active
+            # Get default interval, if Infinity+ is not active
             else:
                 _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT)
 
