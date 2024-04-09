@@ -81,11 +81,10 @@ class ZcsMowerNumberEntity(ZcsMowerEntity, NumberEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="number",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
 
 class ZcsMowerDurationNumberEntity(ZcsMowerNumberEntity):
     """Representation of a ZCS Lawn Mower Robot number for command with duration."""

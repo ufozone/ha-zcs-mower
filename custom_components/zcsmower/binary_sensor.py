@@ -71,11 +71,10 @@ class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="binary_sensor",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""

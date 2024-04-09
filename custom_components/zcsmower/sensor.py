@@ -68,11 +68,10 @@ class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="sensor",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
 
     @property
     def icon(self) -> str:

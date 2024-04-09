@@ -83,11 +83,10 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="device_tracker",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
 
     async def async_added_to_hass(self) -> None:
         """Register callbacks."""

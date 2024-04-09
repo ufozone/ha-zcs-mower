@@ -111,12 +111,11 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="image",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
         self.content_type = "image/png"
-        self.entity_description = entity_description
 
         self.map_enabled = self.config_entry.options.get(CONF_MAP_ENABLE, False)
         self.map_gps_top_left = None
