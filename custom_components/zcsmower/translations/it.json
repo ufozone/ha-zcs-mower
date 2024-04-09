@@ -1,6 +1,10 @@
 {
   "config": {
     "error": {
+      "key_length": "La chiave client fornita non è valida. È troppo corta o troppo lunga.",
+      "key_uppercase": "Probabilmente la chiave client non è corretta. Avete inserito tutti i caratteri in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. L'avete ottenuto dall'applicazione mobile su un iPhone? Se ne avete la possibilità, provate a utilizzare un telefono Android. La chiave viene visualizzata correttamente.",
+      "key_lowercase": "Probabilmente la chiave client non è corretta. Avete inserito tutti i caratteri in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. Sostituire l'ultima cifra della chiave client con un'altra lettera o numero e riprovare.",
+      "key_invalid": "La chiave client fornita non è valida.",
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
       "connection_failed": "Impossibile connettersi al server.",
@@ -14,6 +18,7 @@
         "description": "Inserite il nome del garage e la chiave cliente. Il nome del garage può essere scelto liberamente, mentre la chiave cliente si trova nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
           "name": "Nome del garage",
+          "client_key": "Chiave cliente",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
           "map_enable": "Abilitare la mappa?"
         }
@@ -45,6 +50,10 @@
   },
   "options": {
     "error": {
+      "key_length": "La chiave client fornita non è valida. È troppo corta o troppo lunga.",
+      "key_uppercase": "Probabilmente la chiave client non è corretta. Avete inserito tutti i caratteri in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. L'avete ottenuto dall'applicazione mobile su un iPhone? Se ne avete la possibilità, provate a utilizzare un telefono Android. La chiave viene visualizzata correttamente.",
+      "key_lowercase": "Probabilmente la chiave client non è corretta. Avete inserito tutti i caratteri in maiuscolo, anche se la chiave è composta da lettere maiuscole e minuscole. Sostituire l'ultima cifra della chiave client con un'altra lettera o numero e riprovare.",
+      "key_invalid": "La chiave client fornita non è valida.",
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
       "connection_failed": "Impossibile connettersi al server.",
@@ -115,6 +124,7 @@
         "title": "Configurare il garage",
         "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
+          "client_key": "Chiave cliente",
           "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
           "standby_time_stop": "A che ora termina il periodo di standby giornaliero?",
           "update_interval_working": "Ogni quanti secondi devono essere aggiornati i dati quando uno o più tosaerba sono in funzione?",

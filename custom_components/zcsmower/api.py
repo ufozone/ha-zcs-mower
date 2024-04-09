@@ -73,6 +73,23 @@ class ZcsMowerApiClient:
         if "session_id" in options:
             self._session_id = options["session_id"]
 
+    async def check_api_client(
+        self,
+    ) -> any:
+        """Check given client key against the API."""
+        result = await self.execute(
+            "thing.find",
+            {
+                "key": self._thing_key
+            }
+        )
+        if result is True and self._response["data"]["success"] is True:
+            return self._response["data"]["params"]
+        else:
+            raise ZcsMowerApiAuthenticationError(
+                "Authorization failed. Please check the application configuration."
+            )
+
     async def check_robot(
         self,
         imei: str
@@ -159,11 +176,12 @@ class ZcsMowerApiClient:
                     # If session is invalid, refresh authentication and execute command
                     # again possible loop, if authentication session is always invalid
                     # after successful refresh
-                    if len([
+                    for error in (
                         error
                         for error in self._error
                         if "Authentication session is invalid: Error: Session " in error
-                    ]) > 0:
+                    ):
+                        LOGGER.info(error)
                         refresh_auth = await self.auth()
                         if refresh_auth:
                             data["auth"]["sessionId"] = self._session_id
