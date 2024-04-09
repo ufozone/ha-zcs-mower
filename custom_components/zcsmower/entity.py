@@ -72,7 +72,7 @@ class ZcsMowerEntity(CoordinatorEntity):
                 (DOMAIN, self._imei)
             },
             #connections={
-            #    ("gsm", self._imei)
+            #    (ATTR_IMEI, self._imei)
             #},
             name=self._name,
             model=self._get_attribute(ATTR_MODEL),
