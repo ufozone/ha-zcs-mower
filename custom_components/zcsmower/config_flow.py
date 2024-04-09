@@ -873,6 +873,16 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 errors["base"] = "update_interval_standby_invalid"
 
             if not errors:
+                # TODO:
+                # Checkbox: Generate new client key for authentication
+                # If True:
+                #  _client_key_old = conf.client_key
+                #  _client_key_new = generate
+                # Search _client_key_old in robot_clientX
+                # Get key for robot_clientX or first empty
+                # Set _client_key_new in robot_clientX
+                # Save in options
+
                 # Input is valid, set data
                 self._options.update(
                     {
