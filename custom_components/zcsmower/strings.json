@@ -132,7 +132,7 @@
           "update_interval_idling": "Every how many seconds should the data be updated when all lawn mowers are idle?",
           "trace_position_enable": "Enable position tracing?",
           "wake_up_interval_default": "Default: Every how many seconds should the lawn mower wake up?",
-          "wake_up_interval_infinity": "Infinity+: Every how many seconds should the lawn mower wake up?"
+          "wake_up_interval_infinity": "+Infinity: Every how many seconds should the lawn mower wake up?"
         }
       }
     }
@@ -703,6 +703,16 @@
           "mapping_ended": "Mapping ended"
         },
         "state_attributes": {
+          "infinity_state": {
+            "name": "+Infinity State",
+            "state": {
+              "true": "[%key:common::state::enabled%]",
+              "false": "[%key:common::state::disabled%]"
+            }
+          },
+          "infinity_expiration": {
+            "name": "+Infinity expiration date"
+          },
           "imei": {
             "name": "IMEI"
           },

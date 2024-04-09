@@ -132,7 +132,7 @@
           "update_interval_idling": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono inattivi?",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
           "wake_up_interval_default": "Default: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
-          "wake_up_interval_infinity": "Infinity+: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?"
+          "wake_up_interval_infinity": "+Infinity: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?"
         }
       }
     }
@@ -703,6 +703,16 @@
           "mapping_ended": "Mappatura completata"
         },
         "state_attributes": {
+          "infinity_state": {
+            "name": "+Infinity stato",
+            "state": {
+              "true": "Abilitato",
+              "false": "Disabili"
+            }
+          },
+          "infinity_expiration": {
+            "name": "+Infinity data di scadenza"
+          },
           "imei": {
             "name": "IMEI"
           },
