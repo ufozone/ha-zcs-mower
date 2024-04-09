@@ -1,6 +1,10 @@
 {
   "config": {
     "error": {
+      "key_length": "Der angegebene Kundenschlüssel ist ungültig. Er ist zu kurz oder zu lang.",
+      "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast alle Zeichen in Großbuchstaben eingegeben, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Du hast ihn über die mobile App auf einem iPhone erhalten? Wenn du die Möglichkeit hastn, versuche es mit einem Android-Handy. Dort wird der Schlüssel korrekt angezeigt.",
+      "key_lowercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast alle Zeichen in Kleinbuchstaben eingegeben, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Ersetze die letzte Stelle des Kundenschlüssels durch einen anderen Buchstaben oder eine Zahl und versuche es erneut.",
+     "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
       "connection_failed": "Es kann keine Verbindung zum Server hergestellt werden.",
@@ -14,6 +18,7 @@
         "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel ein. Den Garagennamen kannst du frei wählen und den Kundenschlüssel findest du in der mobilen App. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
           "name": "Garagenname",
+          "client_key": "Kundenschlüssel",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
           "map_enable": "Karte aktivieren?"
         }
@@ -45,6 +50,10 @@
   },
   "options": {
     "error": {
+      "key_length": "Der angegebene Kundenschlüssel ist ungültig. Er ist zu kurz oder zu lang.",
+      "key_uppercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast alle Zeichen in Großbuchstaben eingegeben, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Du hast ihn über die mobile App auf einem iPhone erhalten? Wenn du die Möglichkeit hastn, versuche es mit einem Android-Handy. Dort wird der Schlüssel korrekt angezeigt.",
+      "key_lowercase": "Der Kundenschlüssel ist wahrscheinlich falsch. Du hast alle Zeichen in Kleinbuchstaben eingegeben, obwohl der Schlüssel aus Groß- und Kleinbuchstaben besteht. Ersetze die letzte Stelle des Kundenschlüssels durch einen anderen Buchstaben oder eine Zahl und versuche es erneut.",
+      "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
       "connection_failed": "Es kann keine Verbindung zum Server hergestellt werden.",
@@ -115,6 +124,7 @@
         "title": "Konfigurieren der Garage",
         "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
         "data": {
+          "client_key": "Kundenschlüssel",
           "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",
           "standby_time_stop": "Um wie viel Uhr endet die tägliche Bereitschaftszeit?",
           "update_interval_working": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn ein oder mehrere Rasenmäher in Betrieb sind?",
