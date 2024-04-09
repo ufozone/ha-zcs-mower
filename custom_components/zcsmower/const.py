@@ -49,7 +49,7 @@ CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
 ATTR_DATA_THRESHOLD = "data_threshold"
-ATTR_INFINITY = "infinity"
+ATTR_INFINITY_STATE = "infinity_state"
 ATTR_SERIAL_NUMBER = "serial_number"
 ATTR_WORKING = "working"
 ATTR_ERROR = "error"
