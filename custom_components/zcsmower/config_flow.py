@@ -6,10 +6,7 @@ import os
 import string
 import random
 
-from homeassistant.core import (
-    callback,
-    HassJob,
-)
+from homeassistant.core import callback
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
