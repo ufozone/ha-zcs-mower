@@ -1,28 +1,28 @@
 {
   "config": {
     "error": {
-      "key_invalid": "La chiave client fornita non è valida.",
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
       "connection_failed": "Impossibile connettersi al server.",
       "path_invalid": "Il percorso specificato per il file non è valido: è necessario un percorso assoluto.",
       "coordinates_invalid": "Le coordinate GPS fornite non sono valide: sono necessarie latitudine e longitudine separate da virgole.",
-      "imei_invalid": "L'IMEI fornito non è valido."
+      "imei_invalid": "L'IMEI fornito non è valido. Deve iniziare con \"35\" ed essere composto da 15 cifre.",
+      "mower_invalid": "Non è stato possibile trovare il tosaerba o si è verificato un altro errore. Controllare i file di log.",
+      "mower_toomanyclients": "Ci sono troppi client remoti collegati al tosaerba. Aprire l'applicazione mobile sullo smartphone, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un client remoto."
     },
     "step": {
       "user": {
         "title": "Allestimento del garage",
-        "description": "Immettere il nome dell'officina e la chiave cliente, che si trova nell'app mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Inserite qui il nome del vostro garage. È possibile sceglierlo liberamente. Specificare inoltre se si desidera attivare il rilevamento della posizione e la visualizzazione della mappa. È possibile modificare queste impostazioni anche in seguito. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
         "data": {
           "name": "Nome del garage",
-          "client_key": "Chiave cliente",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
-          "map_enable": "Abilitare la mappa"
+          "map_enable": "Abilitare la mappa?"
         }
       },
       "map": {
         "title": "Configurare la mappa",
-        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
         "data": {
           "map_image_path": "Percorso dell'immagine della mappa",
           "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
@@ -36,10 +36,10 @@
       },
       "mower": {
         "title": "Aggiungi un tosaerba",
-        "description": "Aggiungere un tosaerba, selezionare la casella per aggiungerne un altro.",
+        "description": "Aggiungere un tosaerba. Siete liberi di scegliere il nome. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
         "data": {
-          "name": "Nome del tosaerba",
           "imei": "IMEI del tosaerba",
+          "name": "Nome del tosaerba",
           "add_another": "Aggiungere un altro tosaerba?"
         }
       }
@@ -47,16 +47,17 @@
   },
   "options": {
     "error": {
-      "key_invalid": "La chiave client fornita non è valida.",
       "auth_failed": "Autorizzazione fallita.",
       "communication_failed": "Non è stato possibile eseguire l'azione.",
       "connection_failed": "Impossibile connettersi al server.",
       "standby_time_invalid": "Gli orari di inizio e fine del tempo di standby non devono coincidere.",
       "update_interval_working_invalid": "L'intervallo di aggiornamento per il funzionamento non può essere maggiore di quello per lo standby.",
       "update_interval_standby_invalid": "L'intervallo di aggiornamento pronto non può essere maggiore di inattivo.",
-      "imei_invalid": "L'IMEI fornito non è valido.",
       "imei_exists": "Un tosaerba con questo IMEI esiste già.",
       "name_exists": "Un tosaerba con questo nome esiste già.",
+      "imei_invalid": "L'IMEI fornito non è valido. Deve iniziare con \"35\" ed essere composto da 15 cifre.",
+      "mower_invalid": "Non è stato possibile trovare il tosaerba o si è verificato un altro errore. Controllare i file di log.",
+      "mower_toomanyclients": "Ci sono troppi client remoti collegati al tosaerba. Aprire l'applicazione mobile sullo smartphone, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un client remoto.",
       "imei_not_exists": "Un tagliaerba con questo IMEI non esiste.",
       "delete_not_confirmed": "La cancellazione del tosaerba non è stata confermata.",
       "last_mower": "Non è possibile eliminare l'ultimo tosaerba.",
@@ -77,10 +78,10 @@
       },
       "add": {
         "title": "Aggiungi un tosaerba",
-        "description": "Aggiungete un altro tosaerba.",
+        "description": "Aggiungere un altro tosaerba. Siete liberi di scegliere il nome. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
         "data": {
-          "name": "Nome del tosaerba",
-          "imei": "IMEI del tosaerba"
+          "imei": "IMEI del tosaerba",
+          "name": "Nome del tosaerba"
         }
       },
       "change": {
@@ -101,7 +102,7 @@
       },
       "map": {
         "title": "Configurare la mappa",
-        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine.",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
         "data": {
           "map_enable": "Abilitare la mappa?",
           "map_image_path": "Percorso dell'immagine della mappa",
@@ -116,9 +117,9 @@
       },
       "settings": {
         "title": "Configurare il garage",
-        "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
         "data": {
-          "client_key": "Chiave cliente",
+          "generate_client_key": "Generare nuovamente una nuova chiave client (consigliato solo se la connessione non è più possibile).",
           "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
           "standby_time_stop": "A che ora termina il periodo di standby giornaliero?",
           "update_interval_working": "Ogni quanti secondi devono essere aggiornati i dati quando uno o più tosaerba sono in funzione?",
@@ -126,7 +127,7 @@
           "update_interval_idling": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono inattivi?",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
           "wake_up_interval_default": "Default: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
-          "wake_up_interval_infinity": "Infinity+: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?"
+          "wake_up_interval_infinity": "+Infinity: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?"
         }
       }
     }
@@ -659,9 +660,22 @@
           "bordercut": "Taglio del bordo",
           "expired": "Scaduto",
           "renewed": "Rinnovato",
-          "work_standby": "Standby di lavoro"
+          "work_standby": "Standby di lavoro",
+          "hot_temperature": "Alta temperatura",
+          "mapping_started": "Mappatura avviata",
+          "mapping_ended": "Mappatura completata"
         },
         "state_attributes": {
+          "infinity_state": {
+            "name": "+Infinity stato",
+            "state": {
+              "true": "Abilitato",
+              "false": "Disabili"
+            }
+          },
+          "infinity_expiration": {
+            "name": "+Infinity data di scadenza"
+          },
           "imei": {
             "name": "IMEI"
           },
@@ -852,6 +866,31 @@
           "steer_error_br_fail": "Errore Sterzata - BR-FAIL",
           "steer_error_br_blocked": "Errore Sterzata - BR-BLOCKED",
           "radar_error": "Errore Radar",
+          "front_tilt_error": "Errore Front Tilt",
+          "hub_board_error": "Errore Scheda Hub",
+          "bump_error_front_l_cent": "Errore Urto ANT-SX-CENTR",
+          "bump_error_front_cent_cent": "Errore Urto ANT-CENTR-CENTR",
+          "bump_error_front_r_cent": "Errore Urto ANT-DX-CENTR",
+          "bump_error_rear_l": "Errore Urto POST-SX",
+          "bump_error_rear_cent": "Errore Urto POST-CENTR",
+          "bump_error_rear_r": "Errore Urto POST-DX",
+          "bump_error_front_cent_l": "Errore Urto ANT-CENTR-SX",
+          "bump_error_front_cent_r": "Errore Urto ANT-CENTR-DX",
+          "chasm_error_front_l": "Errore Baratro ANT-SX",
+          "chasm_error_front_r": "Errore Baratro ANT-DX",
+          "bump_error_front_l_l": "Errore Urto ANT-SX-SX",
+          "bump_error_front_l_r": "Errore Urto ANT-SX-DX",
+          "bump_error_front_r_l": "Errore Urto ANT-DX-SX",
+          "bump_error_front_r_r": "Errore Urto ANT-DX-DX",
+          "bump_error_l_front": "Errore Urto SX-ANT",
+          "bump_error_l_rear": "Errore Urto SX-POST",
+          "bump_error_r_front": "Errore Urto DX-ANT",
+          "bump_error_r_rear": "Errore Urto DX-POST",
+          "grass_radar_error_l": "Errore Radar Erba SX",
+          "grass_radar_error_r": "Errore Radar Erba DX",
+          "grass_radar_error_cent": "Errore Radar Erba CENTR",
+          "bump_error_l": "Errore Urto SX",
+          "bump_error_r": "Errore Urto DX",
           "board_error": "BOARD ERROR",
           "config_error": "CONFIG ERROR",
           "test_b_required": "TEST B RICHIESTO",
@@ -898,6 +937,14 @@
           "zdefender_error": "Errore Zdefender",
           "radar_data_save_error": "Errore salvataggio dati radar",
           "docking_error": "Errore ingresso in base",
+          "atomizer_module_error": "Errore modulo Atomizer",
+          "radar_fl_not_calibrated": "FL Radar - Non Calibrato",
+          "radar_fr_not_calibrated": "FR Radar - Non Calibrato",
+          "radar_bl_not_calibrated": "BL Radar - Non Calibrato",
+          "radar_br_not_calibrated": "BR Radar - Non Calibrato",
+          "radar_fm_not_calibrated": "FM Radar - Non Calibrato",
+          "front_tilt_board_error": "Errore scheda Tilt Anteriore",
+          "ultrasound_hub_board_error": "Errore Hub per Ultrasuoni",
           "invalid_voucher": "Voucher non valido",
           "used_voucher": "Voucher usato",
           "voucher_zone_error": "Voucher Errore Area",
@@ -936,7 +983,10 @@
           "unexpected_shutdown_charge": "SPEGNIMENTO INASPETTATO IN CARICA",
           "unexpected_shutdown_work": "SPEGNIMENTO INASPETTATO LAVORO",
           "unexpected_shutdown_work_pause": "SPEGNIMENTO INASPETTATO IN PAUSA",
-          "unexpected_shutdown_done": "SPEGNIMENTO INASPETTATO TERMINE AREA CHIUSA"
+          "unexpected_shutdown_done": "SPEGNIMENTO INASPETTATO TERMINE AREA CHIUSA",
+          "invalid_connection": "Connessione non Valida",
+          "wrong_server_authentication": "Autenticazione al Server",
+          "server_disconnection": "Disconnessione dal Server"
         }
       }
     },

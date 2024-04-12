@@ -22,12 +22,18 @@ ENTITY_DESCRIPTIONS = (
     NumberEntityDescription(
         key="work_for",
         icon="mdi:clock-outline",
+        native_max_value=1439,
+        native_min_value=1,
+        native_step=1,
         native_unit_of_measurement=UnitOfTime.MINUTES,
         translation_key="work_for",
     ),
     NumberEntityDescription(
         key="charge_for",
         icon="mdi:clock-outline",
+        native_max_value=10079,
+        native_min_value=1,
+        native_step=1,
         native_unit_of_measurement=UnitOfTime.MINUTES,
         translation_key="charge_for",
     ),
@@ -75,19 +81,15 @@ class ZcsMowerNumberEntity(ZcsMowerEntity, NumberEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="number",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
 
 class ZcsMowerDurationNumberEntity(ZcsMowerNumberEntity):
     """Representation of a ZCS Lawn Mower Robot number for command with duration."""
 
     _attr_native_value: float = 60
-    _attr_native_min_value: float = 1
-    _attr_native_max_value: float = 1439
-    _attr_native_step: float = 1
 
     async def async_set_native_value(self, value: float) -> None:
         """Change the value."""

@@ -48,7 +48,9 @@ from .const import (
     CONF_WAKE_UP_INTERVAL_INFINITY,
     CONF_MOWERS,
     ATTR_IMEI,
-    ATTR_INFINITY,
+    ATTR_DATA_THRESHOLD,
+    ATTR_INFINITY_STATE,
+    ATTR_INFINITY_EXPIRATION,
     ATTR_SERIAL_NUMBER,
     ATTR_WORKING,
     ATTR_ERROR,
@@ -68,10 +70,10 @@ from .const import (
     API_ACK_TIMEOUT,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
-    UPDATE_INTERVAL_WORKING,
-    UPDATE_INTERVAL_STANDBY,
-    UPDATE_INTERVAL_IDLING,
-    LOCATION_HISTORY_ITEMS,
+    UPDATE_INTERVAL_WORKING_DEFAULT,
+    UPDATE_INTERVAL_STANDBY_DEFAULT,
+    UPDATE_INTERVAL_IDLING_DEFAULT,
+    LOCATION_HISTORY_ITEMS_DEFAULT,
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,
     ROBOT_WAKE_UP_INTERVAL_DEFAULT,
@@ -80,6 +82,7 @@ from .const import (
     ROBOT_STATES,
     ROBOT_STATES_WORKING,
     ROBOT_ERRORS,
+    DATA_THRESHOLD_STATES,
     INFINITY_PLAN_STATES,
 )
 
@@ -99,7 +102,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             logger=LOGGER,
             name=DOMAIN,
             update_interval=timedelta(
-                seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)
+                seconds=config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT)
             ),
         )
         self.config_entry = config_entry
@@ -119,8 +122,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             self.data[_imei] = {
                 ATTR_IMEI: _imei,
                 ATTR_NAME: _mower.get(ATTR_NAME, _imei),
-                ATTR_INFINITY: None,
                 ATTR_STATE: None,
+                ATTR_DATA_THRESHOLD: None,
+                ATTR_INFINITY_STATE: None,
+                ATTR_INFINITY_EXPIRATION: None,
                 ATTR_ICON: None,
                 ATTR_WORKING: False,
                 ATTR_AVAILABLE: False,
@@ -240,7 +245,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             return False
 
         location_history.append(location)
-        self.data[imei][ATTR_LOCATION_HISTORY] = location_history[-LOCATION_HISTORY_ITEMS:]
+        self.data[imei][ATTR_LOCATION_HISTORY] = location_history[-LOCATION_HISTORY_ITEMS_DEFAULT:]
 
         return True
 
@@ -275,19 +280,19 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if self.has_working_mowers():
             LOGGER.debug("Set update_interval: Working")
             suggested_update_interval = timedelta(
-                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING)
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT)
             )
         # If current time is in standby time, decrease update_interval
         elif self.is_standby_time(now):
             LOGGER.debug("Set update_interval: Standby")
             suggested_update_interval = timedelta(
-                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY)
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT)
             )
         # If current time is out of standby time, calculate update_interval
         else:
             LOGGER.debug("Set update_interval: Idle")
             suggested_update_interval = timedelta(
-                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING)
+                seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING_DEFAULT)
             )
             time_to_standby = (dt_util.as_local(self.standby_time_start) - now).seconds
 
@@ -295,7 +300,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             if time_to_standby < suggested_update_interval.seconds:
                 LOGGER.debug("Set update_interval: Time until start of standby time is shorter than update_interval for idle time")
                 # If time to standby is shorter than update_interval for working time
-                if (time_to_standby < (interval_working := self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING))):
+                if (time_to_standby < (interval_working := self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT))):
                     LOGGER.debug("Set update_interval: Time to standby is shorter than update_interval for working time")
                     time_to_standby = interval_working
 
@@ -411,12 +416,21 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                         imei=imei,
                         location=(latitude, longitude),
                     )
-            # Get Infinity+ status from lawn mower
+            # Get data threshold status from lawn mower
+            if "data_th" in data["alarms"]:
+                data_th = data["alarms"]["data_th"]
+                _state = data_th["state"] if data_th["state"] < len(DATA_THRESHOLD_STATES) else 0
+                mower[ATTR_DATA_THRESHOLD] = DATA_THRESHOLD_STATES[_state]["name"]
+            # Get +Infinity status from lawn mower
             if "infinity_plan_status" in data["alarms"]:
                 infinity_plan_status = data["alarms"]["infinity_plan_status"]
-                _state = infinity_plan_status["state"] if infinity_plan_status["state"] < len(ROBOT_STATES) else None
-                mower[ATTR_INFINITY] = INFINITY_PLAN_STATES[_state]["name"]
+                _state = infinity_plan_status["state"] if infinity_plan_status["state"] < len(INFINITY_PLAN_STATES) else 0
+                mower[ATTR_INFINITY_STATE] = INFINITY_PLAN_STATES[_state]["name"]
         if "attrs" in data:
+            # In most cases, infinity_expiration_date is not available
+            if "infinity_expiration_date" in data["attrs"]:
+                infinity_expiration_date = data["attrs"]["infinity_expiration_date"]
+                mower[ATTR_INFINITY_EXPIRATION] = self._convert_datetime_from_api(infinity_expiration_date["value"])
             # In some cases, robot_serial is not available
             if "robot_serial" in data["attrs"]:
                 mower[ATTR_SERIAL_NUMBER] = data["attrs"]["robot_serial"]["value"]
@@ -439,10 +453,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
         # Lawn mower is working
         if mower.get(ATTR_WORKING, False):
-            # Get inifity intervals, if Infinity+ is active
-            if mower.get(ATTR_INFINITY) == "active":
+            # Get inifity interval, if +Infinity is active or pending and valid
+            if mower.get(ATTR_INFINITY_STATE) in ("active", "pending") and mower.get(ATTR_INFINITY_EXPIRATION) > self._get_datetime_now():
                 _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY)
-            # Get default intervals, if Infinity+ is not active
+            # Get default interval, if +Infinity is not active
             else:
                 _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT)
 

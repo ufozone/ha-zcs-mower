@@ -22,6 +22,8 @@ With configured map and activated vacuum entity, the lawn mower can be displayed
 
 ![Lovelace Card](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/lovelace-card.jpg?raw=true)
 
+The spot cleaning points can be used to start the lawn mower in a specific area.
+
 ## Installation
 
 Requires Home Assistant 2024.2.0 or newer.
@@ -68,13 +70,15 @@ Start setup:
 
 ### Authorization
 
+The garage name can be chosen freely.
+
 Get client key from lawn mower mobile app:
 
-   **Note:** Android recommended, because in iPhone app all characters are displayed in capital letters.
+   **:warning: Pay attention** Android recommended, because in the iPhone app all characters are incorrectly displayed in capital letters.
 
 1. Open the app on your mobile device.
 
-   In the best case, you create a new account (via the mobile app) and connect it to your lawn mower(s). Then there should be no problems when you use the HA integration and the mobile app at the same time.
+   :information_source: In the best case, you create a new account (via the mobile app) and connect it to your lawn mower(s). Then there should be no problems when you use the HA integration and the mobile app at the same time.
 
 2. Click on the `Setup` tab.
 
@@ -112,7 +116,7 @@ Best practice:
 
 6. Type the coordinates into the config flow dialog. To enter the coordinates, ensure that they are in signed degree format and separated by a comma for example: `45.0135543,7.6181209`
 
-    **Pay attention** to the correct order of latitude and longitude.
+    **:warning: Pay attention** to the correct order of latitude and longitude.
 
 7. (Optional) Get a image of your lawn mower with transparent background as a marker for the current position. Store the image into your home assistant instance, e.g. `/config/www/mower/` and type the full path into the config flow dialog.
 
@@ -185,12 +189,12 @@ Get IMEI from your lawn mower(s):
 ### Lawn Mower
 
 * mower
-  | Values      | Description       | Lawn mower state(s)                         |
-  |-------------|-------------------|---------------------------------------------|
-  | mowing      | Mowing            | Work, Go to area, Go to station, Border cut |
-  | docked      | Docked            | Charge                                      |
-  | paused      | Paused            | Pause, Work standby                         |
-  | error       | Error             | Error, No signal, Expired, Renewed          |
+  | Values      | Description       | Lawn mower state(s)                                                         |
+  |-------------|-------------------|-----------------------------------------------------------------------------|
+  | mowing      | Mowing            | Work, Go to area, Go to station, Border cut, Mapping started, Mapping ended |
+  | docked      | Docked            | Charge                                                                      |
+  | paused      | Paused            | Pause, Work standby                                                         |
+  | error       | Error             | Error, No signal, Expired, Renewed, Hot temperature                         |
 
     ```text
     attributes: 
@@ -208,34 +212,37 @@ _These entities are disabled by default. You have to activate it if you want to 
 ### Sensor
 
 * state
-  | Values       | Description   |
-  |--------------|---------------|
-  | unknown      | Unknown       |
-  | charge       | Charge        |
-  | work         | Work          |
-  | pause        | Pause         |
-  | fail         | Error         |
-  | nosignal     | No signal     |
-  | gotostation  | Go to station |
-  | gotoarea     | Go to area    |
-  | bordercut    | Border cut    |
-  | expired      | Expired       |
-  | renewed      | Renewed       |
-  | work_standby | Work standby  |
+  | Values          | Description     |
+  |-----------------|-----------------|
+  | unknown         | Unknown         |
+  | charge          | Charge          |
+  | work            | Work            |
+  | pause           | Pause           |
+  | fail            | Error           |
+  | nosignal        | No signal       |
+  | gotostation     | Go to station   |
+  | gotoarea        | Go to area      |
+  | bordercut       | Border cut      |
+  | expired         | Expired         |
+  | renewed         | Renewed         |
+  | work_standby    | Work standby    |
+  | hot_temperature | Hot temperature |
+  | mapping_started | Mapping started |
+  | mapping_ended   | Mapping ended   |
 
 ### Vacuum
 
 _This entity is disabled by default. You have to activate it if you want to use it._
 
 * mower
-  | Values      | Description       | Lawn mower state(s)                |
-  |-------------|-------------------|------------------------------------|
-  | cleaning    | Mowing            | Work, Go to area, Border cut       |
-  | docked      | Docked            | Charge                             |
-  | paused      | Paused            | Pause                              |
-  | returning   | Returning to dock | Go to station                      |
-  | idle        | Idle              | Work standby                       |
-  | error       | Error             | Error, No signal, Expired, Renewed |
+  | Values      | Description       | Lawn mower state(s)                                 |
+  |-------------|-------------------|-----------------------------------------------------|
+  | cleaning    | Mowing            | Work, Go to area, Border cut, Mapping started       |
+  | docked      | Docked            | Charge                                              |
+  | paused      | Paused            | Pause                                               |
+  | returning   | Returning to dock | Go to station, Mapping ended                        |
+  | idle        | Idle              | Work standby                                        |
+  | error       | Error             | Error, No signal, Expired, Renewed, Hot temperature |
 
     ```text
     attributes: 
@@ -294,17 +301,17 @@ _This entity is disabled by default. You have to activate it if you want to use 
 
 ## Usage
 
-* `vacuum.start`:
+* `lawn_mower.start_mowing`, `vacuum.start`:
 
-    The lawn mower stats to mow, within the specified schedule.
+    The lawn mower starts to mow, within the specified schedule.
+
+* `lawn_mower.dock`, `vacuum.return_to_base`:
+
+    The lawn mower returns to the base and parks there until the next schedule start.
 
 * `vacuum.stop`:
 
-    The lawn mower returns to the base and parks there until the next schedule starts.
-
-* `vacuum.return_to_base`:
-
-    Same as `vacuum.stop`.
+    Same as `lawn_mower.dock` and `vacuum.return_to_base`.
 
 * `button.charge_now`:
 

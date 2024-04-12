@@ -8,6 +8,8 @@ from homeassistant.const import (
     ATTR_LOCATION,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
+    STATE_UNAVAILABLE,
+    STATE_UNKNOWN,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.device_tracker import (
@@ -26,7 +28,7 @@ import homeassistant.util.dt as dt_util
 
 from .const import (
     DOMAIN,
-    LOCATION_HISTORY_DAYS,
+    LOCATION_HISTORY_DAYS_DEFAULT,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -81,13 +83,17 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="device_tracker",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
 
-        get_instance(self.hass).async_add_executor_job(
+    async def async_added_to_hass(self) -> None:
+        """Register callbacks."""
+        await super().async_added_to_hass()
+
+        # Load Recorder after loading entity
+        await get_instance(self.hass).async_add_executor_job(
             self._get_location_history,
         )
 
@@ -97,7 +103,7 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         # because the metadata_id_last_updated_ts index is in ascending order.
         history_list = history.state_changes_during_period(
             self.hass,
-            start_time=dt_util.now() - timedelta(days=LOCATION_HISTORY_DAYS),
+            start_time=dt_util.now() - timedelta(days=LOCATION_HISTORY_DAYS_DEFAULT),
             entity_id=self.entity_id,
             no_attributes=False,
             include_start_time_state=True,
@@ -106,13 +112,14 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
             imei=self._imei,
         )
         for state in history_list.get(self.entity_id, []):
-            latitude = state.attributes.get(ATTR_LATITUDE, None)
-            longitude = state.attributes.get(ATTR_LONGITUDE, None)
-            if latitude and longitude:
-                self.coordinator.add_location_history(
-                    imei=self._imei,
-                    location=(latitude, longitude),
-                )
+            if state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE, None):
+                latitude = state.attributes.get(ATTR_LATITUDE, None)
+                longitude = state.attributes.get(ATTR_LONGITUDE, None)
+                if latitude and longitude:
+                    self.coordinator.add_location_history(
+                        imei=self._imei,
+                        location=(latitude, longitude),
+                    )
         # Always update HA states after getting location history.
         self.hass.async_create_task(
             self.coordinator._async_update_listeners()

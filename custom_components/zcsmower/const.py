@@ -47,7 +47,10 @@ CONF_MAP_DRAW_LINES = "map_draw_lines"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
-ATTR_INFINITY = "infinity"
+ATTR_CLIENT_KEY = "client_key"
+ATTR_DATA_THRESHOLD = "data_threshold"
+ATTR_INFINITY_STATE = "infinity_state"
+ATTR_INFINITY_EXPIRATION = "infinity_expiration"
 ATTR_SERIAL_NUMBER = "serial_number"
 ATTR_WORKING = "working"
 ATTR_ERROR = "error"
@@ -116,7 +119,7 @@ SERVICE_CHARGE_FOR = "charge_for"
 SERVICE_CHARGE_FOR_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
-        vol.Required("duration"): vol.All(vol.Coerce(int), vol.Range(min=1, max=1439)),
+        vol.Required("duration"): vol.All(vol.Coerce(int), vol.Range(min=1, max=10079)),
     }
 )
 SERVICE_CHARGE_UNTIL = "charge_until"
@@ -163,6 +166,7 @@ ATTRIBUTION = "Data gently provided by Telit IoT Platform"
 
 API_BASE_URI = "https://api-de.devicewise.com/api"
 API_APP_TOKEN = "DJMYYngGNEit40vA"
+API_CLIENT_KEY_LENGTH = 28
 API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
@@ -170,12 +174,12 @@ API_ACK_TIMEOUT = 30
 STANDBY_TIME_START_DEFAULT = "08:00:00"
 STANDBY_TIME_STOP_DEFAULT = "22:00:00"
 
-UPDATE_INTERVAL_WORKING = 180
-UPDATE_INTERVAL_STANDBY = 900
-UPDATE_INTERVAL_IDLING = 3600
+UPDATE_INTERVAL_WORKING_DEFAULT = 180
+UPDATE_INTERVAL_STANDBY_DEFAULT = 900
+UPDATE_INTERVAL_IDLING_DEFAULT = 3600
 
-LOCATION_HISTORY_DAYS = 7
-LOCATION_HISTORY_ITEMS = 200
+LOCATION_HISTORY_DAYS_DEFAULT = 7
+LOCATION_HISTORY_ITEMS_DEFAULT = 200
 
 MAP_POINTS_DEFAULT = 100
 
@@ -343,6 +347,21 @@ ROBOT_STATES = [
         "icon": "mdi:power-standby",
         "color": "#E61EDC",
     },
+    {
+        "name": "hot_temperature",
+        "icon": "mdi:thermometer-alert",
+        "color": "#DB4B4B",
+    },
+    {
+        "name": "mapping_started",
+        "icon": "mdi:map-marker-star",
+        "color": "#007A08",
+    },
+    {
+        "name": "mapping_ended",
+        "icon": "mdi:map-marker-check",
+        "color": "#D67070",
+    },
 ]
 ROBOT_STATES_WORKING = [2, 6, 7, 8, 11]
 ROBOT_ERRORS = {
@@ -508,6 +527,31 @@ ROBOT_ERRORS = {
     169: "steer_error_br_fail",
     170: "steer_error_br_blocked",
     171: "radar_error",
+    172: "front_tilt_error",
+    173: "hub_board_error",
+    174: "bump_error_front_l_cent",
+    175: "bump_error_front_cent_cent",
+    176: "bump_error_front_r_cent",
+    177: "bump_error_rear_l",
+    178: "bump_error_rear_cent",
+    179: "bump_error_rear_r",
+    180: "bump_error_front_cent_l",
+    181: "bump_error_front_cent_r",
+    182: "chasm_error_front_l",
+    183: "chasm_error_front_r",
+    184: "bump_error_front_l_l",
+    185: "bump_error_front_l_r",
+    186: "bump_error_front_r_l",
+    187: "bump_error_front_r_r",
+    188: "bump_error_l_front",
+    189: "bump_error_l_rear",
+    190: "bump_error_r_front",
+    191: "bump_error_r_rear",
+    192: "grass_radar_error_l",
+    193: "grass_radar_error_r",
+    194: "grass_radar_error_cent",
+    195: "bump_error_l",
+    196: "bump_error_r",
     256: "board_error",
     257: "config_error",
     258: "test_b_required",
@@ -554,6 +598,14 @@ ROBOT_ERRORS = {
     1046: "zdefender_error",
     1047: "radar_data_save_error",
     1049: "docking_error",
+    1050: "atomizer_module_error",
+    1051: "radar_fl_not_calibrated",
+    1052: "radar_fr_not_calibrated",
+    1053: "radar_bl_not_calibrated",
+    1054: "radar_br_not_calibrated",
+    1055: "radar_fm_not_calibrated",
+    1058: "front_tilt_board_error",
+    1059: "ultrasound_hub_board_error",
     2000: "invalid_voucher",
     2001: "used_voucher",
     2002: "voucher_zone_error",
@@ -594,28 +646,50 @@ ROBOT_ERRORS = {
     5005: "unexpected_shutdown_work_pause",
     5006: "unexpected_shutdown_done",
     5008: "unexpected_shutdown_error",
+    10001: "invalid_connection",
+    10002: "invalid_connection",
+    10003: "wrong_server_authentication",
+    10004: "server_disconnection",
 }
+DATA_THRESHOLD_STATES = [
+    {
+        "name": "less_then_50_percent",
+        "color": "#0AFA2A"
+    },
+    {
+        "name": "50_percent",
+        "color": "#DCFC0F"
+    },
+    {
+        "name": "75_percent",
+        "color": "#FA7E0A"
+    },
+    {
+        "name": "100_percent",
+        "color": "#FA0D0D"
+    },
+]
 ATOMIZER_STATES = [
     {
-        "name": "UNKNOWN",
+        "name": "unknown",
         "color": "#000000"
     },
     {
-        "name": "EMPTY",
+        "name": "empty",
         "color": "#CCCC00"
     },
     {
-        "name": "WORK",
+        "name": "work",
         "color": "#007700"
     },
     {
-        "name": "PAUSE",
+        "name": "pause",
         "color": "#0000FF"
     },
     {
-        "name": "FAIL",
+        "name": "fail",
         "color": "#FF0000"
-    }
+    },
 ]
 INFINITY_PLAN_STATES = [
     {
@@ -637,5 +711,5 @@ INFINITY_PLAN_STATES = [
     {
         "name": "pending",
         "color": "#FFE100"
-    }
+    },
 ]

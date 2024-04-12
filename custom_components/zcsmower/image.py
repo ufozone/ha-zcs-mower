@@ -111,12 +111,11 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="image",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
         self.content_type = "image/png"
-        self.entity_description = entity_description
 
         self.map_enabled = self.config_entry.options.get(CONF_MAP_ENABLE, False)
         self.map_gps_top_left = None
@@ -396,10 +395,10 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         """Update extra attributes."""
         if self.map_enabled:
             calibration_points = []
-            for point in [
+            for point in (
                 self.map_gps_top_left,
                 self.map_gps_bottom_right,
-            ]:
+            ):
                 img_point = self._scale_to_image(
                     (point[0], point[1]), (self._image.size[0], self._image.size[1])
                 )
