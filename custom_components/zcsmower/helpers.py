@@ -18,7 +18,8 @@ async def generate_client_key() -> str:
     """Generate client key."""
     # get random client key with letters and digits
     return "".join(
-        random.choice(string.ascii_lowercase + string.digits) for i in range(API_CLIENT_KEY_LENGTH)
+        random.choice(string.ascii_lowercase + string.digits)
+        for i in range(API_CLIENT_KEY_LENGTH)
     )
 
 
