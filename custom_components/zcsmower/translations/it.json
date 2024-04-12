@@ -6,12 +6,14 @@
       "connection_failed": "Impossibile connettersi al server.",
       "path_invalid": "Il percorso specificato per il file non è valido: è necessario un percorso assoluto.",
       "coordinates_invalid": "Le coordinate GPS fornite non sono valide: sono necessarie latitudine e longitudine separate da virgole.",
-      "imei_invalid": "L'IMEI fornito non è valido."
+      "imei_invalid": "L'IMEI fornito non è valido. Deve iniziare con \"35\" ed essere composto da 15 cifre.",
+      "mower_invalid": "Non è stato possibile trovare il tosaerba o si è verificato un altro errore. Controllare i file di log.",
+      "mower_toomanyclients": "Ci sono troppi client remoti collegati al tosaerba. Aprire l'applicazione mobile sullo smartphone, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un client remoto."
     },
     "step": {
       "user": {
         "title": "Allestimento del garage",
-        "description": "Inserite il nome del garage e la chiave cliente. Il nome del garage può essere scelto liberamente, mentre la chiave cliente si trova nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
+        "description": "Inserite qui il nome del vostro garage. È possibile sceglierlo liberamente. Specificare inoltre se si desidera attivare il rilevamento della posizione e la visualizzazione della mappa. È possibile modificare queste impostazioni anche in seguito. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
         "data": {
           "name": "Nome del garage",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
@@ -20,7 +22,7 @@
       },
       "map": {
         "title": "Configurare la mappa",
-        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#Map).",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
         "data": {
           "map_image_path": "Percorso dell'immagine della mappa",
           "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
@@ -34,10 +36,10 @@
       },
       "mower": {
         "title": "Aggiungi un tosaerba",
-        "description": "Aggiungere un tosaerba, selezionare la casella per aggiungerne un altro.",
+        "description": "Aggiungere un tosaerba. Siete liberi di scegliere il nome. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
         "data": {
-          "name": "Nome del tosaerba",
           "imei": "IMEI del tosaerba",
+          "name": "Nome del tosaerba",
           "add_another": "Aggiungere un altro tosaerba?"
         }
       }
@@ -51,9 +53,11 @@
       "standby_time_invalid": "Gli orari di inizio e fine del tempo di standby non devono coincidere.",
       "update_interval_working_invalid": "L'intervallo di aggiornamento per il funzionamento non può essere maggiore di quello per lo standby.",
       "update_interval_standby_invalid": "L'intervallo di aggiornamento pronto non può essere maggiore di inattivo.",
-      "imei_invalid": "L'IMEI fornito non è valido.",
       "imei_exists": "Un tosaerba con questo IMEI esiste già.",
       "name_exists": "Un tosaerba con questo nome esiste già.",
+      "imei_invalid": "L'IMEI fornito non è valido. Deve iniziare con \"35\" ed essere composto da 15 cifre.",
+      "mower_invalid": "Non è stato possibile trovare il tosaerba o si è verificato un altro errore. Controllare i file di log.",
+      "mower_toomanyclients": "Ci sono troppi client remoti collegati al tosaerba. Aprire l'applicazione mobile sullo smartphone, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un client remoto.",
       "imei_not_exists": "Un tagliaerba con questo IMEI non esiste.",
       "delete_not_confirmed": "La cancellazione del tosaerba non è stata confermata.",
       "last_mower": "Non è possibile eliminare l'ultimo tosaerba.",
@@ -74,10 +78,10 @@
       },
       "add": {
         "title": "Aggiungi un tosaerba",
-        "description": "Aggiungete un altro tosaerba.",
+        "description": "Aggiungere un altro tosaerba. Siete liberi di scegliere il nome. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
         "data": {
-          "name": "Nome del tosaerba",
-          "imei": "IMEI del tosaerba"
+          "imei": "IMEI del tosaerba",
+          "name": "Nome del tosaerba"
         }
       },
       "change": {
@@ -98,7 +102,7 @@
       },
       "map": {
         "title": "Configurare la mappa",
-        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#Map).",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
         "data": {
           "map_enable": "Abilitare la mappa?",
           "map_image_path": "Percorso dell'immagine della mappa",
@@ -113,8 +117,9 @@
       },
       "settings": {
         "title": "Configurare il garage",
-        "description": "Inserite la vostra chiave cliente, che potete trovare nell'applicazione mobile. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#Authorization).",
+        "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
         "data": {
+          "generate_client_key": "Generare nuovamente una nuova chiave client (consigliato solo se la connessione non è più possibile).",
           "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
           "standby_time_stop": "A che ora termina il periodo di standby giornaliero?",
           "update_interval_working": "Ogni quanti secondi devono essere aggiornati i dati quando uno o più tosaerba sono in funzione?",
