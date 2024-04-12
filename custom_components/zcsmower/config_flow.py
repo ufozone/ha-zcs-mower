@@ -57,6 +57,7 @@ from .const import (
     CONF_MAP_POINTS,
     CONF_MOWERS,
     ATTR_IMEI,
+    ATTR_CLIENT_KEY,
     API_BASE_URI,
     API_APP_TOKEN,
     API_CLIENT_KEY_LENGTH,
@@ -86,7 +87,9 @@ async def generate_client_key() -> str:
     )
 
 
-async def get_client_key(client: ZcsMowerApiClient) -> str:
+async def get_client_key(
+    client: ZcsMowerApiClient,
+) -> str:
     """Generate, validate and return client key."""
     attempts = 0
     while True:
@@ -104,25 +107,53 @@ async def get_client_key(client: ZcsMowerApiClient) -> str:
     return client_key
 
 
-async def validate_imei(imei: str, client_key: str, hass: HassJob) -> dict:
+async def validate_imei(
+    client: ZcsMowerApiClient,
+    imei: str,
+) -> dict:
     """Validate a lawn mower IMEI.
 
     Raises a ValueError if the IMEI is invalid.
     """
-    if len(imei) != 15:
+    if not imei.startswith("35") or len(imei) != 15:
         raise ValueError
 
-    client = ZcsMowerApiClient(
-        session=async_get_clientsession(hass),
-        options={
-            "endpoint": API_BASE_URI,
-            "app_id": client_key,
-            "app_token": API_APP_TOKEN,
-            "thing_key": client_key,
-        },
+    mower = await client.execute(
+        "thing.find",
+        {
+            "imei": imei
+        }
     )
-    return await client.check_robot(imei=imei)
+    if mower:
+        return await client.get_response()
 
+    # Lawn mower not found
+    raise KeyError(
+        "Lawn mower not found. Please check the application configuration."
+    )
+
+
+async def get_first_empty_robot_client(
+    mower: dict,
+    client_key: str | None = None,
+) -> str:
+    """Get first empty robot_client key or the one that matches client_key."""
+    if "attrs" not in mower:
+        raise KeyError(
+            "No attributes found for lawn mower not found. Abort."
+        )
+    # Iteration through the "robot_client" attributes
+    for counter in range(1, 6):
+        # First empty key
+        if (robot_client := f"robot_client{counter}") not in mower["attrs"]:
+            return robot_client
+        # Key is set and same as given client_key
+        elif mower["attrs"][robot_client] == client_key:
+            return robot_client
+
+    raise IndexError(
+        "No available robot_clientX key found. Abort"
+    )
 
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
@@ -369,22 +400,35 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         """Second/third step in config flow to add a lawn mower."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            # Validate the IMEI
+            # Validate lawn mower
             try:
-                mower = await validate_imei(
-                    imei=user_input[ATTR_IMEI],
-                    client_key=self._options[CONF_CLIENT_KEY],
-                    hass=self.hass,
+                client_key = self._options[CONF_CLIENT_KEY]
+                client = ZcsMowerApiClient(
+                    session=async_get_clientsession(self.hass),
+                    options={
+                        "endpoint": API_BASE_URI,
+                        "app_id": client_key,
+                        "app_token": API_APP_TOKEN,
+                        "thing_key": client_key,
+                    },
                 )
-                # TODO:
-                # Ermittel Clients
-                # Pruefe, ob ClientKey bereits enthalten ist
-                # Falls nicht, fuege ClientKey hinzu:
-                # attribute.publish
-                LOGGER.debug(mower)
+                mower = await validate_imei(
+                    client=client,
+                    imei=user_input[ATTR_IMEI],
+                )
+                robot_client_key = await get_first_empty_robot_client(
+                    mower=mower,
+                    client_key=client_key,
+                )
             except ValueError as exception:
                 LOGGER.info(exception)
                 errors["base"] = "imei_invalid"
+            except KeyError as exception:
+                LOGGER.info(exception)
+                errors["base"] = "mower_invalid"
+            except IndexError as exception:
+                LOGGER.info(exception)
+                errors["base"] = "mower_toomanyclients"
             except ZcsMowerApiCommunicationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "communication_failed"
@@ -396,15 +440,28 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 # Input is valid, set data.
                 self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
+                    ATTR_CLIENT_KEY: robot_client_key,
                 }
                 LOGGER.debug("Step mower -> saved options:")
                 LOGGER.debug(self._options)
+
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
                 if user_input.get("add_another", False):
                     return await self.async_step_mower()
 
-                # User is done adding lawn mowers, create the config entry.
+                # User is done adding lawn mowers,
+                # publish robot_client and create the config entry.
+                for imei, mower in self._options[CONF_MOWERS].items():
+                    await client.execute(
+                        "attribute.publish",
+                        {
+                            "imei": imei,
+                            "key": mower[ATTR_CLIENT_KEY],
+                            "value": client_key,
+                        },
+                    )
+
                 return self.async_create_entry(
                     title=self._title,
                     data={},
@@ -481,18 +538,35 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             ):
                 errors["base"] = "name_exists"
             else:
-                # Validate the IMEI
+                # Validate lawn mower
                 try:
-                    await validate_imei(
-                        imei=user_input[ATTR_IMEI],
-                        client_key=self._options[CONF_CLIENT_KEY],
-                        hass=self.hass,
+                    client_key = self._options[CONF_CLIENT_KEY]
+                    client = ZcsMowerApiClient(
+                        session=async_get_clientsession(self.hass),
+                        options={
+                            "endpoint": API_BASE_URI,
+                            "app_id": client_key,
+                            "app_token": API_APP_TOKEN,
+                            "thing_key": client_key,
+                        },
                     )
-                    # TODO:
-                    # Analog async_step_mower umsetzen
+                    mower = await validate_imei(
+                        client=client,
+                        imei=user_input[ATTR_IMEI],
+                    )
+                    robot_client_key = await get_first_empty_robot_client(
+                        mower=mower,
+                        client_key=client_key,
+                    )
                 except ValueError as exception:
                     LOGGER.info(exception)
                     errors["base"] = "imei_invalid"
+                except KeyError as exception:
+                    LOGGER.info(exception)
+                    errors["base"] = "mower_invalid"
+                except IndexError as exception:
+                    LOGGER.info(exception)
+                    errors["base"] = "mower_toomanyclients"
                 except ZcsMowerApiCommunicationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "communication_failed"
@@ -504,9 +578,20 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 # Input is valid, set data
                 self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
+                    ATTR_CLIENT_KEY: robot_client_key,
                 }
                 LOGGER.debug("Step add -> saved options:")
                 LOGGER.debug(self._options)
+
+                # Publish robot_client and create the config entry.
+                await client.execute(
+                    "attribute.publish",
+                    {
+                        "imei": user_input[ATTR_IMEI],
+                        "key": robot_client_key,
+                        "value": client_key,
+                    },
+                )
                 return self.async_create_entry(
                     title="",
                     data=self._options,
@@ -658,7 +743,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     device_id=device.id,
                     include_disabled_entities=False,
                 )
-                [entity_registry.async_remove(e.entity_id) for e in entries]
+                [
+                    entity_registry.async_remove(e.entity_id)
+                    for e in entries
+                ]
                 device_registry.async_remove_device(device.id)
                 self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
 
@@ -874,13 +962,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
 
             if not errors:
                 # TODO:
-                # Checkbox: Generate new client key for authentication
+                # Checkbox: Generate new client key for authentication and delete old one from lawn mower
                 # If True:
-                #  _client_key_old = conf.client_key
-                #  _client_key_new = generate
-                # Search _client_key_old in robot_clientX
-                # Get key for robot_clientX or first empty
-                # Set _client_key_new in robot_clientX
+                #   _client_key_old = conf.client_key
+                #   _client_key_new = generate
+                #   Iterate through lawn mowers
+                #     Search _client_key_old in robot_clientX
+                #     Get robot_clientX for old client key or first empty
+                #     Delete _client_key_old in robot_clientX
+                #     Set _client_key_new in robot_clientX
                 # Save in options
 
                 # Input is valid, set data
@@ -916,12 +1006,13 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                     }
                 )
+                # TODO
                 LOGGER.debug("Step settings -> saved options:")
                 LOGGER.debug(self._options)
-                return self.async_create_entry(
-                    title="",
-                    data=self._options,
-                )
+                #return self.async_create_entry(
+                #    title="",
+                #    data=self._options,
+                #)
         return self.async_show_form(
             step_id="settings",
             data_schema=vol.Schema(

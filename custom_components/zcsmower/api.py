@@ -44,13 +44,13 @@ class ZcsMowerApiClient:
     _session_id = ""
 
     # If the last request succeeded or failed.
-    _status = None
+    _response_status = None
+
+    # Holds any error returned by the API.
+    _response_error = []
 
     # Holds the response data from the API call.
     _response = []
-
-    # Holds any error returned by the API.
-    _error = []
 
     def __init__(
         self,
@@ -73,24 +73,6 @@ class ZcsMowerApiClient:
         if "session_id" in options:
             self._session_id = options["session_id"]
 
-    async def check_robot(
-        self,
-        imei: str
-    ) -> any:
-        """Check given IMEI against the API."""
-        result = await self.execute(
-            "thing.find",
-            {
-                "imei": imei
-            }
-        )
-        if result is True and self._response["data"]["success"] is True:
-            return await self.get_response()
-        else:
-            raise ZcsMowerApiCommunicationError(
-                "Lawn mower not found. Please check the application configuration."
-            )
-
     # This method sends the TR50 request to the server and parses the response.
     # https://github.com/deviceWISE/sample_tr50_python
     # @param    mixed    data     JSON command and arguments. This parameter can also
@@ -111,8 +93,8 @@ class ZcsMowerApiClient:
             bool: Success or failure to post.
 
         """
-        self._error = []
-        self._status = True
+        self._response_status = False
+        self._response_error = []
         self._response = ""
 
         if not isinstance(data, dict):
@@ -139,29 +121,29 @@ class ZcsMowerApiClient:
                 self._response = await response.json()
 
                 if "errorMessages" in self._response:
-                    self._error = self._response["errorMessages"]
+                    self._response_error = self._response["errorMessages"]
 
                 if "success" in self._response:
-                    self._status = self._response["success"]
+                    self._response_status = self._response["success"]
                 elif "data" in self._response and "success" in self._response["data"]:
-                    self._status = self._response["data"]["success"]
+                    self._response_status = self._response["data"]["success"]
                 elif "auth" in self._response and "success" in self._response["auth"]:
-                    self._status = self._response["auth"]["success"]
+                    self._response_status = self._response["auth"]["success"]
 
                 LOGGER.debug("API.response:")
                 LOGGER.debug(self._response)
 
-                # If _status is True
-                if self._status:
-                    return self._status
-                # Else _status is False
+                # If _response_status is True
+                if self._response_status:
+                    return self._response_status
+                # Else _response_status is False
                 else:
                     # If session is invalid, refresh authentication and execute command
                     # again possible loop, if authentication session is always invalid
                     # after successful refresh
                     if len([
                         error
-                        for error in self._error
+                        for error in self._response_error
                         if "Authentication session is invalid: Error: Session " in error
                     ]) > 0:
                         refresh_auth = await self.auth()
@@ -169,7 +151,7 @@ class ZcsMowerApiClient:
                             data["auth"]["sessionId"] = self._session_id
                             return await self.post(data, headers)
 
-                    raise ZcsMowerApiCommunicationError(self._error)
+                    raise ZcsMowerApiCommunicationError(self._response_error)
         except ZcsMowerApiCommunicationError as exception:
             raise ZcsMowerApiCommunicationError(
                 f"Communication failed: {exception}"
@@ -286,7 +268,7 @@ class ZcsMowerApiClient:
     ) -> any:
         """Return the response data for the last command if the last command was successful."""
         if (
-            self._status
+            self._response_status
             and len(self._response["data"]) > 0
             and "params" in self._response["data"]
         ):
