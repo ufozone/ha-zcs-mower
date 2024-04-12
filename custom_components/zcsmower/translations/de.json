@@ -119,7 +119,7 @@
         "title": "Konfigurieren der Garage",
         "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
         "data": {
-          "generate_client_key": "Generiere einen neuen Client-Schlüssel (nur empfohlen, wenn eine Verbindung nicht mehr möglich ist).",
+          "generate_client_key": "Generiere einen neuen Client-Schlüssel (nur empfohlen, wenn keine Verbindung mehr möglich ist).",
           "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",
           "standby_time_stop": "Um wie viel Uhr endet die tägliche Bereitschaftszeit?",
           "update_interval_working": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn ein oder mehrere Rasenmäher in Betrieb sind?",
