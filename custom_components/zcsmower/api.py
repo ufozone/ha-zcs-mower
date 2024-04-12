@@ -121,7 +121,9 @@ class ZcsMowerApiClient:
                 self._response = await response.json()
 
                 if "errorMessages" in self._response:
-                    self._response_error = self._response["errorMessages"]
+                    self._response_error.extend(self._response["errorMessages"])
+                if "data" in self._response and "errorMessages" in self._response["data"]:
+                    self._response_error.extend(self._response["data"]["errorMessages"])
 
                 if "success" in self._response:
                     self._response_status = self._response["success"]

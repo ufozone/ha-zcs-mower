@@ -745,11 +745,36 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     for e in entries
                 ]
                 device_registry.async_remove_device(device.id)
-                self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
 
                 # Input is valid, set data
+                self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
                 LOGGER.debug("Step delete -> saved options:")
                 LOGGER.debug(self._options)
+
+                # Remove remote client from lawn mower
+                try:
+                    client_key = self._options[CONF_CLIENT_KEY]
+                    client = ZcsMowerApiClient(
+                        session=async_get_clientsession(self.hass),
+                        options={
+                            "endpoint": API_BASE_URI,
+                            "app_id": client_key,
+                            "app_token": API_APP_TOKEN,
+                            "thing_key": client_key,
+                        },
+                    )
+                    await client.execute(
+                        "attribute.delete",
+                        {
+                            "thingKey": user_input[ATTR_IMEI],
+                            "key": self._options[CONF_MOWERS][user_input[ATTR_IMEI]][ATTR_CLIENT_KEY],
+                            "startTs": "1000-01-01T00:00:00Z",
+                            "endTs": "3000-12-31T23:59:59Z"
+                        },
+                    )
+                except Exception as exception:
+                    LOGGER.warning(exception)
+
                 return self.async_create_entry(
                     title="",
                     data=self._options,
