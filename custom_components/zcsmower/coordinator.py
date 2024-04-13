@@ -433,6 +433,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             if "expiration_date" in data["attrs"]:
                 expiration_date = data["attrs"]["expiration_date"]
                 mower[ATTR_DATA_EXPIRATION] = self._convert_datetime_from_api(expiration_date["value"])
+            # If only the created_on date is available, calculate expiration date
+            elif "created_on" in data["attrs"]:
+                created_on = data["attrs"]["created_on"]
+                mower[ATTR_DATA_EXPIRATION] = self._convert_datetime_from_api(created_on["value"]) + timedelta(days=730)
             # In most cases, infinity_expiration_date is not available
             if "infinity_expiration_date" in data["attrs"]:
                 infinity_expiration_date = data["attrs"]["infinity_expiration_date"]
