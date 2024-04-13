@@ -666,6 +666,9 @@
           "mapping_ended": "Kartierung abgeschlossen"
         },
         "state_attributes": {
+          "data_expiration": {
+            "name": "Connect Ablaufdatum"
+          },
           "infinity_state": {
             "name": "+Infinity Status",
             "state": {
