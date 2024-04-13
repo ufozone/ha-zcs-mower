@@ -72,9 +72,11 @@ from .api import (
     ZcsMowerApiError,
 )
 from .helpers import (
+    delete_robot_client,
     get_client_key,
     get_first_empty_robot_client,
     publish_client_thing,
+    publish_robot_client,
     replace_robot_client,
     validate_imei,
 )
@@ -364,9 +366,6 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                     ATTR_CLIENT_KEY: robot_client_key,
                 }
-                LOGGER.debug("Step mower -> saved options:")
-                LOGGER.debug(self._options)
-
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
                 if user_input.get("add_another", False):
@@ -375,15 +374,15 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 # User is done adding lawn mowers,
                 # publish robot_client and create the config entry.
                 for imei, mower in self._options.get(CONF_MOWERS, {}).items():
-                    await client.execute(
-                        "attribute.publish",
-                        {
-                            "imei": imei,
-                            "key": mower[ATTR_CLIENT_KEY],
-                            "value": client_key,
-                        },
+                    await publish_robot_client(
+                        client=client,
+                        imei=imei,
+                        robot_client_key=mower[ATTR_CLIENT_KEY],
+                        client_key=client_key,
                     )
 
+                LOGGER.debug("Step mower -> saved options:")
+                LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title=self._title,
                     data={},
@@ -502,18 +501,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                     ATTR_CLIENT_KEY: robot_client_key,
                 }
+                # Publish robot_client and create the config entry.
+                await publish_robot_client(
+                    client=client,
+                    imei=user_input[ATTR_IMEI],
+                    robot_client_key=robot_client_key,
+                    client_key=client_key,
+                )
                 LOGGER.debug("Step add -> saved options:")
                 LOGGER.debug(self._options)
-
-                # Publish robot_client and create the config entry.
-                await client.execute(
-                    "attribute.publish",
-                    {
-                        "imei": user_input[ATTR_IMEI],
-                        "key": robot_client_key,
-                        "value": client_key,
-                    },
-                )
                 return self.async_create_entry(
                     title="",
                     data=self._options,
@@ -610,10 +606,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             device.id,
                             name=mower_name,
                         )
+                        # Input is valid, set data
                         self._options[CONF_MOWERS][mower_imei] = {
                             ATTR_NAME: mower_name,
                         }
-                        # Input is valid, set data
                         LOGGER.debug("Step change -> saved options:")
                         LOGGER.debug(self._options)
                         return self.async_create_entry(
@@ -673,8 +669,6 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
 
                 # Input is valid, set data
                 self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
-                LOGGER.debug("Step delete -> saved options:")
-                LOGGER.debug(self._options)
 
                 # Remove remote client from lawn mower
                 try:
@@ -688,18 +682,16 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             "thing_key": client_key,
                         },
                     )
-                    await client.execute(
-                        "attribute.delete",
-                        {
-                            "thingKey": user_input[ATTR_IMEI],
-                            "key": self._options[CONF_MOWERS][user_input[ATTR_IMEI]][ATTR_CLIENT_KEY],
-                            "startTs": "1000-01-01T00:00:00Z",
-                            "endTs": "3000-12-31T23:59:59Z"
-                        },
+                    await delete_robot_client(
+                        client=client,
+                        imei=user_input[ATTR_IMEI],
+                        robot_client_key=self._options[CONF_MOWERS][user_input[ATTR_IMEI]][ATTR_CLIENT_KEY],
                     )
                 except Exception as exception:
                     LOGGER.warning(exception)
 
+                LOGGER.debug("Step delete -> saved options:")
+                LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
                     data=self._options,
@@ -786,6 +778,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         for x in user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
+
                 LOGGER.debug("Step map -> saved options:")
                 LOGGER.debug(self._options)
                 return self.async_create_entry(
@@ -973,12 +966,14 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                     }
                 )
-                LOGGER.debug("Step settings -> saved options:")
-                LOGGER.debug(self._options)
-
                 # If user ticked the box for re-generating client key
                 # Replace remote clients in lawn mower(s)
                 if user_input.get("generate_client_key", False):
+                    self._options.update(
+                        {
+                            CONF_CLIENT_KEY: client_key_new,
+                        }
+                    )
                     try:
                         await replace_robot_client(
                             client=client,
@@ -989,6 +984,8 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     except Exception as exception:
                         LOGGER.warning(exception)
 
+                LOGGER.debug("Step settings -> saved options:")
+                LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
                     data=self._options,
