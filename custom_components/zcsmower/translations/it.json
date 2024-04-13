@@ -666,6 +666,9 @@
           "mapping_ended": "Mappatura completata"
         },
         "state_attributes": {
+          "connect_expiration": {
+            "name": "Connect data di scadenza"
+          },
           "infinity_state": {
             "name": "+Infinity stato",
             "state": {
