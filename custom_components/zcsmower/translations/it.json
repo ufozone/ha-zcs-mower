@@ -13,7 +13,7 @@
     "step": {
       "user": {
         "title": "Allestimento del garage",
-        "description": "Inserite qui il nome del vostro garage. È possibile sceglierlo liberamente. Specificare inoltre se si desidera attivare il rilevamento della posizione e la visualizzazione della mappa. È possibile modificare queste impostazioni anche in seguito. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Inserite qui il nome del vostro garage. È possibile sceglierlo liberamente. Specificare inoltre se si desidera attivare il rilevamento della posizione e la visualizzazione della mappa. È possibile modificare queste impostazioni anche in seguito. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "name": "Nome del garage",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
@@ -117,7 +117,7 @@
       },
       "settings": {
         "title": "Configurare il garage",
-        "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "generate_client_key": "Generare nuovamente una nuova chiave client (consigliato solo se la connessione non è più possibile).",
           "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",

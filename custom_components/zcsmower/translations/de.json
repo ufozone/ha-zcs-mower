@@ -13,7 +13,7 @@
     "step": {
       "user": {
         "title": "Garage einrichten",
-        "description": "Gib hier deinen Garagennamen ein. Du kannst ihn frei wählen. Gib außerdem an, ob du die Positionsverfolgung und die Kartenanzeige aktivieren willst. Du kannst diese Einstellungen auch später noch ändern. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Gib hier deinen Garagennamen ein. Du kannst ihn frei wählen. Gib außerdem an, ob du die Positionsverfolgung und die Kartenanzeige aktivieren willst. Du kannst diese Einstellungen auch später noch ändern. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "name": "Garagenname",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
@@ -117,7 +117,7 @@
       },
       "settings": {
         "title": "Konfigurieren der Garage",
-        "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "generate_client_key": "Generiere einen neuen Client-Schlüssel (nur empfohlen, wenn keine Verbindung mehr möglich ist).",
           "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",

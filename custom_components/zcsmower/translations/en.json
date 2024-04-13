@@ -117,7 +117,7 @@
       },
       "settings": {
         "title": "Configure garage",
-        "description": "Make general settings for your garage. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Make general settings for your garage. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "generate_client_key": "Re-generate a new client key (only recommended if a connection is no longer possible).",
           "standby_time_start": "At what time does the daily standby time start?",
