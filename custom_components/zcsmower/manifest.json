@@ -1,6 +1,6 @@
 {
   "domain": "zcsmower",
-  "name": "ZCS Lawn Mower Robot",
+  "name": "ZCS Lawn Mower Robot (Ambrogio, Techline, Wiper)",
   "after_dependencies": [
     "recorder"
   ],

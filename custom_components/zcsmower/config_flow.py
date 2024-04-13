@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import os
-import string
-import random
 
 from homeassistant.core import callback
 from homeassistant.config_entries import (
@@ -57,7 +55,6 @@ from .const import (
     ATTR_CLIENT_KEY,
     API_BASE_URI,
     API_APP_TOKEN,
-    API_CLIENT_KEY_LENGTH,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
     UPDATE_INTERVAL_WORKING_DEFAULT,
@@ -74,83 +71,16 @@ from .api import (
     ZcsMowerApiCommunicationError,
     ZcsMowerApiError,
 )
+from .helpers import (
+    delete_robot_client,
+    get_client_key,
+    get_first_empty_robot_client,
+    publish_client_thing,
+    publish_robot_client,
+    replace_robot_client,
+    validate_imei,
+)
 
-
-async def generate_client_key() -> str:
-    """Generate client key."""
-    # get random client key with letters and digits
-    return "".join(
-        random.choice(string.ascii_letters + string.digits) for i in range(API_CLIENT_KEY_LENGTH)
-    )
-
-
-async def get_client_key(
-    client: ZcsMowerApiClient,
-) -> str:
-    """Generate, validate and return client key."""
-    attempts = 0
-    while True:
-        attempts += 1
-        try:
-            client_key = await generate_client_key()
-            result = await client.app_auth(client_key, API_APP_TOKEN, client_key)
-        except ZcsMowerApiAuthenticationError:
-            result = False
-
-        # Login with generated client key is successfull or max attempts reached
-        if result or attempts > 10:
-            break
-
-    return client_key
-
-
-async def validate_imei(
-    client: ZcsMowerApiClient,
-    imei: str,
-) -> dict:
-    """Validate a lawn mower IMEI.
-
-    Raises a ValueError if the IMEI is invalid.
-    """
-    if not imei.startswith("35") or len(imei) != 15:
-        raise ValueError
-
-    mower = await client.execute(
-        "thing.find",
-        {
-            "imei": imei
-        }
-    )
-    if mower:
-        return await client.get_response()
-
-    # Lawn mower not found
-    raise KeyError(
-        "Lawn mower not found. Please check the application configuration."
-    )
-
-
-async def get_first_empty_robot_client(
-    mower: dict,
-    client_key: str | None = None,
-) -> str:
-    """Get first empty robot_client key or the one that matches client_key."""
-    if "attrs" not in mower:
-        raise KeyError(
-            "No attributes found for lawn mower not found. Abort."
-        )
-    # Iteration through the "robot_client" attributes
-    for counter in range(1, 6):
-        # First empty key
-        if (robot_client := f"robot_client{counter}") not in mower["attrs"]:
-            return robot_client
-        # Key is set and same as given client_key
-        elif mower["attrs"][robot_client] == client_key:
-            return robot_client
-
-    raise IndexError(
-        "No available robot_clientX key found. Abort"
-    )
 
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
@@ -171,7 +101,11 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
         if user_input is not None:
             # Garage Name
-            garage_name = user_input.get(CONF_NAME, "").strip()
+            if (garage_name := user_input.get(CONF_NAME, "").strip()):
+                client_name = f"{garage_name} (Home Assistant)"
+            else:
+                client_name = "Home Assistant"
+
             try:
                 client = ZcsMowerApiClient(
                     session=async_create_clientsession(self.hass),
@@ -180,19 +114,10 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     },
                 )
                 client_key = await get_client_key(client)
-                await client.execute(
-                    "thing.find",
-                    {
-                        "key": client_key,
-                    },
-                )
-                await client.get_response()
-                await client.execute(
-                    "thing.update",
-                    {
-                        "key": client_key,
-                        "name": f"{garage_name} (Home Assistant)",
-                    },
+                await publish_client_thing(
+                    client=client,
+                    client_key=client_key,
+                    client_name=client_name,
                 )
             except ZcsMowerApiAuthenticationError as exception:
                 LOGGER.error(exception)
@@ -232,6 +157,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 }
                 LOGGER.debug("Step user -> saved options:")
                 LOGGER.debug(self._options)
+
                 # Return the form of the next step
                 # If user ticked the box go to map step
                 if user_input.get(CONF_MAP_ENABLE, False):
@@ -311,6 +237,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ]
                 LOGGER.debug("Step map -> saved options:")
                 LOGGER.debug(self._options)
+
                 # Return the form of the next step
                 return await self.async_step_mower()
         return self.async_show_form(
@@ -439,9 +366,6 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                     ATTR_CLIENT_KEY: robot_client_key,
                 }
-                LOGGER.debug("Step mower -> saved options:")
-                LOGGER.debug(self._options)
-
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
                 if user_input.get("add_another", False):
@@ -449,16 +373,16 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
                 # User is done adding lawn mowers,
                 # publish robot_client and create the config entry.
-                for imei, mower in self._options[CONF_MOWERS].items():
-                    await client.execute(
-                        "attribute.publish",
-                        {
-                            "imei": imei,
-                            "key": mower[ATTR_CLIENT_KEY],
-                            "value": client_key,
-                        },
+                for imei, mower in self._options.get(CONF_MOWERS, {}).items():
+                    await publish_robot_client(
+                        client=client,
+                        imei=imei,
+                        robot_client_key=mower[ATTR_CLIENT_KEY],
+                        client_key=client_key,
                     )
 
+                LOGGER.debug("Step mower -> saved options:")
+                LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title=self._title,
                     data={},
@@ -577,18 +501,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                     ATTR_CLIENT_KEY: robot_client_key,
                 }
+                # Publish robot_client and create the config entry.
+                await publish_robot_client(
+                    client=client,
+                    imei=user_input[ATTR_IMEI],
+                    robot_client_key=robot_client_key,
+                    client_key=client_key,
+                )
                 LOGGER.debug("Step add -> saved options:")
                 LOGGER.debug(self._options)
-
-                # Publish robot_client and create the config entry.
-                await client.execute(
-                    "attribute.publish",
-                    {
-                        "imei": user_input[ATTR_IMEI],
-                        "key": robot_client_key,
-                        "value": client_key,
-                    },
-                )
                 return self.async_create_entry(
                     title="",
                     data=self._options,
@@ -685,10 +606,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             device.id,
                             name=mower_name,
                         )
+                        # Input is valid, set data
                         self._options[CONF_MOWERS][mower_imei] = {
                             ATTR_NAME: mower_name,
                         }
-                        # Input is valid, set data
                         LOGGER.debug("Step change -> saved options:")
                         LOGGER.debug(self._options)
                         return self.async_create_entry(
@@ -748,8 +669,6 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
 
                 # Input is valid, set data
                 self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
-                LOGGER.debug("Step delete -> saved options:")
-                LOGGER.debug(self._options)
 
                 # Remove remote client from lawn mower
                 try:
@@ -763,18 +682,16 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             "thing_key": client_key,
                         },
                     )
-                    await client.execute(
-                        "attribute.delete",
-                        {
-                            "thingKey": user_input[ATTR_IMEI],
-                            "key": self._options[CONF_MOWERS][user_input[ATTR_IMEI]][ATTR_CLIENT_KEY],
-                            "startTs": "1000-01-01T00:00:00Z",
-                            "endTs": "3000-12-31T23:59:59Z"
-                        },
+                    await delete_robot_client(
+                        client=client,
+                        imei=user_input[ATTR_IMEI],
+                        robot_client_key=self._options[CONF_MOWERS][user_input[ATTR_IMEI]][ATTR_CLIENT_KEY],
                     )
                 except Exception as exception:
                     LOGGER.warning(exception)
 
+                LOGGER.debug("Step delete -> saved options:")
+                LOGGER.debug(self._options)
                 return self.async_create_entry(
                     title="",
                     data=self._options,
@@ -861,6 +778,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         for x in user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
+
                 LOGGER.debug("Step map -> saved options:")
                 LOGGER.debug(self._options)
                 return self.async_create_entry(
@@ -981,20 +899,40 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 CONF_UPDATE_INTERVAL_IDLING
             ):
                 errors["base"] = "update_interval_standby_invalid"
+            # User ticked the box for re-generating client key
+            elif user_input.get("generate_client_key", False):
+                # Garage Name
+                if (garage_name := self.config_entry.title):
+                    client_name = f"{garage_name} (Home Assistant)"
+                else:
+                    client_name = "Home Assistant"
+
+                try:
+                    client = ZcsMowerApiClient(
+                        session=async_create_clientsession(self.hass),
+                        options={
+                            "endpoint": API_BASE_URI,
+                        },
+                    )
+                    client_key_old = self.options.get(CONF_CLIENT_KEY)
+                    client_key_new = await get_client_key(client)
+
+                    await publish_client_thing(
+                        client=client,
+                        client_key=client_key_new,
+                        client_name=client_name,
+                    )
+                except ZcsMowerApiAuthenticationError as exception:
+                    LOGGER.error(exception)
+                    errors["base"] = "auth_failed"
+                except ZcsMowerApiCommunicationError as exception:
+                    LOGGER.error(exception)
+                    errors["base"] = "communication_failed"
+                except (Exception, ZcsMowerApiError) as exception:
+                    LOGGER.exception(exception)
+                    errors["base"] = "connection_failed"
 
             if not errors:
-                # TODO:
-                # Checkbox: Generate new client key for authentication and delete old one from lawn mower
-                # If True:
-                #   _client_key_old = conf.client_key
-                #   _client_key_new = generate
-                #   Iterate through lawn mowers
-                #     Search _client_key_old in robot_clientX
-                #     Get robot_clientX for old client key or first empty
-                #     Delete _client_key_old in robot_clientX
-                #     Set _client_key_new in robot_clientX
-                # Save in options
-
                 # Input is valid, set data
                 self._options.update(
                     {
@@ -1028,17 +966,39 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                     }
                 )
-                # TODO
+                # If user ticked the box for re-generating client key
+                # Replace remote clients in lawn mower(s)
+                if user_input.get("generate_client_key", False):
+                    self._options.update(
+                        {
+                            CONF_CLIENT_KEY: client_key_new,
+                        }
+                    )
+                    try:
+                        await replace_robot_client(
+                            client=client,
+                            mowers=self.options.get(CONF_MOWERS, {}),
+                            client_key_old=client_key_old,
+                            client_key_new=client_key_new,
+                        )
+                    except Exception as exception:
+                        LOGGER.warning(exception)
+
                 LOGGER.debug("Step settings -> saved options:")
                 LOGGER.debug(self._options)
-                #return self.async_create_entry(
-                #    title="",
-                #    data=self._options,
-                #)
+                return self.async_create_entry(
+                    title="",
+                    data=self._options,
+                )
         return self.async_show_form(
             step_id="settings",
             data_schema=vol.Schema(
                 {
+                    # Re-generate client key
+                    vol.Optional(
+                        "generate_client_key",
+                        default=(user_input or {}).get("generate_client_key", False),
+                    ): selector.BooleanSelector(),
                     # Standby time starts
                     vol.Optional(
                         CONF_STANDBY_TIME_START,
