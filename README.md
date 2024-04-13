@@ -70,10 +70,16 @@ Start setup:
 
 ### Start
 
-> [!NOTE]  
-> This part of the documentation is incomplete or outdated.
+1. Garage Name:
+    You can freely choose the name.
 
-The garage name can be chosen freely.
+2. Enable position tracing?
+    Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
+
+    **:warning: Attention:** Activating this function increases data usage significantly.
+
+3. Enable map?
+    Check this box if you want to set up your own map view. For additional information go to [Map](#map).
 
 ### Map
 
@@ -118,6 +124,22 @@ Get IMEI from your lawn mower(s):
     ![Get IMEI address](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_imei.jpg?raw=true)
 
 4. Type this information into the config flow dialog.
+
+### Remove client from lawn mower(s)
+
+When adding a robot, you may receive a message that too many clients are connected to the lawn mower. You can fix this problem as follows:
+
+1. Open the app on your mobile device.
+
+2. Connect to the lawn mower via bluetooth.
+
+3. Click on the `Setup` tab and scroll to bottom.
+
+4. Click on the `General Settings` section and open to the `Client List`:
+
+    ![Get client list](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_client_list.jpg?raw=true)
+
+5. Click on the "Delete" button of the client that you no longer need
 
 ### General settings
 
