@@ -112,14 +112,48 @@ async def get_first_empty_robot_client(
     # Iteration through the "robot_client" attributes
     for counter in range(1, 6):
         # First empty key
-        if (robot_client := f"robot_client{counter}") not in mower["attrs"]:
-            return robot_client
+        if (robot_client_key := f"robot_client{counter}") not in mower["attrs"]:
+            return robot_client_key
         # Key is set and same as given client_key
-        elif mower["attrs"][robot_client]["value"] == client_key:
-            return robot_client
+        elif mower["attrs"][robot_client_key]["value"] == client_key:
+            return robot_client_key
 
     raise IndexError(
         "No available robot_client key found. Abort"
+    )
+
+
+async def publish_robot_client(
+    client: ZcsMowerApiClient,
+    imei: str,
+    robot_client_key: str,
+    client_key: str,
+) -> None:
+    """Publish robot client."""
+    await client.execute(
+        "attribute.publish",
+        {
+            "thingKey": imei,
+            "key": robot_client_key,
+            "value": client_key,
+        },
+    )
+
+
+async def delete_robot_client(
+    client: ZcsMowerApiClient,
+    imei: str,
+    robot_client_key: str,
+) -> None:
+    """Delete robot client."""
+    await client.execute(
+        "attribute.delete",
+        {
+            "thingKey": imei,
+            "key": robot_client_key,
+            "startTs": "1000-01-01T00:00:00Z",
+            "endTs": "3000-12-31T23:59:59Z"
+        },
     )
 
 
@@ -157,7 +191,7 @@ async def replace_robot_client(
             await client.execute(
                 "attribute.publish",
                 {
-                    "imei": mower.get("key", ""),
+                    "thingKey": mower.get("key", ""),
                     "key": robot_client_key,
                     "value": client_key_new,
                 },
