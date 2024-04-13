@@ -68,29 +68,12 @@ Start setup:
 
 ## Configuration
 
-### Authorization
+### Start
+
+> [!NOTE]  
+> This part of the documentation is incomplete or outdated.
 
 The garage name can be chosen freely.
-
-Get client key from lawn mower mobile app:
-
-   **:warning: Pay attention** Android recommended, because in the iPhone app all characters are incorrectly displayed in capital letters.
-
-1. Open the app on your mobile device.
-
-   :information_source: In the best case, you create a new account (via the mobile app) and connect it to your lawn mower(s). Then there should be no problems when you use the HA integration and the mobile app at the same time.
-
-2. Click on the `Setup` tab.
-
-3. In the `Connect Settings` section, click `Registered "Connect Clients"`:
-
-    ![Registered "Connect Clients"](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_account1.jpg?raw=true)
-
-4. You need your account key (italicized string):
-
-    ![Get account key](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_account2.jpg?raw=true)
-
-5. Type this information into the config flow dialog.
 
 ### Map
 
@@ -128,13 +111,18 @@ Get IMEI from your lawn mower(s):
 
 1. Open the app on your mobile device.
 
-2. Click on the `More info` tab and scroll to the `Connect Informations` section:
+2. Click on the `Info` tab and scroll to the `Connect` section:
 
-3. You need the `Imei Address` (bold string, starts with `3`):
+3. You need the `Imei Address` (starts with `35`):
 
     ![Get IMEI address](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_imei.jpg?raw=true)
 
 4. Type this information into the config flow dialog.
+
+### General settings
+
+> [!NOTE]  
+> This part of the documentation is incomplete or outdated.
 
 ## Available components
 
@@ -229,6 +217,11 @@ _These entities are disabled by default. You have to activate it if you want to 
   | hot_temperature | Hot temperature |
   | mapping_started | Mapping started |
   | mapping_ended   | Mapping ended   |
+
+    ```text
+    attributes: 
+    connect_expiration, infinity_state, infinity_expiration
+    ```
 
 ### Vacuum
 

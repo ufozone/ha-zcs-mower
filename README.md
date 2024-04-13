@@ -70,6 +70,9 @@ Start setup:
 
 ### Start
 
+> [!NOTE]  
+> This part of the documentation is incomplete or outdated.
+
 The garage name can be chosen freely.
 
 ### Map
@@ -117,6 +120,9 @@ Get IMEI from your lawn mower(s):
 4. Type this information into the config flow dialog.
 
 ### General settings
+
+> [!NOTE]  
+> This part of the documentation is incomplete or outdated.
 
 ## Available components
 

@@ -13,7 +13,7 @@
     "step": {
       "user": {
         "title": "Set up garage",
-        "description": "Enter your garage name here. You can choose this freely. Also specify whether you want to activate position tracking and map display. You can also change these settings later. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#garage).",
+        "description": "Enter your garage name here. You can choose this freely. Also specify whether you want to activate position tracking and map display. You can also change these settings later. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "name": "Garage Name",
           "trace_position_enable": "Enable position tracing?",
@@ -117,7 +117,7 @@
       },
       "settings": {
         "title": "Configure garage",
-        "description": "Make general settings for your garage. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
+        "description": "Make general settings for your garage. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
         "data": {
           "generate_client_key": "Re-generate a new client key (only recommended if a connection is no longer possible).",
           "standby_time_start": "At what time does the daily standby time start?",
