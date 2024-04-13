@@ -119,6 +119,7 @@ class ZcsMowerApiClient:
                 response.raise_for_status()
 
                 self._response = await response.json()
+                assert self._response
 
                 if "errorMessages" in self._response:
                     self._response_error.extend(self._response["errorMessages"])
@@ -158,7 +159,7 @@ class ZcsMowerApiClient:
             raise ZcsMowerApiCommunicationError(
                 f"Communication failed: {exception}"
             ) from exception
-        except TimeoutError as exception:
+        except (TimeoutError, AssertionError) as exception:
             raise ZcsMowerApiCommunicationError(
                 "Timeout error fetching information",
             ) from exception
