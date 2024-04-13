@@ -17,7 +17,7 @@ import homeassistant.util.dt as dt_util
 
 from .const import (
     DOMAIN,
-    ATTR_DATA_EXPIRATION,
+    ATTR_CONNECT_EXPIRATION,
     ATTR_INFINITY_STATE,
     ATTR_INFINITY_EXPIRATION,
 )
@@ -80,9 +80,9 @@ class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
         # Data expiration date
-        if (_data_expiration := self._get_attribute(ATTR_DATA_EXPIRATION)) is not None:
+        if (_connect_expiration := self._get_attribute(ATTR_CONNECT_EXPIRATION)) is not None:
             self._additional_extra_state_attributes.update({
-                ATTR_DATA_EXPIRATION: _data_expiration,
+                ATTR_CONNECT_EXPIRATION: _connect_expiration,
             })
         # +Infinity state
         self._additional_extra_state_attributes.update({

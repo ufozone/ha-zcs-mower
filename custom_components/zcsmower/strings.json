@@ -666,7 +666,7 @@
           "mapping_ended": "Mapping ended"
         },
         "state_attributes": {
-          "data_expiration": {
+          "connect_expiration": {
             "name": "Connect expiration date"
           },
           "infinity_state": {
