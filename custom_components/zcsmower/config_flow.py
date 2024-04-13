@@ -52,7 +52,7 @@ from .const import (
     CONF_MAP_POINTS,
     CONF_MOWERS,
     ATTR_IMEI,
-    ATTR_CLIENT_KEY,
+    ATTR_ROBOT_CLIENT_INDEX,
     API_BASE_URI,
     API_APP_TOKEN,
     STANDBY_TIME_START_DEFAULT,
@@ -364,7 +364,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 # Input is valid, set data.
                 self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
-                    ATTR_CLIENT_KEY: robot_client_key,
+                    ATTR_ROBOT_CLIENT_INDEX: robot_client_key,
                 }
                 # If user ticked the box show this form again so
                 # they can add an additional lawn mower.
@@ -377,7 +377,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     await publish_robot_client(
                         client=client,
                         imei=imei,
-                        robot_client_key=mower[ATTR_CLIENT_KEY],
+                        robot_client_key=mower.get(ATTR_ROBOT_CLIENT_INDEX),
                         client_key=client_key,
                     )
 
@@ -499,7 +499,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 # Input is valid, set data
                 self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
-                    ATTR_CLIENT_KEY: robot_client_key,
+                    ATTR_ROBOT_CLIENT_INDEX: robot_client_key,
                 }
                 # Publish robot_client and create the config entry.
                 await publish_robot_client(
@@ -647,12 +647,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 errors["base"] = "delete_not_confirmed"
 
             if not errors:
+                robot_client_key = self._options[CONF_MOWERS][user_input[ATTR_IMEI]].get(ATTR_ROBOT_CLIENT_INDEX)
+
                 device_registry = dr.async_get(self.hass)
                 device = device_registry.async_get_device(
                     {(DOMAIN, user_input[ATTR_IMEI])}
                 )
                 if not device:
                     return self.async_abort(reason="device_error")
+
                 LOGGER.debug(device)
 
                 entity_registry = er.async_get(self.hass)
@@ -671,24 +674,25 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
 
                 # Remove remote client from lawn mower
-                try:
-                    client_key = self._options[CONF_CLIENT_KEY]
-                    client = ZcsMowerApiClient(
-                        session=async_get_clientsession(self.hass),
-                        options={
-                            "endpoint": API_BASE_URI,
-                            "app_id": client_key,
-                            "app_token": API_APP_TOKEN,
-                            "thing_key": client_key,
-                        },
-                    )
-                    await delete_robot_client(
-                        client=client,
-                        imei=user_input[ATTR_IMEI],
-                        robot_client_key=self._options[CONF_MOWERS][user_input[ATTR_IMEI]][ATTR_CLIENT_KEY],
-                    )
-                except Exception as exception:
-                    LOGGER.warning(exception)
+                if robot_client_key:
+                    try:
+                        client_key = self._options[CONF_CLIENT_KEY]
+                        client = ZcsMowerApiClient(
+                            session=async_get_clientsession(self.hass),
+                            options={
+                                "endpoint": API_BASE_URI,
+                                "app_id": client_key,
+                                "app_token": API_APP_TOKEN,
+                                "thing_key": client_key,
+                            },
+                        )
+                        await delete_robot_client(
+                            client=client,
+                            imei=user_input[ATTR_IMEI],
+                            robot_client_key=robot_client_key,
+                        )
+                    except Exception as exception:
+                        LOGGER.warning(exception)
 
                 LOGGER.debug("Step delete -> saved options:")
                 LOGGER.debug(self._options)

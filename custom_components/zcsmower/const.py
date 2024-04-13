@@ -47,7 +47,7 @@ CONF_MAP_DRAW_LINES = "map_draw_lines"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
-ATTR_CLIENT_KEY = "client_key"
+ATTR_ROBOT_CLIENT_INDEX = "robot_client_index"
 ATTR_DATA_THRESHOLD = "data_threshold"
 ATTR_INFINITY_STATE = "infinity_state"
 ATTR_INFINITY_EXPIRATION = "infinity_expiration"
