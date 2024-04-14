@@ -70,6 +70,8 @@ Start setup:
 
 ### Start
 
+In this step, a new account is created at ZCS Cloud, to which your lawn mower(s) will later be linked.
+
 1. **Garage name:** You can freely choose the name.
 
 2. **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
