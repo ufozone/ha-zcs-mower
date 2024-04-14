@@ -70,13 +70,13 @@ Start setup:
 
 ### Start
 
-1. **Garage Name:** You can freely choose the name.
+1. **Garage name:** You can freely choose the name.
 
-2. **Enable position tracing?** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
+2. **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
 
     **:warning: Attention:** Activating this function increases data usage significantly.
 
-3. **Enable map?** Check this box if you want to set up your own map view. For additional information go to [Map](#map).
+3. **Map activation:** Check this box if you want to set up your own map view. For additional information go to [Map](#map).
 
 ### Map
 
@@ -124,26 +124,49 @@ Get IMEI from your lawn mower(s):
 
 ### General settings
 
-> [!NOTE]  
-> This part of the documentation is incomplete or outdated.
+> [!IMPORTANT]  
+> **These settings have a major impact on the data usage of the Connect module.**
+>
+> In the best case, activate +Infinity for your lawn mower(s).
+>
+> If you have not activated +Infinity, you should only carefully select lower values than the default values. If you change these values, you should monitor your data usage in the mobile app and adjust the settings again if necessary.
 
-1. **Re-generate a new client key (only recommended if a connection is no longer possible).**
+The following settings are available:
 
-2. **At what time does the daily standby time start?**
+* **Re-generate client key:**
 
-3. **At what time does the daily standby time end?**
+    Regeneration is only recommended if authentication is no longer possible and the state of the lawn mowers can no longer be retrieved.
 
-4. **Every how many seconds should the data be updated when one or more lawn mowers are working?**
+    **:information_source: Please note** that regenerating will not improve the situation if the monthly data volume has been used up or the Connect expiration date has passed.
 
-5. **Every how many seconds should the data be updated when all lawn mowers are on standby time?**
+* **Start and end of daily standby time:**
 
-6. **Every how many seconds should the data be updated when all lawn mowers are idle?**
+    To save data volume at times when the lawn mowers are not working by default (e.g. at night), the start and end of the usual working hours can be specified. During this standby time, the status is updated more frequently than outside these times.
 
-7. **Enable position tracing?**
+* **Update interval if at least one lawn mower is working:**
+  * **Default:** A good value is 120 seconds.
+  * **+Infinity:** A good value is 60 seconds.
 
-8. **Default: Every how many seconds should the lawn mower wake up?**
+* **Update interval on standby time if no lawn mower is working:**
+  * **Default:** A good value is 300 seconds.
+  * **+Infinity:** A good value is 120 seconds.
 
-9. **+Infinity: Every how many seconds should the lawn mower wake up**
+* **Update interval outside standby time (all lawn mowers are idle):**
+  * **Default:** A good value is 3600 seconds.
+  * **+Infinity:** A good value is 900 seconds.
+
+* **Position tracing:**
+
+    Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
+
+    **:warning: Attention:** Activating this function increases data usage significantly.
+
+* **Wake up command on lawn mower(s):**
+
+    While the lawn mower is working, the Connect Module must be woken up from time to time to send a current status. Waking up has a strong influence on data usage. For this reason, one value can be specified for lawn mower(s) with activated +Infinity and a value without.
+
+  * **Default:** A good value is 1800 seconds.
+  * **+Infinity:** A good value is 300 seconds.
 
 ### Remove client from lawn mower(s)
 

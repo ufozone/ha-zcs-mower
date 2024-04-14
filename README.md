@@ -126,25 +126,34 @@ Get IMEI from your lawn mower(s):
 
 > [!IMPORTANT]  
 > **These settings have a major impact on the data usage of the Connect module.**
+>
 > In the best case, activate +Infinity for your lawn mower(s).
+>
 > If you have not activated +Infinity, you should only carefully select lower values than the default values. If you change these values, you should monitor your data usage in the mobile app and adjust the settings again if necessary.
 
 The following settings are available:
 
 * **Re-generate client key:**
 
-    Regeneration is only recommended if authentication is no longer possible and the status of the lawn mowers can no longer be retrieved.
-    **:information: Please note** that regenerating will not improve the situation if the monthly data volume has been used up or the Connect expiration date has passed.
+    Regeneration is only recommended if authentication is no longer possible and the state of the lawn mowers can no longer be retrieved.
 
-* **Start daily standby time:**
+    **:information_source: Please note** that regenerating will not improve the situation if the monthly data volume has been used up or the Connect expiration date has passed.
 
-* **End daily standby time:**
+* **Start and end of daily standby time:**
 
-* **Update interval when one or more lawn mowers are working:**
+    To save data volume at times when the lawn mowers are not working by default (e.g. at night), the start and end of the usual working hours can be specified. During this standby time, the status is updated more frequently than outside these times.
 
-* **Update interval when all lawn mowers are on standby time:**
+* **Update interval if at least one lawn mower is working:**
+  * **Default:** A good value is 120 seconds.
+  * **+Infinity:** A good value is 60 seconds.
 
-* **Update interval when all lawn mowers are idle:**
+* **Update interval on standby time if no lawn mower is working:**
+  * **Default:** A good value is 300 seconds.
+  * **+Infinity:** A good value is 120 seconds.
+
+* **Update interval outside standby time (all lawn mowers are idle):**
+  * **Default:** A good value is 3600 seconds.
+  * **+Infinity:** A good value is 900 seconds.
 
 * **Position tracing:**
 
@@ -154,13 +163,10 @@ The following settings are available:
 
 * **Wake up command on lawn mower(s):**
 
-    While the lawn mower is working, the Connect Module must be woken up from time to time to send a current status.
+    While the lawn mower is working, the Connect Module must be woken up from time to time to send a current status. Waking up has a strong influence on data usage. For this reason, one value can be specified for lawn mower(s) with activated +Infinity and a value without.
 
-    Waking up has a strong influence on data usage. For this reason, one value can be specified for lawn mower(s) with activated +Infinity and a value without.
-
-  * **Default connection:** A good value is 1800 seconds.
-
-  * **+Infinity connection:** A good value is 300 seconds.
+  * **Default:** A good value is 1800 seconds.
+  * **+Infinity:** A good value is 300 seconds.
 
 ### Remove client from lawn mower(s)
 
