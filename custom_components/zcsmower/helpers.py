@@ -11,6 +11,7 @@ from .const import (
 from .api import (
     ZcsMowerApiClient,
     ZcsMowerApiAuthenticationError,
+    ZcsMowerApiCommunicationError,
 )
 
 
@@ -36,9 +37,12 @@ async def get_client_key(
         except ZcsMowerApiAuthenticationError:
             result = False
 
-        # Login with generated client key is successfull or max attempts reached
-        if result or attempts > 10:
+        # Login with generated client key is successfull
+        if result:
             break
+        # Max attempts reached
+        if attempts > 10:
+            raise ZcsMowerApiCommunicationError("Too many attempts to generate a client key have failed.")
 
     return client_key
 
