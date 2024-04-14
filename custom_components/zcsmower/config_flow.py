@@ -352,7 +352,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "mower_invalid"
             except IndexError as exception:
                 LOGGER.info(exception)
-                errors["base"] = "mower_toomanyclients"
+                errors["base"] = "mower_too_many_clients"
             except ZcsMowerApiCommunicationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "communication_failed"
@@ -487,7 +487,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     errors["base"] = "mower_invalid"
                 except IndexError as exception:
                     LOGGER.info(exception)
-                    errors["base"] = "mower_toomanyclients"
+                    errors["base"] = "mower_too_many_clients"
                 except ZcsMowerApiCommunicationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "communication_failed"

@@ -8,7 +8,7 @@
       "coordinates_invalid": "The GPS coordinates provided are not valid: latitude and longitude separated by commas is needed.",
       "imei_invalid": "The IMEI provided is not valid. It must start with \"35\" and is 15 digits long.",
       "mower_invalid": "The lawn mower could not be found or another error has occurred. Please check the log files.",
-      "mower_toomanyclients": "There are too many remote clients connected to the lawn mower. Open the mobile app on your smartphone, go to \"General settings\" and then \"Client list\". Remove a remote client there."
+      "mower_too_many_clients": "There are too many remote clients linked to the lawn mower. Open the mobile app on your device, go to \"General settings\" and then \"Client list\". Remove a remote client there."
     },
     "step": {
       "user": {
@@ -57,7 +57,7 @@
       "name_exists": "A lawn mower with this name already exists.",
       "imei_invalid": "The IMEI provided is not valid. It must start with \"35\" and is 15 digits long.",
       "mower_invalid": "The lawn mower could not be found or another error has occurred. Please check the log files.",
-      "mower_toomanyclients": "There are too many remote clients connected to the lawn mower. Open the mobile app on your smartphone, go to \"General settings\" and then \"Client list\". Remove a remote client there.",
+      "mower_too_many_clients": "There are too many remote clients linked to the lawn mower. Open the mobile app on your device, go to \"General settings\" and then \"Client list\". Remove a remote client there.",
       "imei_not_exists": "A lawn mower with this IMEI does not exists.",
       "delete_not_confirmed": "Deletion of lawn mower was not confirmed.",
       "last_mower": "Last lawn mower cannot be deleted.",
