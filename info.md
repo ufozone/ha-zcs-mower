@@ -112,36 +112,49 @@ Best practice:
 
 Get IMEI from your lawn mower(s):
 
-1. Open the app on your mobile device.
+1. Open the app on your mobile device and select the lawn mower.
 
-2. Click on the `Info` tab and scroll to the `Connect` section:
+2. Click on the `Info` tab and scroll to the `Connect` section.
 
 3. You need the `Imei Address` (starts with `35`):
 
     ![Get IMEI address](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_imei.jpg?raw=true)
 
-4. Type this information into the config flow dialog.
+4. Type this address into the config flow dialog.
+
+### Remove client from lawn mower(s)
+
+When adding a robot, you may receive a message that too many clients are linked to the lawn mower. Only five remote clients can be linked to the lawn mower.
+
+You can fix this problem as follows:
+
+1. Open the app on your mobile device.
+
+2. Connect to the lawn mower via bluetooth.
+
+3. Click on the `Setup` tab and scroll to bottom.
+
+4. Click on the `General Settings` section and open to the `Client List`:
+
+    ![Get client list](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_client_list.jpg?raw=true)
+
+5. Click on the "Delete" button of the client that you no longer need.
 
 ### General settings
 
 > [!IMPORTANT]  
-> **These settings have a major impact on the data usage of the Connect module.**
+> **These settings have a major impact on data usage of the Connect module.**
 >
-> In the best case, activate +Infinity for your lawn mower(s).
->
-> If you have not activated +Infinity, you should only carefully select lower values than the default values. If you change these values, you should monitor your data usage in the mobile app and adjust the settings again if necessary.
+> * In the best case, activate +Infinity for your lawn mower(s).
+> * If you have not activated +Infinity, you should only carefully select lower values than the default values. If you change these values, you should daily monitor your data usage in the mobile app and adjust the settings again if necessary.
 
 The following settings are available:
 
-* **Re-generate client key:**
-
-    Regeneration is only recommended if authentication is no longer possible and the state of the lawn mowers can no longer be retrieved.
+* **Re-generate client key:** Regeneration is only recommended if authentication is no longer possible and the state of the lawn mowers can no longer be retrieved.
 
     **:information_source: Please note** that regenerating will not improve the situation if the monthly data volume has been used up or the Connect expiration date has passed.
 
-* **Start and end of daily standby time:**
-
-    To save data volume at times when the lawn mowers are not working by default (e.g. at night), the start and end of the usual working hours can be specified. During this standby time, the status is updated more frequently than outside these times.
+* **Start and end of daily standby time:** To save data volume at times when the lawn mowers are not working by default (e.g. at night), the start and end of the usual working hours can be specified. During this standby time, the status is updated more frequently than outside these times.
 
 * **Update interval if at least one lawn mower is working:**
   * **Default:** A good value is 120 seconds.
@@ -155,34 +168,14 @@ The following settings are available:
   * **Default:** A good value is 3600 seconds.
   * **+Infinity:** A good value is 900 seconds.
 
-* **Position tracing:**
-
-    Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
+* **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
 
     **:warning: Attention:** Activating this function increases data usage significantly.
 
-* **Wake up command on lawn mower(s):**
-
-    While the lawn mower is working, the Connect Module must be woken up from time to time to send a current status. Waking up has a strong influence on data usage. For this reason, one value can be specified for lawn mower(s) with activated +Infinity and a value without.
+* **Wake up command on lawn mower(s):** While the lawn mower is working, the Connect Module must be woken up from time to time to send a current status. Waking up has a strong influence on data usage. For this reason, one value can be specified for lawn mower(s) with activated +Infinity and a value without.
 
   * **Default:** A good value is 1800 seconds.
   * **+Infinity:** A good value is 300 seconds.
-
-### Remove client from lawn mower(s)
-
-When adding a robot, you may receive a message that too many clients are connected to the lawn mower. You can fix this problem as follows:
-
-1. Open the app on your mobile device.
-
-2. Connect to the lawn mower via bluetooth.
-
-3. Click on the `Setup` tab and scroll to bottom.
-
-4. Click on the `General Settings` section and open to the `Client List`:
-
-    ![Get client list](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_client_list.jpg?raw=true)
-
-5. Click on the "Delete" button of the client that you no longer need.
 
 ## Available components
 
