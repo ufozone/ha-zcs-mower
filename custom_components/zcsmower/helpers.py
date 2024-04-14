@@ -119,7 +119,7 @@ async def get_first_empty_robot_client(
         if (robot_client_key := f"robot_client{counter}") not in mower["attrs"]:
             return robot_client_key
         # Key is set and same as given client_key
-        elif mower["attrs"][robot_client_key]["value"] == client_key:
+        elif mower["attrs"][robot_client_key].get("value") == client_key:
             return robot_client_key
 
     raise IndexError(
