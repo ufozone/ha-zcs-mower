@@ -74,7 +74,7 @@ Start setup:
 
 2. **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
 
-    **:warning: Attention:** Activating this function increases data usage significantly.
+    **:warning: Attention:** Activating this function increases data usage significantly. For additional information go to [General settings](#general-settings).
 
 3. **Map activation:** Check this box if you want to set up your own map view. For additional information go to [Map](#map).
 
@@ -110,7 +110,7 @@ Best practice:
 
 ### Add lawn mower(s)
 
-Get IMEI from your lawn mower(s):
+Get IMEI address from your lawn mower(s):
 
 1. Open the app on your mobile device and select the lawn mower.
 
@@ -130,7 +130,7 @@ You can fix this problem as follows:
 
 1. Open the app on your mobile device.
 
-2. Connect to the lawn mower via bluetooth.
+2. Connect to the lawn mower via Bluetooth.
 
 3. Click on the `Setup` tab and scroll to bottom.
 
@@ -150,9 +150,9 @@ You can fix this problem as follows:
 
 The following settings are available:
 
-* **Re-generate client key:** Regeneration is only recommended if authentication is no longer possible and the state of the lawn mowers can no longer be retrieved.
+* **Re-generate client key:** Regeneration is only recommended if authentication is no longer possible (see [Debugging](#debugging)) and the state of the lawn mowers can no longer be retrieved.
 
-    **:information_source: Please note** that regenerating will not improve the situation if the monthly data volume has been used up or the Connect expiration date has passed.
+    **:information_source: Please note** that regenerating will not bring any improvement if the monthly data volume has reached or the Connect expiration date has exceeded.
 
 * **Start and end of daily standby time:** To save data volume at times when the lawn mowers are not working by default (e.g. at night), the start and end of the usual working hours can be specified. During this standby time, the status is updated more frequently than outside these times.
 
@@ -168,7 +168,7 @@ The following settings are available:
   * **Default:** A good value is 3600 seconds.
   * **+Infinity:** A good value is 900 seconds.
 
-* **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
+* **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report its position more often.
 
     **:warning: Attention:** Activating this function increases data usage significantly.
 
@@ -183,19 +183,21 @@ The following settings are available:
 
 * All entities
 
-    ```text
-    attributes: 
-    imei, connected, last_communication, last_seen, last_poll, next_poll
-    ```
+  Attributes:
+
+  ```text
+  imei, connected, last_communication, last_seen, last_poll, next_poll
+  ```
 
 ### Binary Sensor
 
 * error
 
-    ```text
-    attributes: 
-    reason
-    ```
+  Attributes:
+
+  ```text
+  reason
+  ```
 
 ### Button
 
@@ -213,23 +215,28 @@ The following settings are available:
 
 * location
 
-    ```text
-    attributes: 
-    latitude, longitude, source_type (GPS)
-    ```
+  Attributes:
+
+  ```text
+  latitude, longitude, source_type (GPS), location_accuracy (10 meters)
+  ```
 
 ### Image
 
 * map
 
-    ```text
-    attributes: 
-    calibration_points
-    ```
+  Attributes:
+
+  ```text
+  calibration_points
+  ```
 
 ### Lawn Mower
 
 * mower
+
+  States:
+
   | Values      | Description       | Lawn mower state(s)                                                         |
   |-------------|-------------------|-----------------------------------------------------------------------------|
   | mowing      | Mowing            | Work, Go to area, Go to station, Border cut, Mapping started, Mapping ended |
@@ -237,10 +244,11 @@ The following settings are available:
   | paused      | Paused            | Pause, Work standby                                                         |
   | error       | Error             | Error, No signal, Expired, Renewed, Hot temperature                         |
 
-    ```text
-    attributes: 
-    status
-    ```
+  Attributes:
+
+  ```text
+  status
+  ```
 
 ### Number
 
@@ -253,6 +261,9 @@ _These entities are disabled by default. You have to activate it if you want to 
 ### Sensor
 
 * state
+
+  States:
+
   | Values          | Description     |
   |-----------------|-----------------|
   | unknown         | Unknown         |
@@ -271,16 +282,20 @@ _These entities are disabled by default. You have to activate it if you want to 
   | mapping_started | Mapping started |
   | mapping_ended   | Mapping ended   |
 
-    ```text
-    attributes: 
-    connect_expiration, infinity_state, infinity_expiration
-    ```
+  Attributes:
+
+  ```text
+  connect_expiration, infinity_state, infinity_expiration
+  ```
 
 ### Vacuum
 
 _This entity is disabled by default. You have to activate it if you want to use it._
 
 * mower
+
+  States:
+
   | Values      | Description       | Lawn mower state(s)                                 |
   |-------------|-------------------|-----------------------------------------------------|
   | cleaning    | Mowing            | Work, Go to area, Border cut, Mapping started       |
@@ -290,10 +305,11 @@ _This entity is disabled by default. You have to activate it if you want to use 
   | idle        | Idle              | Work standby                                        |
   | error       | Error             | Error, No signal, Expired, Renewed, Hot temperature |
 
-    ```text
-    attributes: 
-    status
-    ```
+  Attributes:
+
+  ```text
+  status
+  ```
 
 ### Services
 
