@@ -8,12 +8,12 @@
       "coordinates_invalid": "Die angegebenen GPS-Koordinaten sind nicht gültig: Breitengrad und Längengrad müssen durch Kommata getrennt werden.",
       "imei_invalid": "Die angegebene IMEI ist nicht gültig. Sie muss mit \"35\" beginnen und 15 Ziffern lang sein.",
       "mower_invalid": "Der Rasenmäher konnte nicht gefunden werden oder es ist ein anderer Fehler aufgetreten. Bitte überprüfe die Logdateien.",
-      "mower_toomanyclients": "Es sind zu viele Remote Clients mit dem Rasenmäher verbunden. Öffne die mobile App auf deinem Smartphone, gehe auf \"Allgemeine Einstellungen\" und dann auf \"Klient Liste\". Entferne dort einen Remote-Client."
+      "mower_too_many_clients": "Es sind zu viele Remote Clients mit dem Rasenmäher verknüpft. Öffne die mobile App auf deinem device, gehe auf \"Allgemeine Einstellungen\" und dann auf \"Klient Liste\". Entferne dort einen Remote-Client."
     },
     "step": {
       "user": {
         "title": "Garage einrichten",
-        "description": "Gib hier deinen Garagennamen ein. Du kannst ihn frei wählen. Gib außerdem an, ob du die Positionsverfolgung und die Kartenanzeige aktivieren willst. Du kannst diese Einstellungen auch später noch ändern. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Gib hier deinen Garagennamen ein. Du kannst ihn frei wählen. Gib außerdem an, ob du die Positionsverfolgung und die Kartenanzeige aktivieren willst. Du kannst diese Einstellungen auch später noch ändern. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "name": "Garagenname",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
@@ -57,7 +57,7 @@
       "name_exists": "Ein Roboter mit dem Namen existiert bereits.",
       "imei_invalid": "Die angegebene IMEI ist nicht gültig. Sie muss mit \"35\" beginnen und 15 Ziffern lang sein.",
       "mower_invalid": "Der Rasenmäher konnte nicht gefunden werden oder es ist ein anderer Fehler aufgetreten. Bitte überprüfe die Logdateien.",
-      "mower_toomanyclients": "Es sind zu viele Remote Clients mit dem Rasenmäher verbunden. Öffne die mobile App auf deinem Smartphone, gehe auf \"Allgemeine Einstellungen\" und dann auf \"Klient Liste\". Entferne dort einen Remote-Client.",
+      "mower_too_many_clients": "Es sind zu viele Remote Clients mit dem Rasenmäher verknüpft. Öffne die mobile App auf deinem device, gehe auf \"Allgemeine Einstellungen\" und dann auf \"Klient Liste\". Entferne dort einen Remote-Client.",
       "imei_not_exists": "Ein Roboter mit der IMEI existiert nicht.",
       "delete_not_confirmed": "Die Löschung des Rasenmähers wurde nicht bestätigt.",
       "last_mower": "Der letzte Rasenmäher kann nicht gelöscht werden.",
@@ -117,7 +117,7 @@
       },
       "settings": {
         "title": "Konfigurieren der Garage",
-        "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
         "data": {
           "generate_client_key": "Generiere einen neuen Client-Schlüssel (nur empfohlen, wenn keine Verbindung mehr möglich ist).",
           "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",

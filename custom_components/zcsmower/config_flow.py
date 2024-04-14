@@ -352,7 +352,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "mower_invalid"
             except IndexError as exception:
                 LOGGER.info(exception)
-                errors["base"] = "mower_toomanyclients"
+                errors["base"] = "mower_too_many_clients"
             except ZcsMowerApiCommunicationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "communication_failed"
@@ -487,7 +487,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     errors["base"] = "mower_invalid"
                 except IndexError as exception:
                     LOGGER.info(exception)
-                    errors["base"] = "mower_toomanyclients"
+                    errors["base"] = "mower_too_many_clients"
                 except ZcsMowerApiCommunicationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "communication_failed"
@@ -1059,7 +1059,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=120,
+                            min=60,
                             max=3600,
                             step=60,
                             unit_of_measurement=UnitOfTime.SECONDS,
@@ -1078,9 +1078,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=600,
+                            min=300,
                             max=86400,
-                            step=600,
+                            step=300,
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),

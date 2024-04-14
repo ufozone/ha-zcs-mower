@@ -8,12 +8,12 @@
       "coordinates_invalid": "Le coordinate GPS fornite non sono valide: sono necessarie latitudine e longitudine separate da virgole.",
       "imei_invalid": "L'IMEI fornito non è valido. Deve iniziare con \"35\" ed essere composto da 15 cifre.",
       "mower_invalid": "Non è stato possibile trovare il tosaerba o si è verificato un altro errore. Controllare i file di log.",
-      "mower_toomanyclients": "Ci sono troppi client remoti collegati al tosaerba. Aprire l'applicazione mobile sullo smartphone, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un client remoto."
+      "mower_too_many_clients": "Ci sono troppi clienti remoti collegati al tosaerba. Aprire l'applicazione mobile sul dispositivo, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un cliente remoto."
     },
     "step": {
       "user": {
         "title": "Allestimento del garage",
-        "description": "Inserite qui il nome del vostro garage. È possibile sceglierlo liberamente. Specificare inoltre se si desidera attivare il rilevamento della posizione e la visualizzazione della mappa. È possibile modificare queste impostazioni anche in seguito. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Inserite qui il nome del vostro garage. È possibile sceglierlo liberamente. Specificare inoltre se si desidera attivare il rilevamento della posizione e la visualizzazione della mappa. È possibile modificare queste impostazioni anche in seguito. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "name": "Nome del garage",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
@@ -57,7 +57,7 @@
       "name_exists": "Un tosaerba con questo nome esiste già.",
       "imei_invalid": "L'IMEI fornito non è valido. Deve iniziare con \"35\" ed essere composto da 15 cifre.",
       "mower_invalid": "Non è stato possibile trovare il tosaerba o si è verificato un altro errore. Controllare i file di log.",
-      "mower_toomanyclients": "Ci sono troppi client remoti collegati al tosaerba. Aprire l'applicazione mobile sullo smartphone, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un client remoto.",
+      "mower_too_many_clients": "Ci sono troppi clienti remoti collegati al tosaerba. Aprire l'applicazione mobile sul dispositivo, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un cliente remoto.",
       "imei_not_exists": "Un tagliaerba con questo IMEI non esiste.",
       "delete_not_confirmed": "La cancellazione del tosaerba non è stata confermata.",
       "last_mower": "Non è possibile eliminare l'ultimo tosaerba.",
@@ -117,7 +117,7 @@
       },
       "settings": {
         "title": "Configurare il garage",
-        "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#authorization).",
+        "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
         "data": {
           "generate_client_key": "Generare nuovamente una nuova chiave client (consigliato solo se la connessione non è più possibile).",
           "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
