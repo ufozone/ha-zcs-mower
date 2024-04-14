@@ -144,7 +144,7 @@ You can fix this problem as follows:
 
 4. Click on the `General Settings` section and open to the `Client List`:
 
-    ![Get client list](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_client_list.jpg?raw=true)
+    ![Get client list](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_robot_clients.jpg?raw=true)
 
 5. Click on the "Delete" button of the client that you no longer need.
 
