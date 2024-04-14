@@ -1,4 +1,5 @@
 """ZCS Lawn Mower Robot binary sensor platform."""
+
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
@@ -88,4 +89,10 @@ class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
     def is_on(self) -> bool:
         """Return true if the binary_sensor is on."""
         if self._entity_key == "error":
-            return self._get_attribute(ATTR_STATE) == "fail"
+            return self._get_attribute(ATTR_STATE) in (
+                "fail",
+                "nosignal",
+                "expired",
+                "renewed",
+                "hot_temperature",
+            )
