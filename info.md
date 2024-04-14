@@ -26,7 +26,8 @@ The spot cleaning points can be used to start the lawn mower in a specific area.
 
 ## Installation
 
-Requires Home Assistant 2024.2.0 or newer.
+> [!IMPORTANT]  
+> Requires Home Assistant 2024.2.0 or newer.
 
 ### Installation through HACS
 
@@ -84,6 +85,9 @@ In this step, a new account is created at ZCS Cloud, to which your lawn mower(s)
 
 The image entity will plot the current coordinates and location history of the lawn mower on a user provided image. To configure the entity you need to upload your desired map image and determine the coordinates of the top left corner and the bottom right corner of your selected image.
 
+> [!TIP]  
+> If you don't like the map orientation, you can also rotate the section. First, adjust your image, note the degree of rotation and enter it in the map settings.
+
 The image entity is configured via the setup and options flow on the integration.
 
 You can then provide the path to the image you would like to use for the map and marker.
@@ -106,7 +110,9 @@ Best practice:
 
     **:warning: Pay attention** to the correct order of latitude and longitude.
 
-7. (Optional) Get a image of your lawn mower with transparent background as a marker for the current position. Store the image into your home assistant instance, e.g. `/config/www/mower/` and type the full path into the config flow dialog.
+7. (Optional) Enter the rotation of your map image in degrees.
+
+8. (Optional) Get a image of your lawn mower with transparent background as a marker for the current position. Store the image into your home assistant instance, e.g. `/config/www/mower/` and type the full path into the config flow dialog.
 
     The default marker `/config/custom_components/zcsmower/resources/marker.png` is over written when the integration is updated, store the custom image in another location.
 
@@ -144,7 +150,7 @@ You can fix this problem as follows:
 
 ### General settings
 
-> [!IMPORTANT]  
+> [!NOTE]  
 > **These settings have a major impact on data usage of the Connect module.**
 >
 > * In the best case, activate +Infinity for your lawn mower(s).
