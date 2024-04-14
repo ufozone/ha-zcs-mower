@@ -70,16 +70,13 @@ Start setup:
 
 ### Start
 
-1. Garage Name:
-    You can freely choose the name.
+1. **Garage Name:** You can freely choose the name.
 
-2. Enable position tracing?
-    Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
+2. **Enable position tracing?** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
 
     **:warning: Attention:** Activating this function increases data usage significantly.
 
-3. Enable map?
-    Check this box if you want to set up your own map view. For additional information go to [Map](#map).
+3. **Enable map?** Check this box if you want to set up your own map view. For additional information go to [Map](#map).
 
 ### Map
 
@@ -125,6 +122,29 @@ Get IMEI from your lawn mower(s):
 
 4. Type this information into the config flow dialog.
 
+### General settings
+
+> [!NOTE]  
+> This part of the documentation is incomplete or outdated.
+
+1. **Re-generate a new client key (only recommended if a connection is no longer possible).**
+
+2. **At what time does the daily standby time start?**
+
+3. **At what time does the daily standby time end?**
+
+4. **Every how many seconds should the data be updated when one or more lawn mowers are working?**
+
+5. **Every how many seconds should the data be updated when all lawn mowers are on standby time?**
+
+6. **Every how many seconds should the data be updated when all lawn mowers are idle?**
+
+7. **Enable position tracing?**
+
+8. **Default: Every how many seconds should the lawn mower wake up?**
+
+9. **+Infinity: Every how many seconds should the lawn mower wake up**
+
 ### Remove client from lawn mower(s)
 
 When adding a robot, you may receive a message that too many clients are connected to the lawn mower. You can fix this problem as follows:
@@ -139,12 +159,7 @@ When adding a robot, you may receive a message that too many clients are connect
 
     ![Get client list](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_client_list.jpg?raw=true)
 
-5. Click on the "Delete" button of the client that you no longer need
-
-### General settings
-
-> [!NOTE]  
-> This part of the documentation is incomplete or outdated.
+5. Click on the "Delete" button of the client that you no longer need.
 
 ## Available components
 
