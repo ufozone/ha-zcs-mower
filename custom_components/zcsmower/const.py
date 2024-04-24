@@ -226,11 +226,11 @@ ROBOT_MODELS = {
     "AM400L": "L400 Elite", # ?
     "AM450B": "L400i Basic", # ?
     "AM450D": "L400i Deluxe", # ?
-    "KB250L": "KR 250", # ?
-    "KB250P": "KR 250", # ?
-    "KB350L": "KR 350", # ?
-    "KB400B": "KR 400", # ?
-    "KB400D": "KR 400", # ?
+    "KB250L": "KR250",
+    "KB250P": "KR250",
+    "KB350L": "KR350",
+    "KB400B": "KR400B",
+    "KB400D": "KR400",
     #"OW250L": "", # DB:307
     #"OW250P": "", # DB:60
     #"ST250D": "", # DB:17
