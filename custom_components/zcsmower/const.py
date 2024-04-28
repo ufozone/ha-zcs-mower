@@ -206,17 +206,21 @@ ROBOT_MODELS = {
     "AM025L": "Twenty 25 Elite",
     "AM029D": "Twenty 29 Deluxe",
     "AM029L": "Twenty 29 Elite",
+    "AM030D": "L30 Deluxe", # ?
+    "AM030L": "L30 Elite", # ?
     "AM032D": "L32 Deluxe",
     "AM035B": "L35 Basic",
     "AM035D": "L35 Deluxe",
     "AM040B": "4.0 Basic",
     "AM040L": "4.0 Elite",
+    "AM040R": "4.0 Elite RTK", # ?
     "AM043L": "4.36 Elite",
+    "AM043R": "4.36 Elite RTK", # ?
     "AM060D": "L60 Deluxe",
     "AM060L": "L60 Elite",
     "AM060P": "L60 Elite S+", # ?
     "AM085L": "L85 Elite",
-    "AM095L": "Quad Elite 4WD",
+    "AM095L": "CUBE Elite 4WD",
     "AM250D": "L250 Deluxe",
     "AM250L": "L250i Elite",
     "AM250P": "L250i Elite S+",
@@ -226,19 +230,21 @@ ROBOT_MODELS = {
     "AM400L": "L400 Elite", # ?
     "AM450B": "L400i Basic", # ?
     "AM450D": "L400i Deluxe", # ?
-    "KB250L": "KR 250", # ?
-    "KB250P": "KR 250", # ?
-    "KB350L": "KR 350", # ?
-    "KB400B": "KR 400", # ?
-    "KB400D": "KR 400", # ?
-    #"OW250L": "", # DB:307
-    #"OW250P": "", # DB:60
-    #"ST250D": "", # DB:17
+    "KB250L": "KR250",
+    "KB250P": "KR250",
+    "KB350L": "KR350",
+    "KB400B": "KR400B",
+    "KB400D": "KR400",
+    "KB450D": "KR450", # ?
+    "OW250L": "R30Ac", # ???
+    "OW250P": "R50Ac", # ???
+    "ST250D": "AutoClip 528 S", # ?
     "ST250L": "AutoClip 530 SG",
     "TH015D": "D1",
     "TH020D": "DX2",
     "TH020L": "LX2",
     "TH020P": "SX2", # ?
+    "TH020R": "LX2 ZR", # ?
     "TH025D": "DX2.5", # ?
     "TH025L": "LX2.5", # ?
     "TH029D": "DX2.9", # ?
@@ -248,9 +254,12 @@ ROBOT_MODELS = {
     "TH035D": "DZ3",
     "TH040B": "BX4",
     "TH040L": "LX4",
+    "TH040R": "LX4 RTK", # ?
     "TH043L": "LX6",
+    "TH043R": "LX6 RTK", # ?
     "TH060D": "D6",
     "TH060L": "L6",
+    "TH060P": "S6", # ?
     "TH085L": "L8",
     "TH095L": "LQ 4WD", # ???
     "TH250D": "D25",
@@ -285,6 +294,7 @@ ROBOT_MODELS = {
     "WI350L": "P70 S",
     "WI400B": "YARD 101", # ?
     "WI400D": "YARD 201", # ?
+    "WI400L": "YARD 201", # ?
     "WI450B": "YARD 101S", # ?
     "WI450D": "YARD 201S", # ?
 }
