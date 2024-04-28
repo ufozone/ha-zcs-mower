@@ -165,16 +165,16 @@ The following settings are available:
 * **Start and end of daily standby time:** To save data volume at times when the lawn mowers are not working by default (e.g. at night), the start and end of the usual working hours can be specified. During this standby time, the status is updated more frequently than outside these times.
 
 * **Update interval if at least one lawn mower is working:**
-  * **Default:** A good value is 120 seconds.
-  * **+Infinity:** A good value is 60 seconds.
+  * **Standard plan:** A good value is 120 seconds.
+  * **+Infinity plan:** A good value is 60 seconds.
 
 * **Update interval on standby time if no lawn mower is working:**
-  * **Default:** A good value is 300 seconds.
-  * **+Infinity:** A good value is 120 seconds.
+  * **Standard plan:** A good value is 300 seconds.
+  * **+Infinity plan:** A good value is 120 seconds.
 
 * **Update interval outside standby time (all lawn mowers are idle):**
-  * **Default:** A good value is 3600 seconds.
-  * **+Infinity:** A good value is 900 seconds.
+  * **Standard plan:** A good value is 3600 seconds.
+  * **+Infinity plan:** A good value is 900 seconds.
 
 * **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report its position more often.
 
@@ -182,8 +182,8 @@ The following settings are available:
 
 * **Wake up command on lawn mower(s):** While the lawn mower is working, the Connect Module must be woken up from time to time to send a current status. Waking up has a strong influence on data usage. For this reason, one value can be specified for lawn mower(s) with activated +Infinity and a value without.
 
-  * **Default:** A good value is 1800 seconds.
-  * **+Infinity:** A good value is 300 seconds.
+  * **Standard plan:** A good value is 1800 seconds.
+  * **+Infinity plan:** A good value is 300 seconds.
 
 ## Available components
 
