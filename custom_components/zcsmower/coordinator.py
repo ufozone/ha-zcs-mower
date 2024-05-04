@@ -19,8 +19,14 @@ from homeassistant.const import (
     ATTR_MANUFACTURER,
     ATTR_MODEL,
     ATTR_SW_VERSION,
+    STATE_UNAVAILABLE,
+    STATE_UNKNOWN,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.components.recorder import (
+    get_instance,
+    history,
+)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
@@ -74,6 +80,7 @@ from .const import (
     UPDATE_INTERVAL_WORKING_DEFAULT,
     UPDATE_INTERVAL_STANDBY_DEFAULT,
     UPDATE_INTERVAL_IDLING_DEFAULT,
+    LOCATION_HISTORY_DAYS_DEFAULT,
     LOCATION_HISTORY_ITEMS_DEFAULT,
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,
@@ -224,13 +231,51 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Get attributes of an given lawn mower."""
         return self.data.get(imei, None)
 
-    def init_location_history(
+    async def init_location_history(
         self,
+        entity_id: str,
         imei: str,
     ) -> None:
         """Initiate location history for lawn mower."""
+        # Load Recorder after loading entity
+        await get_instance(self.hass).async_add_executor_job(
+            self.get_location_history,
+            entity_id,
+            imei,
+        )
+        # Always update HA states after getting location history.
+        self.hass.async_create_task(
+            self._async_update_listeners()
+        )
+
+    def get_location_history(
+        self,
+        entity_id: str,
+        imei: str,
+    ) -> None:
+        """Get location history for lawn mower."""
         if self.data[imei][ATTR_LOCATION_HISTORY] is None:
             self.data[imei][ATTR_LOCATION_HISTORY] = []
+
+        # Getting history with history.get_last_state_changes can cause instability
+        # because it has to scan the table to find the last number_of_states states
+        # because the metadata_id_last_updated_ts index is in ascending order.
+        history_list = history.state_changes_during_period(
+            self.hass,
+            start_time=self._get_datetime_now() - timedelta(days=LOCATION_HISTORY_DAYS_DEFAULT),
+            entity_id=entity_id,
+            no_attributes=False,
+            include_start_time_state=True,
+        )
+        for state in history_list.get(entity_id, []):
+            if state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE, None):
+                latitude = state.attributes.get(ATTR_LATITUDE, None)
+                longitude = state.attributes.get(ATTR_LONGITUDE, None)
+                if latitude and longitude:
+                    self.add_location_history(
+                        imei=imei,
+                        location=(latitude, longitude),
+                    )
 
     def add_location_history(
         self,

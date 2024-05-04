@@ -1,34 +1,24 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
-from datetime import timedelta
-
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_LOCATION,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
-    STATE_UNAVAILABLE,
-    STATE_UNKNOWN,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.device_tracker import (
     SourceType,
     TrackerEntity,
 )
-from homeassistant.components.recorder import (
-    get_instance,
-    history,
-)
 from homeassistant.helpers.entity import (
     Entity,
     EntityDescription,
 )
-import homeassistant.util.dt as dt_util
 
 from .const import (
     DOMAIN,
-    LOCATION_HISTORY_DAYS_DEFAULT,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -93,36 +83,9 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         await super().async_added_to_hass()
 
         # Load Recorder after loading entity
-        await get_instance(self.hass).async_add_executor_job(
-            self._get_location_history,
-        )
-
-    def _get_location_history(self) -> None:
-        # Getting history with history.get_last_state_changes can cause instability
-        # because it has to scan the table to find the last number_of_states states
-        # because the metadata_id_last_updated_ts index is in ascending order.
-        history_list = history.state_changes_during_period(
-            self.hass,
-            start_time=dt_util.now() - timedelta(days=LOCATION_HISTORY_DAYS_DEFAULT),
+        await self.coordinator.init_location_history(
             entity_id=self.entity_id,
-            no_attributes=False,
-            include_start_time_state=True,
-        )
-        self.coordinator.init_location_history(
             imei=self._imei,
-        )
-        for state in history_list.get(self.entity_id, []):
-            if state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE, None):
-                latitude = state.attributes.get(ATTR_LATITUDE, None)
-                longitude = state.attributes.get(ATTR_LONGITUDE, None)
-                if latitude and longitude:
-                    self.coordinator.add_location_history(
-                        imei=self._imei,
-                        location=(latitude, longitude),
-                    )
-        # Always update HA states after getting location history.
-        self.hass.async_create_task(
-            self.coordinator._async_update_listeners()
         )
 
     @property
