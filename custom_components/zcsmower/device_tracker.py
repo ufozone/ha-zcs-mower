@@ -1,15 +1,11 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
-from datetime import timedelta
-
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_LOCATION,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
-    STATE_UNAVAILABLE,
-    STATE_UNKNOWN,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.device_tracker import (
@@ -21,7 +17,6 @@ from homeassistant.helpers.entity import (
     Entity,
     EntityDescription,
 )
-import homeassistant.util.dt as dt_util
 
 from .const import (
     DOMAIN,
