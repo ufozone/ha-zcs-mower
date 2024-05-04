@@ -23,7 +23,10 @@ from homeassistant.const import (
     STATE_UNKNOWN,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.recorder import history
+from homeassistant.components.recorder import (
+    get_instance,
+    history,
+)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
@@ -228,13 +231,22 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Get attributes of an given lawn mower."""
         return self.data.get(imei, None)
 
-    def init_location_history(
+    async def init_location_history(
         self,
+        entity_id: str,
         imei: str,
     ) -> None:
         """Initiate location history for lawn mower."""
-        if self.data[imei][ATTR_LOCATION_HISTORY] is None:
-            self.data[imei][ATTR_LOCATION_HISTORY] = []
+        # Load Recorder after loading entity
+        await get_instance(self.hass).async_add_executor_job(
+            self.get_location_history,
+            entity_id,
+            imei,
+        )
+        # Always update HA states after getting location history.
+        self.hass.async_create_task(
+            self._async_update_listeners()
+        )
 
     def get_location_history(
         self,
@@ -242,6 +254,9 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         imei: str,
     ) -> None:
         """Get location history for lawn mower."""
+        if self.data[imei][ATTR_LOCATION_HISTORY] is None:
+            self.data[imei][ATTR_LOCATION_HISTORY] = []
+
         # Getting history with history.get_last_state_changes can cause instability
         # because it has to scan the table to find the last number_of_states states
         # because the metadata_id_last_updated_ts index is in ascending order.
@@ -252,9 +267,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             no_attributes=False,
             include_start_time_state=True,
         )
-        self.init_location_history(
-            imei=imei,
-        )
         for state in history_list.get(entity_id, []):
             if state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE, None):
                 latitude = state.attributes.get(ATTR_LATITUDE, None)
@@ -264,10 +276,6 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                         imei=imei,
                         location=(latitude, longitude),
                     )
-        # Always update HA states after getting location history.
-        #self.hass.async_create_task(
-        #    self._async_update_listeners()
-        #)
 
     def add_location_history(
         self,

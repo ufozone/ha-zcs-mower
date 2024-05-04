@@ -84,10 +84,9 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         await super().async_added_to_hass()
 
         # Load Recorder after loading entity
-        await get_instance(self.hass).async_add_executor_job(
-            self.coordinator.get_location_history,
-            self.entity_id,
-            self._imei,
+        await self.coordinator.init_location_history(
+            entity_id=self.entity_id,
+            imei=self._imei,
         )
 
     @property
