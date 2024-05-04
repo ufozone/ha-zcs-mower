@@ -238,7 +238,7 @@ ROBOT_MODELS = {
     "KB450D": "KR450", # ?
     "OW250L": "R30Ac", # ???
     "OW250P": "R50Ac", # ???
-    "ST250D": "AutoClip 528 S", # ?
+    "ST250D": "AutoClip 528 S", # ???
     "ST250L": "AutoClip 530 SG",
     "TH015D": "D1",
     "TH020D": "DX2",
