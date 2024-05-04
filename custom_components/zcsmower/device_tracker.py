@@ -12,7 +12,6 @@ from homeassistant.components.device_tracker import (
     SourceType,
     TrackerEntity,
 )
-from homeassistant.components.recorder import get_instance
 from homeassistant.helpers.entity import (
     Entity,
     EntityDescription,
