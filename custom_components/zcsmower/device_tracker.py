@@ -25,7 +25,6 @@ from .const import (
     LOGGER,
     DOMAIN,
     CONF_MAP_MARKER_PATH,
-    LOCATION_HISTORY_DAYS,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -126,9 +125,13 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
     def entity_picture(self) -> str | None:
         """Return the picture of the device."""
         map_marker_path = self.config_entry.options.get(CONF_MAP_MARKER_PATH, None)
-        if not map_marker_path or not os.path.isfile(map_marker_path):
-            return None
+        local_dir = self.hass.config.path("www")
 
-        # TODO: config attribute for using marker as entity picture
-        # "/local/l35.png"
-        return map_marker_path
+        # No marker path given or not in static path /local or not readable
+        if (
+            not map_marker_path or 
+            map_marker_path.find(local_dir) == -1 or 
+            not os.path.isfile(map_marker_path)
+        ):
+            return None
+        return map_marker_path.replace(local_dir, "/local")
