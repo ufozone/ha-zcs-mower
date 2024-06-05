@@ -124,7 +124,7 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         map_marker_path = self.config_entry.options.get(CONF_MAP_MARKER_PATH, None)
         local_dir = self.hass.config.path("www")
 
-        # No marker path given or not in static path /local or not readable
+        # No marker path given or not in static path or not readable
         if (
             not map_marker_path or
             map_marker_path.find(local_dir) == -1 or
