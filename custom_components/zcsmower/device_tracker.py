@@ -1,6 +1,8 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
+import os
+
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_LOCATION,
@@ -124,8 +126,8 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
 
         # No marker path given or not in static path /local or not readable
         if (
-            not map_marker_path or 
-            map_marker_path.find(local_dir) == -1 or 
+            not map_marker_path or
+            map_marker_path.find(local_dir) == -1 or
             not os.path.isfile(map_marker_path)
         ):
             return None
