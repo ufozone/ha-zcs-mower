@@ -1,10 +1,6 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
-import os
-
-from datetime import timedelta
-
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_LOCATION,
@@ -22,7 +18,6 @@ from homeassistant.helpers.entity import (
 )
 
 from .const import (
-    LOGGER,
     DOMAIN,
     CONF_MAP_MARKER_PATH,
 )
