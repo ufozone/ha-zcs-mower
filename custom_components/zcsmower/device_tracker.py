@@ -1,6 +1,8 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
+import os
+
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_LOCATION,
@@ -19,6 +21,7 @@ from homeassistant.helpers.entity import (
 
 from .const import (
     DOMAIN,
+    CONF_MAP_MARKER_PATH,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -114,3 +117,18 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
     def device_class(self):
         """Return Device Class."""
         return None
+
+    @property
+    def entity_picture(self) -> str | None:
+        """Return the picture of the device."""
+        map_marker_path = self.config_entry.options.get(CONF_MAP_MARKER_PATH, None)
+        local_dir = self.hass.config.path("www")
+
+        # No marker path given or not in static path /local or not readable
+        if (
+            not map_marker_path or
+            map_marker_path.find(local_dir) == -1 or
+            not os.path.isfile(map_marker_path)
+        ):
+            return None
+        return map_marker_path.replace(local_dir, "/local")
