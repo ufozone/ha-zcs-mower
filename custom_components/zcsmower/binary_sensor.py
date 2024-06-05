@@ -1,4 +1,5 @@
 """ZCS Lawn Mower Robot binary sensor platform."""
+
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
@@ -71,16 +72,15 @@ class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="binary_sensor",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
         if self._entity_key == "error":
-            if self._get_attribute(ATTR_STATE) == "fail":
+            if self.is_on:
                 self._additional_extra_state_attributes = {
                     "reason": self._get_localized_status(),
                 }
@@ -89,4 +89,10 @@ class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
     def is_on(self) -> bool:
         """Return true if the binary_sensor is on."""
         if self._entity_key == "error":
-            return self._get_attribute(ATTR_STATE) == "fail"
+            return self._get_attribute(ATTR_STATE) in (
+                "fail",
+                "nosignal",
+                "expired",
+                "renewed",
+                "hot_temperature",
+            )

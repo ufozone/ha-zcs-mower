@@ -88,11 +88,10 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="vacuum",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
         self._attr_supported_features = ROBOT_SUPPORTED_FEATURES
 
     def _update_extra_state_attributes(self) -> None:
@@ -104,13 +103,13 @@ class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
     @property
     def state(self) -> str:
         """Return the state of the lawn mower."""
-        if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "bordercut"):
+        if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "bordercut", "mapping_started"):
             return STATE_CLEANING
         if self._get_attribute(ATTR_STATE) == "charge":
             return STATE_DOCKED
         if self._get_attribute(ATTR_STATE) == "pause":
             return STATE_PAUSED
-        if self._get_attribute(ATTR_STATE) == "gotostation":
+        if self._get_attribute(ATTR_STATE) in ("gotostation", "mapping_ended"):
             return STATE_RETURNING
         if self._get_attribute(ATTR_STATE) == "work_standby":
             return STATE_IDLE

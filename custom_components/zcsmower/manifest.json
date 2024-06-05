@@ -1,6 +1,6 @@
 {
   "domain": "zcsmower",
-  "name": "ZCS Lawn Mower Robot",
+  "name": "ZCS Lawn Mower Robot (Ambrogio, Techline, Wiper)",
   "after_dependencies": [
     "recorder"
   ],
@@ -21,7 +21,7 @@
   "requirements": [
     "geopy>=2.3.0",
     "numpy>=1.26.0",
-    "Pillow>=10.2.0"
+    "Pillow>=10.3.0"
   ],
-  "version": "1.2.0"
+  "version": "1.4.2"
 }

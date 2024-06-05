@@ -1,28 +1,28 @@
 {
   "config": {
     "error": {
-      "key_invalid": "The client key provided is not valid.",
       "auth_failed": "Authorization failed.",
       "communication_failed": "Action could not be executed.",
       "connection_failed": "Unable to connect to the server.",
       "path_invalid": "The specified path to the file is invalid: absolute path is needed.",
       "coordinates_invalid": "The GPS coordinates provided are not valid: latitude and longitude separated by commas is needed.",
-      "imei_invalid": "The IMEI provided is not valid."
+      "imei_invalid": "The IMEI provided is not valid. It must start with \"35\" and is 15 digits long.",
+      "mower_invalid": "The lawn mower could not be found or another error has occurred. Please check the log files.",
+      "mower_too_many_clients": "There are too many remote clients linked to the lawn mower. Open the mobile app on your device, go to \"General settings\" and then \"Client list\". Remove a remote client there."
     },
     "step": {
       "user": {
         "title": "Set up garage",
-        "description": "Enter your garage name and client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Enter your garage name here. You can choose this freely. Also specify whether you want to activate position tracking and map display. You can also change these settings later. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "name": "Garage Name",
-          "client_key": "Client Key",
           "trace_position_enable": "Enable position tracing?",
           "map_enable": "Enable map?"
         }
       },
       "map": {
         "title": "Configure map",
-        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude.",
+        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
         "data": {
           "map_image_path": "Path to the map image",
           "map_marker_path": "Path to the mower location image",
@@ -36,10 +36,10 @@
       },
       "mower": {
         "title": "Add lawn mower",
-        "description": "Add a lawn mower, check the box to add another.",
+        "description": "Add a lawn mower. You are free to choose the name. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
         "data": {
-          "name": "Name of lawn mower",
           "imei": "IMEI of lawn mower",
+          "name": "Name of lawn mower",
           "add_another": "Add another lawn mower?"
         }
       }
@@ -47,16 +47,17 @@
   },
   "options": {
     "error": {
-      "key_invalid": "The client key provided is not valid.",
       "auth_failed": "Authorization failed.",
       "communication_failed": "Action could not be executed.",
       "connection_failed": "Unable to connect to the server.",
       "standby_time_invalid": "The start and end of the standby time cannot be the same.",
       "update_interval_working_invalid": "The update interval for working cannot be greater than that for standby.",
       "update_interval_standby_invalid": "The update interval for standby cannot be greater than that for idling.",
-      "imei_invalid": "The IMEI provided is not valid.",
       "imei_exists": "A lawn mower with this IMEI already exists.",
       "name_exists": "A lawn mower with this name already exists.",
+      "imei_invalid": "The IMEI provided is not valid. It must start with \"35\" and is 15 digits long.",
+      "mower_invalid": "The lawn mower could not be found or another error has occurred. Please check the log files.",
+      "mower_too_many_clients": "There are too many remote clients linked to the lawn mower. Open the mobile app on your device, go to \"General settings\" and then \"Client list\". Remove a remote client there.",
       "imei_not_exists": "A lawn mower with this IMEI does not exists.",
       "delete_not_confirmed": "Deletion of lawn mower was not confirmed.",
       "last_mower": "Last lawn mower cannot be deleted.",
@@ -77,10 +78,10 @@
       },
       "add": {
         "title": "Add lawn mower",
-        "description": "Add another lawn mower.",
+        "description": "Add another lawn mower. You are free to choose the name. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
         "data": {
-          "name": "Name of lawn mower",
-          "imei": "IMEI of lawn mower"
+          "imei": "IMEI of lawn mower",
+          "name": "Name of lawn mower"
         }
       },
       "change": {
@@ -101,7 +102,7 @@
       },
       "map": {
         "title": "Configure map",
-        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude.",
+        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
         "data": {
           "map_enable": "Enable map?",
           "map_image_path": "Path to the map image",
@@ -116,9 +117,9 @@
       },
       "settings": {
         "title": "Configure garage",
-        "description": "Enter your client key, which you can find in the mobile app. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Make general settings for your garage. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
         "data": {
-          "client_key": "Client Key",
+          "generate_client_key": "Re-generate a new client key (only recommended if a connection is no longer possible).",
           "standby_time_start": "At what time does the daily standby time start?",
           "standby_time_stop": "At what time does the daily standby time end?",
           "update_interval_working": "Every how many seconds should the data be updated when one or more lawn mowers are working?",
@@ -126,7 +127,7 @@
           "update_interval_idling": "Every how many seconds should the data be updated when all lawn mowers are idle?",
           "trace_position_enable": "Enable position tracing?",
           "wake_up_interval_default": "Default: Every how many seconds should the lawn mower wake up?",
-          "wake_up_interval_infinity": "Infinity+: Every how many seconds should the lawn mower wake up?"
+          "wake_up_interval_infinity": "+Infinity: Every how many seconds should the lawn mower wake up?"
         }
       }
     }
@@ -363,6 +364,287 @@
         }
       }
     },
+    "button": {
+      "update_now": {
+        "name": "Update now",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "work_now": {
+        "name": "Work now",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "charge_now": {
+        "name": "Charge now",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "border_cut": {
+        "name": "Border cut",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "trace_position": {
+        "name": "Trace position",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      }
+    },
+    "device_tracker": {
+      "location": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      }
+    },
+    "image": {
+      "map": {
+        "name": "Map",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          },
+          "calibration_points": {
+            "name": "Calibration points"
+          }
+        }
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      }
+    },
+    "number": {
+      "work_for": {
+        "name": "Work for",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "charge_for": {
+        "name": "Charge for",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "[%key:common::state::connected%]",
+              "false": "[%key:common::state::disconnected%]"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      }
+    },
     "sensor": {
       "state": {
         "name": "State",
@@ -378,9 +660,25 @@
           "bordercut": "Border cut",
           "expired": "Expired",
           "renewed": "Renewed",
-          "work_standby": "Work standby"
+          "work_standby": "Work standby",
+          "hot_temperature": "Hot temperature",
+          "mapping_started": "Mapping started",
+          "mapping_ended": "Mapping ended"
         },
         "state_attributes": {
+          "connect_expiration": {
+            "name": "Connect expiration date"
+          },
+          "infinity_state": {
+            "name": "+Infinity State",
+            "state": {
+              "true": "[%key:common::state::enabled%]",
+              "false": "[%key:common::state::disabled%]"
+            }
+          },
+          "infinity_expiration": {
+            "name": "+Infinity expiration date"
+          },
           "imei": {
             "name": "IMEI"
           },
@@ -571,6 +869,31 @@
           "steer_error_br_fail": "Steer Error - BR-FAIL",
           "steer_error_br_blocked": "Steer Error - BR-BLOCKED",
           "radar_error": "Radar error",
+          "front_tilt_error": "Front Tilt Error",
+          "hub_board_error": "HUB Board Error",
+          "bump_error_front_l_cent": "Bump Error FRONT - L - CENT",
+          "bump_error_front_cent_cent": "Bump Error FRONT - CENT - CENT",
+          "bump_error_front_r_cent": "Bump Error FRONT - R - CENT",
+          "bump_error_rear_l": "Bump Error REAR - L",
+          "bump_error_rear_cent": "Bump Error REAR - CENT",
+          "bump_error_rear_r": "Bump Error REAR - R",
+          "bump_error_front_cent_l": "Bump Error FRONT - CENT - L",
+          "bump_error_front_cent_r": "Bump Error FRONT - CENT - R",
+          "chasm_error_front_l": "Chasm Error FRONT - L",
+          "chasm_error_front_r": "Chasm Error FRONT - R",
+          "bump_error_front_l_l": "Bump Error FRONT - L - L",
+          "bump_error_front_l_r": "Bump Error FRONT - L - R",
+          "bump_error_front_r_l": "Bump Error FRONT - R - L",
+          "bump_error_front_r_r": "Bump Error FRONT - R - R",
+          "bump_error_l_front": "Bump Error L - FRONT",
+          "bump_error_l_rear": "Bump Error L - REAR",
+          "bump_error_r_front": "Bump Error R - FRONT",
+          "bump_error_r_rear": "Bump Error R - REAR",
+          "grass_radar_error_l": "Grass Radar Error L",
+          "grass_radar_error_r": "Grass Radar Error R",
+          "grass_radar_error_cent": "Grass Radar Error CENT",
+          "bump_error_l": "Bump Error L",
+          "bump_error_r": "Bump Error R",
           "board_error": "BOARD ERROR",
           "config_error": "CONFIG ERROR",
           "test_b_required": "TEST B REQUIRED",
@@ -617,6 +940,14 @@
           "zdefender_error": "Zdefender error",
           "radar_data_save_error": "Radar data save error",
           "docking_error": "Docking error",
+          "atomizer_module_error": "Atomizer module error",
+          "fl_radar_not_calibrated": "FL Radar - Not Calibrated",
+          "fr_radar_not_calibrated": "FR Radar - Not Calibrated",
+          "bl_radar_not_calibrated": "BL Radar - Not Calibrated",
+          "br_radar_not_calibrated": "BR Radar - Not Calibrated",
+          "fm_radar_not_calibrated": "FM Radar - Not Calibrated",
+          "front_tilt_board_error": "Front Tilt Board Error",
+          "ultrasound_hub_board_error": "Ultrasound Hub board error",
           "invalid_voucher": "Invalid Voucher",
           "used_voucher": "Used Voucher",
           "voucher_zone_error": "Voucher Zone Error",
@@ -655,95 +986,10 @@
           "unexpected_shutdown_charge": "UNEXPECTED SHUTDOWN CHARGE",
           "unexpected_shutdown_work": "UNEXPECTED SHUTDOWN WORK",
           "unexpected_shutdown_work_pause": "UNEXPECTED SHUTDOWN WORK PAUSE",
-          "unexpected_shutdown_done": "UNEXPECTED SHUTDOWN DONE"
-        }
-      }
-    },
-    "device_tracker": {
-      "location": {
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      }
-    },
-    "camera": {
-      "map": {
-        "name": "Map",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          },
-          "calibration_points": {
-            "name": "Calibration points"
-          }
-        }
-      }
-    },
-    "lawn_mower": {
-      "mower": {
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
+          "unexpected_shutdown_done": "UNEXPECTED SHUTDOWN DONE",
+          "invalid_connection": "Invalid Connection",
+          "wrong_server_authentication": "Wrong Server Authentication",
+          "server_disconnection": "Server Disconnection"
         }
       }
     },
@@ -752,199 +998,6 @@
         "state": {
           "cleaning": "Mowing"
         },
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      }
-    },
-    "button": {
-      "update_now": {
-        "name": "Update now",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "work_now": {
-        "name": "Work now",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "charge_now": {
-        "name": "Charge now",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "border_cut": {
-        "name": "Border cut",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "trace_position": {
-        "name": "Trace position",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      }
-    },
-    "number": {
-      "work_for": {
-        "name": "Work for",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "[%key:common::state::connected%]",
-              "false": "[%key:common::state::disconnected%]"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
-          }
-        }
-      },
-      "charge_for": {
-        "name": "Charge for",
         "state_attributes": {
           "imei": {
             "name": "IMEI"

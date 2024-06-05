@@ -16,6 +16,7 @@ from homeassistant.const import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -46,22 +47,22 @@ class ZcsMowerEntity(CoordinatorEntity):
         hass: HomeAssistant,
         config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
-        imei: str,
         entity_type: str,
-        entity_key: str,
+        entity_description: EntityDescription,
+        imei: str,
     ) -> None:
         """Initialize."""
         super().__init__(coordinator)
 
         self.hass = hass
         self.config_entry = config_entry
+        self.entity_description = entity_description
 
         self._imei = imei
         self._name = self._get_attribute(ATTR_NAME, imei)
-        self._entity_type = entity_type
-        self._entity_key = entity_key
-        if entity_key:
-            self._unique_id = slugify(f"mower_{imei}_{entity_key}")
+        self._entity_key = entity_description.key
+        if self._entity_key:
+            self._unique_id = slugify(f"mower_{imei}_{self._entity_key}")
         else:
             self._unique_id = slugify(f"mower_{imei}")
         self._additional_extra_state_attributes = {}
@@ -72,7 +73,7 @@ class ZcsMowerEntity(CoordinatorEntity):
                 (DOMAIN, self._imei)
             },
             #connections={
-            #    ("gsm", self._imei)
+            #    (ATTR_IMEI, self._imei)
             #},
             name=self._name,
             model=self._get_attribute(ATTR_MODEL),

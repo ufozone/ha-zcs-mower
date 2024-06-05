@@ -16,15 +16,10 @@ from homeassistant.components.device_tracker import (
     SourceType,
     TrackerEntity,
 )
-from homeassistant.components.recorder import (
-    get_instance,
-    history,
-)
 from homeassistant.helpers.entity import (
     Entity,
     EntityDescription,
 )
-import homeassistant.util.dt as dt_util
 
 from .const import (
     LOGGER,
@@ -85,42 +80,25 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="device_tracker",
-            entity_key=entity_description.key,
-        )
-        self.entity_description = entity_description
-
-        get_instance(self.hass).async_add_executor_job(
-            self._get_location_history,
+            entity_description=entity_description,
+            imei=imei,
         )
 
-    def _get_location_history(self) -> None:
-        # Getting history with history.get_last_state_changes can cause instability
-        # because it has to scan the table to find the last number_of_states states
-        # because the metadata_id_last_updated_ts index is in ascending order.
-        history_list = history.state_changes_during_period(
-            self.hass,
-            start_time=dt_util.now() - timedelta(days=LOCATION_HISTORY_DAYS),
+    async def async_added_to_hass(self) -> None:
+        """Register callbacks."""
+        await super().async_added_to_hass()
+
+        # Load Recorder after loading entity
+        await self.coordinator.init_location_history(
             entity_id=self.entity_id,
-            no_attributes=False,
-            include_start_time_state=True,
-        )
-        self.coordinator.init_location_history(
             imei=self._imei,
         )
-        for state in history_list.get(self.entity_id, []):
-            latitude = state.attributes.get(ATTR_LATITUDE, None)
-            longitude = state.attributes.get(ATTR_LONGITUDE, None)
-            if latitude and longitude:
-                self.coordinator.add_location_history(
-                    imei=self._imei,
-                    location=(latitude, longitude),
-                )
-        # Always update HA states after getting location history.
-        self.hass.async_create_task(
-            self.coordinator._async_update_listeners()
-        )
+
+    @property
+    def location_accuracy(self):
+        """Return the gps accuracy of the device."""
+        return 10
 
     @property
     def latitude(self) -> float | None:

@@ -1,0 +1,16 @@
+{
+  "services": {
+    "border_cut": "mdi:scissors-cutting",
+    "charge_for": "mdi:clock-outline",
+    "charge_now": "mdi:ev-station",
+    "charge_until": "mdi:clock-outline",
+    "custom_command": "mdi:powershell",
+    "keep_out": "mdi:cancel",
+    "set_profile": "mdi:numeric",
+    "trace_position": "mdi:map-marker",
+    "update_now": "mdi:update",
+    "work_for": "mdi:clock-outline",
+    "work_now": "mdi:state-machine",
+    "work_until": "mdi:clock-outline"
+  }
+}

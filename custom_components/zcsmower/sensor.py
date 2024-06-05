@@ -13,9 +13,13 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
 from homeassistant.helpers.entity import Entity
+import homeassistant.util.dt as dt_util
 
 from .const import (
     DOMAIN,
+    ATTR_CONNECT_EXPIRATION,
+    ATTR_INFINITY_STATE,
+    ATTR_INFINITY_EXPIRATION,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
@@ -68,11 +72,30 @@ class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            imei=imei,
             entity_type="sensor",
-            entity_key=entity_description.key,
+            entity_description=entity_description,
+            imei=imei,
         )
-        self.entity_description = entity_description
+
+    def _update_extra_state_attributes(self) -> None:
+        """Update extra attributes."""
+        # Data expiration date
+        if (_connect_expiration := self._get_attribute(ATTR_CONNECT_EXPIRATION)) is not None:
+            self._additional_extra_state_attributes.update({
+                ATTR_CONNECT_EXPIRATION: _connect_expiration,
+            })
+        # +Infinity state
+        self._additional_extra_state_attributes.update({
+            ATTR_INFINITY_STATE: (
+                self._get_attribute(ATTR_INFINITY_STATE) in ("active", "pending")
+                and self._get_attribute(ATTR_INFINITY_EXPIRATION) > dt_util.now()
+            ),
+        })
+        # +Infinity expiration date
+        if (_infinity_expiration := self._get_attribute(ATTR_INFINITY_EXPIRATION)) is not None:
+            self._additional_extra_state_attributes.update({
+                ATTR_INFINITY_EXPIRATION: _infinity_expiration,
+            })
 
     @property
     def icon(self) -> str:

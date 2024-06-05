@@ -1,28 +1,28 @@
 {
   "config": {
     "error": {
-      "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
       "connection_failed": "Es kann keine Verbindung zum Server hergestellt werden.",
       "path_invalid": "Der angegebene Pfad zur Datei ist ungültig: Der absoluter Pfad wird benötigt.",
       "coordinates_invalid": "Die angegebenen GPS-Koordinaten sind nicht gültig: Breitengrad und Längengrad müssen durch Kommata getrennt werden.",
-      "imei_invalid": "Die angegebene IMEI ist nicht gültig."
+      "imei_invalid": "Die angegebene IMEI ist nicht gültig. Sie muss mit \"35\" beginnen und 15 Ziffern lang sein.",
+      "mower_invalid": "Der Rasenmäher konnte nicht gefunden werden oder es ist ein anderer Fehler aufgetreten. Bitte überprüfe die Logdateien.",
+      "mower_too_many_clients": "Es sind zu viele Remote Clients mit dem Rasenmäher verknüpft. Öffne die mobile App auf deinem device, gehe auf \"Allgemeine Einstellungen\" und dann auf \"Klient Liste\". Entferne dort einen Remote-Client."
     },
     "step": {
       "user": {
         "title": "Garage einrichten",
-        "description": "Gib den Namen deiner Garage und deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Gib hier deinen Garagennamen ein. Du kannst ihn frei wählen. Gib außerdem an, ob du die Positionsverfolgung und die Kartenanzeige aktivieren willst. Du kannst diese Einstellungen auch später noch ändern. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
         "data": {
           "name": "Garagenname",
-          "client_key": "Kundenschlüssel",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
           "map_enable": "Karte aktivieren?"
         }
       },
       "map": {
         "title": "Konfigurieren der Karte",
-        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad.",
+        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad. Mehr Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
         "data": {
           "map_image_path": "Pfad zum Kartenbild",
           "map_marker_path": "Pfad zum Bild des Mäherstandorts",
@@ -36,10 +36,10 @@
       },
       "mower": {
         "title": "Rasenmäher hinzufügen",
-        "description": "Füge einen Rasenmäher hinzu. Markiere das Kästchen, um einen weiteren hinzuzufügen.",
+        "description": "Füge einen Rasenmäher hinzu. Du kannst den Namen frei wählen. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
         "data": {
-          "name": "Name des Rasenmähers",
           "imei": "IMEI des Rasenmähers",
+          "name": "Name des Rasenmähers",
           "add_another": "Einen weiteren Rasenmäher hinzufügen?"
         }
       }
@@ -47,16 +47,17 @@
   },
   "options": {
     "error": {
-      "key_invalid": "Der angegebene Kundenschlüssel ist ungültig.",
       "auth_failed": "Die Autorisierung ist fehlgeschlagen.",
       "communication_failed": "Die Aktion konnte nicht ausgeführt werden.",
       "connection_failed": "Es kann keine Verbindung zum Server hergestellt werden.",
       "standby_time_invalid": "Die Start- und Enduhrzeiten der Bereitschaftszeit dürfen nicht identisch sein.",
       "update_interval_working_invalid": "Das Aktualisierungsintervall für Betrieb kann nicht größer sein als für Bereitschaft.",
       "update_interval_standby_invalid": "Das Aktualisierungsintervall für Bereitschaft kann nicht größer sein als für Leerlauf.",
-      "imei_invalid": "Die angegebene IMEI ist nicht gültig.",
       "imei_exists": "Ein Roboter mit der IMEI existiert bereits.",
       "name_exists": "Ein Roboter mit dem Namen existiert bereits.",
+      "imei_invalid": "Die angegebene IMEI ist nicht gültig. Sie muss mit \"35\" beginnen und 15 Ziffern lang sein.",
+      "mower_invalid": "Der Rasenmäher konnte nicht gefunden werden oder es ist ein anderer Fehler aufgetreten. Bitte überprüfe die Logdateien.",
+      "mower_too_many_clients": "Es sind zu viele Remote Clients mit dem Rasenmäher verknüpft. Öffne die mobile App auf deinem device, gehe auf \"Allgemeine Einstellungen\" und dann auf \"Klient Liste\". Entferne dort einen Remote-Client.",
       "imei_not_exists": "Ein Roboter mit der IMEI existiert nicht.",
       "delete_not_confirmed": "Die Löschung des Rasenmähers wurde nicht bestätigt.",
       "last_mower": "Der letzte Rasenmäher kann nicht gelöscht werden.",
@@ -77,10 +78,10 @@
       },
       "add": {
         "title": "Rasenmähroboter hinzufügen",
-        "description": "Einen weiteren Rasenmäher hinzufügen.",
+        "description": "Füge einen weiteren Rasenmäher hinzu. Du kannst den Namen frei wählen. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
         "data": {
-          "name": "Name des Rasenmähers",
-          "imei": "IMEI des Rasenmähers"
+          "imei": "IMEI des Rasenmähers",
+          "name": "Name des Rasenmähers"
         }
       },
       "change": {
@@ -101,7 +102,7 @@
       },
       "map": {
         "title": "Konfigurieren der Karte",
-        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad.",
+        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad. Mehr Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
         "data": {
           "map_enable": "Karte aktivieren?",
           "map_image_path": "Pfad zum Kartenbild",
@@ -116,9 +117,9 @@
       },
       "settings": {
         "title": "Konfigurieren der Garage",
-        "description": "Gib deinen Kundenschlüssel ein, den du in der mobilen App finden kannst. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower).",
+        "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
         "data": {
-          "client_key": "Kundenschlüssel",
+          "generate_client_key": "Generiere einen neuen Client-Schlüssel (nur empfohlen, wenn keine Verbindung mehr möglich ist).",
           "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",
           "standby_time_stop": "Um wie viel Uhr endet die tägliche Bereitschaftszeit?",
           "update_interval_working": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn ein oder mehrere Rasenmäher in Betrieb sind?",
@@ -126,7 +127,7 @@
           "update_interval_idling": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn alle Rasenmäher im Leerlauf sind?",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
           "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
-          "wake_up_interval_infinity": "Infinity+: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
+          "wake_up_interval_infinity": "+Infinity: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
         }
       }
     }
@@ -363,6 +364,287 @@
         }
       }
     },
+    "button": {
+      "update_now": {
+        "name": "Aktualisiere jetzt",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "work_now": {
+        "name": "Mähe jetzt",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "charge_now": {
+        "name": "Lade jetzt",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "border_cut": {
+        "name": "Randmähen",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "trace_position": {
+        "name": "Position verfolgen",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      }
+    },
+    "device_tracker": {
+      "location": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      }
+    },
+    "image": {
+      "map": {
+        "name": "Karte",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          },
+          "calibration_points": {
+            "name": "Kalibrierungspunkte"
+          }
+        }
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      }
+    },
+    "number": {
+      "work_for": {
+        "name": "Arbeite für",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "charge_for": {
+        "name": "Lade für",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      }
+    },
     "sensor": {
       "state": {
         "name": "Status",
@@ -378,9 +660,25 @@
           "bordercut": "Randmähen",
           "expired": "Abgelaufen",
           "renewed": "Erneuert",
-          "work_standby": "Arbeitsbereitschaft"
+          "work_standby": "Arbeitsbereitschaft",
+          "hot_temperature": "Hohe Temperatur",
+          "mapping_started": "Kartierung gestartet",
+          "mapping_ended": "Kartierung abgeschlossen"
         },
         "state_attributes": {
+          "connect_expiration": {
+            "name": "Connect Ablaufdatum"
+          },
+          "infinity_state": {
+            "name": "+Infinity Status",
+            "state": {
+              "true": "Aktiviert",
+              "false": "Deaktiviert"
+            }
+          },
+          "infinity_expiration": {
+            "name": "+Infinity Ablaufdatum"
+          },
           "imei": {
             "name": "IMEI"
           },
@@ -571,6 +869,31 @@
           "steer_error_br_fail": "Lenkfehler - BR-FAIL",
           "steer_error_br_blocked": "Lenkfehler - BR-BLOCKED",
           "radar_error": "Radar error",
+          "front_tilt_error": "Vorderer Kippfehler",
+          "hub_board_error": "HUB-Kartenfehler",
+          "bump_error_front_l_cent": "Hindernisfehler VO - LI - MI",
+          "bump_error_front_cent_cent": "Hindernisfehler VO - MI - MI",
+          "bump_error_front_r_cent": "Hindernisfehler VO - RE - MI",
+          "bump_error_rear_l": "Hindernisfehler HI - LI",
+          "bump_error_rear_cent": "Hindernisfehler HI - MI",
+          "bump_error_rear_r": "Hindernisfehler HI - RE",
+          "bump_error_front_cent_l": "Hindernisfehler VO - MI - LI",
+          "bump_error_front_cent_r": "Hindernisfehler VO -MI - RE",
+          "chasm_error_front_l": "Fehler Abgrundsensor VO - LI",
+          "chasm_error_front_r": "Fehler Abgrundsensor VO - RE",
+          "bump_error_front_l_l": "Hindernisfehler VO - LI - LI",
+          "bump_error_front_l_r": "Hindernisfehler VO - LI - RE",
+          "bump_error_front_r_l": "Hindernisfehler VO -RE - LI",
+          "bump_error_front_r_r": "Hindernisfehler VO - RE - RE",
+          "bump_error_l_front": "Hindernisfehler LI - VO",
+          "bump_error_l_rear": "Hindernisfehler LI - HI",
+          "bump_error_r_front": "Hindernisfehler RE - VO",
+          "bump_error_r_rear": "Hindernisfehler RE - HI",
+          "grass_radar_error_l": "Fehler Radar-Grassensor LI",
+          "grass_radar_error_r": "Fehler Radar-Grassensor RE",
+          "grass_radar_error_cent": "Fehler Radar-Grassensor MI",
+          "bump_error_l": "Hindernisfehler LI",
+          "bump_error_r": "Hindernisfehler RE",
           "board_error": "BOARD ERROR",
           "config_error": "CONFIG ERROR",
           "test_b_required": "TEST B ERFORDERLICH",
@@ -617,6 +940,14 @@
           "zdefender_error": "Zdefender error",
           "radar_data_save_error": "Radar data save error",
           "docking_error": "Docking error",
+          "atomizer_module_error": "Fehler Atomizer-Modul",
+          "radar_fl_not_calibrated": "FL Radar – Nicht Kalibriert",
+          "radar_fr_not_calibrated": "FR Radar – Nicht Kalibriert",
+          "radar_bl_not_calibrated": "BL Radar – Nicht Kalibriert",
+          "radar_br_not_calibrated": "BR Radar – Nicht Kalibriert",
+          "radar_fm_not_calibrated": "FM Radar – Nicht Kalibriert",
+          "front_tilt_board_error": "Fehler bei der Frontneigungsplatine",
+          "ultrasound_hub_board_error": "Fehler bei der Frontneigungsplatine",
           "invalid_voucher": "Ungültige Gutschein",
           "used_voucher": "Benutzter Gutschein",
           "voucher_zone_error": "Gutschein Zone Fehler",
@@ -655,95 +986,10 @@
           "unexpected_shutdown_charge": "UNEXPECTED SHUTDOWN CHARGE",
           "unexpected_shutdown_work": "UNEXPECTED SHUTDOWN WORK",
           "unexpected_shutdown_work_pause": "UNEXPECTED SHUTDOWN WORK PAUSE",
-          "unexpected_shutdown_done": "UNEXPECTED SHUTDOWN DONE"
-        }
-      }
-    },
-    "device_tracker": {
-      "location": {
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      }
-    },
-    "camera": {
-      "map": {
-        "name": "Karte",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          },
-          "calibration_points": {
-            "name": "Kalibrierungspunkte"
-          }
-        }
-      }
-    },
-    "lawn_mower": {
-      "mower": {
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
+          "unexpected_shutdown_done": "UNEXPECTED SHUTDOWN DONE",
+          "invalid_connection": "Ungültige Verbindung",
+          "wrong_server_authentication": "Falsche Serverauthentifizierung",
+          "server_disconnection": "Server-Trennung"
         }
       }
     },
@@ -752,199 +998,6 @@
         "state": {
           "cleaning": "Mähen"
         },
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      }
-    },
-    "button": {
-      "update_now": {
-        "name": "Aktualisiere jetzt",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "work_now": {
-        "name": "Mähe jetzt",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "charge_now": {
-        "name": "Lade jetzt",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "border_cut": {
-        "name": "Randmähen",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "trace_position": {
-        "name": "Position verfolgen",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      }
-    },
-    "number": {
-      "work_for": {
-        "name": "Arbeite für",
-        "state_attributes": {
-          "imei": {
-            "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
-          }
-        }
-      },
-      "charge_for": {
-        "name": "Lade für",
         "state_attributes": {
           "imei": {
             "name": "IMEI"

@@ -1,4 +1,5 @@
 # ZCS Lawn Mower Robot
+
 [![License][license-shield]](LICENSE)
 ![Project Maintenance][maintenance-shield]
 [![GitHub Activity][commits-shield]][commits]
@@ -7,15 +8,11 @@
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
-Stable -
-[![GitHub Release][stable-release-shield]][releases]
+[![GitHub Release][release-shield]][releases]
+[![issues][issues-shield]][issues-link]
 [![release-badge]][release-workflow]
-
-Latest -
-[![GitHub Release][latest-release-shield]][releases]
 [![validate-badge]][validate-workflow]
 [![lint-badge]][lint-workflow]
-[![issues][issues-shield]][issues-link]
 
 ZCS Lawn Mower Robots platform as a Custom Component for Home Assistant. All Ambrogio, Techline, Wiper and some Kubota, Stiga and Wolf robotic lawn mowers with Connect module are supported. This integration does not support Bluetooth connectivity with lawn mowers.
 
@@ -25,19 +22,22 @@ With configured map and activated vacuum entity, the lawn mower can be displayed
 
 ![Lovelace Card](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/lovelace-card.jpg?raw=true)
 
+The spot cleaning points can be used to start the lawn mower in a specific area.
+
 ## Installation
 
-Requires Home Assistant 2024.2.0 or newer.
+> [!IMPORTANT]  
+> Requires Home Assistant 2024.5.0 or newer.
 
 ### Installation through HACS
 
 Installation using Home Assistant Community Store (HACS) is recommended.
 
-1. If HACS is not installed, follow HACS installation and configuration at https://hacs.xyz/.
+1. If HACS is not installed, follow HACS installation and configuration at <https://hacs.xyz/>.
 
 2. Click the button below or visit the HACS _Integrations_ pane and search for "ZCS Lawn Mower Robot".
 
-    [![my_button](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ufozone&repository=ha-zcs-mower&category=integration)
+    [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ufozone&repository=ha-zcs-mower&category=integration)
 
 3. Install the integration.
 
@@ -63,47 +63,40 @@ Start setup:
 
 * Click this button:
 
-    [![my_button](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=zcsmower)
+    [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=zcsmower)
 
 * Or use the "Add Integration" in Home Assistant, Settings, Devices & Services and select "ZCS Lawn Mower Robot".
 
 ## Configuration
 
-### Authorization
+### Start
 
-Get client key from lawn mower mobile app:
+In this step, a new account is created at ZCS Cloud, to which your lawn mower(s) will later be linked.
 
-   **Note:** Android recommended, because in iPhone app all characters are displayed in capital letters.
+1. **Garage name:** You can freely choose the name.
 
-1. Open the app on your mobile device.
+2. **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report their position more often.
 
-   In the best case, you create a new account (via the mobile app) and connect it to your lawn mower(s). Then there should be no problems when you use the HA integration and the mobile app at the same time.
+    **:warning: Attention:** Activating this function increases data usage significantly. For additional information go to [General settings](#general-settings).
 
-2. Click on the `Setup` tab.
-
-3. In the `Connect Settings` section, click `Registered "Connect Clients"`:
-
-    ![Registered "Connect Clients"](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_account1.jpg?raw=true)
-
-4. You need your account key (italicized string):
-
-    ![Get account key](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_account2.jpg?raw=true)
-
-5. Type this information into the config flow dialog.
+3. **Map activation:** Check this box if you want to set up your own map view. For additional information go to [Map](#map).
 
 ### Map
 
 The image entity will plot the current coordinates and location history of the lawn mower on a user provided image. To configure the entity you need to upload your desired map image and determine the coordinates of the top left corner and the bottom right corner of your selected image.
 
-The image entity is configured via the setup and options flow on the integration. 
+> [!TIP]  
+> If you don't like the map orientation, you can also rotate the section. First, adjust your image, note the degree of rotation and enter it in the map settings.
 
-You can then provide the path to the image you would like to use for the map and marker. 
+The image entity is configured via the setup and options flow on the integration.
+
+You can then provide the path to the image you would like to use for the map and marker.
 
 Best practice:
 
 1. Create a new map on [Google My Maps](https://mymaps.google.com/).
 
-2. Take a snapshot of the desired area and save it. This has been tested with the PNG format, other formats may work. 
+2. Take a snapshot of the desired area and save it. This has been tested with the PNG format, other formats may work.
 
 3. Store the snapshot into your home assistant instance, e.g. `/config/www/mower/`.
 
@@ -115,25 +108,82 @@ Best practice:
 
 6. Type the coordinates into the config flow dialog. To enter the coordinates, ensure that they are in signed degree format and separated by a comma for example: `45.0135543,7.6181209`
 
-    **Pay attention** to the correct order of latitude and longitude.
+    **:warning: Pay attention** to the correct order of latitude and longitude.
 
-7. (Optional) Get a image of your lawn mower with transparent background as a marker for the current position. Store the image into your home assistant instance, e.g. `/config/www/mower/` and type the full path into the config flow dialog.
+7. (Optional) Enter the rotation of your map image in degrees.
+
+8. (Optional) Get a image of your lawn mower with transparent background as a marker for the current position. Store the image into your home assistant instance, e.g. `/config/www/mower/` and type the full path into the config flow dialog.
 
     The default marker `/config/custom_components/zcsmower/resources/marker.png` is over written when the integration is updated, store the custom image in another location.
 
 ### Add lawn mower(s)
 
-Get IMEI from your lawn mower(s):
+Get IMEI address from your lawn mower(s):
 
-1. Open the app on your mobile device.
+1. Open the app on your mobile device and select the lawn mower.
 
-2. Click on the `More info` tab and scroll to the `Connect Informations` section:
+2. Click on the `Info` tab and scroll to the `Connect` section.
 
-3. You need the `Imei Address` (bold string, starts with `3`):
+3. You need the `Imei Address` (starts with `35`):
 
     ![Get IMEI address](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_imei.jpg?raw=true)
 
-4. Type this information into the config flow dialog.
+4. Type this address into the config flow dialog.
+
+### Remove client from lawn mower(s)
+
+When adding a robot, you may receive a message that too many clients are linked to the lawn mower. Only five remote clients can be linked to the lawn mower.
+
+You can fix this problem as follows:
+
+1. Open the app on your mobile device.
+
+2. Connect to the lawn mower via Bluetooth.
+
+3. Click on the `Setup` tab and scroll to bottom.
+
+4. Click on the `General Settings` section and open to the `Client List`:
+
+    ![Get client list](https://github.com/ufozone/ha-zcs-mower/blob/main/screenshots/setup_robot_clients.jpg?raw=true)
+
+5. Click on the "Delete" button of the client that you no longer need.
+
+### General settings
+
+> [!NOTE]  
+> **These settings have a major impact on data usage of the Connect module.**
+>
+> * In the best case, activate +Infinity for your lawn mower(s).
+> * If you have not activated +Infinity, you should only carefully select lower values than the default values. If you change these values, you should daily monitor your data usage in the mobile app and adjust the settings again if necessary.
+
+The following settings are available:
+
+* **Re-generate client key:** Regeneration is only recommended if authentication is no longer possible (see [Debugging](#debugging)) and the state of the lawn mowers can no longer be retrieved.
+
+    **:information_source: Please note** that regenerating will not bring any improvement if the monthly data volume has reached or the Connect expiration date has exceeded.
+
+* **Start and end of daily standby time:** To save data volume at times when the lawn mowers are not working by default (e.g. at night), the start and end of the usual working hours can be specified. During this standby time, the status is updated more frequently than outside these times.
+
+* **Update interval if at least one lawn mower is working:**
+  * **Standard plan:** A good value is 120 seconds.
+  * **+Infinity plan:** A good value is 60 seconds.
+
+* **Update interval on standby time if no lawn mower is working:**
+  * **Standard plan:** A good value is 300 seconds.
+  * **+Infinity plan:** A good value is 120 seconds.
+
+* **Update interval outside standby time (all lawn mowers are idle):**
+  * **Standard plan:** A good value is 3600 seconds.
+  * **+Infinity plan:** A good value is 900 seconds.
+
+* **Position tracing:** Activate this field if you want to use the periodical position tracing of your lawn mower(s). Your lawn mower(s) will report its position more often.
+
+    **:warning: Attention:** Activating this function increases data usage significantly.
+
+* **Wake up command on lawn mower(s):** While the lawn mower is working, the Connect Module must be woken up from time to time to send a current status. Waking up has a strong influence on data usage. For this reason, one value can be specified for lawn mower(s) with activated +Infinity and a value without.
+
+  * **Standard plan:** A good value is 1800 seconds.
+  * **+Infinity plan:** A good value is 300 seconds.
 
 ## Available components
 
@@ -141,19 +191,21 @@ Get IMEI from your lawn mower(s):
 
 * All entities
 
-    ```
-    attributes: 
-    imei, connected, last_communication, last_seen, last_poll, next_poll
-    ```
+  Attributes:
+
+  ```text
+  imei, connected, last_communication, last_seen, last_poll, next_poll
+  ```
 
 ### Binary Sensor
 
 * error
 
-    ```
-    attributes: 
-    reason
-    ```
+  Attributes:
+
+  ```text
+  reason
+  ```
 
 ### Button
 
@@ -167,49 +219,44 @@ Get IMEI from your lawn mower(s):
 
 * trace_position
 
-### Camera
-
-_This entity is deprecated and is disabled by default. Do not activate it as it will be removed in version 1.2.1. Use the [image](#image) entity instead._
-
-* map
-
-    ```
-    attributes: 
-    calibration_points
-    ```
-
 ### Device Tracker
 
 * location
 
-    ```
-    attributes: 
-    latitude, longitude, source_type (GPS)
-    ```
+  Attributes:
+
+  ```text
+  latitude, longitude, source_type (GPS), location_accuracy (10 meters)
+  ```
 
 ### Image
 
 * map
 
-    ```
-    attributes: 
-    calibration_points
-    ```
+  Attributes:
+
+  ```text
+  calibration_points
+  ```
 
 ### Lawn Mower
 
 * mower
-  | Values      | Description       | Lawn mower state(s)                         |
-  |-------------|-------------------|---------------------------------------------|
-  | mowing      | Mowing            | Work, Go to area, Go to station, Border cut |
-  | docked      | Docked            | Charge                                      |
-  | paused      | Paused            | Pause, Work standby                         |
-  | error       | Error             | Error, No signal, Expired, Renewed          |
 
-    ```
-    attributes: 
-    status
-    ```
+  States:
+
+  | Values      | Description       | Lawn mower state(s)                                                         |
+  |-------------|-------------------|-----------------------------------------------------------------------------|
+  | mowing      | Mowing            | Work, Go to area, Go to station, Border cut, Mapping started, Mapping ended |
+  | docked      | Docked            | Charge                                                                      |
+  | paused      | Paused            | Pause, Work standby                                                         |
+  | error       | Error             | Error, No signal, Expired, Renewed, Hot temperature                         |
+
+  Attributes:
+
+  ```text
+  status
+  ```
 
 ### Number
 
@@ -222,39 +269,55 @@ _These entities are disabled by default. You have to activate it if you want to 
 ### Sensor
 
 * state
-  | Values       | Description   |
-  |--------------|---------------|
-  | unknown      | Unknown       |
-  | charge       | Charge        |
-  | work         | Work          |
-  | pause        | Pause         |
-  | fail         | Error         |
-  | nosignal     | No signal     |
-  | gotostation  | Go to station |
-  | gotoarea     | Go to area    |
-  | bordercut    | Border cut    |
-  | expired      | Expired       |
-  | renewed      | Renewed       |
-  | work_standby | Work standby  |
+
+  States:
+
+  | Values          | Description     |
+  |-----------------|-----------------|
+  | unknown         | Unknown         |
+  | charge          | Charge          |
+  | work            | Work            |
+  | pause           | Pause           |
+  | fail            | Error           |
+  | nosignal        | No signal       |
+  | gotostation     | Go to station   |
+  | gotoarea        | Go to area      |
+  | bordercut       | Border cut      |
+  | expired         | Expired         |
+  | renewed         | Renewed         |
+  | work_standby    | Work standby    |
+  | hot_temperature | Hot temperature |
+  | mapping_started | Mapping started |
+  | mapping_ended   | Mapping ended   |
+
+  Attributes:
+
+  ```text
+  connect_expiration, infinity_state, infinity_expiration
+  ```
 
 ### Vacuum
 
 _This entity is disabled by default. You have to activate it if you want to use it._
 
 * mower
-  | Values      | Description       | Lawn mower state(s)                |
-  |-------------|-------------------|------------------------------------|
-  | cleaning    | Mowing            | Work, Go to area, Border cut       |
-  | docked      | Docked            | Charge                             |
-  | paused      | Paused            | Pause                              |
-  | returning   | Returning to dock | Go to station                      |
-  | idle        | Idle              | Work standby                       |
-  | error       | Error             | Error, No signal, Expired, Renewed |
 
-    ```
-    attributes: 
-    status
-    ```
+  States:
+
+  | Values      | Description       | Lawn mower state(s)                                 |
+  |-------------|-------------------|-----------------------------------------------------|
+  | cleaning    | Mowing            | Work, Go to area, Border cut, Mapping started       |
+  | docked      | Docked            | Charge                                              |
+  | paused      | Paused            | Pause                                               |
+  | returning   | Returning to dock | Go to station, Mapping ended                        |
+  | idle        | Idle              | Work standby                                        |
+  | error       | Error             | Error, No signal, Expired, Renewed, Hot temperature |
+
+  Attributes:
+
+  ```text
+  status
+  ```
 
 ### Services
 
@@ -308,17 +371,17 @@ _This entity is disabled by default. You have to activate it if you want to use 
 
 ## Usage
 
-* `vacuum.start`:
+* `lawn_mower.start_mowing`, `vacuum.start`:
 
-    The lawn mower stats to mow, within the specified schedule.
+    The lawn mower starts to mow, within the specified schedule.
+
+* `lawn_mower.dock`, `vacuum.return_to_base`:
+
+    The lawn mower returns to the base and parks there until the next schedule start.
 
 * `vacuum.stop`:
 
-    The lawn mower returns to the base and parks there until the next schedule starts.
-
-* `vacuum.return_to_base`:
-
-    Same as `vacuum.stop`.
+    Same as `lawn_mower.dock` and `vacuum.return_to_base`.
 
 * `button.charge_now`:
 
@@ -346,7 +409,7 @@ To enable debug logging for this integration you can control this in your Home A
 
 Set the logging to debug with the following settings in case of problems:
 
-```
+```yaml
 logger:
   default: warn
   logs:
@@ -354,7 +417,6 @@ logger:
 ```
 
 After a restart detailed log entries will appear in `/config/home-assistant.log`.
-
 
 ***
 
@@ -370,12 +432,11 @@ After a restart detailed log entries will appear in `/config/home-assistant.log`
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/
 
+[releases]: https://github.com/ufozone/ha-zcs-mower/releases
+[release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?style=flat
+
 [issues-shield]: https://img.shields.io/github/issues/ufozone/ha-zcs-mower?style=flat
 [issues-link]: https://github.com/ufozone/ha-zcs-mower/issues
-
-[releases]: https://github.com/ufozone/ha-zcs-mower/releases
-[stable-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?style=flat
-[latest-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-zcs-mower?include_prereleases&style=flat
 
 [lint-badge]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yaml/badge.svg
 [lint-workflow]: https://github.com/ufozone/ha-zcs-mower/actions/workflows/lint.yaml
