@@ -151,7 +151,6 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         self._image = self._create_empty_map_image("Map initialization.")
         self._image_bytes = None
         self._image_to_bytes()
-        self._generate_image()
 
     def _generate_image(self) -> None:
         """Generate image."""
@@ -418,18 +417,21 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
                 ATTR_CALIBRATION: calibration_points,
             }
 
-    def image(
-        self, width: int | None = None, height: int | None = None
-    ) -> bytes | None:
-        """Return the image."""
+    def image(self) -> bytes | None:
+        """Return bytes of image."""
         return self._image_bytes
 
     async def async_update(self) -> None:
         """Handle map image update."""
-        self._generate_image()
+        await super().async_update()
+        await self.hass.async_add_executor_job(
+            self._generate_image
+        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Handle updated data from the coordinator and set frame interval according to working status."""
+        """Handle updated data from the coordinator."""
         super()._handle_coordinator_update()
-        self._generate_image()
+        self.hass.async_add_executor_job(
+            self._generate_image
+        )
