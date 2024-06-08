@@ -134,16 +134,14 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._title = garage_name
                 self._options = {
                     CONF_CLIENT_KEY: client_key,
+                    CONF_STANDBY_TIME_START: STANDBY_TIME_START_DEFAULT,
+                    CONF_STANDBY_TIME_STOP: STANDBY_TIME_STOP_DEFAULT,
                     CONF_UPDATE_INTERVAL_WORKING: int(UPDATE_INTERVAL_WORKING_DEFAULT),
                     CONF_UPDATE_INTERVAL_STANDBY: int(UPDATE_INTERVAL_STANDBY_DEFAULT),
                     CONF_UPDATE_INTERVAL_IDLING: int(UPDATE_INTERVAL_IDLING_DEFAULT),
-                    CONF_TRACE_POSITION_ENABLE: user_input.get(
-                        CONF_TRACE_POSITION_ENABLE, False
-                    ),
+                    CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                     CONF_WAKE_UP_INTERVAL_DEFAULT: int(ROBOT_WAKE_UP_INTERVAL_DEFAULT),
-                    CONF_WAKE_UP_INTERVAL_INFINITY: int(
-                        ROBOT_WAKE_UP_INTERVAL_INFINITY
-                    ),
+                    CONF_WAKE_UP_INTERVAL_INFINITY: int(ROBOT_WAKE_UP_INTERVAL_INFINITY),
                     CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
