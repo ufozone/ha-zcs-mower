@@ -12,9 +12,6 @@ from homeassistant.components.number import (
 )
 from homeassistant.helpers.entity import Entity
 
-from .const import (
-    DOMAIN,
-)
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 

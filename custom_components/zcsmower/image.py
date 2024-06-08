@@ -37,7 +37,6 @@ import homeassistant.util.dt as dt_util
 
 from .const import (
     LOGGER,
-    DOMAIN,
     MAP_POINTS_DEFAULT,
     CONF_MAP_ENABLE,
     CONF_MAP_IMAGE_PATH,

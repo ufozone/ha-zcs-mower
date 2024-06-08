@@ -16,7 +16,6 @@ from homeassistant.helpers.entity import Entity
 import homeassistant.util.dt as dt_util
 
 from .const import (
-    DOMAIN,
     ATTR_CONNECT_EXPIRATION,
     ATTR_INFINITY_STATE,
     ATTR_INFINITY_EXPIRATION,

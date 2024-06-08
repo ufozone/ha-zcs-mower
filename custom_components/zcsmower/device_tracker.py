@@ -20,7 +20,6 @@ from homeassistant.helpers.entity import (
 )
 
 from .const import (
-    DOMAIN,
     CONF_MAP_MARKER_PATH,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator

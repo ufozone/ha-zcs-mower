@@ -9,7 +9,6 @@ from homeassistant.const import (
 )
 
 from .const import (
-    DOMAIN,
     CONF_CLIENT_KEY,
     CONF_MAP_GPS_TOP_LEFT,
     CONF_MAP_GPS_BOTTOM_RIGHT,
