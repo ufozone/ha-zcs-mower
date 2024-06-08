@@ -76,7 +76,7 @@ class ZcsMowerLawnMowerEntity(ZcsMowerEntity, LawnMowerEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            entity_type="vacuum",
+            entity_type="lawn_mower",
             entity_description=entity_description,
             imei=imei,
         )
@@ -120,4 +120,4 @@ class ZcsMowerLawnMowerEntity(ZcsMowerEntity, LawnMowerEntity):
 
     async def async_pause(self) -> None:
         """Not supported."""
-        LOGGER.warning("Method %s.pause is not supported.", DOMAIN)
+        LOGGER.warning("Method %s.lawn_mower.pause is not supported.", DOMAIN)
