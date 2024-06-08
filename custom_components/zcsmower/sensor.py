@@ -16,7 +16,6 @@ from homeassistant.helpers.entity import Entity
 import homeassistant.util.dt as dt_util
 
 from .const import (
-    DOMAIN,
     ATTR_CONNECT_EXPIRATION,
     ATTR_INFINITY_STATE,
     ATTR_INFINITY_EXPIRATION,
@@ -39,7 +38,7 @@ async def async_setup_entry(
     async_add_entities: Entity,
 ) -> None:
     """Do setup sensors from a config entry created in the integrations UI."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator = config_entry.runtime_data
     async_add_entities(
         [
             ZcsMowerSensorEntity(

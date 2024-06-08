@@ -20,7 +20,6 @@ from homeassistant.helpers.entity import (
 )
 
 from .const import (
-    DOMAIN,
     CONF_MAP_MARKER_PATH,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -41,7 +40,7 @@ async def async_setup_entry(
     async_add_entities: Entity,
 ) -> None:
     """Do setup device tracker from a config entry created in the integrations UI."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator = config_entry.runtime_data
     async_add_entities(
         [
             ZcsMowerTrackerEntity(

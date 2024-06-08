@@ -12,9 +12,6 @@ from homeassistant.components.number import (
 )
 from homeassistant.helpers.entity import Entity
 
-from .const import (
-    DOMAIN,
-)
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
@@ -46,7 +43,7 @@ async def async_setup_entry(
     async_add_entities: Entity,
 ) -> None:
     """Do setup numbers from a config entry created in the integrations UI."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator = config_entry.runtime_data
     async_add_entities(
         [
             ZcsMowerDurationNumberEntity(

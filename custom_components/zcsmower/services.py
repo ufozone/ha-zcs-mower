@@ -69,10 +69,11 @@ async def async_setup_services(hass: HomeAssistant) -> None:
             identifiers = list(device.identifiers)[0]
             if identifiers[0] != DOMAIN:
                 continue
-            config_entry_id = list(device.config_entries)[0]
-            if config_entry_id not in hass.data[DOMAIN]:
-                continue
-            targets[identifiers[1]] = hass.data[DOMAIN][config_entry_id]
+            for config_entry_id in list(device.config_entries):
+                config_entry = hass.config_entries.async_get_entry(config_entry_id)
+                if config_entry.domain == DOMAIN:
+                    targets[identifiers[1]] = config_entry.runtime_data
+                    break
 
         if service == SERVICE_UPDATE_NOW:
             await _async_update_now(hass, targets, data)

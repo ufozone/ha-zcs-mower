@@ -37,7 +37,6 @@ import homeassistant.util.dt as dt_util
 
 from .const import (
     LOGGER,
-    DOMAIN,
     MAP_POINTS_DEFAULT,
     CONF_MAP_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -74,7 +73,7 @@ async def async_setup_entry(
     async_add_entities: Entity,
 ) -> None:
     """Do setup images from a config entry created in the integrations UI."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator = config_entry.runtime_data
     async_add_entities(
         [
             ZcsMowerImageEntity(
