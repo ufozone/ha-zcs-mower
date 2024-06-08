@@ -189,6 +189,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Get datetime object by adding a duration to the current time."""
         return dt_util.now() + timedelta(minutes=duration)
 
+    async def initialize(self) -> None:
+        """Set up a ZCS Mower instance."""
+        await self.client.auth()
+
     async def __aenter__(self):
         """Return Self."""
         return self

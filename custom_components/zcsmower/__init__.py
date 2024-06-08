@@ -3,6 +3,10 @@ from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.exceptions import (
+    ConfigEntryAuthFailed,
+    ConfigEntryNotReady,
+)
 from homeassistant.const import (
     ATTR_NAME,
 )
@@ -44,13 +48,12 @@ from .const import (
 )
 from .services import async_setup_services
 from .coordinator import ZcsMowerDataUpdateCoordinator
+from .api import ZcsMowerApiAuthenticationError
 
 CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up ZCS Lawn Mower Robot component."""
-    hass.data.setdefault(DOMAIN, {})
-
     await async_setup_services(hass)
 
     return True
@@ -58,24 +61,31 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][config_entry.entry_id] = coordinator = ZcsMowerDataUpdateCoordinator(
-        hass=hass,
-        config_entry=config_entry,
-    )
-    await coordinator.async_config_entry_first_refresh()
+    try:
+        coordinator = ZcsMowerDataUpdateCoordinator(
+            hass=hass,
+            config_entry=config_entry,
+        )
+        await coordinator.initialize()
+        await coordinator.async_config_entry_first_refresh()
+    except ZcsMowerApiAuthenticationError as err:
+        raise ConfigEntryAuthFailed from err
+    except Exception as err:
+        raise ConfigEntryNotReady from err
 
+    config_entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
-    config_entry.async_on_unload(config_entry.add_update_listener(async_reload_entry))
-
+    config_entry.async_on_unload(
+        config_entry.add_update_listener(async_reload_entry)
+    )
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    if unload_ok := await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS):
-        # Remove config entry from domain.
-        hass.data[DOMAIN].pop(config_entry.entry_id)
+    unload_ok = await hass.config_entries.async_unload_platforms(
+        config_entry, PLATFORMS
+    )
     return unload_ok
 
 
@@ -83,6 +93,7 @@ async def async_reload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> 
     """Reload config entry."""
     await async_unload_entry(hass, config_entry)
     await async_setup_entry(hass, config_entry)
+
 
 async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Migrate old entry."""
