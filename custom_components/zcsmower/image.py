@@ -180,7 +180,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
                 history_enable = self.config_entry.options.get(CONF_MAP_HISTORY_ENABLE, True)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
 
-                # If history has not change, bort generation
+                # If history has not change, abort generation
                 if self.last_location_history == location_history:
                     return None
 
@@ -342,6 +342,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         if self._image_scale is None:
             self._find_image_scale(size)
 
+        # Bearing resource
         bearing_res = distance(self._image_center_gps, location).geod.Inverse(
             self._image_center_gps[0], self._image_center_gps[1], location[0], location[1]
         )
@@ -349,6 +350,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         plot_point_center_meter = bearing_res.get("s12") * 1000
         bearing_center = math.radians(bearing_center_deg - 90 + self.map_rotation)
 
+        # Build the final point
         point_px = (
             self._image_center_px[0] + (plot_point_center_meter * self._image_scale * math.cos(bearing_center)),
             self._image_center_px[1] + (plot_point_center_meter * self._image_scale * math.sin(bearing_center)),
@@ -364,7 +366,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         img_w, img_h = image.size
         max_w, max_h = max_size
 
-        scale = max(1, max((img_w / max_w), (img_h / max_h)))
+        scale = max(1, (img_w / max_w), (img_h / max_h))
         new_w = round(img_w / scale)
         new_h = round(img_h / scale)
 
@@ -391,7 +393,8 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        if self.map_enabled:
+        # Calculate calibration points only if map is enabled and first image generation is done
+        if self.map_enabled and self._image_scale is not None:
             calibration_points = []
             for point in (
                 self.map_gps_top_left,
