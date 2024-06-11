@@ -143,10 +143,6 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
                 self.map_gps_top_left = (top_left_latitude, top_left_longitude)
                 self.map_gps_bottom_right = (bottom_right_latitude, bottom_right_longitude)
 
-        self._image_scale = None
-        self._image_center_px = None
-        self._image_center_gps = None
-
         self._image = self._create_empty_map_image("Map initialization.")
         self._image_bytes = None
         self._image_to_bytes()
@@ -180,7 +176,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
                 history_enable = self.config_entry.options.get(CONF_MAP_HISTORY_ENABLE, True)
                 location_history = self._get_attribute(ATTR_LOCATION_HISTORY, [])
 
-                # If history has not change, bort generation
+                # If history has not change, abort generation
                 if self.last_location_history == location_history:
                     return None
 
@@ -308,11 +304,13 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
 
         return tuple(point)
 
-    def _find_image_scale(
+    def _scale_to_image(
         self,
-        size: ImgDimensions,
-    ):
-        """Find the scale ration in m/px and centers of image."""
+        location: GpsPoint,
+        size: ImgDimensions
+    ) -> ImgPoint:
+        """Convert from latitude and longitude to the image pixels."""
+
         # Length of hypotenuse in meters
         len_meter = geodesic(self.map_gps_top_left, self.map_gps_bottom_right).meters
 
@@ -320,38 +318,29 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         len_px = int(math.dist((0, 0), size))
 
         # Scale in pixels/meter
-        self._image_scale = len_px / len_meter
+        image_scale = len_px / len_meter
 
         # Center of image in pixels
-        self._image_center_px = int((0 + size[0]) / 2), int(
+        image_center_px = int((0 + size[0]) / 2), int(
             (0 + size[1]) / 2
         )
         # Center of image in lat/long
-        self._image_center_gps = (
+        image_center_gps = (
             (self.map_gps_top_left[0] + self.map_gps_bottom_right[0]) / 2,
             (self.map_gps_top_left[1] + self.map_gps_bottom_right[1]) / 2,
         )
-
-    def _scale_to_image(
-        self,
-        location: GpsPoint,
-        size: ImgDimensions
-    ) -> ImgPoint:
-        """Convert from latitude and longitude to the image pixels."""
-        # If image scale is not calculated, do it
-        if self._image_scale is None:
-            self._find_image_scale(size)
-
-        bearing_res = distance(self._image_center_gps, location).geod.Inverse(
-            self._image_center_gps[0], self._image_center_gps[1], location[0], location[1]
+        # Bearing resource
+        bearing_res = distance(image_center_gps, location).geod.Inverse(
+            image_center_gps[0], image_center_gps[1], location[0], location[1]
         )
         bearing_center_deg = bearing_res.get("azi1")
         plot_point_center_meter = bearing_res.get("s12") * 1000
         bearing_center = math.radians(bearing_center_deg - 90 + self.map_rotation)
 
+        # Build the final point
         point_px = (
-            self._image_center_px[0] + (plot_point_center_meter * self._image_scale * math.cos(bearing_center)),
-            self._image_center_px[1] + (plot_point_center_meter * self._image_scale * math.sin(bearing_center)),
+            image_center_px[0] + (plot_point_center_meter * image_scale * math.cos(bearing_center)),
+            image_center_px[1] + (plot_point_center_meter * image_scale * math.sin(bearing_center)),
         )
         return int(point_px[0]), int(point_px[1])
 
