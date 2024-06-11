@@ -168,8 +168,6 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
 
         try:
             if self.map_gps_top_left is not None and self.map_gps_bottom_right is not None:
-                self._find_image_scale(map_image.size)
-
                 img_draw = ImageDraw.Draw(map_image, "RGBA")
                 latitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LATITUDE, None)
                 longitude_current = self._get_attribute(ATTR_LOCATION, {}).get(ATTR_LONGITUDE, None)
@@ -368,7 +366,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         img_w, img_h = image.size
         max_w, max_h = max_size
 
-        scale = max(1, max((img_w / max_w), (img_h / max_h)))
+        scale = max(1, (img_w / max_w), (img_h / max_h))
         new_w = round(img_w / scale)
         new_h = round(img_h / scale)
 
@@ -395,7 +393,8 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        if self.map_enabled:
+        # Calculate calibration points only if map is enabled and first generation is done
+        if self.map_enabled and self._image_scale is not None:
             calibration_points = []
             for point in (
                 self.map_gps_top_left,
