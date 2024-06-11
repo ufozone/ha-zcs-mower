@@ -393,7 +393,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        # Calculate calibration points only if map is enabled and first generation is done
+        # Calculate calibration points only if map is enabled and first image generation is done
         if self.map_enabled and self._image_scale is not None:
             calibration_points = []
             for point in (
