@@ -25,6 +25,12 @@ ENTITY_DESCRIPTIONS = (
         entity_category=EntityCategory.DIAGNOSTIC,
     ),
     ButtonEntityDescription(
+        key="wake_up",
+        icon="mdi:connection",
+        translation_key="wake_up",
+        device_class=ButtonDeviceClass.UPDATE,
+    ),
+    ButtonEntityDescription(
         key="work_now",
         icon="mdi:state-machine",
         translation_key="work_now",
