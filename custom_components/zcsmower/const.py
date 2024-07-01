@@ -74,6 +74,12 @@ SERVICE_UPDATE_NOW_SCHEMA = vol.Schema(
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
     }
 )
+SERVICE_WAKE_UP = "wake_up"
+SERVICE_WAKE_UP_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
+    }
+)
 SERVICE_SET_PROFILE = "set_profile"
 SERVICE_SET_PROFILE_SCHEMA = vol.Schema(
     {

@@ -156,6 +156,16 @@
         }
       }
     },
+    "wake_up": {
+      "name": "Aufwachen",
+      "description": "Befiehlt dem Rasenmäher, aufzuwachen und sich mit der Cloud zu verbinden.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    },
     "set_profile": {
       "name": "Profil einstellen",
       "description": "Konfiguriere das Profil für den Automodus.",
@@ -367,6 +377,33 @@
     "button": {
       "update_now": {
         "name": "Aktualisiere jetzt",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Verbindungsstatus",
+            "state": {
+              "true": "Verbunden",
+              "false": "Getrennt"
+            }
+          },
+          "last_communication": {
+            "name": "Letzte Kommunikation"
+          },
+          "last_seen": {
+            "name": "Letzte Sichtung"
+          },
+          "last_pull": {
+            "name": "Letzter Abruf"
+          },
+          "next_pull": {
+            "name": "Nächster Abruf"
+          }
+        }
+      },
+      "wake_up": {
+        "name": "Aufwachen",
         "state_attributes": {
           "imei": {
             "name": "IMEI"

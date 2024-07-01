@@ -156,6 +156,16 @@
         }
       }
     },
+    "wake_up": {
+      "name": "Wake up",
+      "description": "Command the lawn mower to wake up and connect to the cloud.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    },
     "set_profile": {
       "name": "Setting profile",
       "description": "Configure the profile for auto-mode.",
@@ -366,6 +376,33 @@
     },
     "button": {
       "update_now": {
+        "name": "Update now",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Connection State",
+            "state": {
+              "true": "Connected",
+              "false": "Disconnected"
+            }
+          },
+          "last_communication": {
+            "name": "Last communication"
+          },
+          "last_seen": {
+            "name": "Last seen"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          },
+          "next_pull": {
+            "name": "Next pull"
+          }
+        }
+      },
+      "wake_up": {
         "name": "Update now",
         "state_attributes": {
           "imei": {

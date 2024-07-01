@@ -211,6 +211,8 @@ The following settings are available:
 
 * update_now
 
+* wake_up
+
 * work_now
 
 * charge_now
@@ -324,6 +326,10 @@ _This entity is disabled by default. You have to activate it if you want to use 
 * `zcsmower.update_now`:
 
     Fetch data for lawn mower immediately from API.
+
+* `zcsmower.wake_up`:
+
+    Command the lawn mower to wake up and connect to the cloud.
 
 * `zcsmower.set_profile`:
 

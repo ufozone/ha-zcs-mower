@@ -10,6 +10,18 @@ update_now:
           entity:
             domain: "device_tracker"
 
+wake_up:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+
 set_profile:
   fields:
     device_id:

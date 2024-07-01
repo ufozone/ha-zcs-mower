@@ -9,6 +9,7 @@
     "set_profile": "mdi:numeric",
     "trace_position": "mdi:map-marker",
     "update_now": "mdi:update",
+    "wake_up": "mdi:connection",
     "work_for": "mdi:clock-outline",
     "work_now": "mdi:state-machine",
     "work_until": "mdi:clock-outline"

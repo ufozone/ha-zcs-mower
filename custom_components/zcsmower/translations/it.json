@@ -156,6 +156,16 @@
         }
       }
     },
+    "wake_up": {
+      "name": "Svegliarsi",
+      "description": "Comandate al tosaerba di svegliarsi e di connettersi al cloud.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        }
+      }
+    },
     "set_profile": {
       "name": "Impostazione del profilo",
       "description": "Configurare il profilo per la modalità automatica.",
@@ -367,6 +377,33 @@
     "button": {
       "update_now": {
         "name": "Aggiorna ora",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          },
+          "connected": {
+            "name": "Stato della connessione",
+            "state": {
+              "true": "connesso",
+              "false": "disconnesso"
+            }
+          },
+          "last_communication": {
+            "name": "Ultima comunicazione"
+          },
+          "last_seen": {
+            "name": "Ultimo visto"
+          },
+          "last_pull": {
+            "name": "Ultimo tirata"
+          },
+          "next_pull": {
+            "name": "Prossima tirata"
+          }
+        }
+      },
+      "wake_up": {
+        "name": "Svegliarsi",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
