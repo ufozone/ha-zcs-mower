@@ -99,7 +99,6 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
     LOGGER.info("Migrating from version %s", config_entry.version)
 
     if config_entry.version < 6:
-        config_entry.version = 6
         _mowers = dict(config_entry.options.get(CONF_MOWERS, []))
         for _imei, _name in _mowers.items():
             _mowers[_imei] = {
@@ -116,11 +115,10 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             title=str(config_entry.title),
             data={},
             options=_options,
+            version=6,
         )
 
     if config_entry.version < 10:
-        config_entry.version = 10
-
         if (gps_top_left := config_entry.options.get(CONF_MAP_GPS_TOP_LEFT, None)) == "":
             gps_top_left = None
 
@@ -149,22 +147,17 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                 CONF_MAP_ROTATION: 0.0,
             }
         )
-        _options.pop("trace_position_interval_default")
-        _options.pop("trace_position_interval_infinity")
-        _options.pop("uptade_interval_working")
-        _options.pop("uptade_interval_idling")
-        _options.pop("camera_enable")
-        _options.pop("img_path_map")
-        _options.pop("img_path_marker")
-        _options.pop("gps_top_left")
-        _options.pop("gps_bottom_right")
-        _options.pop("draw_lines")
+        _delete_keys = ["trace_position_interval_default", "trace_position_interval_infinity", "uptade_interval_working", "uptade_interval_idling", "camera_enable", "img_path_map", "img_path_marker", "gps_top_left", "gps_bottom_right", "draw_lines"]
+        for _delete_key in _delete_keys:
+            if _delete_key in _options:
+                _options.pop(_delete_key)
 
         hass.config_entries.async_update_entry(
             config_entry,
             title=str(config_entry.title),
             data={},
             options=_options,
+            version=10,
         )
 
     LOGGER.info("Migration to version %s successful", config_entry.version)
