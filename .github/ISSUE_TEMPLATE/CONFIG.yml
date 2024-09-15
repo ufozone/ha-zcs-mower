@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question and support
+    url: https://community.home-assistant.io/t/ambrogio-lawn-mover/311608
+    about: You have a question or need support? We use GitHub for tracking bugs and discussing new feature requests. See the community thread for resources to get help.
