@@ -30,7 +30,7 @@ body:
     id: version
     attributes:
       label: What version of the integration has the issue?
-      description: >
+      description: >-
         Can be found in: [Settings ⇒ Devices &amp; services ⇒ Integrations ⇒ Click on integration name](https://my.home-assistant.io/redirect/integration/?domain=zcsmower).
 
         [![Open your Home Assistant instance and show an integration.](https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=zcsmower)
@@ -40,13 +40,12 @@ body:
   - type: input
     attributes:
       label: What was the last working version of the integration?
-      description: >
-        If known, otherwise leave blank.
+      description: If known, otherwise leave blank.
       placeholder: v1.0.0
   - type: input
     attributes:
       label: What version of Home Assistant Core has the issue?
-      description: >
+      description: >-
         Can be found in: [Settings ⇒ System ⇒ Repairs ⇒ Three Dots in Upper Right ⇒ System information](https://my.home-assistant.io/redirect/system_health/).
 
         [![Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/badges/system_health.svg)](https://my.home-assistant.io/redirect/system_health/)
@@ -56,8 +55,7 @@ body:
   - type: input
     attributes:
       label: What was the last working version of Home Assistant Core?
-      description: >
-        If known, otherwise leave blank.
+      description: If known, otherwise leave blank.
       placeholder: core-2024.8.0
 
   - type: markdown
@@ -67,8 +65,7 @@ body:
   - type: input
     attributes:
       label: Which lawn mower model do you own?
-      description: >
-        In most cases, we need the exact model name of your lawn mower. Even better would be the first six characters of the serial number.
+      description: In most cases, we need the exact model name of your lawn mower. Even better would be the first six characters of the serial number.
       placeholder: e.g. Ambrogio Twenty Deluxe (AM020D)
     validations:
       required: true
@@ -89,8 +86,7 @@ body:
   - type: dropdown
     attributes:
       label: Has your lawn mower been recently updated?
-      description: >
-        If your lawn mower has recently been updated, a bug or breaking change may have been hidden in the latest firmware.
+      description: If your lawn mower has recently been updated, a bug or breaking change may have been hidden in the latest firmware.
       options:
         - "No"
         - "Yes"
