@@ -25,7 +25,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## Environment
+        ## Home Assistant Environment
   - type: input
     id: version
     attributes:
@@ -60,6 +60,10 @@ body:
         If known, otherwise leave blank.
       placeholder: core-2024.8.0
 
+  - type: markdown
+    attributes:
+      value: |
+        ## Lawn Mower Environment
   - type: input
     attributes:
       label: Which lawn mower model do you own?
