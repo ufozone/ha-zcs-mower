@@ -4,6 +4,6 @@ ruff==0.6.9
 pydocstyle==6.3.0
 isort==5.13.2
 geopy==2.3.0
-numpy==1.26.0
+numpy==1.26.4
 Pillow==10.4.0
 homeassistant==2024.8.0
