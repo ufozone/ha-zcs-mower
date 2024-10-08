@@ -276,6 +276,7 @@ ROBOT_MODELS = {
     "TH400D": "D40", # ?
     "TH450B": "B40i", # ?
     "TH450D": "D40i", # ?
+    "TH450L": "LX45 RTK", # ???
     "WI015D": "IKE",
     "WI020D": "I70",
     "WI020L": "I100 S",
@@ -288,9 +289,11 @@ ROBOT_MODELS = {
     "WI032D": "Premium C80", # Cassiopea: X 10
     "WI035B": "Premium C120",
     "WI035D": "Premium C180 S",
-    "WI040B": "K Premium Medium",
-    "WI040L": "K S Premium Medium",
+    "WI040B": "K S Medium",
+    "WI040L": "K S Premium",
+    "WI040R": "K S RTK Premium ",
     "WI043L": "KXL S Ultra Premium",
+    "WI043R": "KXL S RTK Ultra Premium",
     "WI085L": "J XH",
     "WI095L": "Q350 SR", # ?
     "WI250D": "F28",
@@ -303,6 +306,7 @@ ROBOT_MODELS = {
     "WI400L": "YARD 201", # ?
     "WI450B": "YARD 101S", # ?
     "WI450D": "YARD 201S", # ?
+    "WI450L": "YARD 201S", # ?
 }
 ROBOT_STATES = [
     {
