@@ -44,6 +44,7 @@ CONF_MAP_GPS_BOTTOM_RIGHT = "map_gps_bottom_right"
 CONF_MAP_ROTATION = "map_rotation"
 CONF_MAP_POINTS = "map_points"
 CONF_MAP_DRAW_LINES = "map_draw_lines"
+CONF_HIBERNATION_ENABLE = "hibernation_enable"
 CONF_MOWERS = "lawn_mowers"
 
 ATTR_IMEI = "imei"
