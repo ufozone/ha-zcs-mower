@@ -18,7 +18,7 @@ from homeassistant.helpers.entity import (
 from .const import (
     CONF_HIBERNATION_ENABLE,
 )
-from .coordinator import ZcsMowerDataUpdateCoordinator
+from .coordinator import ZcsDataUpdateCoordinator
 from .entity import ZcsConfigEntity
 
 
@@ -69,7 +69,7 @@ class ZcsConfigSwitchEntity(ZcsConfigEntity, SwitchEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsMowerDataUpdateCoordinator,
+        coordinator: ZcsDataUpdateCoordinator,
         entity_description: SwitchEntityDescription,
     ) -> None:
         """Initialize the switch class."""

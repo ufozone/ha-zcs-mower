@@ -35,7 +35,7 @@ from .const import (
     ATTRIBUTION,
     MANUFACTURER_DEFAULT,
 )
-from .coordinator import ZcsMowerDataUpdateCoordinator
+from .coordinator import ZcsDataUpdateCoordinator
 
 
 class ZcsMowerEntity(CoordinatorEntity):
@@ -48,7 +48,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsMowerDataUpdateCoordinator,
+        coordinator: ZcsDataUpdateCoordinator,
         entity_type: str,
         entity_description: EntityDescription,
         imei: str,
@@ -180,7 +180,7 @@ class ZcsConfigEntity(CoordinatorEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsMowerDataUpdateCoordinator,
+        coordinator: ZcsDataUpdateCoordinator,
         entity_type: str,
         entity_description: EntityDescription,
     ) -> None:

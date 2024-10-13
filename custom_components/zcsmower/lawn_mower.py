@@ -19,7 +19,7 @@ from .const import (
     DOMAIN,
     ATTR_STATUS,
 )
-from .coordinator import ZcsMowerDataUpdateCoordinator
+from .coordinator import ZcsDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 ROBOT_SUPPORTED_FEATURES = (
@@ -67,7 +67,7 @@ class ZcsMowerLawnMowerEntity(ZcsMowerEntity, LawnMowerEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsMowerDataUpdateCoordinator,
+        coordinator: ZcsDataUpdateCoordinator,
         entity_description: LawnMowerEntityEntityDescription,
         imei: str,
     ) -> None:

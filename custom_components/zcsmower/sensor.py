@@ -23,7 +23,7 @@ from .const import (
     ATTR_INFINITY_STATE,
     ATTR_INFINITY_EXPIRATION,
 )
-from .coordinator import ZcsMowerDataUpdateCoordinator
+from .coordinator import ZcsDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 ENTITY_DESCRIPTIONS = (
@@ -66,7 +66,7 @@ class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsMowerDataUpdateCoordinator,
+        coordinator: ZcsDataUpdateCoordinator,
         entity_description: SensorEntityDescription,
         imei: str,
     ) -> None:
