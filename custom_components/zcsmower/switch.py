@@ -5,22 +5,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from homeassistant.core import HomeAssistant
-from homeassistant.const import (
-    ATTR_STATE,
-)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.switch import (
-    SwitchDeviceClass,
     SwitchEntity,
     SwitchEntityDescription,
 )
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import (
     Entity,
     EntityCategory,
 )
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.util import slugify
 
 from .const import (
     CONF_HIBERNATION_ENABLE,
