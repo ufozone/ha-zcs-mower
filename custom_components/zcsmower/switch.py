@@ -96,7 +96,7 @@ class ZcsConfigSwitchEntity(ZcsConfigEntity, SwitchEntity):
     @property
     def is_on(self) -> bool:
         """Return True if entity is on."""
-        return bool(self.coordinator.get_entry_option(self._config_key, False))
+        return bool(self.config_entry.options.get(self._config_key, False))
 
     async def async_turn_on(self, **kwargs: any) -> None:
         """Turn the entity on."""
