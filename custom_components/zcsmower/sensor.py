@@ -114,7 +114,7 @@ class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
         """Return the icon of the entity."""
         if self._entity_key is None:
             return self._get_attribute(ATTR_ICON)
-        
+
         # Fallback
         return self.entity_description.icon
 
