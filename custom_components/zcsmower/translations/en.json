@@ -350,12 +350,16 @@
           "imei": {
             "name": "IMEI"
           },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
+          "reason": {
+            "name": "Reason"
+          }
+        }
+      },
+      "connection": {
+        "name": "Connection State",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
           },
           "last_communication": {
             "name": "Last communication"
@@ -381,25 +385,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       },
@@ -408,25 +393,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       },
@@ -435,25 +401,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       },
@@ -462,25 +409,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       },
@@ -489,25 +417,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       },
@@ -516,25 +425,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       }
@@ -544,25 +434,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       }
@@ -573,25 +444,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           },
           "calibration_points": {
             "name": "Calibration points"
@@ -604,25 +456,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       }
@@ -633,25 +466,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       },
@@ -660,25 +474,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       }
@@ -719,25 +514,6 @@
           },
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       },
@@ -1039,25 +815,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Connection State",
-            "state": {
-              "true": "Connected",
-              "false": "Disconnected"
-            }
-          },
-          "last_communication": {
-            "name": "Last communication"
-          },
-          "last_seen": {
-            "name": "Last seen"
-          },
-          "last_pull": {
-            "name": "Last pull"
-          },
-          "next_pull": {
-            "name": "Next pull"
           }
         }
       }
