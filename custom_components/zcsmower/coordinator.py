@@ -52,6 +52,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
+    CONF_HIBERNATION_ENABLE,
     CONF_MOWERS,
     ATTR_IMEI,
     ATTR_DATA_THRESHOLD,
@@ -80,6 +81,7 @@ from .const import (
     UPDATE_INTERVAL_WORKING_DEFAULT,
     UPDATE_INTERVAL_STANDBY_DEFAULT,
     UPDATE_INTERVAL_IDLING_DEFAULT,
+    UPDATE_INTERVAL_HIBERNATION_DEFAULT,
     LOCATION_HISTORY_DAYS_DEFAULT,
     LOCATION_HISTORY_ITEMS_DEFAULT,
     MANUFACTURER_DEFAULT,
@@ -154,6 +156,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_LAST_TRACE_POSITION: None,
             }
 
+        self.hibernation_enable = self.config_entry.options.get(CONF_HIBERNATION_ENABLE, False)
         self.standby_time_start = datetime.strptime(
             config_entry.options.get(CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT),
             "%H:%M:%S"
@@ -332,6 +335,12 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug("Set update_interval: Working")
             suggested_update_interval = timedelta(
                 seconds=self.config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT)
+            )
+        # If hibernation is enabled, decrease update_interval
+        elif self.hibernation_enable:
+            LOGGER.debug("Set update_interval: Hibernation")
+            suggested_update_interval = timedelta(
+                seconds=UPDATE_INTERVAL_HIBERNATION_DEFAULT
             )
         # If current time is in standby time, decrease update_interval
         elif self.is_standby_time(now):
