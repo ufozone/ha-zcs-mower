@@ -29,11 +29,6 @@ from .const import (
     ATTR_SERIAL_NUMBER,
     ATTR_ERROR,
     ATTR_AVAILABLE,
-    ATTR_CONNECTED,
-    ATTR_LAST_COMM,
-    ATTR_LAST_SEEN,
-    ATTR_LAST_PULL,
-    ATTR_NEXT_PULL,
     ATTRIBUTION,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -157,11 +152,6 @@ class ZcsMowerEntity(CoordinatorEntity):
         _extra_state_attributes.update(
             {
                 ATTR_IMEI: self._imei,
-                ATTR_CONNECTED: self._get_attribute(ATTR_CONNECTED),
-                ATTR_LAST_COMM: self._get_attribute(ATTR_LAST_COMM),
-                ATTR_LAST_SEEN: self._get_attribute(ATTR_LAST_SEEN),
-                ATTR_LAST_PULL: self._get_attribute(ATTR_LAST_PULL),
-                ATTR_NEXT_PULL: self._get_next_pull(),
             }
         )
         return _extra_state_attributes
