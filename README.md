@@ -196,7 +196,7 @@ The following settings are available:
   Attributes:
 
   ```text
-  imei, connected, last_communication, last_seen, last_poll, next_poll
+  imei
   ```
 
 ### Binary Sensor
@@ -207,6 +207,14 @@ The following settings are available:
 
   ```text
   reason
+  ```
+
+* connection
+
+  Attributes:
+
+  ```text
+  last_communication, last_seen, last_poll, next_poll
   ```
 
 ### Button

@@ -17,6 +17,13 @@ from homeassistant.helpers.entity import (
     EntityCategory,
 )
 
+from .const import (
+    ATTR_CONNECTED,
+    ATTR_LAST_COMM,
+    ATTR_LAST_SEEN,
+    ATTR_LAST_PULL,
+    ATTR_NEXT_PULL,
+)
 from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
@@ -25,6 +32,12 @@ ENTITY_DESCRIPTIONS = (
         key="error",
         translation_key="error",
         device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    BinarySensorEntityDescription(
+        key="connection",
+        translation_key="connection",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
         entity_category=EntityCategory.DIAGNOSTIC,
     ),
 )
@@ -81,6 +94,13 @@ class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
                 self._additional_extra_state_attributes = {
                     "reason": self._get_localized_status(),
                 }
+        elif self._entity_key == "connection":
+            self._additional_extra_state_attributes = {
+                ATTR_LAST_COMM: self._get_attribute(ATTR_LAST_COMM),
+                ATTR_LAST_SEEN: self._get_attribute(ATTR_LAST_SEEN),
+                ATTR_LAST_PULL: self._get_attribute(ATTR_LAST_PULL),
+                ATTR_NEXT_PULL: self._get_next_pull(),
+            }
 
     @property
     def is_on(self) -> bool:
@@ -93,3 +113,5 @@ class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
                 "renewed",
                 "hot_temperature",
             )
+        elif self._entity_key == "connection":
+            return self._get_attribute(ATTR_CONNECTED)

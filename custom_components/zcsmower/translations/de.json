@@ -350,12 +350,16 @@
           "imei": {
             "name": "IMEI"
           },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
+          "reason": {
+            "name": "Grund"
+          }
+        }
+      },
+      "connection": {
+        "name": "Verbindungsstatus",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
           },
           "last_communication": {
             "name": "Letzte Kommunikation"
@@ -368,9 +372,6 @@
           },
           "next_pull": {
             "name": "Nächster Abruf"
-          },
-          "reason": {
-            "name": "Grund"
           }
         }
       }
@@ -381,25 +382,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       },
@@ -408,25 +390,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       },
@@ -435,25 +398,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       },
@@ -462,25 +406,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       },
@@ -489,25 +414,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       },
@@ -516,25 +422,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       }
@@ -544,25 +431,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       }
@@ -573,25 +441,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           },
           "calibration_points": {
             "name": "Kalibrierungspunkte"
@@ -604,25 +453,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       }
@@ -633,25 +463,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       },
@@ -660,25 +471,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       }
@@ -719,25 +511,6 @@
           },
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       },
@@ -1039,25 +812,6 @@
         "state_attributes": {
           "imei": {
             "name": "IMEI"
-          },
-          "connected": {
-            "name": "Verbindungsstatus",
-            "state": {
-              "true": "Verbunden",
-              "false": "Getrennt"
-            }
-          },
-          "last_communication": {
-            "name": "Letzte Kommunikation"
-          },
-          "last_seen": {
-            "name": "Letzte Sichtung"
-          },
-          "last_pull": {
-            "name": "Letzter Abruf"
-          },
-          "next_pull": {
-            "name": "Nächster Abruf"
           }
         }
       }
