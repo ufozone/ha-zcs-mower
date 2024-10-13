@@ -13,19 +13,19 @@ import json
 from .const import LOGGER
 
 
-class ZcsMowerApiError(Exception):
+class ZcsApiError(Exception):
     """Exception to indicate a general API error."""
 
 
-class ZcsMowerApiCommunicationError(ZcsMowerApiError):
+class ZcsApiCommunicationError(ZcsApiError):
     """Exception to indicate a communication error."""
 
 
-class ZcsMowerApiAuthenticationError(ZcsMowerApiError):
+class ZcsApiAuthenticationError(ZcsApiError):
     """Exception to indicate an authentication error."""
 
 
-class ZcsMowerApiClient:
+class ZcsApiClient:
     """Sample API Client."""
 
     # The API endpoint for POSTing (e.g. https://www.example.com/api)
@@ -113,7 +113,7 @@ class ZcsMowerApiClient:
                     json=data,
                 )
                 if not response.status == 200:
-                    raise ZcsMowerApiError(
+                    raise ZcsApiError(
                         "Failed to POST to API"
                     )
                 response.raise_for_status()
@@ -154,21 +154,21 @@ class ZcsMowerApiClient:
                             data["auth"]["sessionId"] = self._session_id
                             return await self.post(data, headers)
 
-                    raise ZcsMowerApiCommunicationError(self._response_error)
-        except ZcsMowerApiCommunicationError as exception:
-            raise ZcsMowerApiCommunicationError(
+                    raise ZcsApiCommunicationError(self._response_error)
+        except ZcsApiCommunicationError as exception:
+            raise ZcsApiCommunicationError(
                 f"Communication failed: {exception}"
             ) from exception
         except (TimeoutError, AssertionError) as exception:
-            raise ZcsMowerApiCommunicationError(
+            raise ZcsApiCommunicationError(
                 "Timeout error fetching information",
             ) from exception
         except (aiohttp.ClientError, socket.gaierror) as exception:
-            raise ZcsMowerApiCommunicationError(
+            raise ZcsApiCommunicationError(
                 "Error fetching information",
             ) from exception
         except Exception as exception:
-            raise ZcsMowerApiError(
+            raise ZcsApiError(
                 "Something really wrong happened!"
             ) from exception
 
@@ -256,8 +256,8 @@ class ZcsMowerApiClient:
                     self._session_id = self._response["auth"]["params"]["sessionId"]
                 return True
             return False
-        except ZcsMowerApiCommunicationError as exception:
-            raise ZcsMowerApiAuthenticationError(
+        except ZcsApiCommunicationError as exception:
+            raise ZcsApiAuthenticationError(
                 "Authorization failed. Please check the application configuration.",
             ) from exception
         except Exception as exception:
@@ -295,7 +295,7 @@ class ZcsMowerApiClient:
                 await self.auth()
             # If it is still empty, we cannot proceed
             if len(self._session_id) == 0:
-                raise ZcsMowerApiAuthenticationError(
+                raise ZcsApiAuthenticationError(
                     "Authorization failed. Please check the application configuration."
                 )
             data["auth"] = {

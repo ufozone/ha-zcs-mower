@@ -50,7 +50,7 @@ from .const import (
     ATTR_LOCATION_HISTORY,
     ATTR_CALIBRATION,
 )
-from .coordinator import ZcsMowerDataUpdateCoordinator
+from .coordinator import ZcsDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 ENTITY_DESCRIPTIONS = (
@@ -100,7 +100,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsMowerDataUpdateCoordinator,
+        coordinator: ZcsDataUpdateCoordinator,
         entity_description: ImageEntityDescription,
         imei: str,
     ) -> None:

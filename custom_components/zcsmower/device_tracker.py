@@ -23,7 +23,7 @@ from homeassistant.helpers.entity import (
 from .const import (
     CONF_MAP_MARKER_PATH,
 )
-from .coordinator import ZcsMowerDataUpdateCoordinator
+from .coordinator import ZcsDataUpdateCoordinator
 from .entity import ZcsMowerEntity
 
 ENTITY_DESCRIPTIONS = (
@@ -68,7 +68,7 @@ class ZcsMowerTrackerEntity(ZcsMowerEntity, TrackerEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsMowerDataUpdateCoordinator,
+        coordinator: ZcsDataUpdateCoordinator,
         entity_description: EntityDescription,
         imei: str,
     ) -> None:

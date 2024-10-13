@@ -9,9 +9,9 @@ from .const import (
     API_CLIENT_KEY_LENGTH,
 )
 from .api import (
-    ZcsMowerApiClient,
-    ZcsMowerApiAuthenticationError,
-    ZcsMowerApiCommunicationError,
+    ZcsApiClient,
+    ZcsApiAuthenticationError,
+    ZcsApiCommunicationError,
 )
 
 
@@ -25,7 +25,7 @@ async def generate_client_key() -> str:
 
 
 async def get_client_key(
-    client: ZcsMowerApiClient,
+    client: ZcsApiClient,
 ) -> str:
     """Generate, validate and return client key."""
     attempts = 0
@@ -34,7 +34,7 @@ async def get_client_key(
         try:
             client_key = await generate_client_key()
             result = await client.app_auth(client_key, API_APP_TOKEN, client_key)
-        except ZcsMowerApiAuthenticationError:
+        except ZcsApiAuthenticationError:
             result = False
 
         # Login with generated client key is successfull
@@ -42,13 +42,13 @@ async def get_client_key(
             break
         # Max attempts reached
         if attempts > 10:
-            raise ZcsMowerApiCommunicationError("Too many attempts to generate a client key have failed.")
+            raise ZcsApiCommunicationError("Too many attempts to generate a client key have failed.")
 
     return client_key
 
 
 async def publish_client_thing(
-    client: ZcsMowerApiClient,
+    client: ZcsApiClient,
     client_key: str,
     client_name: str,
 ) -> None:
@@ -79,7 +79,7 @@ async def publish_client_thing(
 
 
 async def validate_imei(
-    client: ZcsMowerApiClient,
+    client: ZcsApiClient,
     imei: str,
 ) -> dict:
     """Validate a lawn mower IMEI.
@@ -128,7 +128,7 @@ async def get_first_empty_robot_client(
 
 
 async def publish_robot_client(
-    client: ZcsMowerApiClient,
+    client: ZcsApiClient,
     imei: str,
     robot_client_key: str,
     client_key: str,
@@ -145,7 +145,7 @@ async def publish_robot_client(
 
 
 async def delete_robot_client(
-    client: ZcsMowerApiClient,
+    client: ZcsApiClient,
     imei: str,
     robot_client_key: str,
 ) -> None:
@@ -162,7 +162,7 @@ async def delete_robot_client(
 
 
 async def replace_robot_client(
-    client: ZcsMowerApiClient,
+    client: ZcsApiClient,
     mowers: dict,
     client_key_old: str,
     client_key_new: str,
