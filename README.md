@@ -158,9 +158,7 @@ You can fix this problem as follows:
 
 The following settings are available:
 
-* **Re-generate client key:** Regeneration is only recommended if authentication is no longer possible (see [Debugging](#debugging)) and the state of the lawn mowers can no longer be retrieved.
-
-    **:information_source: Please note** that regenerating will not bring any improvement if the monthly data volume has reached or the Connect expiration date has exceeded.
+* **Winter storage:** When all lawn mowers are on their winter break, they can no longer be controlled. Hibernation mode must be activated or deactivated manually. When hibernation mode is activated, all control entities are no longer available. In addition, the update interval is reduced to once a day.
 
 * **Start and end of daily standby time:** To save data volume at times when the lawn mowers are not working by default (e.g. at night), the start and end of the usual working hours can be specified. During this standby time, the status is updated more frequently than outside these times.
 
@@ -184,6 +182,10 @@ The following settings are available:
 
   * **Standard plan:** A good value is 1800 seconds.
   * **+Infinity plan:** A good value is 300 seconds.
+
+* **Re-generate client key:** Regeneration is only recommended if authentication is no longer possible (see [Debugging](#debugging)) and the state of the lawn mowers can no longer be retrieved.
+
+    **:information_source: Please note** that regenerating will not bring any improvement if the monthly data volume has reached or the Connect expiration date has exceeded.
 
 ## Available components
 
