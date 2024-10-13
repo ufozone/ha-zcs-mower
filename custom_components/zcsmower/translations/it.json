@@ -476,6 +476,24 @@
       }
     },
     "sensor": {
+      "connect_expiration": {
+        "name": "Connect data di scadenza",
+        "state_attributes": {
+          "infinity_state": {
+            "name": "+Infinity stato",
+            "state": {
+              "true": "Abilitato",
+              "false": "Disabili"
+            }
+          },
+          "infinity_expiration": {
+            "name": "+Infinity data di scadenza"
+          },
+          "imei": {
+            "name": "IMEI"
+          }
+        }
+      },
       "state": {
         "name": "State",
         "state": {
@@ -496,19 +514,6 @@
           "mapping_ended": "Mappatura completata"
         },
         "state_attributes": {
-          "connect_expiration": {
-            "name": "Connect data di scadenza"
-          },
-          "infinity_state": {
-            "name": "+Infinity stato",
-            "state": {
-              "true": "Abilitato",
-              "false": "Disabili"
-            }
-          },
-          "infinity_expiration": {
-            "name": "+Infinity data di scadenza"
-          },
           "imei": {
             "name": "IMEI"
           }
