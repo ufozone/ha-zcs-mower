@@ -302,10 +302,12 @@ _These entities are disabled by default. You have to activate it if you want to 
   | mapping_started | Mapping started |
   | mapping_ended   | Mapping ended   |
 
+* connect_expiration
+
   Attributes:
 
   ```text
-  connect_expiration, infinity_state, infinity_expiration
+  infinity_state, infinity_expiration
   ```
 
 ### Switch
