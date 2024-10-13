@@ -169,6 +169,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
         self._loop = asyncio.get_event_loop()
         self._scheduled_update_listeners: asyncio.TimerHandle | None = None
+        self._scheduled_update_entry: asyncio.TimerHandle | None = None
 
     def _convert_datetime_from_api(
         self,
@@ -229,6 +230,27 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         self._scheduled_update_listeners = self.hass.loop.call_later(
             1,
             lambda: self.async_update_listeners(),
+        )
+
+    async def async_set_entry_option(
+        self,
+        key: str,
+        value: any,
+    ) -> None:
+        """Set config entry option and update config entry after 3 second."""
+        _options = dict(self.config_entry.options)
+        _options.update(
+            {
+                key: value
+            }
+        )
+        if self._scheduled_update_entry:
+            self._scheduled_update_entry.cancel()
+        self._scheduled_update_entry = self.hass.loop.call_later(
+            3,
+            lambda: self.hass.config_entries.async_update_entry(
+                self.config_entry, options=_options
+            ),
         )
 
     def get_mower_attributes(

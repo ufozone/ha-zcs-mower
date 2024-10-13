@@ -807,6 +807,11 @@
         }
       }
     },
+    "switch": {
+      "hibernation": {
+        "name": "Winter break"
+      }
+    },
     "vacuum": {
       "mower": {
         "state": {
