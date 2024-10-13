@@ -15,7 +15,10 @@ from homeassistant.const import (
     ATTR_SW_VERSION,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import (
+    DeviceEntryType,
+    DeviceInfo,
+)
 from homeassistant.helpers.entity import (
     EntityCategory,
     EntityDescription,
@@ -30,12 +33,13 @@ from .const import (
     ATTR_ERROR,
     ATTR_AVAILABLE,
     ATTRIBUTION,
+    MANUFACTURER_DEFAULT,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
 
 
 class ZcsMowerEntity(CoordinatorEntity):
-    """ZCS Lawn Mower Robot class."""
+    """ZCS Lawn Mower Robot entity class."""
 
     _attr_attribution = ATTRIBUTION
     _attr_has_entity_name = True
@@ -133,7 +137,7 @@ class ZcsMowerEntity(CoordinatorEntity):
 
     @property
     def unique_id(self) -> str:
-        """Return the unique ID of the sensor."""
+        """Return the unique ID of the entity."""
         return self._unique_id
 
     @property
@@ -165,3 +169,44 @@ class ZcsMowerEntity(CoordinatorEntity):
         """Handle updated data from the coordinator."""
         self._update_handler()
         self.async_write_ha_state()
+
+
+class ZcsConfigEntity(CoordinatorEntity):
+    """ZCS Configuration entity class."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        config_entry: ConfigEntry,
+        coordinator: ZcsMowerDataUpdateCoordinator,
+        entity_type: str,
+        entity_description: EntityDescription,
+    ) -> None:
+        """Initialize."""
+        super().__init__(coordinator)
+
+        self.hass = hass
+        self.config_entry = config_entry
+        self.entity_description = entity_description
+
+        self._name = self.config_entry.title
+        self._entity_key = entity_description.key
+        self._unique_id = slugify(f"{self._entity_key}_{config_entry.entry_id}")
+
+        self.entity_id = f"{entity_type}.{self._unique_id}"
+        self._attr_device_info = DeviceInfo(
+            entry_type=DeviceEntryType.SERVICE,
+            identifiers={
+                (DOMAIN, self._unique_id)
+            },
+            name=config_entry.title,
+            manufacturer=MANUFACTURER_DEFAULT,
+        )
+        self._config_key = entity_description.config_key
+
+    @property
+    def unique_id(self) -> str:
+        """Return the unique ID of the entity."""
+        return self._unique_id

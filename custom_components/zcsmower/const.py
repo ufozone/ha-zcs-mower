@@ -23,6 +23,7 @@ PLATFORMS = [
     Platform.LAWN_MOWER,
     Platform.NUMBER,
     Platform.SENSOR,
+    Platform.SWITCH,
     Platform.VACUUM,
 ]
 
