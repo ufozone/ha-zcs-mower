@@ -16,7 +16,10 @@ from homeassistant.const import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.helpers.entity import EntityDescription
+from homeassistant.helpers.entity import (
+    EntityCategory,
+    EntityDescription,
+)
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -141,6 +144,11 @@ class ZcsMowerEntity(CoordinatorEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
+
+        # If hibernation is enabled, all NOT config and diagnostic entities are not available
+        if self.coordinator.hibernation_enable and self.entity_description.entity_category not in [EntityCategory.CONFIG, EntityCategory.DIAGNOSTIC]:
+            return False
+
         return self._get_attribute(ATTR_AVAILABLE, False)
 
     @property
