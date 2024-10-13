@@ -308,6 +308,11 @@ _These entities are disabled by default. You have to activate it if you want to 
   connect_expiration, infinity_state, infinity_expiration
   ```
 
+### Switch
+
+* hibernation
+  _This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry._
+
 ### Vacuum
 
 _This entity is disabled by default. You have to activate it if you want to use it._
