@@ -48,8 +48,9 @@ from .const import (
     CONF_MAP_GPS_TOP_LEFT,
     CONF_MAP_GPS_BOTTOM_RIGHT,
     CONF_MAP_ROTATION,
-    CONF_MAP_DRAW_LINES,
     CONF_MAP_POINTS,
+    CONF_MAP_DRAW_LINES,
+    CONF_HIBERNATION_ENABLE,
     CONF_MOWERS,
     ATTR_IMEI,
     ATTR_ROBOT_CLIENT_INDEX,
@@ -85,7 +86,7 @@ from .helpers import (
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 10
+    VERSION = 11
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     def __init__(self) -> None:
@@ -149,8 +150,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_MAP_GPS_BOTTOM_RIGHT: None,
                     CONF_MAP_ROTATION: 0.0,
                     CONF_MAP_HISTORY_ENABLE: True,
-                    CONF_MAP_DRAW_LINES: True,
                     CONF_MAP_POINTS: int(MAP_POINTS_DEFAULT),
+                    CONF_MAP_DRAW_LINES: True,
+                    CONF_HIBERNATION_ENABLE: False,
                     CONF_MOWERS: {},
                 }
                 LOGGER.debug("Step user -> saved options:")
@@ -938,6 +940,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 # Input is valid, set data
                 self._options.update(
                     {
+                        CONF_HIBERNATION_ENABLE: user_input.get(
+                            CONF_HIBERNATION_ENABLE, False
+                        ),
                         CONF_STANDBY_TIME_START: user_input.get(
                             CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT
                         ),
@@ -996,10 +1001,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             step_id="settings",
             data_schema=vol.Schema(
                 {
-                    # Re-generate client key
+                    # Hibernation state
                     vol.Optional(
-                        "generate_client_key",
-                        default=(user_input or {}).get("generate_client_key", False),
+                        CONF_HIBERNATION_ENABLE,
+                        default=(user_input or self._options).get(
+                            CONF_HIBERNATION_ENABLE, False
+                        ),
                     ): selector.BooleanSelector(),
                     # Standby time starts
                     vol.Optional(
@@ -1127,6 +1134,11 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
+                    # Re-generate client key
+                    vol.Optional(
+                        "generate_client_key",
+                        default=(user_input or {}).get("generate_client_key", False),
+                    ): selector.BooleanSelector(),
                 }
             ),
             errors=errors,

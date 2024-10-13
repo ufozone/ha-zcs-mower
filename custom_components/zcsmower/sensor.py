@@ -12,7 +12,10 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorEntityDescription,
 )
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import (
+    Entity,
+    EntityCategory,
+)
 import homeassistant.util.dt as dt_util
 
 from .const import (
@@ -28,6 +31,7 @@ ENTITY_DESCRIPTIONS = (
         key=None,
         device_class=SensorDeviceClass.ENUM,
         translation_key="state",
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
 )
 

@@ -119,7 +119,7 @@
         "title": "Configurare il garage",
         "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
         "data": {
-          "generate_client_key": "Generare nuovamente una nuova chiave client (consigliato solo se la connessione non è più possibile).",
+          "hibernation_enable": "Tutti i tosaerba sono in rimessa invernale? (L'intervallo di aggiornamento è ridotto e gli elementi di controllo sono disattivati)",
           "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
           "standby_time_stop": "A che ora termina il periodo di standby giornaliero?",
           "update_interval_working": "Ogni quanti secondi devono essere aggiornati i dati quando uno o più tosaerba sono in funzione?",
@@ -127,7 +127,8 @@
           "update_interval_idling": "Ogni quanti secondi devono essere aggiornati i dati quando tutti i tosaerba sono inattivi?",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
           "wake_up_interval_default": "Default: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
-          "wake_up_interval_infinity": "+Infinity: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?"
+          "wake_up_interval_infinity": "+Infinity: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
+          "generate_client_key": "Generare nuovamente una nuova chiave client (consigliato solo se la connessione non è più possibile)."
         }
       }
     }

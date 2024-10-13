@@ -16,6 +16,7 @@ from homeassistant.components.device_tracker import (
 )
 from homeassistant.helpers.entity import (
     Entity,
+    EntityCategory,
     EntityDescription,
 )
 
@@ -30,6 +31,7 @@ ENTITY_DESCRIPTIONS = (
         key=None,
         icon="mdi:robot-mower",
         translation_key="location",
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
 )
 

@@ -119,7 +119,7 @@
         "title": "Konfigurieren der Garage",
         "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
         "data": {
-          "generate_client_key": "Generiere einen neuen Client-Schlüssel (nur empfohlen, wenn keine Verbindung mehr möglich ist).",
+          "hibernation_enable": "Befinden sich alle Rasenmäher in der Winterpause? (Aktualisierungsintervall wird reduziert und Steuerungselemente deaktiviert)",
           "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",
           "standby_time_stop": "Um wie viel Uhr endet die tägliche Bereitschaftszeit?",
           "update_interval_working": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn ein oder mehrere Rasenmäher in Betrieb sind?",
@@ -127,7 +127,8 @@
           "update_interval_idling": "Alle wie viele Sekunden sollen die Daten aktualisiert werden, wenn alle Rasenmäher im Leerlauf sind?",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
           "wake_up_interval_default": "Standard: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
-          "wake_up_interval_infinity": "+Infinity: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?"
+          "wake_up_interval_infinity": "+Infinity: Nach wie vielen Sekunden soll der Rasenmäher erneut aufwachen?",
+          "generate_client_key": "Generiere einen neuen Client-Schlüssel (nur empfohlen, wenn keine Verbindung mehr möglich ist)."
         }
       }
     }

@@ -119,15 +119,16 @@
         "title": "Configure garage",
         "description": "Make general settings for your garage. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
         "data": {
-          "generate_client_key": "Re-generate a new client key (only recommended if a connection is no longer possible).",
+          "hibernation_enable": "Are all the lawn mowers in winter storage? (Update interval is reduced and control elements are deactivated)",
           "standby_time_start": "At what time does the daily standby time start?",
           "standby_time_stop": "At what time does the daily standby time end?",
           "update_interval_working": "Every how many seconds should the data be updated when one or more lawn mowers are working?",
           "update_interval_standby": "Every how many seconds should the data be updated when all lawn mowers are on standby time?",
           "update_interval_idling": "Every how many seconds should the data be updated when all lawn mowers are idle?",
           "trace_position_enable": "Enable position tracing?",
-          "wake_up_interval_default": "Default: Every how many seconds should the lawn mower wake up?",
-          "wake_up_interval_infinity": "+Infinity: Every how many seconds should the lawn mower wake up?"
+          "wake_up_interval_default": "Default: Every how many seconds should the lawn mower(s) wake up?",
+          "wake_up_interval_infinity": "+Infinity: Every how many seconds should the lawn mower(s) wake up?",
+          "generate_client_key": "Re-generate a new client key (only recommended if a connection is no longer possible)."
         }
       }
     }

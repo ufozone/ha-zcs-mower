@@ -35,6 +35,7 @@ from .const import (
     CONF_MAP_ROTATION,
     CONF_MAP_POINTS,
     CONF_MAP_DRAW_LINES,
+    CONF_HIBERNATION_ENABLE,
     CONF_MOWERS,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
@@ -158,6 +159,21 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             data={},
             options=_options,
             version=10,
+        )
+
+    if config_entry.version < 11:
+        _options = dict(config_entry.options)
+        _options.update(
+            {
+                CONF_HIBERNATION_ENABLE: False,
+            }
+        )
+        hass.config_entries.async_update_entry(
+            config_entry,
+            title=str(config_entry.title),
+            data={},
+            options=_options,
+            version=11,
         )
 
     LOGGER.info("Migration to version %s successful", config_entry.version)
