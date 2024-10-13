@@ -144,7 +144,6 @@ class ZcsMowerEntity(CoordinatorEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-
         # If hibernation is enabled, all NOT config and diagnostic entities are not available
         if self.coordinator.hibernation_enable and self.entity_description.entity_category not in [EntityCategory.CONFIG, EntityCategory.DIAGNOSTIC]:
             return False
