@@ -1,6 +1,11 @@
 """ZCS Lawn Mower Robot sensor platform."""
 from __future__ import annotations
 
+from datetime import (
+    date,
+    datetime,
+)
+
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_STATE,
@@ -16,6 +21,7 @@ from homeassistant.helpers.entity import (
     Entity,
     EntityCategory,
 )
+from homeassistant.helpers.typing import StateType
 import homeassistant.util.dt as dt_util
 
 from .const import (
@@ -31,6 +37,13 @@ ENTITY_DESCRIPTIONS = (
         key=None,
         device_class=SensorDeviceClass.ENUM,
         translation_key="state",
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    SensorEntityDescription(
+        key=ATTR_CONNECT_EXPIRATION,
+        icon="mdi:ev-station",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        translation_key=ATTR_CONNECT_EXPIRATION,
         entity_category=EntityCategory.DIAGNOSTIC,
     ),
 )
@@ -82,30 +95,33 @@ class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
 
     def _update_extra_state_attributes(self) -> None:
         """Update extra attributes."""
-        # Data expiration date
-        if (_connect_expiration := self._get_attribute(ATTR_CONNECT_EXPIRATION)) is not None:
+        if self._entity_key == ATTR_CONNECT_EXPIRATION:
+            # +Infinity state
             self._additional_extra_state_attributes.update({
-                ATTR_CONNECT_EXPIRATION: _connect_expiration,
+                ATTR_INFINITY_STATE: (
+                    self._get_attribute(ATTR_INFINITY_STATE) in ("active", "pending")
+                    and self._get_attribute(ATTR_INFINITY_EXPIRATION) > dt_util.now()
+                ),
             })
-        # +Infinity state
-        self._additional_extra_state_attributes.update({
-            ATTR_INFINITY_STATE: (
-                self._get_attribute(ATTR_INFINITY_STATE) in ("active", "pending")
-                and self._get_attribute(ATTR_INFINITY_EXPIRATION) > dt_util.now()
-            ),
-        })
-        # +Infinity expiration date
-        if (_infinity_expiration := self._get_attribute(ATTR_INFINITY_EXPIRATION)) is not None:
-            self._additional_extra_state_attributes.update({
-                ATTR_INFINITY_EXPIRATION: _infinity_expiration,
-            })
+            # +Infinity expiration date
+            if (_infinity_expiration := self._get_attribute(ATTR_INFINITY_EXPIRATION)) is not None:
+                self._additional_extra_state_attributes.update({
+                    ATTR_INFINITY_EXPIRATION: _infinity_expiration,
+                })
 
     @property
     def icon(self) -> str:
         """Return the icon of the entity."""
-        return self._get_attribute(ATTR_ICON)
+        if self._entity_key is None:
+            return self._get_attribute(ATTR_ICON)
+        
+        # Fallback
+        return self.entity_description.icon
 
     @property
-    def native_value(self) -> str:
+    def native_value(self) -> StateType | date | datetime:
         """Return the native value of the sensor."""
-        return self._get_attribute(ATTR_STATE)
+        if self._entity_key is None:
+            return self._get_attribute(ATTR_STATE)
+        elif self._entity_key == ATTR_CONNECT_EXPIRATION:
+            return self._get_attribute(ATTR_CONNECT_EXPIRATION)
