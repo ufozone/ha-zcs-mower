@@ -50,10 +50,10 @@ from .const import (
     ATTR_LOCATION_HISTORY,
     ATTR_CALIBRATION,
 )
-from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsMowerEntity
+from .coordinator import ZcsMowerDataUpdateCoordinator
+from .entity import ZcsMowerRobotEntity
 
-ENTITY_DESCRIPTIONS = (
+ROBOT_ENTITY_DESCRIPTIONS = (
     ImageEntityDescription(
         key="map",
         icon="mdi:map",
@@ -76,7 +76,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsMowerImageEntity(
+            ZcsMowerRobotImageEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -84,13 +84,13 @@ async def async_setup_entry(
                 imei=imei,
             )
             for imei in coordinator.mowers
-            for entity_description in ENTITY_DESCRIPTIONS
+            for entity_description in ROBOT_ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
 
 
-class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
+class ZcsMowerRobotImageEntity(ZcsMowerRobotEntity, ImageEntity):
     """Representation of a ZCS Lawn Mower Robot image."""
 
     _attr_entity_registry_enabled_default = False
@@ -100,7 +100,7 @@ class ZcsMowerImageEntity(ZcsMowerEntity, ImageEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsDataUpdateCoordinator,
+        coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: ImageEntityDescription,
         imei: str,
     ) -> None:

@@ -67,10 +67,10 @@ from .const import (
     ROBOT_WAKE_UP_INTERVAL_INFINITY,
 )
 from .api import (
-    ZcsApiClient,
-    ZcsApiAuthenticationError,
-    ZcsApiCommunicationError,
-    ZcsApiError,
+    ZcsMowerApiClient,
+    ZcsMowerApiAuthenticationError,
+    ZcsMowerApiCommunicationError,
+    ZcsMowerApiError,
 )
 from .helpers import (
     delete_robot_client,
@@ -83,7 +83,7 @@ from .helpers import (
 )
 
 
-class ZcsConfigFlow(ConfigFlow, domain=DOMAIN):
+class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
     VERSION = 11
@@ -108,7 +108,7 @@ class ZcsConfigFlow(ConfigFlow, domain=DOMAIN):
                 client_name = "Home Assistant"
 
             try:
-                client = ZcsApiClient(
+                client = ZcsMowerApiClient(
                     session=async_create_clientsession(self.hass),
                     options={
                         "endpoint": API_BASE_URI,
@@ -120,13 +120,13 @@ class ZcsConfigFlow(ConfigFlow, domain=DOMAIN):
                     client_key=client_key,
                     client_name=client_name,
                 )
-            except ZcsApiAuthenticationError as exception:
+            except ZcsMowerApiAuthenticationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "auth_failed"
-            except ZcsApiCommunicationError as exception:
+            except ZcsMowerApiCommunicationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "communication_failed"
-            except (Exception, ZcsApiError) as exception:
+            except (Exception, ZcsMowerApiError) as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection_failed"
 
@@ -327,7 +327,7 @@ class ZcsConfigFlow(ConfigFlow, domain=DOMAIN):
             # Validate lawn mower
             try:
                 client_key = self._options[CONF_CLIENT_KEY]
-                client = ZcsApiClient(
+                client = ZcsMowerApiClient(
                     session=async_get_clientsession(self.hass),
                     options={
                         "endpoint": API_BASE_URI,
@@ -353,10 +353,10 @@ class ZcsConfigFlow(ConfigFlow, domain=DOMAIN):
             except IndexError as exception:
                 LOGGER.info(exception)
                 errors["base"] = "mower_too_many_clients"
-            except ZcsApiCommunicationError as exception:
+            except ZcsMowerApiCommunicationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "communication_failed"
-            except (Exception, ZcsApiError) as exception:
+            except (Exception, ZcsMowerApiError) as exception:
                 LOGGER.exception(exception)
                 errors["base"] = "connection_failed"
 
@@ -421,12 +421,12 @@ class ZcsConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry) -> ZcsOptionsFlowHandler:
+    def async_get_options_flow(config_entry) -> ZcsMowerOptionsFlowHandler:
         """Get the options flow for this handler."""
-        return ZcsOptionsFlowHandler(config_entry)
+        return ZcsMowerOptionsFlowHandler(config_entry)
 
 
-class ZcsOptionsFlowHandler(OptionsFlowWithConfigEntry):
+class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     """Handles options flow for the component."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
@@ -462,7 +462,7 @@ class ZcsOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 # Validate lawn mower
                 try:
                     client_key = self._options[CONF_CLIENT_KEY]
-                    client = ZcsApiClient(
+                    client = ZcsMowerApiClient(
                         session=async_get_clientsession(self.hass),
                         options={
                             "endpoint": API_BASE_URI,
@@ -488,10 +488,10 @@ class ZcsOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 except IndexError as exception:
                     LOGGER.info(exception)
                     errors["base"] = "mower_too_many_clients"
-                except ZcsApiCommunicationError as exception:
+                except ZcsMowerApiCommunicationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "communication_failed"
-                except (Exception, ZcsApiError) as exception:
+                except (Exception, ZcsMowerApiError) as exception:
                     LOGGER.exception(exception)
                     errors["base"] = "connection_failed"
 
@@ -677,7 +677,7 @@ class ZcsOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 if robot_client_key:
                     try:
                         client_key = self._options[CONF_CLIENT_KEY]
-                        client = ZcsApiClient(
+                        client = ZcsMowerApiClient(
                             session=async_get_clientsession(self.hass),
                             options={
                                 "endpoint": API_BASE_URI,
@@ -912,7 +912,7 @@ class ZcsOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     client_name = "Home Assistant"
 
                 try:
-                    client = ZcsApiClient(
+                    client = ZcsMowerApiClient(
                         session=async_create_clientsession(self.hass),
                         options={
                             "endpoint": API_BASE_URI,
@@ -926,13 +926,13 @@ class ZcsOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         client_key=client_key_new,
                         client_name=client_name,
                     )
-                except ZcsApiAuthenticationError as exception:
+                except ZcsMowerApiAuthenticationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "auth_failed"
-                except ZcsApiCommunicationError as exception:
+                except ZcsMowerApiCommunicationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "communication_failed"
-                except (Exception, ZcsApiError) as exception:
+                except (Exception, ZcsMowerApiError) as exception:
                     LOGGER.exception(exception)
                     errors["base"] = "connection_failed"
 

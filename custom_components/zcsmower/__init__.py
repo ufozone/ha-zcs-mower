@@ -49,8 +49,8 @@ from .const import (
     ROBOT_WAKE_UP_INTERVAL_INFINITY,
 )
 from .services import async_setup_services
-from .coordinator import ZcsDataUpdateCoordinator
-from .api import ZcsApiAuthenticationError
+from .coordinator import ZcsMowerDataUpdateCoordinator
+from .api import ZcsMowerApiAuthenticationError
 
 CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
@@ -64,13 +64,13 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
     try:
-        coordinator = ZcsDataUpdateCoordinator(
+        coordinator = ZcsMowerDataUpdateCoordinator(
             hass=hass,
             config_entry=config_entry,
         )
         await coordinator.initialize()
         await coordinator.async_config_entry_first_refresh()
-    except ZcsApiAuthenticationError as err:
+    except ZcsMowerApiAuthenticationError as err:
         raise ConfigEntryAuthFailed from err
     except Exception as err:
         raise ConfigEntryNotReady from err

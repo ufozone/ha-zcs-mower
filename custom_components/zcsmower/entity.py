@@ -35,10 +35,10 @@ from .const import (
     ATTRIBUTION,
     MANUFACTURER_DEFAULT,
 )
-from .coordinator import ZcsDataUpdateCoordinator
+from .coordinator import ZcsMowerDataUpdateCoordinator
 
 
-class ZcsMowerEntity(CoordinatorEntity):
+class ZcsMowerRobotEntity(CoordinatorEntity):
     """ZCS Lawn Mower Robot entity class."""
 
     _attr_attribution = ATTRIBUTION
@@ -48,7 +48,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsDataUpdateCoordinator,
+        coordinator: ZcsMowerDataUpdateCoordinator,
         entity_type: str,
         entity_description: EntityDescription,
         imei: str,
@@ -171,7 +171,7 @@ class ZcsMowerEntity(CoordinatorEntity):
         self.async_write_ha_state()
 
 
-class ZcsConfigEntity(CoordinatorEntity):
+class ZcsMowerConfigEntity(CoordinatorEntity):
     """ZCS Configuration entity class."""
 
     _attr_has_entity_name = True
@@ -180,7 +180,7 @@ class ZcsConfigEntity(CoordinatorEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsDataUpdateCoordinator,
+        coordinator: ZcsMowerDataUpdateCoordinator,
         entity_type: str,
         entity_description: EntityDescription,
     ) -> None:

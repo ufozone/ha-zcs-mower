@@ -29,10 +29,10 @@ from .const import (
     ATTR_INFINITY_STATE,
     ATTR_INFINITY_EXPIRATION,
 )
-from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsMowerEntity
+from .coordinator import ZcsMowerDataUpdateCoordinator
+from .entity import ZcsMowerRobotEntity
 
-ENTITY_DESCRIPTIONS = (
+ROBOT_ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
         key=None,
         device_class=SensorDeviceClass.ENUM,
@@ -58,7 +58,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsMowerSensorEntity(
+            ZcsMowerRobotSensorEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -66,20 +66,20 @@ async def async_setup_entry(
                 imei=imei,
             )
             for imei in coordinator.mowers
-            for entity_description in ENTITY_DESCRIPTIONS
+            for entity_description in ROBOT_ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
 
 
-class ZcsMowerSensorEntity(ZcsMowerEntity, SensorEntity):
+class ZcsMowerRobotSensorEntity(ZcsMowerRobotEntity, SensorEntity):
     """Representation of a ZCS Lawn Mower Robot sensor."""
 
     def __init__(
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsDataUpdateCoordinator,
+        coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: SensorEntityDescription,
         imei: str,
     ) -> None:

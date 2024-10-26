@@ -201,15 +201,7 @@ The following settings are available:
 
 ### Binary Sensor
 
-* error
-
-  Attributes:
-
-  ```text
-  reason
-  ```
-
-* connection
+* binary_sensor.mower_*{imei}*_connection
 
   Attributes:
 
@@ -217,23 +209,31 @@ The following settings are available:
   last_communication, last_seen, last_poll, next_poll
   ```
 
+* binary_sensor.mower_*{imei}*_error
+
+  Attributes:
+
+  ```text
+  reason
+  ```
+
 ### Button
 
-* update_now
+* button.mower_*{imei}*_update_now
 
-* wake_up
+* button.mower_*{imei}*_wake_up
 
-* work_now
+* button.mower_*{imei}*_work_now
 
-* charge_now
+* button.mower_*{imei}*_charge_now
 
-* border_cut
+* button.mower_*{imei}*_border_cut
 
-* trace_position
+* button.mower_*{imei}*_trace_position
 
 ### Device Tracker
 
-* location
+* device_tracker.mower_*{imei}*
 
   Attributes:
 
@@ -243,7 +243,7 @@ The following settings are available:
 
 ### Image
 
-* map
+* image.mower_*{imei}*_map
 
   Attributes:
 
@@ -253,7 +253,7 @@ The following settings are available:
 
 ### Lawn Mower
 
-* mower
+* lawn_mower.mower_*{imei}*
 
   States:
 
@@ -274,13 +274,13 @@ The following settings are available:
 
 _These entities are disabled by default. You have to activate it if you want to use it._
 
-* work_for
+* number.mower_*{imei}*_work_for
 
-* charge_for
+* number.mower_*{imei}*_charge_for
 
 ### Sensor
 
-* state
+* sensor.mower_*{imei}*
 
   States:
 
@@ -302,7 +302,7 @@ _These entities are disabled by default. You have to activate it if you want to 
   | mapping_started | Mapping started |
   | mapping_ended   | Mapping ended   |
 
-* connect_expiration
+* sensor.mower_*{imei}*_connect_expiration
 
   Attributes:
 
@@ -312,14 +312,17 @@ _These entities are disabled by default. You have to activate it if you want to 
 
 ### Switch
 
-* hibernation
+* switch.mower_hibernation_*{config_id}*
+  _This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry._
+
+* switch.mower_trace_position_*{config_id}*
   _This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry._
 
 ### Vacuum
 
 _This entity is disabled by default. You have to activate it if you want to use it._
 
-* mower
+* vacuum.mower_*{imei}*
 
   States:
 
