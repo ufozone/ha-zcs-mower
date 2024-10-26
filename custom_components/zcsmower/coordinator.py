@@ -36,9 +36,9 @@ from homeassistant.exceptions import ConfigEntryAuthFailed
 import homeassistant.util.dt as dt_util
 
 from .api import (
-    ZcsApiClient,
-    ZcsApiAuthenticationError,
-    ZcsApiError,
+    ZcsMowerApiClient,
+    ZcsMowerApiAuthenticationError,
+    ZcsMowerApiError,
 )
 from .const import (
     LOGGER,
@@ -116,7 +116,7 @@ class ZcsDataUpdateCoordinator(DataUpdateCoordinator):
             ),
         )
         self.config_entry = config_entry
-        self.client = ZcsApiClient(
+        self.client = ZcsMowerApiClient(
             session=async_get_clientsession(hass),
             options={
                 "endpoint": API_BASE_URI,
@@ -218,9 +218,9 @@ class ZcsDataUpdateCoordinator(DataUpdateCoordinator):
             self.set_update_interval()
 
             return self.data
-        except ZcsApiAuthenticationError as exception:
+        except ZcsMowerApiAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
-        except ZcsApiError as exception:
+        except ZcsMowerApiError as exception:
             raise UpdateFailed(exception) from exception
 
     async def _async_update_listeners(self) -> None:

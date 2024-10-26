@@ -50,7 +50,7 @@ from .const import (
 )
 from .services import async_setup_services
 from .coordinator import ZcsDataUpdateCoordinator
-from .api import ZcsApiAuthenticationError
+from .api import ZcsMowerApiAuthenticationError
 
 CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
@@ -70,7 +70,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         )
         await coordinator.initialize()
         await coordinator.async_config_entry_first_refresh()
-    except ZcsApiAuthenticationError as err:
+    except ZcsMowerApiAuthenticationError as err:
         raise ConfigEntryAuthFailed from err
     except Exception as err:
         raise ConfigEntryNotReady from err
