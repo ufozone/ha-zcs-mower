@@ -20,24 +20,24 @@ from .const import (
     CONF_HIBERNATION_ENABLE,
 )
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsConfigEntity
+from .entity import ZcsMowerConfigEntity
 
 
 @dataclass(frozen=True, kw_only=True)
-class ZcsConfigSwitchEntityDescription(SwitchEntityDescription):
+class ZcsMowerConfigSwitchEntityDescription(SwitchEntityDescription):
     """Describes ZCS Lawn Mower Configuration switch entity."""
 
     config_key: str
 
 
 CONFIG_ENTITY_DESCRIPTIONS = (
-    ZcsConfigSwitchEntityDescription(
+    ZcsMowerConfigSwitchEntityDescription(
         key="mower_trace_position",
         translation_key="trace_position",
         entity_category=EntityCategory.CONFIG,
         config_key=CONF_TRACE_POSITION_ENABLE,
     ),
-    ZcsConfigSwitchEntityDescription(
+    ZcsMowerConfigSwitchEntityDescription(
         key="mower_hibernation",
         translation_key="hibernation",
         entity_category=EntityCategory.CONFIG,
@@ -55,7 +55,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsConfigSwitchEntity(
+            ZcsMowerConfigSwitchEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -67,7 +67,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsConfigSwitchEntity(ZcsConfigEntity, SwitchEntity):
+class ZcsMowerConfigSwitchEntity(ZcsMowerConfigEntity, SwitchEntity):
     """Representation of a ZCS Lawn Mower Configuration switch."""
 
     _attr_has_entity_name = True

@@ -83,7 +83,7 @@ from .helpers import (
 )
 
 
-class ZcsConfigFlow(ConfigFlow, domain=DOMAIN):
+class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
     VERSION = 11

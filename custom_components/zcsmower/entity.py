@@ -171,7 +171,7 @@ class ZcsRobotEntity(CoordinatorEntity):
         self.async_write_ha_state()
 
 
-class ZcsConfigEntity(CoordinatorEntity):
+class ZcsMowerConfigEntity(CoordinatorEntity):
     """ZCS Configuration entity class."""
 
     _attr_has_entity_name = True
