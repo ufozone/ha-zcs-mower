@@ -161,7 +161,7 @@ class ZcsMowerConfigNumberEntity(ZcsMowerConfigEntity, NumberEntity):
         hass: HomeAssistant,
         config_entry: ConfigEntry,
         coordinator: ZcsMowerDataUpdateCoordinator,
-        entity_description: SwitchEntityDescription,
+        entity_description: NumberEntityDescription,
     ) -> None:
         """Initialize the switch class."""
         super().__init__(
