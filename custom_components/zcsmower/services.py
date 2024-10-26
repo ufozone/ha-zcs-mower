@@ -3,6 +3,7 @@
 from homeassistant.core import (
     HomeAssistant,
     ServiceCall,
+    callback,
 )
 from homeassistant.const import (
     CONF_DEVICE_ID,
@@ -46,7 +47,7 @@ from .const import (
     SERVICE_CUSTOM_COMMAND_SCHEMA,
 )
 
-
+@callback
 async def async_setup_services(hass: HomeAssistant) -> None:
     """Set up ZCS Lawn Mower Robot services."""
     if hass.services.async_services().get(DOMAIN):
@@ -182,6 +183,24 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         service_func=async_handle_service,
         schema=SERVICE_CUSTOM_COMMAND_SCHEMA
     )
+
+@callback
+def async_unload_services(hass: HomeAssistant) -> None:
+    """Unload ZCS Lawn Mower Robot services."""
+    hass.services.async_remove(DOMAIN, SERVICE_UPDATE_NOW)
+    hass.services.async_remove(DOMAIN, SERVICE_WAKE_UP)
+    hass.services.async_remove(DOMAIN, SERVICE_SET_PROFILE)
+    hass.services.async_remove(DOMAIN, SERVICE_WORK_NOW)
+    hass.services.async_remove(DOMAIN, SERVICE_WORK_FOR)
+    hass.services.async_remove(DOMAIN, SERVICE_WORK_UNTIL)
+    hass.services.async_remove(DOMAIN, SERVICE_BORDER_CUT)
+    hass.services.async_remove(DOMAIN, SERVICE_CHARGE_NOW)
+    hass.services.async_remove(DOMAIN, SERVICE_CHARGE_FOR)
+    hass.services.async_remove(DOMAIN, SERVICE_CHARGE_UNTIL)
+    hass.services.async_remove(DOMAIN, SERVICE_TRACE_POSITION)
+    hass.services.async_remove(DOMAIN, SERVICE_KEEP_OUT)
+    hass.services.async_remove(DOMAIN, SERVICE_CUSTOM_COMMAND)
+
 
 async def _async_update_now(
     hass: HomeAssistant,

@@ -56,15 +56,11 @@ from .const import (
     ATTR_ROBOT_CLIENT_INDEX,
     API_BASE_URI,
     API_APP_TOKEN,
+    CONFIGURATION_DEFAULTS,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
-    UPDATE_INTERVAL_WORKING_DEFAULT,
-    UPDATE_INTERVAL_STANDBY_DEFAULT,
-    UPDATE_INTERVAL_IDLING_DEFAULT,
     LOCATION_HISTORY_ITEMS_DEFAULT,
     MAP_POINTS_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_INFINITY,
 )
 from .api import (
     ZcsMowerApiClient,
@@ -137,12 +133,12 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_CLIENT_KEY: client_key,
                     CONF_STANDBY_TIME_START: STANDBY_TIME_START_DEFAULT,
                     CONF_STANDBY_TIME_STOP: STANDBY_TIME_STOP_DEFAULT,
-                    CONF_UPDATE_INTERVAL_WORKING: int(UPDATE_INTERVAL_WORKING_DEFAULT),
-                    CONF_UPDATE_INTERVAL_STANDBY: int(UPDATE_INTERVAL_STANDBY_DEFAULT),
-                    CONF_UPDATE_INTERVAL_IDLING: int(UPDATE_INTERVAL_IDLING_DEFAULT),
+                    CONF_UPDATE_INTERVAL_WORKING: _get_config(CONF_UPDATE_INTERVAL_WORKING, "default"),
+                    CONF_UPDATE_INTERVAL_STANDBY: _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default"),
+                    CONF_UPDATE_INTERVAL_IDLING: _get_config(CONF_UPDATE_INTERVAL_IDLING, "default"),
                     CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
-                    CONF_WAKE_UP_INTERVAL_DEFAULT: int(ROBOT_WAKE_UP_INTERVAL_DEFAULT),
-                    CONF_WAKE_UP_INTERVAL_INFINITY: int(ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                    CONF_WAKE_UP_INTERVAL_DEFAULT: _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default"),
+                    CONF_WAKE_UP_INTERVAL_INFINITY: _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default"),
                     CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
@@ -951,25 +947,26 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                         CONF_UPDATE_INTERVAL_WORKING: user_input.get(
                             CONF_UPDATE_INTERVAL_WORKING,
-                            UPDATE_INTERVAL_WORKING_DEFAULT,
+                            _get_config(CONF_UPDATE_INTERVAL_WORKING, "default")
                         ),
                         CONF_UPDATE_INTERVAL_STANDBY: user_input.get(
                             CONF_UPDATE_INTERVAL_STANDBY,
-                            UPDATE_INTERVAL_STANDBY_DEFAULT,
+                            _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default")
                         ),
                         CONF_UPDATE_INTERVAL_IDLING: user_input.get(
-                            CONF_UPDATE_INTERVAL_IDLING, UPDATE_INTERVAL_IDLING_DEFAULT
+                            CONF_UPDATE_INTERVAL_IDLING,
+                            _get_config(CONF_UPDATE_INTERVAL_IDLING, "default")
                         ),
                         CONF_TRACE_POSITION_ENABLE: user_input.get(
                             CONF_TRACE_POSITION_ENABLE, False
                         ),
                         CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(
                             CONF_WAKE_UP_INTERVAL_DEFAULT,
-                            ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+                            _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default")
                         ),
                         CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(
                             CONF_WAKE_UP_INTERVAL_INFINITY,
-                            ROBOT_WAKE_UP_INTERVAL_INFINITY,
+                            _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default")
                         ),
                     }
                 )
@@ -1035,57 +1032,57 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     # Update interval, if one or more lawn mowers working
                     vol.Optional(
                         CONF_UPDATE_INTERVAL_WORKING,
-                        default=UPDATE_INTERVAL_WORKING_DEFAULT,
+                        default=_get_config(CONF_UPDATE_INTERVAL_WORKING, "default"),
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_UPDATE_INTERVAL_WORKING,
-                                UPDATE_INTERVAL_WORKING_DEFAULT,
+                                _get_config(CONF_UPDATE_INTERVAL_WORKING, "default")
                             ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=30,
-                            max=300,
-                            step=30,
+                            min=_get_config(CONF_UPDATE_INTERVAL_WORKING, "min", 1),
+                            max=_get_config(CONF_UPDATE_INTERVAL_WORKING, "max", 100000),
+                            step=_get_config(CONF_UPDATE_INTERVAL_WORKING, "step", 1),
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
                     # Update interval, if all lawn mowers on standby
                     vol.Optional(
                         CONF_UPDATE_INTERVAL_STANDBY,
-                        default=UPDATE_INTERVAL_STANDBY_DEFAULT,
+                        default=_get_config(CONF_UPDATE_INTERVAL_STANDBY, "default"),
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_UPDATE_INTERVAL_STANDBY,
-                                UPDATE_INTERVAL_STANDBY_DEFAULT,
+                                _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default")
                             ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=60,
-                            max=3600,
-                            step=60,
+                            min=_get_config(CONF_UPDATE_INTERVAL_STANDBY, "min", 1),
+                            max=_get_config(CONF_UPDATE_INTERVAL_STANDBY, "max", 100000),
+                            step=_get_config(CONF_UPDATE_INTERVAL_STANDBY, "step", 1),
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
                     # Update interval, if all lawn mowers idling
                     vol.Optional(
                         CONF_UPDATE_INTERVAL_IDLING,
-                        default=UPDATE_INTERVAL_IDLING_DEFAULT,
+                        default=_get_config(CONF_UPDATE_INTERVAL_IDLING, "default"),
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_UPDATE_INTERVAL_IDLING,
-                                UPDATE_INTERVAL_IDLING_DEFAULT,
+                                _get_config(CONF_UPDATE_INTERVAL_IDLING, "default")
                             ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=300,
-                            max=86400,
-                            step=300,
+                            min=_get_config(CONF_UPDATE_INTERVAL_IDLING, "min", 1),
+                            max=_get_config(CONF_UPDATE_INTERVAL_IDLING, "max", 100000),
+                            step=_get_config(CONF_UPDATE_INTERVAL_IDLING, "step", 1),
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
@@ -1099,38 +1096,38 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     # Wake up interval (Standard plan)
                     vol.Optional(
                         CONF_WAKE_UP_INTERVAL_DEFAULT,
-                        default=ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+                        default=_get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default"),
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_WAKE_UP_INTERVAL_DEFAULT,
-                                ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+                                _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default")
                             ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=300,
-                            max=21600,
-                            step=300,
+                            min=_get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "min", 1),
+                            max=_get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "max", 100000),
+                            step=_get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "step", 1),
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
                     # Wake up interval (+Infinity plan)
                     vol.Optional(
                         CONF_WAKE_UP_INTERVAL_INFINITY,
-                        default=ROBOT_WAKE_UP_INTERVAL_INFINITY,
+                        default=_get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default"),
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_WAKE_UP_INTERVAL_INFINITY,
-                                ROBOT_WAKE_UP_INTERVAL_INFINITY,
+                                _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default")
                             ),
                         },
                     ): selector.NumberSelector(
                         selector.NumberSelectorConfig(
                             mode=selector.NumberSelectorMode.BOX,
-                            min=300,
-                            max=21600,
-                            step=300,
+                            min=_get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "min", 1),
+                            max=_get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "max", 100000),
+                            step=_get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "step", 1),
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),
@@ -1143,3 +1140,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             ),
             errors=errors,
         )
+
+def _get_config(
+    key: str,
+    native: str = "default",
+    fallback_default: int = 0
+) -> int:
+    return int(CONFIGURATION_DEFAULTS.get(key).get(native, fallback_default))

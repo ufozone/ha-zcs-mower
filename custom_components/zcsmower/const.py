@@ -33,6 +33,7 @@ CONF_STANDBY_TIME_STOP = "standby_time_stop"
 CONF_UPDATE_INTERVAL_WORKING = "update_interval_working"
 CONF_UPDATE_INTERVAL_STANDBY = "update_interval_standby"
 CONF_UPDATE_INTERVAL_IDLING = "update_interval_idling"
+CONF_UPDATE_INTERVAL_HIBERNATION = "update_interval_hibernation"
 CONF_TRACE_POSITION_ENABLE = "trace_position_enable"
 CONF_WAKE_UP_INTERVAL_DEFAULT = "wake_up_interval_default"
 CONF_WAKE_UP_INTERVAL_INFINITY = "wake_up_interval_infinity"
@@ -181,13 +182,47 @@ API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
 
+CONFIGURATION_DEFAULTS = {
+    CONF_UPDATE_INTERVAL_WORKING: {
+        "default": 120,
+        "min": 30,
+        "max": 300,
+        "step": 30,
+    },
+    CONF_UPDATE_INTERVAL_STANDBY: {
+        "default": 300,
+        "min": 60,
+        "max": 3600,
+        "step": 60,
+    },
+    CONF_UPDATE_INTERVAL_IDLING: {
+        "default": 3600,
+        "min": 300,
+        "max": 86400,
+        "step": 300,
+    },
+    CONF_UPDATE_INTERVAL_HIBERNATION: {
+        "default": 86400,
+        "min": 3600,
+        "max": 604800,
+        "step": 3600,
+    },
+    CONF_WAKE_UP_INTERVAL_DEFAULT: {
+        "default": 1800,
+        "min": 300,
+        "max": 21600,
+        "step": 300,
+    },
+    CONF_WAKE_UP_INTERVAL_INFINITY: {
+        "default": 300,
+        "min": 300,
+        "max": 21600,
+        "step": 300,
+    },
+}
+
 STANDBY_TIME_START_DEFAULT = "08:00:00"
 STANDBY_TIME_STOP_DEFAULT = "22:00:00"
-
-UPDATE_INTERVAL_WORKING_DEFAULT = 120
-UPDATE_INTERVAL_STANDBY_DEFAULT = 300
-UPDATE_INTERVAL_IDLING_DEFAULT = 3600
-UPDATE_INTERVAL_HIBERNATION_DEFAULT = 86400
 
 LOCATION_HISTORY_DAYS_DEFAULT = 7
 LOCATION_HISTORY_ITEMS_DEFAULT = 200
@@ -203,8 +238,6 @@ MANUFACTURER_MAP = {
     "WI": "Herkules Wiper",
 }
 
-ROBOT_WAKE_UP_INTERVAL_DEFAULT = 1800
-ROBOT_WAKE_UP_INTERVAL_INFINITY = 300
 ROBOT_MODELS = {
     "AM015D": "L15 Deluxe",
     "AM020D": "Twenty Deluxe",
