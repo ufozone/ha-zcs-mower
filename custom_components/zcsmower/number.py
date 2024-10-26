@@ -154,7 +154,7 @@ class ZcsMowerRobotDurationNumberEntity(ZcsMowerRobotNumberEntity):
 class ZcsMowerConfigNumberEntity(ZcsMowerConfigEntity, NumberEntity):
     """Representation of a ZCS Lawn Mower Configuration number."""
 
-    #_attr_entity_registry_enabled_default = False
+    _attr_entity_registry_enabled_default = False
 
     def __init__(
         self,
@@ -171,9 +171,9 @@ class ZcsMowerConfigNumberEntity(ZcsMowerConfigEntity, NumberEntity):
             entity_type="switch",
             entity_description=entity_description,
         )
-        self._attr_native_min_value = CONFIGURATION_DEFAULTS.get(entity_description.key).get("min", 0)
-        self._attr_native_max_value = CONFIGURATION_DEFAULTS.get(entity_description.key).get("max", 10000)
-        self._attr_native_step = CONFIGURATION_DEFAULTS.get(entity_description.key).get("step", 1)
+        self._attr_native_min_value = CONFIGURATION_DEFAULTS.get(self._config_key).get("min", 0)
+        self._attr_native_max_value = CONFIGURATION_DEFAULTS.get(self._config_key).get("max", 10000)
+        self._attr_native_step = CONFIGURATION_DEFAULTS.get(self._config_key).get("step", 1)
 
     @property
     def native_value(self) -> int:
