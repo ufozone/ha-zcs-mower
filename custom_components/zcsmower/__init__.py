@@ -12,6 +12,8 @@ from homeassistant.const import (
 )
 from homeassistant.helpers import (
     config_validation as cv,
+    device_registry as dr,
+    entity_registry as er,
 )
 
 from .const import (
@@ -78,6 +80,21 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     config_entry.async_on_unload(
         config_entry.add_update_listener(async_reload_entry)
     )
+
+    # Clean up unused device entries with no entities
+    device_registry = dr.async_get(hass)
+    entity_registry = er.async_get(hass)
+
+    device_entries = dr.async_entries_for_config_entry(
+        device_registry, config_entry_id=config_entry.entry_id
+    )
+    for device in device_entries:
+        device_entities = er.async_entries_for_device(
+            entity_registry, device.id, include_disabled_entities=True
+        )
+        if not device_entities:
+            device_registry.async_remove_device(device.id)
+
     return True
 
 
