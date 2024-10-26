@@ -98,7 +98,7 @@ from .const import (
 
 
 # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
-class ZcsDataUpdateCoordinator(DataUpdateCoordinator):
+class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the ZCS API."""
 
     def __init__(

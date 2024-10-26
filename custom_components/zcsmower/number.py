@@ -12,7 +12,7 @@ from homeassistant.components.number import (
 )
 from homeassistant.helpers.entity import Entity
 
-from .coordinator import ZcsDataUpdateCoordinator
+from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerRobotEntity
 
 ROBOT_ENTITY_DESCRIPTIONS = (
@@ -69,7 +69,7 @@ class ZcsMowerRobotNumberEntity(ZcsMowerRobotEntity, NumberEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsDataUpdateCoordinator,
+        coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: NumberEntityDescription,
         imei: str,
     ) -> None:

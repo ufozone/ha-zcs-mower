@@ -19,7 +19,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_HIBERNATION_ENABLE,
 )
-from .coordinator import ZcsDataUpdateCoordinator
+from .coordinator import ZcsMowerDataUpdateCoordinator
 from .entity import ZcsMowerConfigEntity
 
 
@@ -76,7 +76,7 @@ class ZcsMowerConfigSwitchEntity(ZcsMowerConfigEntity, SwitchEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsDataUpdateCoordinator,
+        coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: SwitchEntityDescription,
     ) -> None:
         """Initialize the switch class."""
