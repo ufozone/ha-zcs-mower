@@ -813,6 +813,9 @@
       }
     },
     "switch": {
+      "trace_position": {
+        "name": "Tracing position"
+      },
       "hibernation": {
         "name": "Winter break"
       }

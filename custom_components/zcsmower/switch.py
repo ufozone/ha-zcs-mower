@@ -16,6 +16,7 @@ from homeassistant.helpers.entity import (
 )
 
 from .const import (
+    CONF_TRACE_POSITION_ENABLE,
     CONF_HIBERNATION_ENABLE,
 )
 from .coordinator import ZcsDataUpdateCoordinator
@@ -30,6 +31,12 @@ class ZcsConfigSwitchEntityDescription(SwitchEntityDescription):
 
 
 ENTITY_DESCRIPTIONS = (
+    ZcsConfigSwitchEntityDescription(
+        key="mower_trace_position",
+        translation_key="trace_position",
+        entity_category=EntityCategory.CONFIG,
+        config_key=CONF_TRACE_POSITION_ENABLE,
+    ),
     ZcsConfigSwitchEntityDescription(
         key="mower_hibernation",
         translation_key="hibernation",

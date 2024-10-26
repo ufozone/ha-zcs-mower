@@ -810,6 +810,9 @@
       }
     },
     "switch": {
+      "trace_position": {
+        "name": "Position verfolgen"
+      },
       "hibernation": {
         "name": "Winterpause"
       }

@@ -191,7 +191,7 @@ class ZcsConfigEntity(CoordinatorEntity):
         self.config_entry = config_entry
         self.entity_description = entity_description
 
-        self._name = self.config_entry.title
+        self._name = config_entry.title
         self._entity_key = entity_description.key
         self._unique_id = slugify(f"{self._entity_key}_{config_entry.entry_id}")
 
@@ -199,7 +199,7 @@ class ZcsConfigEntity(CoordinatorEntity):
         self._attr_device_info = DeviceInfo(
             entry_type=DeviceEntryType.SERVICE,
             identifiers={
-                (DOMAIN, self._unique_id)
+                (DOMAIN, config_entry.entry_id)
             },
             name=config_entry.title,
             manufacturer=MANUFACTURER_DEFAULT,
