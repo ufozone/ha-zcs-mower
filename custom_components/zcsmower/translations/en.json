@@ -476,6 +476,30 @@
             "name": "IMEI"
           }
         }
+      },
+      "update_interval_working": {
+        "name": "Update interval Working time",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          }
+        }
+      },
+      "update_interval_standby": {
+        "name": "Update interval Standby time",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          }
+        }
+      },
+      "update_interval_idling": {
+        "name": "Update interval Idle time",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          }
+        }
       }
     },
     "sensor": {
