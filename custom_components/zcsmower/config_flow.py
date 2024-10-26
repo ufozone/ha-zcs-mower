@@ -421,12 +421,12 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry) -> ZcsOptionsFlowHandler:
+    def async_get_options_flow(config_entry) -> ZcsMowerOptionsFlowHandler:
         """Get the options flow for this handler."""
-        return ZcsOptionsFlowHandler(config_entry)
+        return ZcsMowerOptionsFlowHandler(config_entry)
 
 
-class ZcsOptionsFlowHandler(OptionsFlowWithConfigEntry):
+class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     """Handles options flow for the component."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
