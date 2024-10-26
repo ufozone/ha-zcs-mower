@@ -38,7 +38,7 @@ from .const import (
 from .coordinator import ZcsDataUpdateCoordinator
 
 
-class ZcsMowerEntity(CoordinatorEntity):
+class ZcsRobotEntity(CoordinatorEntity):
     """ZCS Lawn Mower Robot entity class."""
 
     _attr_attribution = ATTRIBUTION

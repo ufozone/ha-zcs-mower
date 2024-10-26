@@ -25,9 +25,9 @@ from .const import (
     ATTR_NEXT_PULL,
 )
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsMowerEntity
+from .entity import ZcsRobotEntity
 
-ENTITY_DESCRIPTIONS = (
+ROBOT_ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
         key="error",
         translation_key="error",
@@ -52,7 +52,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsMowerBinarySensorEntity(
+            ZcsRobotBinarySensorEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -60,13 +60,13 @@ async def async_setup_entry(
                 imei=imei,
             )
             for imei in coordinator.mowers
-            for entity_description in ENTITY_DESCRIPTIONS
+            for entity_description in ROBOT_ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
 
 
-class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
+class ZcsRobotBinarySensorEntity(ZcsRobotEntity, BinarySensorEntity):
     """Representation of a ZCS Lawn Mower Robot binary sensor."""
 
     def __init__(
@@ -114,4 +114,4 @@ class ZcsMowerBinarySensorEntity(ZcsMowerEntity, BinarySensorEntity):
                 "hot_temperature",
             )
         elif self._entity_key == "connection":
-            return self._get_attribute(ATTR_CONNECTED)
+            return (self._get_attribute(ATTR_CONNECTED) is True)

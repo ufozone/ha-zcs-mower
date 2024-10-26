@@ -25,12 +25,12 @@ from .entity import ZcsConfigEntity
 
 @dataclass(frozen=True, kw_only=True)
 class ZcsConfigSwitchEntityDescription(SwitchEntityDescription):
-    """Describes ZCS Lawn Mower Robot switch entity."""
+    """Describes ZCS Lawn Mower Configuration switch entity."""
 
     config_key: str
 
 
-ENTITY_DESCRIPTIONS = (
+CONFIG_ENTITY_DESCRIPTIONS = (
     ZcsConfigSwitchEntityDescription(
         key="mower_trace_position",
         translation_key="trace_position",
@@ -61,14 +61,14 @@ async def async_setup_entry(
                 coordinator=coordinator,
                 entity_description=entity_description,
             )
-            for entity_description in ENTITY_DESCRIPTIONS
+            for entity_description in CONFIG_ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
 
 
 class ZcsConfigSwitchEntity(ZcsConfigEntity, SwitchEntity):
-    """Representation of a ZCS configuration switch."""
+    """Representation of a ZCS Lawn Mower Configuration switch."""
 
     _attr_has_entity_name = True
 

@@ -13,9 +13,9 @@ from homeassistant.components.number import (
 from homeassistant.helpers.entity import Entity
 
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsMowerEntity
+from .entity import ZcsRobotEntity
 
-ENTITY_DESCRIPTIONS = (
+ROBOT_ENTITY_DESCRIPTIONS = (
     NumberEntityDescription(
         key="work_for",
         icon="mdi:clock-outline",
@@ -46,7 +46,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsMowerDurationNumberEntity(
+            ZcsRobotDurationNumberEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -54,13 +54,13 @@ async def async_setup_entry(
                 imei=imei,
             )
             for imei in coordinator.mowers
-            for entity_description in ENTITY_DESCRIPTIONS
+            for entity_description in ROBOT_ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
 
 
-class ZcsMowerNumberEntity(ZcsMowerEntity, NumberEntity):
+class ZcsRobotNumberEntity(ZcsRobotEntity, NumberEntity):
     """Representation of a ZCS Lawn Mower Robot number."""
 
     _attr_entity_registry_enabled_default = False
@@ -83,7 +83,7 @@ class ZcsMowerNumberEntity(ZcsMowerEntity, NumberEntity):
             imei=imei,
         )
 
-class ZcsMowerDurationNumberEntity(ZcsMowerNumberEntity):
+class ZcsRobotDurationNumberEntity(ZcsRobotNumberEntity):
     """Representation of a ZCS Lawn Mower Robot number for command with duration."""
 
     _attr_native_value: float = 60
