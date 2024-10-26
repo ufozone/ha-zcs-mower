@@ -43,8 +43,6 @@ from .const import (
     STANDBY_TIME_STOP_DEFAULT,
     CONFIGURATION_DEFAULTS,
     MAP_POINTS_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_INFINITY,
 )
 from .services import async_setup_services
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -148,8 +146,8 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                 CONF_UPDATE_INTERVAL_STANDBY: config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, CONFIGURATION_DEFAULTS.get(CONF_UPDATE_INTERVAL_STANDBY).get("default")),
                 CONF_UPDATE_INTERVAL_IDLING: config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, CONFIGURATION_DEFAULTS.get(CONF_UPDATE_INTERVAL_IDLING).get("default")),
                 CONF_TRACE_POSITION_ENABLE: config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False),
-                CONF_WAKE_UP_INTERVAL_DEFAULT: config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
-                CONF_WAKE_UP_INTERVAL_INFINITY: config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                CONF_WAKE_UP_INTERVAL_DEFAULT: config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_INTERVAL_DEFAULT).get("default")),
+                CONF_WAKE_UP_INTERVAL_INFINITY: config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_INTERVAL_INFINITY).get("default")),
                 CONF_STANDBY_TIME_START: STANDBY_TIME_START_DEFAULT,
                 CONF_STANDBY_TIME_STOP: STANDBY_TIME_STOP_DEFAULT,
                 CONF_MAP_ENABLE: config_entry.options.get(CONF_MAP_ENABLE, CONF_MAP_ENABLE),

@@ -84,8 +84,6 @@ from .const import (
     LOCATION_HISTORY_ITEMS_DEFAULT,
     MANUFACTURER_DEFAULT,
     MANUFACTURER_MAP,
-    ROBOT_WAKE_UP_INTERVAL_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_INFINITY,
     ROBOT_MODELS,
     ROBOT_STATES,
     ROBOT_STATES_WORKING,
@@ -543,10 +541,10 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         if mower.get(ATTR_WORKING, False):
             # Get inifity interval, if +Infinity is active or pending and valid
             if mower.get(ATTR_INFINITY_STATE) in ("active", "pending") and mower.get(ATTR_INFINITY_EXPIRATION) > self._get_datetime_now():
-                _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY)
+                _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_INTERVAL_INFINITY).get("default"))
             # Get default interval, if +Infinity is not active
             else:
-                _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT)
+                _wake_up_interval = self.config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_INTERVAL_DEFAULT).get("default"))
 
             # Send a wake_up command every WAKE_UP_INTERVAL seconds
             if (

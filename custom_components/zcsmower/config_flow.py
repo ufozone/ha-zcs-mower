@@ -61,8 +61,6 @@ from .const import (
     STANDBY_TIME_STOP_DEFAULT,
     LOCATION_HISTORY_ITEMS_DEFAULT,
     MAP_POINTS_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_INFINITY,
 )
 from .api import (
     ZcsMowerApiClient,
@@ -139,8 +137,8 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_UPDATE_INTERVAL_STANDBY: _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default"),
                     CONF_UPDATE_INTERVAL_IDLING: _get_config(CONF_UPDATE_INTERVAL_IDLING, "default"),
                     CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
-                    CONF_WAKE_UP_INTERVAL_DEFAULT: int(ROBOT_WAKE_UP_INTERVAL_DEFAULT),
-                    CONF_WAKE_UP_INTERVAL_INFINITY: int(ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                    CONF_WAKE_UP_INTERVAL_DEFAULT: _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default"),
+                    CONF_WAKE_UP_INTERVAL_INFINITY: _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default"),
                     CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
@@ -964,11 +962,11 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                         CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(
                             CONF_WAKE_UP_INTERVAL_DEFAULT,
-                            ROBOT_WAKE_UP_INTERVAL_DEFAULT,
+                            _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default"),
                         ),
                         CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(
                             CONF_WAKE_UP_INTERVAL_INFINITY,
-                            ROBOT_WAKE_UP_INTERVAL_INFINITY,
+                            _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default"),
                         ),
                     }
                 )
