@@ -278,6 +278,18 @@ The following settings are available:
 
 * number.mower_*{imei}*_charge_for
 
+* number.mower_update_interval_working_*{config_id}*
+
+  *This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry.*
+
+* number.mower_update_interval_standby_*{config_id}*
+
+  *This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry.*
+
+* number.mower_update_interval_idling_*{config_id}*
+
+  *This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry.*
+
 ### Sensor
 
 * sensor.mower_*{imei}*
