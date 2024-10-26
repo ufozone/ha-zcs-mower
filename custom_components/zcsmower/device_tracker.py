@@ -24,7 +24,7 @@ from .const import (
     CONF_MAP_MARKER_PATH,
 )
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsRobotEntity
+from .entity import ZcsMowerRobotEntity
 
 ROBOT_ENTITY_DESCRIPTIONS = (
     EntityDescription(
@@ -45,7 +45,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsRobotTrackerEntity(
+            ZcsMowerRobotTrackerEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -59,7 +59,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsRobotTrackerEntity(ZcsRobotEntity, TrackerEntity):
+class ZcsMowerRobotTrackerEntity(ZcsMowerRobotEntity, TrackerEntity):
     """Representation of a ZCS Lawn Mower Robot sensor."""
 
     _attr_name = None

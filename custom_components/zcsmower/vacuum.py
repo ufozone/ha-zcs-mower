@@ -25,7 +25,7 @@ from .const import (
     DOMAIN,
 )
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsRobotEntity
+from .entity import ZcsMowerRobotEntity
 
 ROBOT_SUPPORTED_FEATURES = (
     VacuumEntityFeature.STOP
@@ -55,7 +55,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsRobotVacuumEntity(
+            ZcsMowerRobotVacuumEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -69,7 +69,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsRobotVacuumEntity(ZcsRobotEntity, StateVacuumEntity):
+class ZcsMowerRobotVacuumEntity(ZcsMowerRobotEntity, StateVacuumEntity):
     """Representation of a ZCS Lawn Mower Robot vacuum."""
 
     _attr_name = None

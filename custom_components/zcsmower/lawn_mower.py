@@ -20,7 +20,7 @@ from .const import (
     ATTR_STATUS,
 )
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsRobotEntity
+from .entity import ZcsMowerRobotEntity
 
 ROBOT_SUPPORTED_FEATURES = (
     LawnMowerEntityFeature.START_MOWING
@@ -44,7 +44,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsRobotLawnMowerEntity(
+            ZcsMowerRobotLawnMowerEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -58,7 +58,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsRobotLawnMowerEntity(ZcsRobotEntity, LawnMowerEntity):
+class ZcsMowerRobotLawnMowerEntity(ZcsMowerRobotEntity, LawnMowerEntity):
     """Representation of a ZCS Lawn Mower Robot entity."""
 
     _attr_name = None

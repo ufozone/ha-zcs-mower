@@ -14,7 +14,7 @@ from homeassistant.helpers.entity import (
 )
 
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsRobotEntity
+from .entity import ZcsMowerRobotEntity
 
 ROBOT_ENTITY_DESCRIPTIONS = (
     ButtonEntityDescription(
@@ -66,7 +66,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsRobotButtonEntity(
+            ZcsMowerRobotButtonEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -80,7 +80,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsRobotButtonEntity(ZcsRobotEntity, ButtonEntity):
+class ZcsMowerRobotButtonEntity(ZcsMowerRobotEntity, ButtonEntity):
     """Representation of a ZCS Lawn Mower Robot button."""
 
     def __init__(

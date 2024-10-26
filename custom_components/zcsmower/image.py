@@ -51,7 +51,7 @@ from .const import (
     ATTR_CALIBRATION,
 )
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsRobotEntity
+from .entity import ZcsMowerRobotEntity
 
 ROBOT_ENTITY_DESCRIPTIONS = (
     ImageEntityDescription(
@@ -76,7 +76,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsRobotImageEntity(
+            ZcsMowerRobotImageEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -90,7 +90,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsRobotImageEntity(ZcsRobotEntity, ImageEntity):
+class ZcsMowerRobotImageEntity(ZcsMowerRobotEntity, ImageEntity):
     """Representation of a ZCS Lawn Mower Robot image."""
 
     _attr_entity_registry_enabled_default = False

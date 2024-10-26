@@ -25,7 +25,7 @@ from .const import (
     ATTR_NEXT_PULL,
 )
 from .coordinator import ZcsDataUpdateCoordinator
-from .entity import ZcsRobotEntity
+from .entity import ZcsMowerRobotEntity
 
 ROBOT_ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
@@ -52,7 +52,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsRobotBinarySensorEntity(
+            ZcsMowerRobotBinarySensorEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -66,7 +66,7 @@ async def async_setup_entry(
     )
 
 
-class ZcsRobotBinarySensorEntity(ZcsRobotEntity, BinarySensorEntity):
+class ZcsMowerRobotBinarySensorEntity(ZcsMowerRobotEntity, BinarySensorEntity):
     """Representation of a ZCS Lawn Mower Robot binary sensor."""
 
     def __init__(
