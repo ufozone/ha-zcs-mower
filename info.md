@@ -272,7 +272,7 @@ The following settings are available:
 
 ### Number
 
-_These entities are disabled by default. You have to activate it if you want to use it._
+*These entities are disabled by default. You have to activate it if you want to use it.*
 
 * number.mower_*{imei}*_work_for
 
@@ -313,14 +313,16 @@ _These entities are disabled by default. You have to activate it if you want to 
 ### Switch
 
 * switch.mower_hibernation_*{config_id}*
-  _This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry._
+
+  *This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry.*
 
 * switch.mower_trace_position_*{config_id}*
-  _This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry._
+
+  *This entity only exists once per configuration entry. The configuration affects all lawn mowers set up for this configuration entry.*
 
 ### Vacuum
 
-_This entity is disabled by default. You have to activate it if you want to use it._
+*This entity is disabled by default. You have to activate it if you want to use it.*
 
 * vacuum.mower_*{imei}*
 
