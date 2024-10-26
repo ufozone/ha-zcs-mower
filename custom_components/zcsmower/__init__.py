@@ -41,12 +41,8 @@ from .const import (
     CONF_MOWERS,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
-    UPDATE_INTERVAL_WORKING_DEFAULT,
-    UPDATE_INTERVAL_STANDBY_DEFAULT,
-    UPDATE_INTERVAL_IDLING_DEFAULT,
+    CONFIGURATION_DEFAULTS,
     MAP_POINTS_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_DEFAULT,
-    ROBOT_WAKE_UP_INTERVAL_INFINITY,
 )
 from .services import async_setup_services
 from .coordinator import ZcsMowerDataUpdateCoordinator
@@ -108,8 +104,7 @@ async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> 
 
 async def async_reload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
     """Reload config entry."""
-    await async_unload_entry(hass, config_entry)
-    await async_setup_entry(hass, config_entry)
+    await hass.config_entries.async_reload(config_entry.entry_id)
 
 
 async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
@@ -146,12 +141,12 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         _options = dict(config_entry.options)
         _options.update(
             {
-                CONF_UPDATE_INTERVAL_WORKING: config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, UPDATE_INTERVAL_WORKING_DEFAULT),
-                CONF_UPDATE_INTERVAL_STANDBY: config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, UPDATE_INTERVAL_STANDBY_DEFAULT),
-                CONF_UPDATE_INTERVAL_IDLING: UPDATE_INTERVAL_IDLING_DEFAULT,
+                CONF_UPDATE_INTERVAL_WORKING: config_entry.options.get(CONF_UPDATE_INTERVAL_WORKING, CONFIGURATION_DEFAULTS.get(CONF_UPDATE_INTERVAL_WORKING).get("default")),
+                CONF_UPDATE_INTERVAL_STANDBY: config_entry.options.get(CONF_UPDATE_INTERVAL_STANDBY, CONFIGURATION_DEFAULTS.get(CONF_UPDATE_INTERVAL_STANDBY).get("default")),
+                CONF_UPDATE_INTERVAL_IDLING: config_entry.options.get(CONF_UPDATE_INTERVAL_IDLING, CONFIGURATION_DEFAULTS.get(CONF_UPDATE_INTERVAL_IDLING).get("default")),
                 CONF_TRACE_POSITION_ENABLE: config_entry.options.get(CONF_TRACE_POSITION_ENABLE, False),
-                CONF_WAKE_UP_INTERVAL_DEFAULT: config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, ROBOT_WAKE_UP_INTERVAL_DEFAULT),
-                CONF_WAKE_UP_INTERVAL_INFINITY: config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, ROBOT_WAKE_UP_INTERVAL_INFINITY),
+                CONF_WAKE_UP_INTERVAL_DEFAULT: config_entry.options.get(CONF_WAKE_UP_INTERVAL_DEFAULT, CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_INTERVAL_DEFAULT).get("default")),
+                CONF_WAKE_UP_INTERVAL_INFINITY: config_entry.options.get(CONF_WAKE_UP_INTERVAL_INFINITY, CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_INTERVAL_INFINITY).get("default")),
                 CONF_STANDBY_TIME_START: STANDBY_TIME_START_DEFAULT,
                 CONF_STANDBY_TIME_STOP: STANDBY_TIME_STOP_DEFAULT,
                 CONF_MAP_ENABLE: config_entry.options.get(CONF_MAP_ENABLE, CONF_MAP_ENABLE),
