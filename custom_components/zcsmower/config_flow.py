@@ -947,26 +947,26 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         ),
                         CONF_UPDATE_INTERVAL_WORKING: user_input.get(
                             CONF_UPDATE_INTERVAL_WORKING,
-                            _get_config(CONF_UPDATE_INTERVAL_WORKING, "default"),
+                            _get_config(CONF_UPDATE_INTERVAL_WORKING, "default")
                         ),
                         CONF_UPDATE_INTERVAL_STANDBY: user_input.get(
                             CONF_UPDATE_INTERVAL_STANDBY,
-                            _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default"),
+                            _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default")
                         ),
                         CONF_UPDATE_INTERVAL_IDLING: user_input.get(
                             CONF_UPDATE_INTERVAL_IDLING,
-                            _get_config(CONF_UPDATE_INTERVAL_IDLING, "default"),
+                            _get_config(CONF_UPDATE_INTERVAL_IDLING, "default")
                         ),
                         CONF_TRACE_POSITION_ENABLE: user_input.get(
                             CONF_TRACE_POSITION_ENABLE, False
                         ),
                         CONF_WAKE_UP_INTERVAL_DEFAULT: user_input.get(
                             CONF_WAKE_UP_INTERVAL_DEFAULT,
-                            _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default"),
+                            _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default")
                         ),
                         CONF_WAKE_UP_INTERVAL_INFINITY: user_input.get(
                             CONF_WAKE_UP_INTERVAL_INFINITY,
-                            _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default"),
+                            _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default")
                         ),
                     }
                 )
@@ -1036,7 +1036,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_UPDATE_INTERVAL_WORKING,
-                                _get_config(CONF_UPDATE_INTERVAL_WORKING, "default"),
+                                _get_config(CONF_UPDATE_INTERVAL_WORKING, "default")
                             ),
                         },
                     ): selector.NumberSelector(
@@ -1055,7 +1055,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_UPDATE_INTERVAL_STANDBY,
-                                _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default"),
+                                _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default")
                             ),
                         },
                     ): selector.NumberSelector(
@@ -1074,7 +1074,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_UPDATE_INTERVAL_IDLING,
-                                _get_config(CONF_UPDATE_INTERVAL_IDLING, "default"),
+                                _get_config(CONF_UPDATE_INTERVAL_IDLING, "default")
                             ),
                         },
                     ): selector.NumberSelector(
@@ -1100,7 +1100,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_WAKE_UP_INTERVAL_DEFAULT,
-                                _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default"),
+                                _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default")
                             ),
                         },
                     ): selector.NumberSelector(
@@ -1119,7 +1119,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         description={
                             "suggested_value": (user_input or self._options).get(
                                 CONF_WAKE_UP_INTERVAL_INFINITY,
-                                _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default"),
+                                _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default")
                             ),
                         },
                     ): selector.NumberSelector(
