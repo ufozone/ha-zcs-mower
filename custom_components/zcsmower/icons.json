@@ -1,17 +1,43 @@
 {
   "services": {
-    "border_cut": "mdi:scissors-cutting",
-    "charge_for": "mdi:clock-outline",
-    "charge_now": "mdi:ev-station",
-    "charge_until": "mdi:clock-outline",
-    "custom_command": "mdi:powershell",
-    "keep_out": "mdi:cancel",
-    "set_profile": "mdi:numeric",
-    "trace_position": "mdi:map-marker",
-    "update_now": "mdi:update",
-    "wake_up": "mdi:connection",
-    "work_for": "mdi:clock-outline",
-    "work_now": "mdi:state-machine",
-    "work_until": "mdi:clock-outline"
+    "border_cut": {
+      "service": "mdi:scissors-cutting"
+    },
+    "charge_for": {
+      "service": "mdi:clock-outline"
+    },
+    "charge_now": {
+      "service": "mdi:ev-station"
+    },
+    "charge_until": {
+      "service": "mdi:clock-outline"
+    },
+    "custom_command": {
+      "service": "mdi:powershell"
+    },
+    "keep_out": {
+      "service": "mdi:cancel"
+    },
+    "set_profile": {
+      "service": "mdi:numeric"
+    },
+    "trace_position": {
+      "service": "mdi:map-marker"
+    },
+    "update_now": {
+      "service": "mdi:update"
+    },
+    "wake_up": {
+      "service": "mdi:connection"
+    },
+    "work_for": {
+      "service": "mdi:clock-outline"
+    },
+    "work_now": {
+      "service": "mdi:state-machine"
+    },
+    "work_until": {
+      "service": "mdi:clock-outline"
+    }
   }
 }
