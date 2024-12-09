@@ -1,4 +1,28 @@
 {
+  "entity": {
+    "sensor": {
+      "state": {
+        "default": "mdi:robot-mower",
+        "state": {
+          "unknown": "mdi:crosshairs-question",
+          "charge": "mdi:battery-charging",
+          "work": "mdi:state-machine",
+          "pause": "mdi:pause",
+          "fail": "mdi:alert-circle",
+          "nosignal": "mdi:signal-off",
+          "gotostation": "mdi:ev-station",
+          "gotoarea": "mdi:grass",
+          "bordercut": "mdi:scissors-cutting",
+          "expired": "mdi:clock-alert",
+          "renewed": "mdi:clock-check",
+          "work_standby": "mdi:power-standby",
+          "hot_temperature": "mdi:thermometer-alert",
+          "mapping_started": "mdi:map-marker-star",
+          "mapping_ended": "mdi:map-marker-check"
+        }
+      }
+    }
+  },
   "services": {
     "border_cut": {
       "service": "mdi:scissors-cutting"
