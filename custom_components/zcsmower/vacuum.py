@@ -8,12 +8,7 @@ from homeassistant.const import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.vacuum import (
     ATTR_STATUS,
-    VacuumActivity.STATE_CLEANING,
-    VacuumActivity.STATE_DOCKED,
-    VacuumActivity.STATE_PAUSED,
-    VacuumActivity.STATE_IDLE,
-    VacuumActivity.STATE_RETURNING,
-    VacuumActivity.STATE_ERROR,
+    VacuumActivity,
     StateVacuumEntity,
     StateVacuumEntityDescription,
     VacuumEntityFeature,
@@ -24,8 +19,8 @@ from .const import (
     LOGGER,
     DOMAIN,
 )
-from .coordinator import ZcsMowerDataUpdateCoordinator
-from .entity import ZcsMowerRobotEntity
+from .coordinator import ZcsDataUpdateCoordinator
+from .entity import ZcsMowerEntity
 
 ROBOT_SUPPORTED_FEATURES = (
     VacuumEntityFeature.STOP
@@ -37,7 +32,7 @@ ROBOT_SUPPORTED_FEATURES = (
     | VacuumEntityFeature.START
     | VacuumEntityFeature.MAP
 )
-ROBOT_ENTITY_DESCRIPTIONS = (
+ENTITY_DESCRIPTIONS = (
     StateVacuumEntityDescription(
         key="",
         icon="mdi:robot-mower",
@@ -55,7 +50,7 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data
     async_add_entities(
         [
-            ZcsMowerRobotVacuumEntity(
+            ZcsMowerVacuumEntity(
                 hass=hass,
                 config_entry=config_entry,
                 coordinator=coordinator,
@@ -63,13 +58,13 @@ async def async_setup_entry(
                 imei=imei,
             )
             for imei in coordinator.mowers
-            for entity_description in ROBOT_ENTITY_DESCRIPTIONS
+            for entity_description in ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
 
 
-class ZcsMowerRobotVacuumEntity(ZcsMowerRobotEntity, StateVacuumEntity):
+class ZcsMowerVacuumEntity(ZcsMowerEntity, StateVacuumEntity):
     """Representation of a ZCS Lawn Mower Robot vacuum."""
 
     _attr_name = None
@@ -79,7 +74,7 @@ class ZcsMowerRobotVacuumEntity(ZcsMowerRobotEntity, StateVacuumEntity):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        coordinator: ZcsMowerDataUpdateCoordinator,
+        coordinator: ZcsDataUpdateCoordinator,
         entity_description: StateVacuumEntityDescription,
         imei: str,
     ) -> None:
@@ -104,16 +99,16 @@ class ZcsMowerRobotVacuumEntity(ZcsMowerRobotEntity, StateVacuumEntity):
     def state(self) -> str:
         """Return the state of the lawn mower."""
         if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "bordercut", "mapping_started"):
-            return VacuumActivity.STATE_CLEANING
+            return VacuumActivity.CLEANING
         if self._get_attribute(ATTR_STATE) == "charge":
-            return VacuumActivity.STATE_DOCKED
+            return VacuumActivity.DOCKED
         if self._get_attribute(ATTR_STATE) == "pause":
-            return VacuumActivity.STATE_PAUSED
+            return VacuumActivity.PAUSED
         if self._get_attribute(ATTR_STATE) in ("gotostation", "mapping_ended"):
-            return VacuumActivity.STATE_RETURNING
+            return VacuumActivity.RETURNING
         if self._get_attribute(ATTR_STATE) == "work_standby":
-            return VacuumActivity.STATE_IDLE
-        return VacuumActivity.STATE_ERROR
+            return VacuumActivity.IDLE
+        return VacuumActivity.ERROR
 
     @property
     def error(self) -> str | None:
