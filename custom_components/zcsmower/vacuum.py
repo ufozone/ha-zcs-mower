@@ -8,12 +8,12 @@ from homeassistant.const import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.vacuum import (
     ATTR_STATUS,
-    STATE_CLEANING,
-    STATE_DOCKED,
-    STATE_PAUSED,
-    STATE_IDLE,
-    STATE_RETURNING,
-    STATE_ERROR,
+    VacuumActivity.STATE_CLEANING,
+    VacuumActivity.STATE_DOCKED,
+    VacuumActivity.STATE_PAUSED,
+    VacuumActivity.STATE_IDLE,
+    VacuumActivity.STATE_RETURNING,
+    VacuumActivity.STATE_ERROR,
     StateVacuumEntity,
     StateVacuumEntityDescription,
     VacuumEntityFeature,
@@ -104,15 +104,15 @@ class ZcsMowerRobotVacuumEntity(ZcsMowerRobotEntity, StateVacuumEntity):
     def state(self) -> str:
         """Return the state of the lawn mower."""
         if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "bordercut", "mapping_started"):
-            return STATE_CLEANING
+            return VacuumActivity.STATE_CLEANING
         if self._get_attribute(ATTR_STATE) == "charge":
-            return STATE_DOCKED
+            return VacuumActivity.STATE_DOCKED
         if self._get_attribute(ATTR_STATE) == "pause":
-            return STATE_PAUSED
+            return VacuumActivity.STATE_PAUSED
         if self._get_attribute(ATTR_STATE) in ("gotostation", "mapping_ended"):
-            return STATE_RETURNING
+            return VacuumActivity.STATE_RETURNING
         if self._get_attribute(ATTR_STATE) == "work_standby":
-            return STATE_IDLE
+            return VacuumActivity.STATE_IDLE
         return STATE_ERROR
 
     @property
