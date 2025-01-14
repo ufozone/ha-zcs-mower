@@ -113,7 +113,7 @@ class ZcsMowerRobotVacuumEntity(ZcsMowerRobotEntity, StateVacuumEntity):
             return VacuumActivity.STATE_RETURNING
         if self._get_attribute(ATTR_STATE) == "work_standby":
             return VacuumActivity.STATE_IDLE
-        return STATE_ERROR
+        return VacuumActivity.STATE_ERROR
 
     @property
     def error(self) -> str | None:
