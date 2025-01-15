@@ -8,9 +8,9 @@ from homeassistant.const import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.vacuum import (
     ATTR_STATUS,
-    VacuumActivity,
     StateVacuumEntity,
     StateVacuumEntityDescription,
+    VacuumActivity,
     VacuumEntityFeature,
 )
 from homeassistant.helpers.entity import Entity
