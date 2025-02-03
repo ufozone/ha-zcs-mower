@@ -2,7 +2,7 @@ pip>=21.0,<25.1
 colorlog==6.9.0
 ruff==0.9.4
 pydocstyle==6.3.0
-isort==5.13.2
+isort==6.0.0
 geopy==2.3.0
 numpy==2.2.0
 Pillow==11.0.0
