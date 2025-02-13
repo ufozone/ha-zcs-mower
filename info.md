@@ -27,7 +27,7 @@ The spot cleaning points can be used to start the lawn mower in a specific area.
 ## Installation
 
 > [!IMPORTANT]
-> Requires Home Assistant 2025.1.0 or newer.
+> Requires Home Assistant 2025.2.0 or newer.
 
 ### Installation through HACS
 
