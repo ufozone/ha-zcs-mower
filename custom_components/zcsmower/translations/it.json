@@ -8,7 +8,8 @@
       "coordinates_invalid": "Le coordinate GPS fornite non sono valide: sono necessarie latitudine e longitudine separate da virgole.",
       "imei_invalid": "L'IMEI fornito non è valido. Deve iniziare con \"35\" ed essere composto da 15 cifre.",
       "mower_invalid": "Non è stato possibile trovare il tosaerba o si è verificato un altro errore. Controllare i file di log.",
-      "mower_too_many_clients": "Ci sono troppi clienti remoti collegati al tosaerba. Aprire l'applicazione mobile sul dispositivo, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un cliente remoto."
+      "mower_too_many_clients": "Ci sono troppi clienti remoti collegati al tosaerba. Aprire l'applicazione mobile sul dispositivo, andare su \"Impostazioni generali\" e quindi su \"Elenco clienti\". Rimuovere un cliente remoto.",
+      "unknown": "Unexpected error"
     },
     "step": {
       "user": {
@@ -62,7 +63,8 @@
       "delete_not_confirmed": "La cancellazione del tosaerba non è stata confermata.",
       "last_mower": "Non è possibile eliminare l'ultimo tosaerba.",
       "path_invalid": "Il percorso specificato per il file non è valido: è necessario un percorso assoluto.",
-      "coordinates_invalid": "Le coordinate GPS fornite non sono valide: sono necessarie latitudine e longitudine separate da virgole."
+      "coordinates_invalid": "Le coordinate GPS fornite non sono valide: sono necessarie latitudine e longitudine separate da virgole.",
+      "unknown": "Unexpected error"
     },
     "step": {
       "init": {
