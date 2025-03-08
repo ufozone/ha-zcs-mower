@@ -122,9 +122,12 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             except ZcsMowerApiCommunicationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "communication_failed"
-            except (Exception, ZcsMowerApiError) as exception:
-                LOGGER.exception(exception)
+            except ZcsMowerApiError as exception:
+                LOGGER.error(exception)
                 errors["base"] = "connection_failed"
+            except Exception as exception:
+                LOGGER.exception(exception)
+                errors["base"] = "unknown"
 
             if not errors:
                 # Input is valid, set data and options
@@ -352,9 +355,12 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
             except ZcsMowerApiCommunicationError as exception:
                 LOGGER.error(exception)
                 errors["base"] = "communication_failed"
-            except (Exception, ZcsMowerApiError) as exception:
-                LOGGER.exception(exception)
+            except ZcsMowerApiError as exception:
+                LOGGER.error(exception)
                 errors["base"] = "connection_failed"
+            except Exception as exception:
+                LOGGER.exception(exception)
+                errors["base"] = "unknown"
 
             if not errors:
                 # Input is valid, set data.
@@ -487,9 +493,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 except ZcsMowerApiCommunicationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "communication_failed"
-                except (Exception, ZcsMowerApiError) as exception:
-                    LOGGER.exception(exception)
+                except ZcsMowerApiError as exception:
+                    LOGGER.error(exception)
                     errors["base"] = "connection_failed"
+                except Exception as exception:
+                    LOGGER.exception(exception)
+                    errors["base"] = "unknown"
 
             if not errors:
                 # Input is valid, set data
@@ -928,9 +937,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 except ZcsMowerApiCommunicationError as exception:
                     LOGGER.error(exception)
                     errors["base"] = "communication_failed"
-                except (Exception, ZcsMowerApiError) as exception:
-                    LOGGER.exception(exception)
+                except ZcsMowerApiError as exception:
+                    LOGGER.error(exception)
                     errors["base"] = "connection_failed"
+                except Exception as exception:
+                    LOGGER.exception(exception)
+                    errors["base"] = "unknown"
 
             if not errors:
                 # Input is valid, set data
