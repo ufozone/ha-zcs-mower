@@ -77,6 +77,7 @@ from .const import (
     API_DATETIME_FORMAT_DEFAULT,
     API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
+    API_WAIT_FOR_CONNECTION,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
     CONFIGURATION_DEFAULTS,
@@ -624,17 +625,18 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         ):
             await self.async_wake_up(imei)
 
-        # Wait 5 seconds before the loop starts
-        await asyncio.sleep(5)
+        # Wait 10 seconds before the loop starts
+        await asyncio.sleep(10)
 
         attempt = 0
-        while connected is False and attempt <= 5:
+        # Wait for connection state to be True, but max 10 attempts
+        while connected is False and attempt <= 10:
             connected = await self.async_fetch_single_mower(imei)
             if connected is True:
                 return True
             attempt = attempt + 1
-            # Wait 5 seconds before next attempt
-            await asyncio.sleep(5)
+            # Wait calculated seconds before next attempt
+            await asyncio.sleep((API_WAIT_FOR_CONNECTION - 10) / 10)
 
         raise TimeoutError(
             f"The lawn mower with IMEI {imei} was not available after a long wait"
