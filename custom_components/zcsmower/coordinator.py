@@ -600,47 +600,45 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         imei: str,
     ) -> bool:
         """Prepare lawn mower for incomming command."""
-        try:
-            # Use connection state from last fetch if last pull was not longer than 10 seconds ago
-            mower = self.get_mower_attributes(imei)
-            last_pull = mower.get(ATTR_LAST_PULL, None)
-            last_wake_up = mower.get(ATTR_LAST_WAKE_UP, None)
+        # Use connection state from last fetch if last pull was not longer than 10 seconds ago
+        mower = self.get_mower_attributes(imei)
+        last_pull = mower.get(ATTR_LAST_PULL, None)
+        last_wake_up = mower.get(ATTR_LAST_WAKE_UP, None)
 
-            if (
-                last_pull is not None
-                and (self._get_datetime_now() - last_pull).total_seconds() < 10
-                and mower.get(ATTR_CONNECTED, False)
-            ):
-                return True
+        if (
+            last_pull is not None
+            and (self._get_datetime_now() - last_pull).total_seconds() < 10
+            and mower.get(ATTR_CONNECTED, False)
+        ):
+            return True
 
-            # Fetch connection state fresh from API
+        # Fetch connection state fresh from API
+        connected = await self.async_fetch_single_mower(imei)
+        if connected is True:
+            return True
+
+        # Send wake up command if last attempt was more than 60 seconds ago
+        if (
+            last_wake_up is None
+            or (self._get_datetime_now() - last_wake_up).total_seconds() > 60
+        ):
+            await self.async_wake_up(imei)
+
+        # Wait 5 seconds before the loop starts
+        await asyncio.sleep(5)
+
+        attempt = 0
+        while connected is False and attempt <= 5:
             connected = await self.async_fetch_single_mower(imei)
             if connected is True:
                 return True
-
-            # Send wake up command if last attempt was more than 60 seconds ago
-            if (
-                last_wake_up is None
-                or (self._get_datetime_now() - last_wake_up).total_seconds() > 60
-            ):
-                await self.async_wake_up(imei)
-
-            # Wait 5 seconds before the loop starts
+            attempt = attempt + 1
+            # Wait 5 seconds before next attempt
             await asyncio.sleep(5)
 
-            attempt = 0
-            while connected is False and attempt <= 5:
-                connected = await self.async_fetch_single_mower(imei)
-                if connected is True:
-                    return True
-                attempt = attempt + 1
-                # Wait 5 seconds before next attempt
-                await asyncio.sleep(5)
-            raise TimeoutError(
-                f"The lawn mower with IMEI {imei} was not available after a long wait"
-            )
-        except Exception as exception:
-            LOGGER.exception(exception)
+        raise TimeoutError(
+            f"The lawn mower with IMEI {imei} was not available after a long wait"
+        )
 
     async def async_update_now(
         self,
@@ -670,6 +668,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "message": "UP",
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
         return False
@@ -695,6 +695,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -715,6 +717,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -764,6 +768,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -784,6 +790,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -804,6 +812,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -848,6 +858,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -869,6 +881,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -907,6 +921,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -932,5 +948,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
                     "singleton": True,
                 },
             )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
         except Exception as exception:
             LOGGER.exception(exception)

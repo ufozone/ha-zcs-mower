@@ -147,7 +147,7 @@ class ZcsMowerApiClient:
                     if len([
                         error
                         for error in self._response_error
-                        if "Authentication session is invalid: Error: Session " in error
+                        if "Authentication session is invalid: " in error
                     ]) > 0:
                         refresh_auth = await self.auth()
                         if refresh_auth:
