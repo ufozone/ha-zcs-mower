@@ -96,7 +96,7 @@ class ZcsMowerRobotVacuumEntity(ZcsMowerRobotEntity, StateVacuumEntity):
         }
 
     @property
-    def state(self) -> str:
+    def activity(self) -> VacuumActivity | None:
         """Return the state of the lawn mower."""
         if self._get_attribute(ATTR_STATE) in ("work", "gotoarea", "bordercut", "mapping_started"):
             return VacuumActivity.CLEANING
