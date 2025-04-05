@@ -130,7 +130,7 @@
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
           "wake_up_interval_default": "Default: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
           "wake_up_interval_infinity": "+Infinity: Ogni quanti secondi il tosaerba robot deve svegliarsi periodicamente?",
-          "wake_up_timeout": "Quanto tempo deve attendere il tosaerba per svegliarsi dopo l'invio del comando?",
+          "wake_up_timeout": "Quanto tempo deve aspettare il tosaerba per svegliarsi prima di inviare un comando?",
           "generate_client_key": "Generare nuovamente una nuova chiave client (consigliato solo se la connessione non è più possibile)."
         }
       }
