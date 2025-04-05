@@ -53,6 +53,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
+    CONF_WAIT_FOR_WAKE_UP,
     CONF_HIBERNATION_ENABLE,
     CONF_MOWERS,
     ATTR_IMEI,
@@ -77,7 +78,6 @@ from .const import (
     API_DATETIME_FORMAT_DEFAULT,
     API_DATETIME_FORMAT_FALLBACK,
     API_ACK_TIMEOUT,
-    API_WAIT_FOR_CONNECTION,
     STANDBY_TIME_START_DEFAULT,
     STANDBY_TIME_STOP_DEFAULT,
     CONFIGURATION_DEFAULTS,
@@ -628,15 +628,23 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         # Wait 10 seconds before the loop starts
         await asyncio.sleep(10)
 
+        # Set max attempts minimum 1 to avoid infinite loop
+        _wait_for_wake_up = self.config_entry.options.get(
+            CONF_WAIT_FOR_WAKE_UP,
+            CONFIGURATION_DEFAULTS.get(CONF_WAIT_FOR_WAKE_UP).get("default")
+        )
+        _wait_for_wake_up_remaining = max(_wait_for_wake_up - 10, 10)
+        attempts_max = round(_wait_for_wake_up_remaining / 10)
         attempt = 0
-        # Wait for connection state to be True, but max 10 attempts
-        while connected is False and attempt <= 10:
+        # Wait for connection state to be True and max attempts is not exceeded
+        while connected is False and attempt <= attempts_max:
             connected = await self.async_fetch_single_mower(imei)
             if connected is True:
+                LOGGER.debug("Connected after %s attempt(s)", attempt)
                 return True
             attempt = attempt + 1
-            # Wait calculated seconds before next attempt
-            await asyncio.sleep((API_WAIT_FOR_CONNECTION - 10) / 10)
+            # Wait 10 seconds before next attempt
+            await asyncio.sleep(10)
 
         raise TimeoutError(
             f"The lawn mower with IMEI {imei} was not available after a long wait"
