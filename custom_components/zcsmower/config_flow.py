@@ -41,6 +41,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
+    CONF_WAKE_UP_TIMEOUT,
     CONF_MAP_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -82,7 +83,7 @@ from .helpers import (
 class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
-    VERSION = 11
+    VERSION = 12
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     def __init__(self) -> None:
@@ -142,6 +143,7 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                     CONF_TRACE_POSITION_ENABLE: user_input.get(CONF_TRACE_POSITION_ENABLE, False),
                     CONF_WAKE_UP_INTERVAL_DEFAULT: _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default"),
                     CONF_WAKE_UP_INTERVAL_INFINITY: _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default"),
+                    CONF_WAKE_UP_TIMEOUT: _get_config(CONF_WAKE_UP_TIMEOUT, "default"),
                     CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                     CONF_MAP_IMAGE_PATH: "",
                     CONF_MAP_MARKER_PATH: "",
@@ -1140,6 +1142,25 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             min=_get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "min", 1),
                             max=_get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "max", 100000),
                             step=_get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "step", 1),
+                            unit_of_measurement=UnitOfTime.SECONDS,
+                        )
+                    ),
+                    # Wake up timeout
+                    vol.Optional(
+                        CONF_WAKE_UP_TIMEOUT,
+                        default=_get_config(CONF_WAKE_UP_TIMEOUT, "default"),
+                        description={
+                            "suggested_value": (user_input or self._options).get(
+                                CONF_WAKE_UP_TIMEOUT,
+                                _get_config(CONF_WAKE_UP_TIMEOUT, "default")
+                            ),
+                        },
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            mode=selector.NumberSelectorMode.BOX,
+                            min=_get_config(CONF_WAKE_UP_TIMEOUT, "min", 1),
+                            max=_get_config(CONF_WAKE_UP_TIMEOUT, "max", 100000),
+                            step=_get_config(CONF_WAKE_UP_TIMEOUT, "step", 1),
                             unit_of_measurement=UnitOfTime.SECONDS,
                         )
                     ),

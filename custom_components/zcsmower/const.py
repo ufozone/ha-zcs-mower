@@ -37,6 +37,7 @@ CONF_UPDATE_INTERVAL_HIBERNATION = "update_interval_hibernation"
 CONF_TRACE_POSITION_ENABLE = "trace_position_enable"
 CONF_WAKE_UP_INTERVAL_DEFAULT = "wake_up_interval_default"
 CONF_WAKE_UP_INTERVAL_INFINITY = "wake_up_interval_infinity"
+CONF_WAKE_UP_TIMEOUT = "wake_up_timeout"
 CONF_MAP_ENABLE = "map_enable"
 CONF_MAP_HISTORY_ENABLE = "map_history_enable"
 CONF_MAP_IMAGE_PATH = "map_image_path"
@@ -181,7 +182,6 @@ API_CLIENT_KEY_LENGTH = 28
 API_DATETIME_FORMAT_DEFAULT = "%Y-%m-%dT%H:%M:%S.%f%z"
 API_DATETIME_FORMAT_FALLBACK = "%Y-%m-%dT%H:%M:%S%z"
 API_ACK_TIMEOUT = 30
-API_WAIT_FOR_CONNECTION = 90
 
 CONFIGURATION_DEFAULTS = {
     CONF_UPDATE_INTERVAL_WORKING: {
@@ -219,6 +219,12 @@ CONFIGURATION_DEFAULTS = {
         "min": 300,
         "max": 21600,
         "step": 300,
+    },
+    CONF_WAKE_UP_TIMEOUT: {
+        "default": 120,
+        "min": 30,
+        "max": 300,
+        "step": 30,
     },
 }
 

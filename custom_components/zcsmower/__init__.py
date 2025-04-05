@@ -28,6 +28,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
+    CONF_WAKE_UP_TIMEOUT,
     CONF_MAP_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -186,6 +187,21 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
             data={},
             options=_options,
             version=11,
+        )
+
+    if config_entry.version < 12:
+        _options = dict(config_entry.options)
+        _options.update(
+            {
+                CONF_WAKE_UP_TIMEOUT: config_entry.options.get(CONF_WAKE_UP_TIMEOUT, CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_TIMEOUT).get("default")),
+            }
+        )
+        hass.config_entries.async_update_entry(
+            config_entry,
+            title=str(config_entry.title),
+            data={},
+            options=_options,
+            version=12,
         )
 
     LOGGER.info("Migration to version %s successful", config_entry.version)
