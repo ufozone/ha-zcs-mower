@@ -37,7 +37,7 @@ CONF_UPDATE_INTERVAL_HIBERNATION = "update_interval_hibernation"
 CONF_TRACE_POSITION_ENABLE = "trace_position_enable"
 CONF_WAKE_UP_INTERVAL_DEFAULT = "wake_up_interval_default"
 CONF_WAKE_UP_INTERVAL_INFINITY = "wake_up_interval_infinity"
-CONF_WAIT_FOR_WAKE_UP = "wait_for_wake_up"
+CONF_WAKE_UP_TIMEOUT = "wake_up_timeout"
 CONF_MAP_ENABLE = "map_enable"
 CONF_MAP_HISTORY_ENABLE = "map_history_enable"
 CONF_MAP_IMAGE_PATH = "map_image_path"
@@ -220,8 +220,8 @@ CONFIGURATION_DEFAULTS = {
         "max": 21600,
         "step": 300,
     },
-    CONF_WAIT_FOR_WAKE_UP: {
-        "default": 90,
+    CONF_WAKE_UP_TIMEOUT: {
+        "default": 120,
         "min": 30,
         "max": 300,
         "step": 30,

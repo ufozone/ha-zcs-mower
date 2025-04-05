@@ -53,7 +53,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
-    CONF_WAIT_FOR_WAKE_UP,
+    CONF_WAKE_UP_TIMEOUT,
     CONF_HIBERNATION_ENABLE,
     CONF_MOWERS,
     ATTR_IMEI,
@@ -630,8 +630,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
 
         # Set max attempts minimum 1 to avoid infinite loop
         _wait_for_wake_up = self.config_entry.options.get(
-            CONF_WAIT_FOR_WAKE_UP,
-            CONFIGURATION_DEFAULTS.get(CONF_WAIT_FOR_WAKE_UP).get("default")
+            CONF_WAKE_UP_TIMEOUT,
+            CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_TIMEOUT).get("default")
         )
         _wait_for_wake_up_remaining = max(_wait_for_wake_up - 10, 10)
         attempts_max = round(_wait_for_wake_up_remaining / 10)

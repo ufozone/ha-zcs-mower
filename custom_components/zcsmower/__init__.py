@@ -28,7 +28,7 @@ from .const import (
     CONF_TRACE_POSITION_ENABLE,
     CONF_WAKE_UP_INTERVAL_DEFAULT,
     CONF_WAKE_UP_INTERVAL_INFINITY,
-    CONF_WAIT_FOR_WAKE_UP,
+    CONF_WAKE_UP_TIMEOUT,
     CONF_MAP_ENABLE,
     CONF_MAP_HISTORY_ENABLE,
     CONF_MAP_IMAGE_PATH,
@@ -193,7 +193,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         _options = dict(config_entry.options)
         _options.update(
             {
-                CONF_WAIT_FOR_WAKE_UP: config_entry.options.get(CONF_WAIT_FOR_WAKE_UP, CONFIGURATION_DEFAULTS.get(CONF_WAIT_FOR_WAKE_UP).get("default")),
+                CONF_WAKE_UP_TIMEOUT: config_entry.options.get(CONF_WAKE_UP_TIMEOUT, CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_TIMEOUT).get("default")),
             }
         )
         hass.config_entries.async_update_entry(
