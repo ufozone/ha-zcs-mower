@@ -20,8 +20,8 @@
   ],
   "requirements": [
     "geopy>=2.3.0",
-    "numpy>=1.26.4",
-    "Pillow>=10.4.0"
+    "numpy>=2.2.2",
+    "Pillow>=11.1.0"
   ],
-  "version": "1.8.1"
+  "version": "1.8.2"
 }
