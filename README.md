@@ -183,7 +183,7 @@ The following settings are available:
   * **Standard plan:** A good value is 1800 seconds.
   * **+Infinity plan:** A good value is 300 seconds.
 
-* **Wake up timeout:** Before the lawn mower can receive a command, it must wake up. An attempt is therefore made to wake up the robotic lawnmower before the command is sent. This may take a different time depending on the model. This option can be used to set the waiting time until the connection is established before the command is sent or canceled.
+* **Wake up timeout:** Before the lawn mower can receive a command, it must wake up. An attempt is therefore made to wake up the lawn mower before the command is sent. This may take a different time depending on the model. This option can be used to set the waiting time until the connection is established before the command is sent or canceled.
 
 * **Re-generate client key:** Regeneration is only recommended if authentication is no longer possible (see [Debugging](#debugging)) and the state of the lawn mowers can no longer be retrieved.
 
