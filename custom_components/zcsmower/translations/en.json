@@ -130,7 +130,7 @@
           "trace_position_enable": "Enable position tracing?",
           "wake_up_interval_default": "Default: Every how many seconds should the lawn mower(s) wake up?",
           "wake_up_interval_infinity": "+Infinity: Every how many seconds should the lawn mower(s) wake up?",
-          "wake_up_timeout": "How long should the lawn mower wait for wake up before sending a command?",
+          "wake_up_timeout": "How long should the integration wait for the lawn mower to wake up before it sends a command?",
           "generate_client_key": "Re-generate a new client key (only recommended if a connection is no longer possible)."
         }
       }
