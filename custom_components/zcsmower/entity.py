@@ -116,12 +116,12 @@ class ZcsMowerRobotEntity(CoordinatorEntity):
                 f"component.{self.platform.platform_name}.entity"
                 f".sensor.state.state.{_status}"
             )
+        # HA > 2025.8.0
+        if hasattr(self, "platform_data") and hasattr(self.platform_data, "platform_translations"):
+            _localized_status: str = self.platform_data.platform_translations.get(_name_translation_key, _status)
         # HA > 2023.6.3
-        if hasattr(self.platform, "platform_translations"):
+        elif hasattr(self.platform, "platform_translations"):
             _localized_status: str = self.platform.platform_translations.get(_name_translation_key, _status)
-        # HA <= 2023.6.3
-        elif hasattr(self.platform, "entity_translations"):
-            _localized_status: str = self.platform.entity_translations.get(_name_translation_key, _status)
         # HA < 2023.4.0
         else:
             _localized_status = _status
