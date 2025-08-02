@@ -8,7 +8,7 @@ from homeassistant.core import callback
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
-    OptionsFlowWithConfigEntry,
+    OptionsFlow,
     CONN_CLASS_CLOUD_POLL,
 )
 from homeassistant.const import (
@@ -430,12 +430,12 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
         return ZcsMowerOptionsFlowHandler(config_entry)
 
 
-class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
-    """Handles options flow for the component."""
+class ZcsMowerOptionsFlowHandler(OptionsFlow):
+    """Handle ZCS Lawn Mower options."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
-        """Initialize options flow."""
-        super().__init__(config_entry)
+        """Initialize ZCS Lawn Mower options flow."""
+        self.options = dict(config_entry.options)
         self.base_path = os.path.dirname(__file__)
 
     async def async_step_init(self, user_input: dict | None = None) -> FlowResult:
@@ -455,17 +455,17 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
         """Add a lawn mower to the garage."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            if user_input[ATTR_IMEI] in self._options[CONF_MOWERS]:
+            if user_input[ATTR_IMEI] in self.options[CONF_MOWERS]:
                 errors["base"] = "imei_exists"
             elif user_input.get(ATTR_NAME, "") and any(
                 m.get(ATTR_NAME, "") == user_input.get(ATTR_NAME)
-                for m in self._options[CONF_MOWERS].values()
+                for m in self.options[CONF_MOWERS].values()
             ):
                 errors["base"] = "name_exists"
             else:
                 # Validate lawn mower
                 try:
-                    client_key = self._options[CONF_CLIENT_KEY]
+                    client_key = self.options[CONF_CLIENT_KEY]
                     client = ZcsMowerApiClient(
                         session=async_get_clientsession(self.hass),
                         options={
@@ -504,7 +504,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
 
             if not errors:
                 # Input is valid, set data
-                self._options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
+                self.options[CONF_MOWERS][user_input[ATTR_IMEI]] = {
                     ATTR_NAME: user_input.get(ATTR_NAME, user_input[ATTR_IMEI]),
                     ATTR_ROBOT_CLIENT_INDEX: robot_client_key,
                 }
@@ -516,10 +516,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     client_key=client_key,
                 )
                 LOGGER.debug("Step add -> saved options:")
-                LOGGER.debug(self._options)
+                LOGGER.debug(self.options)
                 return self.async_create_entry(
                     title="",
-                    data=self._options,
+                    data=self.options,
                 )
         return self.async_show_form(
             step_id="add",
@@ -563,7 +563,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             value=imei,
                             label=f"{mower.get(ATTR_NAME)} ({imei})",
                         )
-                        for imei, mower in self._options[CONF_MOWERS].items()
+                        for imei, mower in self.options[CONF_MOWERS].items()
                     ],
                     mode=selector.SelectSelectorMode.DROPDOWN,
                     translation_key=ATTR_IMEI,
@@ -572,18 +572,18 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
             ),
         }
         if user_input is not None:
-            if user_input[ATTR_IMEI] not in self._options[CONF_MOWERS]:
+            if user_input[ATTR_IMEI] not in self.options[CONF_MOWERS]:
                 errors["base"] = "imei_not_exists"
             else:
                 last_step = True
                 mower_imei = user_input[ATTR_IMEI]
                 if ATTR_NAME not in user_input:
-                    mower_name = self._options[CONF_MOWERS][mower_imei].get(ATTR_NAME)
+                    mower_name = self.options[CONF_MOWERS][mower_imei].get(ATTR_NAME)
                 else:
                     mower_name = user_input.get(ATTR_NAME)
-                    if mower_name != self._options[CONF_MOWERS][mower_imei] and any(
+                    if mower_name != self.options[CONF_MOWERS][mower_imei] and any(
                         m.get(ATTR_NAME, "") == mower_name
-                        for m in self._options[CONF_MOWERS].values()
+                        for m in self.options[CONF_MOWERS].values()
                     ):
                         errors["base"] = "name_exists"
 
@@ -614,14 +614,14 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                             name=mower_name,
                         )
                         # Input is valid, set data
-                        self._options[CONF_MOWERS][mower_imei] = {
+                        self.options[CONF_MOWERS][mower_imei] = {
                             ATTR_NAME: mower_name,
                         }
                         LOGGER.debug("Step change -> saved options:")
-                        LOGGER.debug(self._options)
+                        LOGGER.debug(self.options)
                         return self.async_create_entry(
                             title="",
-                            data=self._options,
+                            data=self.options,
                         )
                 form_schema.update(
                     {
@@ -646,15 +646,15 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
         """Delete a lawn mower from the garage."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            if len(self._options[CONF_MOWERS]) == 1:
+            if len(self.options[CONF_MOWERS]) == 1:
                 errors["base"] = "last_mower"
-            elif user_input[ATTR_IMEI] not in self._options[CONF_MOWERS]:
+            elif user_input[ATTR_IMEI] not in self.options[CONF_MOWERS]:
                 errors["base"] = "imei_not_exists"
             elif user_input["confirm"] is not True:
                 errors["base"] = "delete_not_confirmed"
 
             if not errors:
-                robot_client_key = self._options[CONF_MOWERS][user_input[ATTR_IMEI]].get(ATTR_ROBOT_CLIENT_INDEX)
+                robot_client_key = self.options[CONF_MOWERS][user_input[ATTR_IMEI]].get(ATTR_ROBOT_CLIENT_INDEX)
 
                 device_registry = dr.async_get(self.hass)
                 device = device_registry.async_get_device(
@@ -678,12 +678,12 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 device_registry.async_remove_device(device.id)
 
                 # Input is valid, set data
-                self._options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
+                self.options[CONF_MOWERS].pop(user_input[ATTR_IMEI])
 
                 # Remove remote client from lawn mower
                 if robot_client_key:
                     try:
-                        client_key = self._options[CONF_CLIENT_KEY]
+                        client_key = self.options[CONF_CLIENT_KEY]
                         client = ZcsMowerApiClient(
                             session=async_get_clientsession(self.hass),
                             options={
@@ -702,10 +702,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         LOGGER.warning(exception)
 
                 LOGGER.debug("Step delete -> saved options:")
-                LOGGER.debug(self._options)
+                LOGGER.debug(self.options)
                 return self.async_create_entry(
                     title="",
-                    data=self._options,
+                    data=self.options,
                 )
         return self.async_show_form(
             step_id="delete",
@@ -721,7 +721,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                                     value=imei,
                                     label=f"{mower.get(ATTR_NAME)} ({imei})",
                                 )
-                                for imei, mower in self._options[CONF_MOWERS].items()
+                                for imei, mower in self.options[CONF_MOWERS].items()
                             ],
                             mode=selector.SelectSelectorMode.DROPDOWN,
                             translation_key=ATTR_IMEI,
@@ -740,10 +740,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
     async def async_step_map(self, user_input: dict | None = None) -> FlowResult:
         """Manage the ZCS Lawn Mower Robot map cam settings."""
         errors: dict[str, str] = {}
-        gps_top_left = self._options.get(CONF_MAP_GPS_TOP_LEFT, "")
+        gps_top_left = self.options.get(CONF_MAP_GPS_TOP_LEFT, "")
         if gps_top_left is not None:
             gps_top_left = ",".join([str(x) for x in gps_top_left])
-        gps_bottom_right = self._options.get(CONF_MAP_GPS_BOTTOM_RIGHT, "")
+        gps_bottom_right = self.options.get(CONF_MAP_GPS_BOTTOM_RIGHT, "")
         if gps_bottom_right is not None:
             gps_bottom_right = ",".join([str(x) for x in gps_bottom_right])
         if user_input is not None:
@@ -760,7 +760,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
 
             if not errors:
                 # Input is valid, set data
-                self._options.update(
+                self.options.update(
                     {
                         CONF_MAP_ENABLE: user_input.get(CONF_MAP_ENABLE, False),
                         CONF_MAP_IMAGE_PATH: image_map_path,
@@ -778,23 +778,23 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     }
                 )
                 if user_input.get(CONF_MAP_GPS_TOP_LEFT):
-                    self._options[CONF_MAP_GPS_TOP_LEFT] = [
+                    self.options[CONF_MAP_GPS_TOP_LEFT] = [
                         float(x.strip())
                         for x in user_input.get(CONF_MAP_GPS_TOP_LEFT).split(",")
                         if x
                     ]
                 if user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT):
-                    self._options[CONF_MAP_GPS_BOTTOM_RIGHT] = [
+                    self.options[CONF_MAP_GPS_BOTTOM_RIGHT] = [
                         float(x.strip())
                         for x in user_input.get(CONF_MAP_GPS_BOTTOM_RIGHT).split(",")
                         if x
                     ]
 
                 LOGGER.debug("Step map -> saved options:")
-                LOGGER.debug(self._options)
+                LOGGER.debug(self.options)
                 return self.async_create_entry(
                     title="",
-                    data=self._options,
+                    data=self.options,
                 )
             else:
                 gps_top_left = user_input.get(CONF_MAP_GPS_TOP_LEFT)
@@ -806,13 +806,13 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 {
                     vol.Optional(
                         CONF_MAP_ENABLE,
-                        default=(user_input or self._options).get(
+                        default=(user_input or self.options).get(
                             CONF_MAP_ENABLE, False
                         ),
                     ): selector.BooleanSelector(),
                     vol.Required(
                         CONF_MAP_IMAGE_PATH,
-                        default=(user_input or self._options).get(
+                        default=(user_input or self.options).get(
                             CONF_MAP_IMAGE_PATH, ""
                         ),
                     ): selector.TextSelector(
@@ -838,7 +838,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Required(
                         CONF_MAP_ROTATION,
-                        default=(user_input or self._options).get(
+                        default=(user_input or self.options).get(
                             CONF_MAP_ROTATION, 0.0
                         ),
                     ): selector.NumberSelector(
@@ -853,7 +853,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     vol.Optional(
                         CONF_MAP_MARKER_PATH,
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_MAP_MARKER_PATH, ""
                             ),
                         },
@@ -864,13 +864,13 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_MAP_HISTORY_ENABLE,
-                        default=(user_input or self._options).get(
+                        default=(user_input or self.options).get(
                             CONF_MAP_HISTORY_ENABLE, True
                         ),
                     ): selector.BooleanSelector(),
                     vol.Required(
                         CONF_MAP_POINTS,
-                        default=(user_input or self._options).get(
+                        default=(user_input or self.options).get(
                             CONF_MAP_POINTS, MAP_POINTS_DEFAULT
                         ),
                     ): selector.NumberSelector(
@@ -882,7 +882,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     ),
                     vol.Optional(
                         CONF_MAP_DRAW_LINES,
-                        default=(user_input or self._options).get(
+                        default=(user_input or self.options).get(
                             CONF_MAP_DRAW_LINES, False
                         ),
                     ): selector.BooleanSelector(),
@@ -948,7 +948,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
 
             if not errors:
                 # Input is valid, set data
-                self._options.update(
+                self.options.update(
                     {
                         CONF_HIBERNATION_ENABLE: user_input.get(
                             CONF_HIBERNATION_ENABLE, False
@@ -987,7 +987,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                 # If user ticked the box for re-generating client key
                 # Replace remote clients in lawn mower(s)
                 if user_input.get("generate_client_key", False):
-                    self._options.update(
+                    self.options.update(
                         {
                             CONF_CLIENT_KEY: client_key_new,
                         }
@@ -1003,10 +1003,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         LOGGER.warning(exception)
 
                 LOGGER.debug("Step settings -> saved options:")
-                LOGGER.debug(self._options)
+                LOGGER.debug(self.options)
                 return self.async_create_entry(
                     title="",
-                    data=self._options,
+                    data=self.options,
                 )
         return self.async_show_form(
             step_id="settings",
@@ -1015,7 +1015,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     # Hibernation state
                     vol.Optional(
                         CONF_HIBERNATION_ENABLE,
-                        default=(user_input or self._options).get(
+                        default=(user_input or self.options).get(
                             CONF_HIBERNATION_ENABLE, False
                         ),
                     ): selector.BooleanSelector(),
@@ -1024,7 +1024,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_STANDBY_TIME_START,
                         default=STANDBY_TIME_START_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_STANDBY_TIME_START, STANDBY_TIME_START_DEFAULT
                             ),
                         },
@@ -1036,7 +1036,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_STANDBY_TIME_STOP,
                         default=STANDBY_TIME_STOP_DEFAULT,
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_STANDBY_TIME_STOP, STANDBY_TIME_STOP_DEFAULT
                             ),
                         },
@@ -1048,7 +1048,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_UPDATE_INTERVAL_WORKING,
                         default=_get_config(CONF_UPDATE_INTERVAL_WORKING, "default"),
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_UPDATE_INTERVAL_WORKING,
                                 _get_config(CONF_UPDATE_INTERVAL_WORKING, "default")
                             ),
@@ -1067,7 +1067,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_UPDATE_INTERVAL_STANDBY,
                         default=_get_config(CONF_UPDATE_INTERVAL_STANDBY, "default"),
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_UPDATE_INTERVAL_STANDBY,
                                 _get_config(CONF_UPDATE_INTERVAL_STANDBY, "default")
                             ),
@@ -1086,7 +1086,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_UPDATE_INTERVAL_IDLING,
                         default=_get_config(CONF_UPDATE_INTERVAL_IDLING, "default"),
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_UPDATE_INTERVAL_IDLING,
                                 _get_config(CONF_UPDATE_INTERVAL_IDLING, "default")
                             ),
@@ -1103,7 +1103,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                     # Trace position
                     vol.Optional(
                         CONF_TRACE_POSITION_ENABLE,
-                        default=(user_input or self._options).get(
+                        default=(user_input or self.options).get(
                             CONF_TRACE_POSITION_ENABLE, False
                         ),
                     ): selector.BooleanSelector(),
@@ -1112,7 +1112,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_WAKE_UP_INTERVAL_DEFAULT,
                         default=_get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default"),
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_WAKE_UP_INTERVAL_DEFAULT,
                                 _get_config(CONF_WAKE_UP_INTERVAL_DEFAULT, "default")
                             ),
@@ -1131,7 +1131,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_WAKE_UP_INTERVAL_INFINITY,
                         default=_get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default"),
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_WAKE_UP_INTERVAL_INFINITY,
                                 _get_config(CONF_WAKE_UP_INTERVAL_INFINITY, "default")
                             ),
@@ -1150,7 +1150,7 @@ class ZcsMowerOptionsFlowHandler(OptionsFlowWithConfigEntry):
                         CONF_WAKE_UP_TIMEOUT,
                         default=_get_config(CONF_WAKE_UP_TIMEOUT, "default"),
                         description={
-                            "suggested_value": (user_input or self._options).get(
+                            "suggested_value": (user_input or self.options).get(
                                 CONF_WAKE_UP_TIMEOUT,
                                 _get_config(CONF_WAKE_UP_TIMEOUT, "default")
                             ),
