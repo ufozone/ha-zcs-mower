@@ -392,7 +392,7 @@
         }
       },
       "wake_up": {
-        "name": "Update now",
+        "name": "Wake up",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
