@@ -427,6 +427,11 @@ ROBOT_STATES = [
         "icon": "mdi:map-marker-check",
         "color": "#D67070",
     },
+    {
+        "name": "MIGRATED",
+        "icon": "mdi:merge",
+        "color": "#AA00FF",
+    },
 ]
 ROBOT_STATES_WORKING = [2, 6, 7, 8, 11]
 ROBOT_ERRORS = {
