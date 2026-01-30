@@ -14,7 +14,7 @@
     "step": {
       "user": {
         "title": "Garage einrichten",
-        "description": "Gib hier deinen Garagennamen ein. Du kannst ihn frei wählen. Gib außerdem an, ob du die Positionsverfolgung und die Kartenanzeige aktivieren willst. Du kannst diese Einstellungen auch später noch ändern. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
+        "description": "Gib hier deinen Garagennamen ein. Du kannst ihn frei wählen. Gib außerdem an, ob du die Positionsverfolgung und die Kartenanzeige aktivieren willst. Du kannst diese Einstellungen auch später noch ändern. Weitere Informationen findest du unter [ZCS Mower auf GitHub]({doc_url_start}).",
         "data": {
           "name": "Garagenname",
           "trace_position_enable": "Positionsverfolgung aktivieren?",
@@ -23,7 +23,7 @@
       },
       "map": {
         "title": "Konfigurieren der Karte",
-        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad. Mehr Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
+        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps]({google_map_url}) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad. Mehr Informationen findest du unter [ZCS Mower auf GitHub]({doc_url_map}).",
         "data": {
           "map_image_path": "Pfad zum Kartenbild",
           "map_marker_path": "Pfad zum Bild des Mäherstandorts",
@@ -37,7 +37,7 @@
       },
       "mower": {
         "title": "Rasenmäher hinzufügen",
-        "description": "Füge einen Rasenmäher hinzu. Du kannst den Namen frei wählen. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
+        "description": "Füge einen Rasenmäher hinzu. Du kannst den Namen frei wählen. Weitere Informationen findest du unter [ZCS Mower auf GitHub]({doc_url_add_lawn_mowers}).",
         "data": {
           "imei": "IMEI des Rasenmähers",
           "name": "Name des Rasenmähers",
@@ -80,7 +80,7 @@
       },
       "add": {
         "title": "Rasenmähroboter hinzufügen",
-        "description": "Füge einen weiteren Rasenmäher hinzu. Du kannst den Namen frei wählen. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
+        "description": "Füge einen weiteren Rasenmäher hinzu. Du kannst den Namen frei wählen. Weitere Informationen findest du unter [ZCS Mower auf GitHub]({doc_url_add_lawn_mowers}).",
         "data": {
           "imei": "IMEI des Rasenmähers",
           "name": "Name des Rasenmähers"
@@ -104,7 +104,7 @@
       },
       "map": {
         "title": "Konfigurieren der Karte",
-        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps](https://mymaps.google.com/) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad. Mehr Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
+        "description": "Der beste Weg ist es eine neue Karte auf [Google My Maps]({google_map_url}) anzulegen, einen Snapshot des gewünschten Bereichs anzufertigen sowie sich die Eckpunkte zu markieren und exportieren. Achte auf die richtige Reihenfolge von Breitengrad und Längengrad. Mehr Informationen findest du unter [ZCS Mower auf GitHub]({doc_url_map}).",
         "data": {
           "map_enable": "Karte aktivieren?",
           "map_image_path": "Pfad zum Kartenbild",
@@ -119,7 +119,7 @@
       },
       "settings": {
         "title": "Konfigurieren der Garage",
-        "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
+        "description": "Nimm allgemeine Einstellungen für deine Garage vor. Weitere Informationen findest du unter [ZCS Mower auf GitHub]({doc_url_general_settings}).",
         "data": {
           "hibernation_enable": "Befinden sich alle Rasenmäher in der Winterpause? (Aktualisierungsintervall wird reduziert und Steuerungselemente deaktiviert)",
           "standby_time_start": "Um wie viel Uhr startet die tägliche Bereitschaftszeit?",

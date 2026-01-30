@@ -185,6 +185,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 }
             ),
             errors=errors,
+            description_placeholders={
+                "doc_url_start": "https://github.com/ufozone/ha-zcs-mower#start",
+            },
         )
 
     async def async_step_map(
@@ -316,6 +319,10 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 }
             ),
             errors=errors,
+            description_placeholders={
+                "google_map_url": "https://mymaps.google.com/",
+                "doc_url_map": "https://github.com/ufozone/ha-zcs-mower#map",
+            },
         )
 
     async def async_step_mower(
@@ -421,6 +428,9 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
                 }
             ),
             errors=errors,
+            description_placeholders={
+                "doc_url_add_lawn_mowers": "https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers",
+            },
         )
 
     @staticmethod
@@ -546,6 +556,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                 }
             ),
             errors=errors,
+            description_placeholders={
+                "doc_url_add_lawn_mowers": "https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers",
+            },
         )
 
     async def async_step_change(self, user_input: dict | None = None) -> FlowResult:
@@ -889,6 +902,10 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                 }
             ),
             errors=errors,
+            description_placeholders={
+                "google_map_url": "https://mymaps.google.com/",
+                "doc_url_map": "https://github.com/ufozone/ha-zcs-mower#map",
+            },
         )
 
     async def async_step_settings(self, user_input: dict | None = None) -> FlowResult:
@@ -1172,6 +1189,9 @@ class ZcsMowerOptionsFlowHandler(OptionsFlow):
                 }
             ),
             errors=errors,
+            description_placeholders={
+                "doc_url_general_settings": "https://github.com/ufozone/ha-zcs-mower#general-settings",
+            },
         )
 
 def _get_config(

@@ -14,7 +14,7 @@
     "step": {
       "user": {
         "title": "Set up garage",
-        "description": "Enter your garage name here. You can choose this freely. Also specify whether you want to activate position tracking and map display. You can also change these settings later. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
+        "description": "Enter your garage name here. You can choose this freely. Also specify whether you want to activate position tracking and map display. You can also change these settings later. For more information go to [ZCS Mower on GitHub]({doc_url_start}).",
         "data": {
           "name": "Garage Name",
           "trace_position_enable": "Enable position tracing?",
@@ -23,7 +23,7 @@
       },
       "map": {
         "title": "Configure map",
-        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
+        "description": "The best way is to create a new map on [Google My Maps]({google_map_url}), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude. For more information go to [ZCS Mower on GitHub]({doc_url_map}).",
         "data": {
           "map_image_path": "Path to the map image",
           "map_marker_path": "Path to the mower location image",
@@ -37,7 +37,7 @@
       },
       "mower": {
         "title": "Add lawn mower",
-        "description": "Add a lawn mower. You are free to choose the name. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
+        "description": "Add a lawn mower. You are free to choose the name. For additional information go to [ZCS Mower on GitHub]({doc_url_add_lawn_mowers}).",
         "data": {
           "imei": "IMEI of lawn mower",
           "name": "Name of lawn mower",
@@ -80,7 +80,7 @@
       },
       "add": {
         "title": "Add lawn mower",
-        "description": "Add another lawn mower. You are free to choose the name. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
+        "description": "Add another lawn mower. You are free to choose the name. For additional information go to [ZCS Mower on GitHub]({doc_url_add_lawn_mowers}).",
         "data": {
           "imei": "IMEI of lawn mower",
           "name": "Name of lawn mower"
@@ -104,7 +104,7 @@
       },
       "map": {
         "title": "Configure map",
-        "description": "The best way is to create a new map on [Google My Maps](https://mymaps.google.com/), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude. For more information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
+        "description": "The best way is to create a new map on [Google My Maps]({google_map_url}), take a snapshot of the desired area and mark and export the corner points. Pay attention to the correct order of latitude and longitude. For more information go to [ZCS Mower on GitHub]({doc_url_map}).",
         "data": {
           "map_enable": "Enable map?",
           "map_image_path": "Path to the map image",
@@ -119,7 +119,7 @@
       },
       "settings": {
         "title": "Configure garage",
-        "description": "Make general settings for your garage. For additional information go to [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
+        "description": "Make general settings for your garage. For additional information go to [ZCS Mower on GitHub]({doc_url_general_settings}).",
         "data": {
           "hibernation_enable": "Are all the lawn mowers in winter storage? (Update interval is reduced and control elements are deactivated)",
           "standby_time_start": "At what time does the daily standby time start?",
