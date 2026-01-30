@@ -382,10 +382,10 @@
         "name": "Stato di standby",
         "state_attributes": {
           "standby_time_start": {
-            "name": "Il prossimo tempo di standby inizia"
+            "name": "Tempo di standby inizia"
           },
           "standby_time_stop": {
-            "name": "Il prossimo tempo di standby termina"
+            "name": "Tempo di standby termina"
           }
         }
       }

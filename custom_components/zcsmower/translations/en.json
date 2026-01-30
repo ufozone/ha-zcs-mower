@@ -385,10 +385,10 @@
         "name": "Standby state",
         "state_attributes": {
           "standby_time_start": {
-            "name": "Next standby time starts"
+            "name": "Standby time starts"
           },
           "standby_time_stop": {
-            "name": "Next standby time stops"
+            "name": "Standby time stops"
           }
         }
       }
