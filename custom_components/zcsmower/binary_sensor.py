@@ -140,7 +140,7 @@ class ZcsMowerRobotBinarySensorEntity(ZcsMowerRobotEntity, BinarySensorEntity):
 
     @property
     def is_on(self) -> bool:
-        """Return true if the binary_sensor is on."""
+        """Return True if the binary_sensor is on."""
         if self._entity_key == "error":
             return self._get_attribute(ATTR_STATE) in (
                 "fail",
@@ -164,7 +164,7 @@ class ZcsMowerConfigBinarySensorEntity(ZcsMowerConfigEntity, BinarySensorEntity)
         coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: BinarySensorEntityDescription,
     ) -> None:
-        """Initialize the switch class."""
+        """Initialize the binary sensor class."""
         super().__init__(
             hass=hass,
             config_entry=config_entry,
@@ -175,9 +175,17 @@ class ZcsMowerConfigBinarySensorEntity(ZcsMowerConfigEntity, BinarySensorEntity)
 
     @property
     def is_on(self) -> bool:
-        """Return true if the binary_sensor is on."""
+        """Return True if the binary_sensor is on."""
         if self._config_key == "standby":
             return self.coordinator.is_standby_time()
+
+    @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        if self._config_key == "standby":
+            return (self.coordinator.hibernation_enable is False)
+
+        return True
 
     @property
     def extra_state_attributes(self) -> dict[str, any]:
