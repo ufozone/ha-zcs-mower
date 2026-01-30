@@ -261,8 +261,10 @@ ROBOT_MODELS = {
     "AM035B": "L35 Basic",
     "AM035D": "L35 Deluxe",
     "AM040B": "4.0 Basic",
+    "AM040D": "4.0 Deluxe", # ?
     "AM040L": "4.0 Elite",
     "AM040R": "4.0 Elite RTK", # ?
+    "AM043D": "4.36 Deluxe", # ?
     "AM043L": "4.36 Elite",
     "AM043R": "4.36 Elite RTK", # ?
     "AM060D": "L60 Deluxe",
