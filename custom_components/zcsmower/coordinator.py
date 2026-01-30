@@ -8,7 +8,6 @@ from datetime import (
     datetime,
     time,
 )
-from awesomeversion import AwesomeVersion
 
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
