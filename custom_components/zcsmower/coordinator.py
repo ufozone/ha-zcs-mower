@@ -107,33 +107,18 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         config_entry: ConfigEntry,
     ) -> None:
         """Initialize."""
-        # Version threshold for config_entry attribute in data update coordinator
-        # See: https://github.com/home-assistant/core/pull/138161
-        if AwesomeVersion(HAVERSION) > "2025.07.99":
-            super().__init__(
-                hass=hass,
-                logger=LOGGER,
-                name=DOMAIN,
-                config_entry=config_entry,
-                update_interval=timedelta(
-                    seconds=config_entry.options.get(
-                        CONF_UPDATE_INTERVAL_STANDBY,
-                        CONFIGURATION_DEFAULTS.get(CONF_UPDATE_INTERVAL_STANDBY).get("default"),
-                    )
-                ),
-            )
-        else:
-            super().__init__(
-                hass=hass,
-                logger=LOGGER,
-                name=DOMAIN,
-                update_interval=timedelta(
-                    seconds=config_entry.options.get(
-                        CONF_UPDATE_INTERVAL_STANDBY,
-                        CONFIGURATION_DEFAULTS.get(CONF_UPDATE_INTERVAL_STANDBY).get("default"),
-                    )
-                ),
-            )
+        super().__init__(
+            hass=hass,
+            logger=LOGGER,
+            name=DOMAIN,
+            config_entry=config_entry,
+            update_interval=timedelta(
+                seconds=config_entry.options.get(
+                    CONF_UPDATE_INTERVAL_STANDBY,
+                    CONFIGURATION_DEFAULTS.get(CONF_UPDATE_INTERVAL_STANDBY).get("default"),
+                )
+            ),
+        )
         self.config_entry = config_entry
         self.client = ZcsMowerApiClient(
             session=async_get_clientsession(hass),
