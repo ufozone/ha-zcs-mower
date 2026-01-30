@@ -154,6 +154,7 @@ class ZcsMowerRobotDurationNumberEntity(ZcsMowerRobotNumberEntity):
 class ZcsMowerConfigNumberEntity(ZcsMowerConfigEntity, NumberEntity):
     """Representation of a ZCS Lawn Mower Configuration number."""
 
+    _attr_has_entity_name = True
     _attr_entity_registry_enabled_default = False
 
     def __init__(
@@ -168,7 +169,7 @@ class ZcsMowerConfigNumberEntity(ZcsMowerConfigEntity, NumberEntity):
             hass=hass,
             config_entry=config_entry,
             coordinator=coordinator,
-            entity_type="switch",
+            entity_type="number",
             entity_description=entity_description,
         )
         self._attr_native_min_value = CONFIGURATION_DEFAULTS.get(self._config_key).get("min", 0)
