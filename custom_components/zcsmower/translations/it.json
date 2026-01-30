@@ -14,7 +14,7 @@
     "step": {
       "user": {
         "title": "Allestimento del garage",
-        "description": "Inserite qui il nome del vostro garage. È possibile sceglierlo liberamente. Specificare inoltre se si desidera attivare il rilevamento della posizione e la visualizzazione della mappa. È possibile modificare queste impostazioni anche in seguito. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#start).",
+        "description": "Inserite qui il nome del vostro garage. È possibile sceglierlo liberamente. Specificare inoltre se si desidera attivare il rilevamento della posizione e la visualizzazione della mappa. È possibile modificare queste impostazioni anche in seguito. Per ulteriori informazioni, visitate [ZCS Mower su GitHub]({doc_url_start}).",
         "data": {
           "name": "Nome del garage",
           "trace_position_enable": "Abilitare il tracciamento della posizione?",
@@ -23,7 +23,7 @@
       },
       "map": {
         "title": "Configurare la mappa",
-        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps]({google_map_url}), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub]({doc_url_map}).",
         "data": {
           "map_image_path": "Percorso dell'immagine della mappa",
           "map_marker_path": "Percorso dell'immagine della posizione della falciatrice",
@@ -37,7 +37,7 @@
       },
       "mower": {
         "title": "Aggiungi un tosaerba",
-        "description": "Aggiungere un tosaerba. Siete liberi di scegliere il nome. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
+        "description": "Aggiungere un tosaerba. Siete liberi di scegliere il nome. Per ulteriori informazioni, visitate [ZCS Mower su GitHub]({doc_url_add_lawn_mowers}).",
         "data": {
           "imei": "IMEI del tosaerba",
           "name": "Nome del tosaerba",
@@ -80,7 +80,7 @@
       },
       "add": {
         "title": "Aggiungi un tosaerba",
-        "description": "Aggiungere un altro tosaerba. Siete liberi di scegliere il nome. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#add-lawn-mowers).",
+        "description": "Aggiungere un altro tosaerba. Siete liberi di scegliere il nome. Per ulteriori informazioni, visitate [ZCS Mower su GitHub]({doc_url_add_lawn_mowers}).",
         "data": {
           "imei": "IMEI del tosaerba",
           "name": "Nome del tosaerba"
@@ -104,7 +104,7 @@
       },
       "map": {
         "title": "Configurare la mappa",
-        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps](https://mymaps.google.com/), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub](https://github.com/ufozone/ha-zcs-mower#map).",
+        "description": "Il modo migliore è creare una nuova mappa su [Google My Maps]({google_map_url}), scattare un'istantanea dell'area desiderata e segnare ed esportare i punti d'angolo. Prestare attenzione all'ordine corretto di latitudine e longitudine. Per ulteriori informazioni, visitate [ZCS Mower on GitHub]({doc_url_map}).",
         "data": {
           "map_enable": "Abilitare la mappa?",
           "map_image_path": "Percorso dell'immagine della mappa",
@@ -119,7 +119,7 @@
       },
       "settings": {
         "title": "Configurare il garage",
-        "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub](https://github.com/ufozone/ha-zcs-mower#general-settings).",
+        "description": "Effettuare le impostazioni generali del garage. Per ulteriori informazioni, visitate [ZCS Mower su GitHub]({doc_url_general_settings}).",
         "data": {
           "hibernation_enable": "Tutti i tosaerba sono in rimessa invernale? (L'intervallo di aggiornamento è ridotto e gli elementi di controllo sono disattivati)",
           "standby_time_start": "A che ora inizia il periodo di standby giornaliero?",
