@@ -377,6 +377,17 @@
             "name": "Nächster Abruf"
           }
         }
+      },
+      "standby": {
+        "name": "Bereitschaftszustand",
+        "state_attributes": {
+          "standby_time_start": {
+            "name": "Nächste Bereitschaftszeit startet"
+          },
+          "standby_time_stop": {
+            "name": "Nächste Bereitschaftszeit endet"
+          }
+        }
       }
     },
     "button": {
