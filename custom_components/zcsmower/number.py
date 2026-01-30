@@ -164,7 +164,7 @@ class ZcsMowerConfigNumberEntity(ZcsMowerConfigEntity, NumberEntity):
         coordinator: ZcsMowerDataUpdateCoordinator,
         entity_description: NumberEntityDescription,
     ) -> None:
-        """Initialize the switch class."""
+        """Initialize the number class."""
         super().__init__(
             hass=hass,
             config_entry=config_entry,

@@ -6,6 +6,7 @@ import asyncio
 from datetime import (
     timedelta,
     datetime,
+    time,
 )
 from awesomeversion import AwesomeVersion
 
@@ -211,6 +212,15 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         """Get datetime object by adding a duration to the current time."""
         return dt_util.now() + timedelta(minutes=duration)
 
+    def _get_datetime_from_time(self, target_time: time) -> datetime:
+        """Convert time to datetime object for the current day."""
+        now = dt_util.now()
+        target_dt = dt_util.as_local(datetime.combine(now.date(), target_time))
+
+        if target_dt <= now:
+            target_dt += timedelta(days=1)
+        return target_dt
+
     async def initialize(self) -> None:
         """Set up a ZCS Mower instance."""
         await self.client.auth()
@@ -363,6 +373,14 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             return _standby_time_start.time() <= time.time() <= _standby_time_stop.time()
         else:
             return _standby_time_start.time() <= time.time() or time.time() <= _standby_time_stop.time()
+
+    def next_standby_start(self) -> datetime:
+        """Return start of next standby time."""
+        return self._get_datetime_from_time(dt_util.as_local(self.standby_time_start).time())
+
+    def next_standby_stop(self) -> datetime:
+        """Return stop of next standby time."""
+        return self._get_datetime_from_time(dt_util.as_local(self.standby_time_stop).time())
 
     def set_update_interval(
         self,
