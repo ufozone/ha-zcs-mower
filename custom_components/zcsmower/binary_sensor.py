@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     ATTR_STATE,
@@ -18,6 +20,8 @@ from homeassistant.helpers.entity import (
 )
 
 from .const import (
+    CONF_STANDBY_TIME_START,
+    CONF_STANDBY_TIME_STOP,
     ATTR_CONNECTED,
     ATTR_LAST_COMM,
     ATTR_LAST_SEEN,
@@ -25,7 +29,18 @@ from .const import (
     ATTR_NEXT_PULL,
 )
 from .coordinator import ZcsMowerDataUpdateCoordinator
-from .entity import ZcsMowerRobotEntity
+from .entity import (
+    ZcsMowerRobotEntity,
+    ZcsMowerConfigEntity,
+)
+
+
+@dataclass(frozen=True, kw_only=True)
+class ZcsMowerConfigBinarySensorEntityDescription(BinarySensorEntityDescription):
+    """Describes ZCS Lawn Mower Configuration binary sensor entity."""
+
+    config_key: str
+
 
 ROBOT_ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
@@ -42,6 +57,15 @@ ROBOT_ENTITY_DESCRIPTIONS = (
     ),
 )
 
+CONFIG_ENTITY_DESCRIPTIONS = (
+    ZcsMowerConfigBinarySensorEntityDescription(
+        key="mower_standby",
+        translation_key="standby",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        config_key="standby",
+    ),
+)
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -61,6 +85,18 @@ async def async_setup_entry(
             )
             for imei in coordinator.mowers
             for entity_description in ROBOT_ENTITY_DESCRIPTIONS
+        ],
+        update_before_add=True,
+    )
+    async_add_entities(
+        [
+            ZcsMowerConfigBinarySensorEntity(
+                hass=hass,
+                config_entry=config_entry,
+                coordinator=coordinator,
+                entity_description=entity_description,
+            )
+            for entity_description in CONFIG_ENTITY_DESCRIPTIONS
         ],
         update_before_add=True,
     )
@@ -115,3 +151,39 @@ class ZcsMowerRobotBinarySensorEntity(ZcsMowerRobotEntity, BinarySensorEntity):
             )
         elif self._entity_key == "connection":
             return (self._get_attribute(ATTR_CONNECTED) is True)
+
+class ZcsMowerConfigBinarySensorEntity(ZcsMowerConfigEntity, BinarySensorEntity):
+    """Representation of a ZCS Lawn Mower Configuration binary sensor."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        config_entry: ConfigEntry,
+        coordinator: ZcsMowerDataUpdateCoordinator,
+        entity_description: BinarySensorEntityDescription,
+    ) -> None:
+        """Initialize the switch class."""
+        super().__init__(
+            hass=hass,
+            config_entry=config_entry,
+            coordinator=coordinator,
+            entity_type="binary_sensor",
+            entity_description=entity_description,
+        )
+
+    @property
+    def is_on(self) -> bool:
+        """Return true if the binary_sensor is on."""
+        if self._config_key == "standby":
+            return self.coordinator.is_standby_time()
+
+    @property
+    def extra_state_attributes(self) -> dict[str, any]:
+        """Return extra attributes."""
+        if self._config_key == "standby":
+            return {
+                CONF_STANDBY_TIME_START: self.coordinator.next_standby_start(),
+                CONF_STANDBY_TIME_STOP: self.coordinator.next_standby_stop(),
+            }
