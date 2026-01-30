@@ -21,7 +21,7 @@
   "requirements": [
     "geopy>=2.3.0",
     "numpy>=2.3.2",
-    "Pillow>=11.3.0"
+    "Pillow>=12.0.0"
   ],
-  "version": "1.10.1"
+  "version": "1.11.0"
 }
