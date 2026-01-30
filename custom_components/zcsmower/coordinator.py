@@ -12,7 +12,6 @@ from awesomeversion import AwesomeVersion
 
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
-    __version__ as HAVERSION,
     ATTR_NAME,
     ATTR_ICON,
     ATTR_STATE,
