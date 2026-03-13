@@ -4,6 +4,6 @@ ruff==0.15.6
 pydocstyle==6.3.0
 isort==8.0.1
 geopy==2.3.0
-numpy==2.3.2
+numpy==2.4.3
 Pillow==12.1.1
 pytest-homeassistant-custom-component==0.13.317
