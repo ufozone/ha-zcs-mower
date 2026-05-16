@@ -430,7 +430,7 @@ ROBOT_STATES = [
         "color": "#D67070",
     },
     {
-        "name": "MIGRATED",
+        "name": "migrated",
         "icon": "mdi:merge",
         "color": "#AA00FF",
     },
