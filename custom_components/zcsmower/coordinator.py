@@ -915,6 +915,28 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as exception:
             LOGGER.exception(exception)
 
+    async def async_change_operator(
+        self,
+        imei: str,
+    ) -> bool:
+        """Send command change_operator to lawn nower."""
+        LOGGER.debug("change_operator: %s", imei)
+        try:
+            await self.async_prepare_for_command(imei)
+            return await self.client.execute(
+                "method.exec",
+                {
+                    "method": "change_operator",
+                    "imei": imei,
+                    "ackTimeout": API_ACK_TIMEOUT,
+                    "singleton": True,
+                },
+            )
+        except TimeoutError as exception:
+            LOGGER.error(exception)
+        except Exception as exception:
+            LOGGER.exception(exception)
+
     async def async_keep_out(
         self,
         imei: str,
