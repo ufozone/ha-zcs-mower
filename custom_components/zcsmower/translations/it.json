@@ -300,6 +300,16 @@
         }
       }
     },
+    "change_operator": {
+      "name": "Cambiare gestore di rete",
+      "description": "Obbliga il tosaerba a cambiare operatore di rete.",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo/i",
+          "description": "Dispositivo/i su cui deve essere eseguito il comando."
+        }
+      }
+    },
     "keep_out": {
       "name": "Tenersi lontani da un luogo (no-go area)",
       "description": "Comanda al tosaerba di tenersi lontano da un luogo.",
@@ -433,6 +443,14 @@
       },
       "trace_position": {
         "name": "Trovare la posizione",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          }
+        }
+      },
+      "change_operator": {
+        "name": "Cambiare gestore di rete",
         "state_attributes": {
           "imei": {
             "name": "IMEI"

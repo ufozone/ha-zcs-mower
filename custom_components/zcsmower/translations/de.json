@@ -300,6 +300,16 @@
         }
       }
     },
+    "change_operator": {
+      "name": "Netzbetreiber wechseln",
+      "description": "Erzwingt, dass der Rasenmäher den Netzbetreiber wechselt.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    },
     "keep_out": {
       "name": "Von einem Ort fernhalten (No-Go-Area)",
       "description": "Befiehlt dem Rasenmäher, sich von einem bestimmten Ort fernzuhalten.",
@@ -433,6 +443,14 @@
       },
       "trace_position": {
         "name": "Position verfolgen",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          }
+        }
+      },
+      "change_operator": {
+        "name": "Netzbetreiber wechseln",
         "state_attributes": {
           "imei": {
             "name": "IMEI"

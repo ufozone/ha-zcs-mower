@@ -300,6 +300,16 @@
         }
       }
     },
+    "change_operator": {
+      "name": "Change operator",
+      "description": "Force the lawn mower to change network operator.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    },
     "keep_out": {
       "name": "Keep out of a location (no-go area)",
       "description": "Commands the lawn mower to keep out of a location.",
@@ -436,6 +446,14 @@
       },
       "trace_position": {
         "name": "Trace position",
+        "state_attributes": {
+          "imei": {
+            "name": "IMEI"
+          }
+        }
+      },
+      "change_operator": {
+        "name": "Change operator",
         "state_attributes": {
           "imei": {
             "name": "IMEI"
