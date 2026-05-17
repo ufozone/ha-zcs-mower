@@ -549,7 +549,8 @@
           "work_standby": "Standby di lavoro",
           "hot_temperature": "Alta temperatura",
           "mapping_started": "Mappatura avviata",
-          "mapping_ended": "Mappatura completata"
+          "mapping_ended": "Mappatura completata",
+          "migrated": "Migrato"
         },
         "state_attributes": {
           "imei": {
