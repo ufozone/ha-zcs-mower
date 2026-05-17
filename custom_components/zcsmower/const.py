@@ -148,6 +148,12 @@ SERVICE_TRACE_POSITION_SCHEMA = vol.Schema(
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
     }
 )
+SERVICE_CHANGE_OPERATOR = "change_operator"
+SERVICE_CHANGE_OPERATOR_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
+    }
+)
 SERVICE_KEEP_OUT = "keep_out"
 SERVICE_KEEP_OUT_SCHEMA = vol.Schema(
     {

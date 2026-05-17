@@ -41,6 +41,8 @@ from .const import (
     SERVICE_CHARGE_UNTIL_SCHEMA,
     SERVICE_TRACE_POSITION,
     SERVICE_TRACE_POSITION_SCHEMA,
+    SERVICE_CHANGE_OPERATOR,
+    SERVICE_CHANGE_OPERATOR_SCHEMA,
     SERVICE_KEEP_OUT,
     SERVICE_KEEP_OUT_SCHEMA,
     SERVICE_CUSTOM_COMMAND,
@@ -100,6 +102,8 @@ async def async_setup_services(hass: HomeAssistant) -> None:
             await _async_charge_until(hass, targets, data)
         elif service == SERVICE_TRACE_POSITION:
             await _async_trace_position(hass, targets, data)
+        elif service == SERVICE_CHANGE_OPERATOR:
+            await _async_change_operator(hass, targets, data)
         elif service == SERVICE_KEEP_OUT:
             await _async_keep_out(hass, targets, data)
         elif service == SERVICE_CUSTOM_COMMAND:
@@ -173,6 +177,12 @@ async def async_setup_services(hass: HomeAssistant) -> None:
     )
     hass.services.async_register(
         domain=DOMAIN,
+        service=SERVICE_CHANGE_OPERATOR,
+        service_func=async_handle_service,
+        schema=SERVICE_CHANGE_OPERATOR_SCHEMA
+    )
+    hass.services.async_register(
+        domain=DOMAIN,
         service=SERVICE_KEEP_OUT,
         service_func=async_handle_service,
         schema=SERVICE_KEEP_OUT_SCHEMA
@@ -198,6 +208,7 @@ def async_unload_services(hass: HomeAssistant) -> None:
     hass.services.async_remove(DOMAIN, SERVICE_CHARGE_FOR)
     hass.services.async_remove(DOMAIN, SERVICE_CHARGE_UNTIL)
     hass.services.async_remove(DOMAIN, SERVICE_TRACE_POSITION)
+    hass.services.async_remove(DOMAIN, SERVICE_CHANGE_OPERATOR)
     hass.services.async_remove(DOMAIN, SERVICE_KEEP_OUT)
     hass.services.async_remove(DOMAIN, SERVICE_CUSTOM_COMMAND)
 
@@ -351,6 +362,19 @@ async def _async_trace_position(
     for imei, coordinator in targets.items():
         hass.async_create_task(
             coordinator.async_trace_position(
+                imei,
+            )
+        )
+
+async def _async_change_operator(
+    hass: HomeAssistant,
+    targets: dict[str, any],
+    data: dict[str, any],
+) -> None:
+    """Handle the service call."""
+    for imei, coordinator in targets.items():
+        hass.async_create_task(
+            coordinator.async_change_operator(
                 imei,
             )
         )

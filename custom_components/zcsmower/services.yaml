@@ -232,6 +232,18 @@ trace_position:
           entity:
             domain: "device_tracker"
 
+change_operator:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            integration: "zcsmower"
+          entity:
+            domain: "device_tracker"
+
 keep_out:
   fields:
     device_id:
