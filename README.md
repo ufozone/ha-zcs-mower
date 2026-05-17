@@ -407,7 +407,7 @@ The following settings are available:
 
 * `zcsmower.change_operator`:
 
-    Force the lawn mower to change network operator.
+    Force the lawn mower to change the network operator.
 
 * `zcsmower.keep_out`:
 

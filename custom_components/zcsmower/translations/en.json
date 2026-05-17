@@ -302,7 +302,7 @@
     },
     "change_operator": {
       "name": "Change operator",
-      "description": "Force the lawn mower to change network operator.",
+      "description": "Force the lawn mower to change the network operator.",
       "fields": {
         "device_id": {
           "name": "Device(s)",
