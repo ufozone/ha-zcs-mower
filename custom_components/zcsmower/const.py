@@ -264,9 +264,11 @@ ROBOT_MODELS = {
     "AM040D": "4.0 Deluxe", # ?
     "AM040L": "4.0 Elite",
     "AM040R": "4.0 Elite RTK", # ?
+    "AM040P": "4.0 Elite RTK 4WD", # DB:49
     "AM043D": "4.36 Deluxe", # ?
     "AM043L": "4.36 Elite",
     "AM043R": "4.36 Elite RTK", # ?
+    "AM043P": "4.36 PRO", # DB:126
     "AM060D": "L60 Deluxe",
     "AM060L": "L60 Elite",
     "AM060P": "L60 Elite S+", # ?
@@ -281,6 +283,7 @@ ROBOT_MODELS = {
     "AM400L": "L400 Elite", # ?
     "AM450B": "L400i Basic", # ?
     "AM450D": "L400i Deluxe", # ?
+    "AM450P": "4.50 PRO", # DB:47
     "KB250L": "KR250",
     "KB250P": "KR250",
     "KB350L": "KR350",
@@ -336,7 +339,7 @@ ROBOT_MODELS = {
     "WI035D": "Premium C180 S",
     "WI040B": "K S Medium",
     "WI040L": "K S Premium",
-    "WI040R": "K S RTK Premium ",
+    "WI040R": "K S RTK Premium",
     "WI043L": "KXL S Ultra Premium",
     "WI043R": "KXL S RTK Ultra Premium",
     "WI085L": "J XH",
