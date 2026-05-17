@@ -18,7 +18,8 @@
           "work_standby": "mdi:power-standby",
           "hot_temperature": "mdi:thermometer-alert",
           "mapping_started": "mdi:map-marker-star",
-          "mapping_ended": "mdi:map-marker-check"
+          "mapping_ended": "mdi:map-marker-check",
+          "migrated": "mdi:transfer"
         }
       }
     }
