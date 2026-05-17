@@ -48,6 +48,9 @@
     "trace_position": {
       "service": "mdi:map-marker"
     },
+    "change_operator": {
+      "service": "mdi:network-strength-1-alert"
+    },
     "update_now": {
       "service": "mdi:update"
     },
