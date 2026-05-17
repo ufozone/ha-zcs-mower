@@ -233,6 +233,8 @@ The following settings are available:
 
 * button.mower_*{imei}*_trace_position
 
+* button.mower_*{imei}*_change_operator
+
 ### Device Tracker
 
 * device_tracker.mower_*{imei}*
@@ -402,6 +404,10 @@ The following settings are available:
 * `zcsmower.trace_position`:
 
     Command the lawn mower to report its current position.
+
+* `zcsmower.change_operator`:
+
+    Force the lawn mower to change network operator.
 
 * `zcsmower.keep_out`:
 
