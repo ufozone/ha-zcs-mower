@@ -54,6 +54,12 @@ ROBOT_ENTITY_DESCRIPTIONS = (
         translation_key="trace_position",
         device_class=ButtonDeviceClass.UPDATE,
     ),
+    ButtonEntityDescription(
+        key="change_operator",
+        icon="mdi:network-strength-1-alert",
+        translation_key="change_operator",
+        device_class=ButtonDeviceClass.UPDATE,
+    ),
 )
 
 
