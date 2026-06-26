@@ -6,4 +6,4 @@ isort==8.0.1
 geopy==2.4.1
 numpy==2.3.2
 Pillow==12.2.0
-pytest-homeassistant-custom-component==0.13.339
+pytest-homeassistant-custom-component==0.13.341
