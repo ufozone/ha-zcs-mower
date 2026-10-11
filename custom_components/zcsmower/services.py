@@ -12,7 +12,9 @@ from homeassistant.const import (
     CONF_LONGITUDE,
     CONF_RADIUS,
 )
-from homeassistant.helpers.device_registry import async_get
+from homeassistant.helpers.device_registry import (
+    async_get_device_and_config_entry_for_domain,
+)
 from homeassistant.helpers.service import (
     verify_domain_control,
 )
@@ -66,19 +68,25 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         device_ids = set(device_ids)
 
         targets = {}
-        dr = async_get(hass)
         for device_id in device_ids:
-            device = dr.async_get(device_id)
-            if not device:
+            device, config_entry = async_get_device_and_config_entry_for_domain(
+                hass, device_id, domain=DOMAIN
+            )
+            if device is None or config_entry is None:
                 continue
-            identifiers = list(device.identifiers)[0]
-            if identifiers[0] != DOMAIN:
+
+            imei = next(
+                (
+                    identifier
+                    for domain, identifier in device.identifiers
+                    if domain == DOMAIN
+                ),
+                None,
+            )
+            if imei is None:
                 continue
-            for config_entry_id in list(device.config_entries):
-                config_entry = hass.config_entries.async_get_entry(config_entry_id)
-                if config_entry.domain == DOMAIN:
-                    targets[identifiers[1]] = config_entry.runtime_data
-                    break
+
+            targets[imei] = config_entry.runtime_data
 
         if service == SERVICE_UPDATE_NOW:
             await _async_update_now(hass, targets, data)
