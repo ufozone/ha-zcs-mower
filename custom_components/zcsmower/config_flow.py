@@ -9,7 +9,6 @@ from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
     OptionsFlow,
-    CONN_CLASS_CLOUD_POLL,
 )
 from homeassistant.const import (
     CONF_NAME,
@@ -84,7 +83,6 @@ class ZcsMowerConfigFlow(ConfigFlow, domain=DOMAIN):
     """ZCS Lawn Mower config flow."""
 
     VERSION = 12
-    CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     def __init__(self) -> None:
         """Initialize the ZCS Lawn Mower flow."""
