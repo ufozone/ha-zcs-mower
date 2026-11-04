@@ -652,7 +652,7 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             CONF_WAKE_UP_TIMEOUT,
             CONFIGURATION_DEFAULTS.get(CONF_WAKE_UP_TIMEOUT).get("default")
         )
-        _wait_for_wake_up_remaining = max(_wait_for_wake_up - 10, 10)
+        _wait_for_wake_up_remaining = max(_wait_for_wake_up - 20, 10)
         attempts_max = round(_wait_for_wake_up_remaining / 10)
         attempt = 0
         # Wait for connection state to be True and max attempts is not exceeded
@@ -660,6 +660,8 @@ class ZcsMowerDataUpdateCoordinator(DataUpdateCoordinator):
             connected = await self.async_fetch_single_mower(imei)
             if connected is True:
                 LOGGER.debug("Connected after %s attempt(s)", attempt)
+                # Wait 10 seconds before returning True to ensure mower is ready for command
+                await asyncio.sleep(10)
                 return True
             attempt = attempt + 1
             # Wait 10 seconds before next attempt
